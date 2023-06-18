@@ -1,15 +1,17 @@
+let nowWatcher = null
+
 function Vue(options) {
-  // Vue 实例上有一个 _data 对象, 访问 Vue 实例实际上都是访问 _data 对象
+  // Vue 实例上有一个 _data 对象, 访问 Vue 实例实际上就是访问 _data 对象
   this._data = options.data
   
   /* 数据代理 */
-  for (let [k, v] of Object.entries(this._data)) {
-    Object.defineProperty(this, k, {
+  for (const key in this._data) {
+    Object.defineProperty(this, key, {
       get() {
-        return v
+        return this._data[key]
       },
       set(value) {
-        v = value
+        this._data[key] = value
       }
     })
   }
@@ -22,27 +24,27 @@ function Vue(options) {
 function observe(data) {
   if (Object.prototype.toString.call(data) !== "[object Object]") return
   
-  // 符合条件 (是对象), 创建一个观察者
+  // 符合条件 (是对象), 创建一个发布者
   new Observer(data)
 }
 
 /******************************************* 发布者 *******************************************/
 class Observer {
   constructor(data /* 经过判断, data 是对象 */) {
-    for (const [k, v] of Object.entries(data)) {
+    for (const key in data) {
       // 将对象属性 (obj >> prop) 交给 observe 判断是否监听
-      observe(v)
+      observe(data[key])
       
       // 还需判断当对象属性是数组时, 数组元素是否为对象
-      if (Array.isArray(v)) {
-        v.forEach(item => {
+      if (Array.isArray(data[key])) {
+        data[key].forEach(item => {
           // 将数组元素 (obj >> arr >> item) 交给 observe 判断是否监听
           observe(item)
         })
       }
       
       // 当所有判断完成 (data 使用完了), 最后对 data 对象的属性进行数据劫持
-      this.defineReactive(data, k, v)
+      this.defineReactive(data, key, data[key])
     }
   }
   
@@ -55,13 +57,19 @@ class Observer {
       get() { /* 监听数据的获取 */
         console.log(`${ key } 被访问`)
         
-        // 调用订阅中心的 depend 方法, 收集订阅者
-        dep.depend()
+        //因为获取数据的可能是watcher 也可能不是watcher,所以需要判断,只有watcher获取数据才会收集依赖
+        if (nowWatcher) {
+          // 调用订阅中心的 depend 方法, 收集订阅者
+          dep.depend(nowWatcher)
+        }
         
         return value
       },
       set(newValue) { /* 监听数据的改变 */
+        if (newValue === value) return
+        
         console.log(`${ key } 被修改, 修改后是 ${ newValue }`)
+        
         value = newValue
         
         // 调用订阅中心的 notify 方法, 通知所有的订阅者更新
@@ -81,12 +89,45 @@ class Dep {
   // 订阅中心任务1: 收集依赖(订阅者)
   depend(Watcher) {
     console.log("收集依赖(订阅者)")
-    // this.subs.push(Watcher)
+    this.subs.push(Watcher)
   }
   
   // 订阅中心任务2: 通知所有的依赖更新
   notify() {
     console.log("通知所有的依赖(订阅者)更新")
+    //遍历当前订阅中心的subs 得到每一个watcher,调用watcher自身的update方法进行更新
+    this.subs.forEach(watcher => {
+      watcher.update()
+    })
+  }
+}
+
+
+/******************************************* 订阅者 *******************************************/
+class Watcher {
+  constructor(data, key) {
+    this.data = data
+    this.key = key
+    
+    //马上就会获取数据了,我们把当前的watcher保存在全局变量上,方便在发布者的数据劫持中收集当前的watcher
+    nowWatcher = this
+    
+    //调用get方法读取数据
+    this.get()
+    
+    //获取完数据就把nowWatcher保存的自己 清除掉
+    nowWatcher = null
+  }
+  
+  //watcher的功能1:获取数据
+  get() {
+    console.log("watcher 中获取数据的 get 方法被调用")
+    return this.data[this.key]
+  }
+  
+  //watcher的功能2:重新获取数据
+  update() {
+    console.log("watcher 调用 update 方法重新获取最新的数据")
   }
 }
 
@@ -104,3 +145,8 @@ const app = new Vue({
 })
 
 console.log("app", app)
+
+//实例化一个watcher(模拟组件内需要数据的watcher)
+document.onclick = function () {
+  new Watcher(app, "name")
+}
