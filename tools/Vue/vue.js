@@ -1,3 +1,5 @@
+/* 数据响应式原理 */
+
 let nowWatcher = null
 
 function Vue(options) {
