@@ -97,7 +97,7 @@ class Dep {
   // 订阅中心任务2: 通知所有的依赖更新
   notify() {
     console.log("通知所有的依赖(订阅者)更新")
-    //遍历当前订阅中心的subs 得到每一个watcher,调用watcher自身的update方法进行更新
+    // 遍历当前订阅中心的 subs 得到每一个 watcher, 调用 watcher 自身的 update 方法进行更新
     this.subs.forEach(watcher => {
       watcher.update()
     })
@@ -111,23 +111,23 @@ class Watcher {
     this.data = data
     this.key = key
     
-    //马上就会获取数据了,我们把当前的watcher保存在全局变量上,方便在发布者的数据劫持中收集当前的watcher
+    // 马上就会获取数据了, 我们把当前的 watcher 保存在全局变量上, 方便在发布者的数据劫持中收集当前的 watcher
     nowWatcher = this
     
-    //调用get方法读取数据
+    // 调用 get 方法读取数据
     this.get()
     
-    //获取完数据就把nowWatcher保存的自己 清除掉
+    // 获取完数据就把 nowWatcher 保存的自己清除掉
     nowWatcher = null
   }
   
-  //watcher的功能1:获取数据
+  // watcher功能1: 获取数据
   get() {
     console.log("watcher 中获取数据的 get 方法被调用")
     return this.data[this.key]
   }
   
-  //watcher的功能2:重新获取数据
+  // watcher功能2: 重新获取数据
   update() {
     console.log("watcher 调用 update 方法重新获取最新的数据")
   }
@@ -148,7 +148,7 @@ const app = new Vue({
 
 console.log("app", app)
 
-//实例化一个watcher(模拟组件内需要数据的watcher)
+// 实例化一个 watcher (模拟组件内需要数据的 watcher)
 document.onclick = function () {
   new Watcher(app, "name")
 }
