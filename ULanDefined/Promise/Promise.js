@@ -1,15 +1,15 @@
 /**
- * defined ULannt as Promise
+ * defined Promise
  *
- *   I have finished ULannt's constructor, "resolve" and "reject":
+ *   I have finished Promise's constructor, "resolve" and "reject":
  *
- *       init ULannt's "value" to "undefined" and "state" to "pending";
+ *       init Promise's "value" to "undefined" and "state" to "pending";
  *
- *       change "this" in "resolve" and "reject" to the instance of ULannt forever !
+ *       change "this" in "resolve" and "reject" to the instance of Promise forever !
  *
- *       when "resolve" or "reject" is called, ULannt's "value" and "state" will be changed.
+ *       when "resolve" or "reject" is called, Promise's "value" and "state" will be changed.
  *
- *   I have finished ULannt.prototype.then:
+ *   I have finished Promise.prototype.then:
  *
  *       when "onFulfilled" is called, save a Microtask to MicrotaskQueue, because "then" is a Microtask,
  *       the Microtask is `resolve(onFulfilled's value)`,
@@ -17,7 +17,7 @@
  *
  *       "onRejected" is the same meaning;
  *
- *       when we meet an async ULannt, we can't get onFulfilled's value in a short time,
+ *       when we meet an async Promise, we can't get onFulfilled's value in a short time,
  *       we can push a task included `resolve(onFulfilled's value)` to the CallbackQueue,
  *       the task will be executed when the "value" and "state" are all changed.
  */
@@ -26,7 +26,7 @@ const PENDING = "pending"
 const FULFILLED = "fulfilled"
 const REJECTED = "rejected"
 
-class ULannt {
+class Promise {
   /***************************************** [[PromiseResult]] ****************************************/
   #value = undefined
   
@@ -72,7 +72,7 @@ class ULannt {
   
   /********************************************** then ************************************************/
   then(onFulfilled, onRejected) {
-    return new ULannt((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (this.#state === PENDING) {
         // 异步, 将回调函数加入回调队列
         this.#callbackQueue.push(() => {
@@ -98,7 +98,7 @@ class ULannt {
 
 /*********************************************** test *************************************************/
 /**
- * const upromise = new ULannt((resolve, reject) => {
+ * const upromise = new Promise((resolve, reject) => {
  *   setTimeout(() => {
  *     if (Date.now() % 2 === 1) {
  *       resolve("new Promise 的返回值")
