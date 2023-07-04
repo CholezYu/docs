@@ -6,9 +6,9 @@
 
 - CSS，不是现阶段的重点，但是需要理解一下 flex 布局
 
-- JavaScript，已经有了更深的理解，会对文档进行重构
+- JavaScript，recently：合并了 ES6
 
-- ES6，目前计划深入学习一下迭代器和生成器
+- TypeScript，recently：新增
 
 - Node，简单地了解一下服务器的构建，不是目前的重点
 
@@ -18,9 +18,7 @@
 
 - React，uhm... 再说
 
-- Vue，重点学习对象，理解还算不错，对文档的构建还算满意
-
-- Hua，整理了华哥的笔记，目前只有 Vue，计划整理 CSS 和 JavaScript
+- Vue，recently：新增了 Vue3
 
 ## Mr.Hua
 
