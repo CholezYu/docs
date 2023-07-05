@@ -215,7 +215,6 @@
     ```
 
 - 动态路由和编程式路由导航
-
   * 动态路由的核心就是传值,传值没有改变,改变的是我们在setup中无法使用this.$route,我们在v4版本中直接引入`useRoute`的方法,调用这个useRoute方法即可得到route对象
   * 编程式路由导航的核心是$router对象,我们在v4中通过`useRouter`方法,调用以后得到router对象
 
