@@ -700,13 +700,49 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 ## 谈谈 Webpack
 
+- Webpack 用于将 JS 文件打包在一起，打包后的文件用于在浏览器中使用。
 
+- Webpack 由五个核心配置组成：
+
+  - entry：指定从哪个文件开始打包；
+  
+  - output：指定打包后的文件放到哪个目录；
+  
+  - loader：解析除 js、json 类型外的文件；
+  
+  - plugin：提供一些扩展功能；
+  
+  - mode：选择生产环境或开发环境，或者不使用任何默认优化选项。
+  
+- 常用的 loader：
+
+  - 处理样式资源的有：style-loader、css-loader、sass-loader、less-loader；
+  
+  - 处理图片文件的有：url-loader、file-loader；
+  
+  - 处理 es6 的有：babel-loader；
+  
+  - 处理 vue 的有：vue-loader。
+  
+- 常用的 plugin：
+
+  - BannerPlugin: 添加版权；
+  
+  - HtmlWebpackPlugin: 打包 HTML；
+  
+  - EslintWebpackPlugin: JS 语法检查；
+  
+  - TerserWebpackPlugin: 压缩 JS 文件。
 
 ## 谈谈 Webpack 优化
 
 
 
 ## Webpack 和 Vite 的区别
+
+- 构建速度：
+
+  Vite 的构建速度比 Webpack 更快。
 
 
 
@@ -716,19 +752,89 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 ## 生命周期函数
 
+- 初始化阶段：
 
+  - Vue 或组件被实例化（new Vue），进入初始化阶段。
+
+  - 初始化事件和生命周期，
+  
+  - `beforeCreate` 触发，此时无法通过实例访问 data methods computed watch 等数据，
+  
+  - 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据，
+  
+  - `created` 触发，此时可以通过实例访问数据。
+
+- 编译阶段：
+
+  - 判断 Vue 是否配置 el 选项，
+  
+  - 如果没有 el 选项，则等待使用 `$mount` 提供 el 选项；
+  
+  - 存在 el 选项，再判断是否配置 template 选项。
+  
+  - 如果有 template 选项，则编译模板得到 render 函数，返回虚拟 DOM；
+  
+  - 如果没有 template 选项，则将 el 挂载容器的 outerHTML 作为模板进行编译。
+
+- 挂载阶段：
+
+  - 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效，
+  
+  - 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器，
+  
+  - 挂载之后，`mounted` 触发，视图呈现的是编译后的 DOM。一般在这个阶段进行开启定时器、发送网络请求、订阅消息、监听自定义事件等操作。
+
+- 更新阶段：
+
+  - 当响应式数据发生改变的时候，进入更新阶段。
+  
+  - `beforeUpdate` 触发，此时数据已更新，视图还未更新，
+  
+  - 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM，
+  
+  - `updated` 触发，此时数据和视图都完成更新。
+
+- 销毁阶段：
+
+  - 当 `$destroy` 被调用，或条件渲染组件或路由时，进入销毁阶段。
+  
+  - 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段进行关闭定时器、取消订阅、移除自定义事件等操作，
+  
+  - 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，
+  
+  - 实例销毁之后，`destroyed` 触发
 
 ## 组件间通信
 
+- props - 父子组件通信。
 
+- 自定义事件 - 父子组件通信。父组件通过 `$on` 监听事件，子组件通过 `$emit` 触发事件，并可以携带参数。
 
-## 谈谈 Vuex
+- 事件总线 - 任意组件通信。在 Vue 的原型对象上挂载一个对象，将所有事件监听都绑定给这个对象。
 
+- v-model - 用于表单元素的双向绑定。
 
+- v-bind.sync - 用于非表单元素的双向绑定。
 
-## 谈谈 Pinia
+- 作用域插槽 - 父子组件通信。父组件给子组件传递模板，子组件向父组件传递数据。
 
+- 依赖注入 - 祖孙组件通信。祖先组件通过 provide 提供属性和方法，后代组件通过 inject 注入。
 
+- 透传 - 祖孙组件通信。`$attrs` 和 `$listeners`，将属性和方法传递给内部组件。
+
+- 发布订阅 - 任意组件通信。类似于事件总线，由一个订阅中心对象监听数据的改变，然后通知依赖更新。
+
+- Vuex 或 Pinia
+
+## Pinia 相对于 Vuex 的优点
+
+- mutations 被弃用，操作更简单；
+
+- TS 支持更友好；
+
+- state 管理的数据是响应式的，可以直接修改；
+
+- 支持组合式 API。
 
 ## Vue2 和 Vue3 的区别
 
