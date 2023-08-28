@@ -826,9 +826,9 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 - 事件总线 - 任意组件通信。在 Vue 的原型对象上挂载一个对象，将所有事件监听都绑定给这个对象。
 
-- v-model - 用于表单元素的双向绑定。
+- `v-model` - 用于表单元素的双向绑定。
 
-- v-bind.sync - 用于非表单元素的双向绑定。
+- `v-bind.sync` - 用于非表单元素的双向绑定。
 
 - 作用域插槽 - 父子组件通信。父组件给子组件传递模板，子组件向父组件传递数据。
 
@@ -852,25 +852,37 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 ## Vue2 和 Vue3 的区别
 
-- 生命周期钩子改名了，`beforeDestroy` 改为 `beforeUnmount`，`destroyed` 改为 `unmounted`
+- 用法方面：
 
-- 由于 Vue3 没有了组件实例，所以不能使用事件总线。此外，`$on`，`$off`，`$once` 被移除了。
+  - Vue3 新增了组合式 API，以及 setup 语法糖，并配合 TS 使用。
 
-- Vue3 使用 `v-model:prop` 代替 Vue2 的 `v-bind:prop.sync` 实现多个数据的双向绑定。
+  - Vue3 使用 v-model 代替 Vue2 的 `v-bind.sync` 实现多个数据的双向绑定。
 
-- Vue2 的 `v-model` 绑定的是 `value` 属性和 `input` 数据；
+    另外，Vue2 的 v-model 绑定的是 `value` 属性和 `input` 事件；
 
-  Vue3 的 `v-model` 绑定的是 `modelValue` 属性和 `update:modelValue` 事件。
+    而 Vue3 的 v-model 绑定的是 `modelValue` 属性和 `update:modelValue` 事件。
 
-- 删除了 `$listeners`，透传方法合并到了 `$attrs` 中。
+  - v-if 和 v-for 一起使用时，Vue2 是 v-for 优先级更高，Vue3 是 v-if 优先级更高。
 
-- 删除了 `$children`，使用 ref 获取子组件实例。
+  - Vue3 移除了 .native 修饰符，而未被 defineEmits 接收的事件会被视为原生事件。
 
-- `v-if` 和 `v-for` 一起使用时，Vue2 是 `v-for` 优先级更高，Vue3 是 `v-if` 优先级更高。
+  - Vue3 移除了 `$listeners`，透传的方法合并到了 `$attrs` 中，并且 `$attrs` 还会传递动态样式。
 
-- 可以使用组合式 API，以及 setup 语法糖。
+  - 生命周期钩子重命名，beforeDestroy 改为 beforeUnmount，destroyed 改为 unmounted
 
-- 响应式原理不同。Vue2 通过 `Object.defineProperty` 实现，存在一定的缺陷；Vue3 使用 Proxy 实现。
+  - 由于 Vue3 没有了组件实例，所以不能使用事件总线。此外，`$on`，`$off`，`$once` 也被移除了。
+
+  - 移除了 filter，使用 computed 代替。
+
+  - 移除了 `$children`，使用 ref 获取子组件实例。
+
+  - Vue3 还推荐使用新的状态管理库 Pinia，和新的构建工具 Vite。
+
+- 原理方面：
+
+  - Vue3 放弃了对 IE 的支持，所以在 nextTick 的实现上做了一些优化。
+
+  - Vue3 使用 Proxy 实现响应式，解决了 Vue2 使用 defineProperty 的缺陷。
 
 ## ref 和 reactive 的区别
 
@@ -966,13 +978,43 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 ## 双向数据绑定原理
 
+- 什么是双向绑定？
 
+  - `v-model` 主要用于表单元素的双向绑定，用来收集表单数据。对于不同的元素，它绑定的属性和事件不同。
 
-## Vue2 响应式原理
+- 实现原理：
 
+  - 如果是输入框或文本域，绑定 `value` 属性和 `input` 事件；
 
+  - 如果是单选框或多选框，绑定 `checked` 属性和 `change` 事件；
 
-## Vue3 响应式原理
+  - 如果是下拉列表，绑定 `value` 属性和 `change` 事件；
+
+  - 如果是组件，Vue2 绑定 `value` 属性和 `input` 事件，
+
+    Vue3 绑定 `modelValue` 属性和 `update:modelValue` 事件。
+
+## Vue2 响应式原理★
+
+- 响应式原理指的是：
+
+  当响应式数据更新时，根据 render 函数返回的虚拟 DOM 树生成真实 DOM 元素，插入到页面，更新视图。
+
+- 响应式原理的具体过程分为数据代理、数据劫持、页面解析渲染和更新触发响应式：
+
+  - 数据代理：
+
+    遍历 _data 中的数据，使用 defineProperty 给实例扩展一个同名属性，并通过 get 和 set 监听这些属性。它们实际都是操作 _data 中的数据，所以我们访问实例上的数据就是访问 _data 中的数据。同时代理的还有 props、methods、watch。
+
+  - 数据劫持：
+
+    遍历 _data 中的数据，然后调用 defineReactive 函数为每一个属性都创建一个 dep 对象，通过 defineProperty 对这些属性进行重写，并添加 getter 和 setter，此时 dep 对象会以闭包的形式保存在 getter 和 setter 中。
+
+    当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖：在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
+
+    当我们修改响应式数据时，就会触发 set 方法，它会更新数据，同时调用 dep 的 notify 方法，遍历 dep 的 subs 数组中的 watcher，并按照 id 从小到大排列，然后依次执行每个 watcher 的 update 方法。在 update 方法中，判断 watcher 的类型，如果是计算 watcher，则不执行回调，后续会在 evaluate 方法中计算求值；如果是渲染 watcher 或侦听 watcher，则把 watcher 对象添加到一个调度队列中，然后通过 nextTick 将一个调度任务的方法 flushSchedulerQueue 添加到异步队列，等待异步执行。当执行这个调度任务的方法时，会从调度队列中依次取出每一个 watcher 对象执行它的 run 方法更新视图并重新收集依赖。
+
+## Vue3 响应式原理★
 
 
 
@@ -999,3 +1041,4 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
   - 静态资源缓存：资源长期不会修改，使用强制缓存；资源随时变化，使用协商缓存
 
   - 服务端渲染：在服务端将渲染逻辑处理好，将处理好的 html 返回给前端
+
