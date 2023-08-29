@@ -770,17 +770,17 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
   - Vue 或组件被实例化（new Vue），进入初始化阶段。
 
-  - 初始化事件和生命周期，
+  - 初始化事件和生命周期。
   
-  - `beforeCreate` 触发，此时无法通过实例访问 data methods computed watch 等数据，
+  - `beforeCreate` 触发，此时无法通过实例访问 data methods computed watch 等数据。
   
-  - 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据，
+  - 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据。
   
   - `created` 触发，此时可以通过实例访问数据。
 
 - 编译阶段：
 
-  - 判断 Vue 是否配置 el 选项，
+  - 判断 Vue 是否配置 el 选项。
   
   - 如果没有 el 选项，则等待使用 `$mount` 提供 el 选项；
   
@@ -792,17 +792,19 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 - 挂载阶段：
 
-  - 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效，
-  
-  - 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器，
-  
-  - 挂载之后，`mounted` 触发，视图呈现的是编译后的 DOM。一般在这个阶段进行开启定时器、发送网络请求、订阅消息、监听自定义事件等操作。
+  - 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效。
+
+  - 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器。
+
+  - 挂载之后，`mounted` 触发，视图呈现的是编译后的 DOM。
+
+    一般在这个阶段进行开启定时器、发送网络请求、监听自定义事件等操作。
 
 - 更新阶段：
 
   - 当响应式数据发生改变的时候，进入更新阶段。
   
-  - `beforeUpdate` 触发，此时数据已更新，视图还未更新，
+  - `beforeUpdate` 触发，此时数据已更新，视图还未更新。
   
   - 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM，
   
@@ -812,33 +814,77 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
   - 当 `$destroy` 被调用，或条件渲染组件或路由时，进入销毁阶段。
   
-  - 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段进行关闭定时器、取消订阅、移除自定义事件等操作，
+  - 实例销毁之前，`beforeDestroy` 触发。
   
-  - 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，
+    一般在这个阶段进行关闭定时器、移除自定义事件等操作，防止内存泄漏。
+  
+  - 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开联系，移除所有事件监听器。
   
   - 实例销毁之后，`destroyed` 触发。
 
-## 组件间通信
+## 组件通信方式
 
-- props - 父子组件通信。
+- props 和自定义事件
 
-- 自定义事件 - 父子组件通信。父组件通过 `$on` 监听事件，子组件通过 `$emit` 触发事件，并可以携带参数。
+  用于父子组件通信。
 
-- 事件总线 - 任意组件通信。在 Vue 的原型对象上挂载一个对象，将所有事件监听都绑定给这个对象。
+- 事件总线
 
-- `v-model` - 用于表单元素的双向绑定。
+  Vue2 的任意组件通信方式。在 Vue 的原型对象上挂载一个对象，将所有事件监听都绑定给这个对象。
 
-- `v-bind.sync` - 用于非表单元素的双向绑定。
+  Vue3 不再使用这种方式，因为移除了 `$on`，`$once`，`$off`。
 
-- 作用域插槽 - 父子组件通信。父组件给子组件传递模板，子组件向父组件传递数据。
+- `v-model`
 
-- 依赖注入 - 祖孙组件通信。祖先组件通过 provide 提供属性和方法，后代组件通过 inject 注入。
+  用于父子组件双向通信。
 
-- 透传 - 祖孙组件通信。`$attrs` 和 `$listeners`，将属性和方法传递给内部组件。
+  Vue2 中绑定的是 `value` 属性和 `input` 事件；
 
-- 发布订阅 - 任意组件通信。类似于事件总线，由一个订阅中心对象监听数据的改变，然后通知依赖更新。
+  Vue3 中绑定的是 `modelValue` 属性和 `update:modelValue` 事件。
 
-- Vuex 或 Pinia
+  如果需要绑定多个数据，Vue2 使用 `v-bind.sync`，Vue3 使用 `v-model:`。
+
+- 插槽
+
+  用于父子组件通信。
+
+  父组件给子组件传递标签模板；如果是作用域插槽，子组件可以向父组件传递数据。
+
+- 依赖注入
+
+  用于祖孙组件通信。
+
+  祖先组件通过 provide 提供属性和方法，后代组件通过 inject 注入。
+
+- 透传
+
+  用于祖孙组件通信。
+
+  Vue2 中通过 `$attrs` 向内部组件传递属性，通过 `$listeners` 向内部组件传递方法。
+
+  Vue3 移除了 `$listeners`，透传的方法合并到了 `$attrs` 中，并且它还会传递样式。
+
+- 状态管理库
+
+  用于共享全局状态或方法。
+
+  Vue2 一般使用 Vuex；Vue3 一般使用 Pinia。
+
+- hooks
+
+  也可以共享全局状态或方法。
+
+  是 Vue3 中替代状态管理库的一种方案。
+
+- 本地存储
+
+  localStorage 和 sessionStorage，当上面的方式都实现不了时，使用本地存储。
+
+## 谈谈 Vuex
+
+Vuex 是一个
+
+## 谈谈 Pinia
 
 ## Pinia 相对于 Vuex 的优点
 
@@ -866,7 +912,7 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
   - Vue3 移除了 .native 修饰符，而未被 defineEmits 接收的事件会被视为原生事件。
 
-  - Vue3 移除了 `$listeners`，透传的方法合并到了 `$attrs` 中，并且 `$attrs` 还会传递动态样式。
+  - Vue3 移除了 `$listeners`，透传的方法合并到了 `$attrs` 中，并且 `$attrs` 还会传递样式。
 
   - 生命周期钩子重命名，beforeDestroy 改为 beforeUnmount，destroyed 改为 unmounted
 
@@ -962,15 +1008,15 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
 - nextTick 是什么？
 
-  nextTick 是用于异步执行回调函数的方法，会在下一次 DOM 更新循环结束之后执行回调函数。主要用于修改响应式数据后，需要等待 DOM 更新完成后执行某些操作。例如打开对话框触发表单校验规则需要等待表单元素渲染完毕，使用 Swiper 组件开启图片轮播时需要等待图片资源请求完成。由于 Vue 在数据更新后不会立即进行 DOM 的重新渲染，而是在下一次事件循环中进行批量更新，因此直接在数据修改后获取 DOM 可能会得到旧的结果或者报错。此时可以使用 nextTick 确保在 DOM 更新后执行回调。
+  nextTick 是用于异步执行回调函数的方法，会在下一次 DOM 更新循环结束之后执行回调函数。主要用于修改响应式数据后，需要等待 DOM 更新完成后执行某些操作。例如打开对话框需要等待表单元素渲染完毕才能触发表单校验规则，使用 Swiper 组件需要等待图片资源请求完成才能开启图片轮播。由于 Vue 在数据更新后不会立即进行 DOM 的重新渲染，而是在下一次事件循环中进行批量更新，因此直接在数据修改后获取 DOM 可能会得到旧的结果或者报错。此时可以使用 nextTick 确保在 DOM 更新后执行回调。
 
 - 原理：
 
-  在 Vue2 和 Vue3 中，nextTick 的原理有所不同。在 Vue2.6 和 2.7 的源码中，先准备一个 callbacks 数组，用来存放回调函数。再定义一个 flushCallbacks 方法，用来遍历 callbacks 数组并执行回调函数。再定义一个 timerFunc 函数，用来将执行回调的方法 flushCallbacks 添加到异步队列。考虑到兼容性问题，timerFunc 函数内部依次使用了四种添加异步任务的方法，分别是 Promise、MutationObserver、setImmediate、setTimeout，只选择次序最高的一种。Promise 通过 then 方法将回调函数添加到微队列；MutationObserver 会监听 DOM 元素的变化，并在变化时将回调函数添加到微队列；setImmediate 和 setTimeout 都是将回调函数添加到宏队列，但是 setImmediate 用于 nodejs 环境。
+  在 Vue2 和 Vue3 中，nextTick 的原理有所不同。在 Vue2.6 和 2.7 的实现中，先准备一个 callbacks 数组，用来存放回调函数。再定义一个 flushCallbacks 方法，用来遍历 callbacks 数组并执行回调函数。再定义一个 timerFunc 函数，用来将执行回调的方法 flushCallbacks 添加到异步队列。考虑到兼容性问题，timerFunc 函数内部依次使用了四种添加异步任务的方法，分别是 Promise、MutationObserver、setImmediate、setTimeout，只选择次序最高的一种。Promise 通过 then 方法将回调函数添加到微队列；MutationObserver 会监听 DOM 元素的变化，并在变化时将回调函数添加到微队列；setImmediate 和 setTimeout 都是将回调函数添加到宏队列，但是 setImmediate 用于 nodejs 环境。
 
 - 调用方式：
 
-  nextTick 有两种调用方式：回调函数形式和 Promise 形式。nextTick 会根据调用方式执行回调函数或返回一个 Promise。执行 nextTick 时，会将一个匿名函数添加到 callbacks 数组中。再执行 timerFunc，将 flushCallbacks 方法添加到异步队列。在这个匿名函数中，判断 nextTick 是否传入了回调函数。如果有的话，说明是回调函数形式的调用，就会执行这个回调函数；如果没有传入回调函数，说明是 Promise 形式的调用，就会返回一个 Promise，并执行 resolve，这样就会将 then 方法中的代码添加到异步队列。等浏览器执行完同步代码，就会开始执行异步队列中的任务。执行到 flushCallbacks 函数时，会遍历 callbacks 数组中的回调函数并执行。
+  nextTick 有两种调用方式：回调函数形式和 Promise 形式。nextTick 会根据调用方式执行回调函数或返回一个 Promise。执行 nextTick 时，会将一个匿名函数添加到 callbacks 数组中。再执行 timerFunc，将 flushCallbacks 方法添加到异步队列。在这个匿名函数中，判断 nextTick 是否传入了回调函数。如果有的话，说明是回调函数形式的调用，就会执行这个回调函数；如果没有传入回调函数，说明是 Promise 形式的调用，就会返回一个 Promise，并执行 resolve，这样就会将 then 方法中的代码添加到微队列。等浏览器执行完同步代码，就会开始执行异步队列中的任务。执行到 flushCallbacks 函数时，会遍历 callbacks 数组中的回调函数并执行。
 
 - Vue3 的区别：
 
@@ -1000,17 +1046,17 @@ Flex 布局又称为弹性布局。弹性容器中存在主轴和侧轴，默认
 
   当响应式数据更新时，根据 render 函数返回的虚拟 DOM 树生成真实 DOM 元素，插入到页面，更新视图。
 
-- 响应式原理的具体过程分为数据代理、数据劫持、页面解析渲染和更新触发响应式：
+- 响应式原理的具体过程分为数据代理和数据劫持：
 
   - 数据代理：
 
-    遍历 _data 中的数据，使用 defineProperty 给实例扩展一个同名属性，并通过 get 和 set 监听这些属性。它们实际都是操作 _data 中的数据，所以我们访问实例上的数据就是访问 _data 中的数据。同时代理的还有 props、methods、watch。
+    遍历 _data 中的数据，使用 defineProperty 给实例扩展一个同名属性，并通过 get 和 set 监听这些属性。它们实际都是操作 _data 中的数据，所以我们访问实例上的数据就是访问 _data 中的数据。同时代理的还有 props、computed、methods、watch。
 
   - 数据劫持：
 
     遍历 _data 中的数据，然后调用 defineReactive 函数为每一个属性都创建一个 dep 对象，通过 defineProperty 对这些属性进行重写，并添加 getter 和 setter，此时 dep 对象会以闭包的形式保存在 getter 和 setter 中。
 
-    当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖：在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
+    当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖。dep 收集 watcher 是为了可以通过 dep 找到 watcher，然后更新视图；watcher 收集 dep 是为了防止重复收集。在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中，同时还会收集 dep 对象的 id；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
 
     当我们修改响应式数据时，就会触发 set 方法，它会更新数据，同时调用 dep 的 notify 方法，遍历 dep 的 subs 数组中的 watcher，并按照 id 从小到大排列，然后依次执行每个 watcher 的 update 方法。在 update 方法中，判断 watcher 的类型，如果是计算 watcher，则不执行回调，后续会在 evaluate 方法中计算求值；如果是渲染 watcher 或侦听 watcher，则把 watcher 对象添加到一个调度队列中，然后通过 nextTick 将一个调度任务的方法 flushSchedulerQueue 添加到异步队列，等待异步执行。当执行这个调度任务的方法时，会从调度队列中依次取出每一个 watcher 对象执行它的 run 方法更新视图并重新收集依赖。
 
