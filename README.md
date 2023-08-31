@@ -1135,7 +1135,7 @@ iframe 标签就是在一个页面中嵌套另一个页面。
 
 - 响应式原理指的是：
 
-  当响应式数据更新时，根据 render 函数返回的虚拟 DOM 树生成真实 DOM 元素，插入到页面，更新视图。
+  当响应式数据更新时，根据 render 函数返回的虚拟 DOM 树生成真实 DOM 元素，插入到页面，触发视图更新。
 
 - 响应式原理的具体过程分为数据代理和数据劫持：
 
@@ -1147,13 +1147,41 @@ iframe 标签就是在一个页面中嵌套另一个页面。
 
     遍历 _data 中的数据，然后调用 defineReactive 函数为每一个属性都创建一个 dep 对象，通过 defineProperty 对这些属性进行重写，并添加 getter 和 setter，此时 dep 对象会以闭包的形式保存在 getter 和 setter 中。
 
-    当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖。dep 收集 watcher 是为了可以通过 dep 找到 watcher，然后更新视图；watcher 收集 dep 是为了防止重复收集。在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中，同时还会收集 dep 对象的 id；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
+    当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖。dep 收集 watcher 是为了可以通过 dep 找到 watcher，然后触发视图更新；watcher 收集 dep 是为了防止重复收集。在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中，同时还会收集 dep 对象的 id；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
 
-    当我们修改响应式数据时，就会触发 set 方法，它会更新数据，同时调用 dep 的 notify 方法，遍历 dep 的 subs 数组中的 watcher，并按照 id 从小到大排列，然后依次执行每个 watcher 的 update 方法。在 update 方法中，判断 watcher 的类型，如果是计算 watcher，则不执行回调，后续会在 evaluate 方法中计算求值；如果是渲染 watcher 或侦听 watcher，则把 watcher 对象添加到一个调度队列中，然后通过 nextTick 将一个调度任务的方法 flushSchedulerQueue 添加到异步队列，等待异步执行。当执行这个调度任务的方法时，会从调度队列中依次取出每一个 watcher 对象执行它的 run 方法更新视图并重新收集依赖。
+    当我们修改响应式数据时，就会触发 set 方法，它会更新数据，同时调用 dep 的 notify 方法，遍历 dep 的 subs 数组中的 watcher，并按照 id 从小到大排列，然后依次执行每个 watcher 的 update 方法。在 update 方法中，判断 watcher 的类型，如果是计算 watcher，则不执行回调，后续会在 evaluate 方法中计算求值；如果是渲染 watcher 或侦听 watcher，则把 watcher 对象添加到一个调度队列中，然后通过 nextTick 将一个调度任务的方法 flushSchedulerQueue 添加到异步队列，等待异步执行。当执行这个调度任务的方法时，会从调度队列中依次取出每一个 watcher 对象执行它的 run 方法触发视图更新并重新收集依赖。
 
 ## Vue3 响应式原理★
 
-Vue2 的响应式使用的是 defineProperty，它只能对对象的现有属性进行劫持，无法监听新增属性或者删除属性。
+- Vue2 的响应式使用的是 defineProperty，它只能监听对象的现有属性，无法监听新增属性或者删除属性。
+
+- Vue3 使用的是 Proxy 进行数据监听，它可以监听整个对象，包括对属性的读取、新增、修改和删除操作。
+
+- Vue3 的响应式主要用了四个方法：reactive、track、effect、trigger
+
+  - reactive：
+
+    它是用来将数据定义成响应式的。当我们定义 reactive 数据时，内部会通过 Proxy 对数据进行代理。但是 Proxy 只能进行代理对象的第一层属性，所以如果是引用类型，会递归调用 reactive，进行深度代理。
+
+    当我们访问响应式数据的时候，就会触发 get 方法，会使用 Reflect.get 返回数据的值，然后通过 track 收集依赖，相对于 Vue2 中 dep 的 depend 方法。
+
+    当我们修改响应式数据的时候，就会触发 set 方法，会使用 Reflect.set 更新数据，然后通过 trigger 触发视图更新，相对于 Vue2中 dep 的 notify 方法。
+
+  - track：
+
+    它是用来收集依赖的。建立响应式数据和 effect 实例之间的联系。
+
+  - effect：
+
+    它是用来触发视图更新的。
+
+    初始化渲染时，effect 方法会执行一遍，此时会生成 effect 实例，将更新视图的方法保存在 effect 实例，并调用这个方法来完成页面的初始化渲染。此时会触发 Proxy 的 get 方法，通过 track 收集依赖：创建一个 WeakMap 容器，存储的 key 为响应式对象，value 是一个 Map 容器，Map 容器的 key 是响应式数据的某个属性，value 是一个 Set 容器，Set 容器会存储 effect 实例。这就是一个建立响应式数据和 effect 实例之间的联系的过程。
+
+  - trigger：
+
+    它是用来更新依赖的。找到响应式数据对应的 effect 实例，调用 run 方法更新视图。
+
+    当响应式数据更新时，会触发 Proxy 的 set 方法，通过 trigger 更新依赖：通过 WeakMap 容器找到响应式数据对应的 effect 实例，调用 run 方法更新视图，完成响应式。这就是一个更新依赖的过程。
 
 ## keep-alive 原理
 
