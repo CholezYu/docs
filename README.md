@@ -415,13 +415,13 @@ iframe 标签就是在一个页面中嵌套另一个页面。
 
 - 模块化，主要是便于开发和维护，并且可以避免同名变量产生的冲突。
 
-- Promise：[谈谈 Promise](#谈谈 Promise)
+- Promise：[😄 谈谈 Promise](#😄 谈谈 Promise)
 
 - async 和 await，它是 Promise 的语法糖，以同步的形式实现异步操作。
 
 - Set 和 Map，Set 可以用来做数组去重；Map 可以扩展对象属性名的类型，它可以是任意类型。
 
-- Proxy，可以代理对象，并监听一些行为。Vue3 的响应式原理就是基于 Proxy 实现的：[Vue3 响应式原理😄](#Vue3 响应式原理😄)
+- Proxy，可以代理对象，并监听一些行为。Vue3 的响应式原理就是基于 Proxy 实现的：[😄 Vue3 响应式原理](#😄 Vue3 响应式原理)
 
 ## 😄 谈谈 Promise
 

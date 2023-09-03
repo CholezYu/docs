@@ -2,7 +2,4 @@
 Desktop.ini
 
 # Editor
-node_modules
-.yarn
 .idea
-.vscode
