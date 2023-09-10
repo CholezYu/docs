@@ -1,4 +1,6 @@
-# 基本配置
+# 基本使用
+
+## 基本配置
 
 `npx webpack` or `webpack`
 
@@ -31,13 +33,9 @@ module.exports = {
 }
 ```
 
+## loader
 
-
-
-
-# loader
-
-## 处理样式资源
+### 处理样式资源
 
 `npm i style-loader css-loader -D`
 
@@ -69,7 +67,7 @@ module.exports = {
 }
 ```
 
-## 处理图片资源
+### 处理图片资源
 
 在 Webpack4 中，我们通过 `url-loader` 和 `file-loader` 对图片资源进行处理，
 
@@ -100,22 +98,24 @@ module.exports = {
 }
 ```
 
-## 处理 Babel
+### 处理 Babel
 
 `npm i babel-loader @babel/core @babel/preset-env -D`
 
-> `@babel/preset-env` 一个智能预设，允许使用最新的 JavaScript
->
-> `@babel/preset-react` 一个用来编译 React jsx 语法的预设
->
-> `@babel/preset-typescript` 一个用来编译 TypeScript 语法的预设
+`npm i @babel/preset-react -D`
+
+`npm i @babel/preset-typescript -D`
 
 ```js
 /* babel.config.js */
 
 module.exports = {
   // 预设
-  presets: ["@babel/preset-env"]
+  presets: [
+    "@babel/preset-env", // 处理 JS
+    "@babel/preset-react", // 处理 JSX
+    "@babel/preset-typescript" // 处理 TS
+  ]
 }
 ```
 
@@ -136,7 +136,108 @@ module.exports = {
 }
 ```
 
-## 处理 Vue
+### 提取 CSS 成单独文件
+
+`npm i mini-css-extract-plugin -D`
+
+将 CSS 打包成单独的文件，通过 link 标签加载。而不是创建一个 style 标签来生成样式
+
+```js
+/* webpack.prod.js */
+
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"] // 不需要 style-loader
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "static/css/main.css" // 指定输出文件名和目录
+    })
+  ]
+}
+```
+
+### 处理 CSS 兼容性
+
+`npm i postcss-loader postcss postcss-preset-env -D`
+
+```js
+/* webpack.prod.js */
+
+// 获取处理样式的 loaders
+const getStyleLoaders = (preProcessor) => {
+  return [
+    MiniCssExtractPlugin.loader,
+    "css-loader",
+    {
+      loader: "postcss-loader",
+      options: {
+        postcssOptions: {
+          plugins: [
+            "postcss-preset-env" // 能解决大多数样式兼容性问题
+          ]
+        }
+      }
+    },
+    preProcessor
+  ].filter(Boolean) // 筛选真值
+}
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: getStyleLoaders()
+      },
+      {
+        test: /\.less$/,
+        use: getStyleLoaders("less-loader")
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: getStyleLoaders("sass-loader")
+      }
+    ]
+  }
+}
+```
+
+```json
+/* package.json */
+
+{
+  "browserslist": ["last 2 version", "> 1%", "not dead"] // 不兼容低版本浏览器
+}
+```
+
+### 压缩 CSS
+
+`npm i css-minimizer-webpack-plugin -D`
+
+```js
+/* webpack.prod.js */
+
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
+
+module.exports = {
+  // ...
+  plugins: [
+    new CssMinimizerPlugin()
+  ]
+}
+```
+
+### 处理 Vue
 
 `npm install vue-loader@15 vue-template-compiler --save-dev` 指定 15 版本的 vue-loader
 
@@ -172,21 +273,17 @@ module.exports = {
 }
 ```
 
-## 处理字体图标
+### 处理字体图标
 
 http://xxpromise.gitee.io/webpack5-docs/base/font.html
 
-## 处理音频视频
+### 处理音频视频
 
 http://xxpromise.gitee.io/webpack5-docs/base/other.html
 
+## plugins
 
-
-
-
-# plugins
-
-## 处理 HTML
+### 处理 HTML
 
 `npm i html-webpack-plugin -D`
 
@@ -207,7 +304,7 @@ module.exports = {
 }
 ```
 
-## 处理 Eslint
+### 处理 Eslint
 
 `npm i eslint-webpack-plugin eslint -D`
 
@@ -247,17 +344,16 @@ module.exports = {
   // ...
   plugins: [
     new ESLintWebpackPlugin({
-      context: path.resolve(__dirname, "src") // 指定检查文件的根目录
+      context: path.resolve(__dirname, "src") // 出口
     })
   ]
 }
 ```
 
-## 添加版权
-
-#### 配置 webpack.config.js
+### 添加版权
 
 ```js
+// webpack.config.js
 const path = require('path')
 const webpack = require('webpack')
 
@@ -268,22 +364,17 @@ module.exports = {
     filename: 'bundle.js'
   },
   plugins: [
-    new webpack.BannerPlugin('最终版权归 ln 所有')
+    new webpack.BannerPlugin('最终版权归 ** 所有')
   ]
 }
 ```
 
-## 压缩
+### 压缩
 
-> 打包时配置
-
-#### 安装 terser-webpack-plugin
-
-`npm install terser-webpack-plugin --save-dev`
-
-#### 配置 webpack.congfig.js
+`npm i terser-webpack-plugin -D`
 
 ```js
+// webpack.congfig.js
 const path = require('path')
 const TerserWebpackPlugin = require("terser-webpack-plugin")
 
@@ -300,11 +391,7 @@ module.exports = {
 }
 ```
 
-
-
-
-
-# devServer
+## devServer
 
 `npm i webpack-dev-server -D`
 
@@ -320,3 +407,23 @@ module.exports = {
   }
 }
 ```
+
+
+
+
+
+# 高级优化
+
+## 提升开发体验
+
+
+
+## 提升打包速度
+
+
+
+## 减少代码体积
+
+
+
+## 优化代码性能

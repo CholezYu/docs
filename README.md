@@ -1,4 +1,4 @@
-# HTML
+﻿# HTML
 
 ## 😊 HTML5 新特性有哪些
 
@@ -24,7 +24,7 @@
 
   - 但是它们的样式不好控制，在项目中一般会使用一些 UI 组件库，例如 element-ui、ant-design 等。
 
-- 还新增了 canvas，我一般是使用 ECharts，在项目中封装过一个通用的 ECharts 组件：[😊 ECharts 组件](#😊 ECharts 组件)
+  - 还新增了 canvas，我一般是使用 ECharts，在项目中封装过一个通用的 ECharts 组件：[😊 ECharts 组件](#😊 ECharts 组件)
 
 - 还新增了本地存储 API：
 
