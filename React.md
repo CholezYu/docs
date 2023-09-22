@@ -13,9 +13,8 @@
 ## 基本使用
 
 - `React.createElement()`
-
   - 创建虚拟 DOM
-
+  
   - 参数分别是：标签名；标签属性；子节点...
   
 - `ReactDOM.createRoot()`
