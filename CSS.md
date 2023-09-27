@@ -170,47 +170,47 @@
 
 ```css
 /* 正常 */
-{ font-style: normal; }
+font-style: normal;
 
 /* 斜体 */
-{ font-style: italic; }
+font-style: italic;
 ```
 
 ## 字体宽度 font-weight
 
 ```css
 /* 正常 */
-{ font-weight: normal; }
+font-weight: normal;
 
 /* 加粗 */
-{ font-weight: bold; }
+font-weight: bold;
 
 /* 相对于继承的状态加粗 */
-{ font-weight: bolder; }
+font-weight: bolder;
 
 /* 相对于继承的状态变细 */
-{ font-weight: lighter; }
+font-weight: lighter;
 
 /* 细 */
-{ font-weight: 300; }
+font-weight: 300;
 
 /* 正常 */
-{ font-weight: 500; }
+font-weight: 500;
 
 /* 粗 */
-{ font-weight: 600; }
+font-weight: 600;
 ```
 
 ## 字号大小 font-size
 
 ```css
-{ font-size: 14px; }
+font-size: 14px;
 ```
 
 ## 字体系列 font-family
 
 ```css
-{ font-family: "Microsoft YaHei", sans-serif, SimSun, SimHei; }
+font-family: "Microsoft YaHei", sans-serif, SimSun, SimHei;
 ```
 
 ## 引用字体 @font-face
@@ -233,7 +233,7 @@ font-style > font-weight > font-size/line-height > font-family
 **必须设置 font-size 和 font-family**
 
 ```css
-{ font: italic bold 14px/14px "Microsoft YaHei"; }
+font: italic bold 14px/14px "Microsoft YaHei";
 ```
 
 ## 属性继承
@@ -250,13 +250,13 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 关键字 */
-{ color: red; }
+color: red;
 
 /* 十六进制 */
-{ color: #ffc0cb; }
+color: #ffc0cb;
 
 /* RGB */
-{ color: rgb(255, 194, 204); }
+color: rgb(255, 194, 204);
 ```
 
 ## 行框高度 line-height
@@ -270,7 +270,7 @@ font-style > font-weight > font-size/line-height > font-family
 - 如果 line-height 大于 font-size，就会把多出来的高度平分，并分别设置给文字上下作为间隙
 
 ```css
-{ line-height: 24px; }
+line-height: 24px;
 ```
 
 ## 水平对齐 text-align
@@ -279,16 +279,16 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 居中对齐 */
-{ text-align: center; }
+text-align: center;
 
 /* 居左对齐 */
-{ text-align: left; }
+text-align: left;
 
 /* 居右对齐 */
-{ text-align: right; }
+text-align: right;
 
 /* 两端对齐 */
-{ text-align: justify; }
+text-align: justify;
 ```
 
 ## 垂直对齐 vertical-align
@@ -297,16 +297,16 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 默认基线对齐 */
-{ vertical-align: baseline; }
+vertical-align: baseline;
 
 /* 居中对齐 */
-{ vertical-align: middle; }
+vertical-align: middle;
 
 /* 顶部对齐 */
-{ vertical-align: top; }
+vertical-align: top;
 
 /* 底部对齐 */
-{ vertical-align: bottom; }
+vertical-align: bottom;
 ```
 
 ## 文本装饰 text-decoration
@@ -344,7 +344,7 @@ font-style > font-weight > font-size/line-height > font-family
 单位一般不使用 px，而是使用 em 设置缩进两个字号大小
 
 ```css
-{ text-indent: 2em; }
+text-indent: 2em;
 ```
 
 ## 字词间距 word-spacing
@@ -352,7 +352,7 @@ font-style > font-weight > font-size/line-height > font-family
 被空格隔开的字词间的距离，例如 "What a nice day today"，"今天 天气 真好"
 
 ```css
-{ word-spacing: 5px; }
+word-spacing: 5px;
 ```
 
 ## 字符间距 letter-spacing
@@ -360,7 +360,7 @@ font-style > font-weight > font-size/line-height > font-family
 字符与字符间的距离
 
 ```css
-{ letter-spacing: 2px; }
+letter-spacing: 2px;
 ```
 
 ## 内容区溢出 overflow
@@ -369,16 +369,16 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 默认显示溢出部分 */
-{ overflow: visible; }
+overflow: visible;
 
 /* 隐藏溢出部分 */
-{ overflow: hidden; }
+overflow: hidden;
 
 /* 始终显示滚动条 */
-{ overflow: scroll; }
+overflow: scroll;
 
 /* 若有溢出部分则显示滚动条，否则不显示 */
-{ overflow: auto; }
+overflow: auto;
 ```
 
 ## 显示与隐藏 display
@@ -387,10 +387,10 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 元素默认显示 */
-{ display: block; }
+display: block;
 
 /* 元素隐藏 */
-{ display: none; }
+display: none;
 ```
 
 ## 元素可见性 visibility
@@ -399,10 +399,10 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 元素默认可见 */
-{ visibility: visible; }
+visibility: visible;
 
 /* 元素不可见 */
-{ visibility: hidden; }
+visibility: hidden;
 ```
 
 ## 不透明度 opacity
@@ -411,10 +411,10 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 完全不透明 */
-{ opacity: 1; }
+opacity: 1;
 
 /* 完全透明 */
-{ opacity: 0; }
+opacity: 0;
 ```
 
 ## 属性继承
@@ -443,10 +443,10 @@ font-style > font-weight > font-size/line-height > font-family
 
 ```css
 /* 默认透明 */
-{ background-color: transparent; }
+background-color: transparent;
 
 /* 半透明 */
-{ background-color: rgba(83, 210, 235, .5); }
+background-color: rgba(83, 210, 235, .5);
 ```
 
 ## 背景图像 background-image
@@ -454,33 +454,33 @@ font-style > font-weight > font-size/line-height > font-family
 一般不与 background-color 一起使用
 
 ```css
-{ background-image: url("https://www.baidu.com"); }
+background-image: url("https://www.baidu.com");
 ```
 
 ## 背景定位 background-position
 
 ```css
 /* 默认位于左上角 */
-{ background-position: left top; }
+background-position: left top;
 
 /* X, Y */
-{ background-position: 20px 50px; }
+background-position: 20px 50px;
 ```
 
 ## 背景填充 background-repeat
 
 ```css
 /* 默认填充整个页面 */
-{ background-repeat: repeat; }
+background-repeat: repeat;
 
 /* 横向填充 */
-{ background-repeat: repeat-x; }
+background-repeat: repeat-x;
 
 /* 纵向填充 */
-{ background-repeat: repeat-y; }
+background-repeat: repeat-y;
 
 /* 不填充 */
-{ background-repeat: no-repeat; }
+background-repeat: no-repeat;
 ```
 
 ## 复合属性 background
@@ -488,7 +488,7 @@ font-style > font-weight > font-size/line-height > font-family
 background-image > background-position > background-repeat
 
 ```css
-{ background: url("https://www.baidu.com") center center no-repeat; }
+background: url("https://www.baidu.com") center center no-repeat;
 ```
 
 
@@ -501,58 +501,58 @@ background-image > background-position > background-repeat
 
 ```css
 /* 默认实心圆 */
-{ list-style-type: disc; }
+list-style-type: disc;
 
 /* 无标记 */
-{ list-style-type: none; }
+list-style-type: none;
 
 /* 空心圆 */
-{ list-style-type: circle; }
+list-style-type: circle;
 
 /* 实心方块 */
-{ list-style-type: square; }
+list-style-type: square;
 ```
 
 ```css
 /* 默认阿拉伯数字 */
-{ list-style-type: decimal; }
+list-style-type: decimal;
 
 /* 小写罗马数字 */
-{ list-style-type: lower-roman; }
+list-style-type: lower-roman;
 
 /* 大写罗马数字 */
-{ list-style-type: upper-roman; }
+list-style-type: upper-roman;
 
 /* 小写英文字母 */
-{ list-style-type: lower-alpha; }
+list-style-type: lower-alpha;
 
 /* 大写英文字母 */
-{ list-style-type: upper-alpha; }
+list-style-type: upper-alpha;
 
 /* 小写希腊字母 */
-{ list-style-type: lower-Greek; }
+list-style-type: lower-Greek;
 
 /* 大写拉丁字母 */
-{ list-style-type: upper-latin; }
+list-style-type: upper-latin;
 
 /* 小写拉丁字母 */
-{ list-style-type: lower-latin; }
+list-style-type: lower-latin;
 ```
 
 ## 标号位置 list-style-position
 
 ```css
 /* 标号默认在列表区域内 */
-{ list-style-position: inside; }
+list-style-position: inside;
 
 /* 标号在列表区域外 */
-{ list-style-position: outside; }
+list-style-position: outside;
 ```
 
 ## 标号图像 list-style-image
 
 ```css
-{ list-style-image: url("https://www.baidu.com"); }
+list-style-image: url("https://www.baidu.com");
 ```
 
 ## 复合属性 list-style
@@ -560,7 +560,7 @@ background-image > background-position > background-repeat
 list-style-type > list-style-position > list-style-image
 
 ```css
-{ list-style: square inside url("https://www.baidu.com"); }
+list-style: square inside url("https://www.baidu.com");
 ```
 
 
@@ -795,7 +795,7 @@ list-style-type > list-style-position > list-style-image
 参照物为该元素的原始位置，不会脱离文档流，保留原来的位置，对布局不产生影响
 
 ```css
-{ position: relative; }
+position: relative;
 ```
 
 ## 绝对定位 absolute
@@ -803,7 +803,7 @@ list-style-type > list-style-position > list-style-image
 参照物为包含块(最近的定位父元素)，会脱离文档流，不保留原来的位置，对布局产生影响
 
 ```css
-{ position: absolute; }
+position: absolute;
 ```
 
 ## 固定定位 fixed
@@ -811,7 +811,7 @@ list-style-type > list-style-position > list-style-image
 参照物为浏览器窗口，会脱离文档流，不保留原来的位置，对布局产生影响
 
 ```css
-{ position: fixed; }
+position: fixed;
 ```
 
 ## 粘性定位 sticky
@@ -821,7 +821,7 @@ list-style-type > list-style-position > list-style-image
 **必须设置 top bottom left right 其中一个才会生效**
 
 ```css
-{ position: sticky; }
+position: sticky;
 ```
 
 ## 层叠顺序 z-index
@@ -1162,7 +1162,7 @@ ul li:only-child
 offset-x > offset-y > blur-radius > color
 
 ```css
-{ text-shadow: 1px 1px 2px black; }
+text-shadow: 1px 1px 2px black;
 ```
 
 - offset-x: 水平方向的偏移量（必要），正数向右，负数向左
@@ -1177,26 +1177,26 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 将连续的多个空格变成一个空格，文本溢出则换行(默认) */
-{ white-space: normal; }
+white-space: normal;
 
 /* 禁止文本换行 */
-{ white-space: nowrap; }
+white-space: nowrap;
 
 /* 保留空格 */
-{ white-space: pre; }
+white-space: pre;
 ```
 
 ## 文本转换 text-transform
 
 ```css
 /* 所有字母大写 */
-{ text-transform: uppercase; }
+text-transform: uppercase;
 
 /* 所有字母小写 */
-{ text-transform: lowercase; }
+text-transform: lowercase;
 
 /* 首字母大写 */
-{ text-transform: capitalize; }
+text-transform: capitalize;
 ```
 
 
@@ -1209,39 +1209,39 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 数值 */
-{ background-size: 300px 200px; }
+background-size: 300px 200px;
 
 /* 等比例缩放到完全覆盖容器 */
-{ background-size: cover; }
+background-size: cover;
 
 /* 等比例缩放到与容器宽高相等 */
-{ background-size: contain; }
+background-size: contain;
 ```
 
 ## 背景原点 background-origin
 
 ```css
 /* 背景原点默认在内边距左上角 */
-{ background-origin: padding-box; }
+background-origin: padding-box;
 
 /* 背景原点在边框左上角 */
-{ background-origin: border-box; }
+background-origin: border-box;
 
 /* 背景原点在内容区左上角 */
-{ background-origin: content-box; }
+background-origin: content-box;
 ```
 
 ## 背景裁剪 background-clip
 
 ```css
 /* 背景图默认在边框以内 */
-{ background-clip: border-box; }
+background-clip: border-box;
 
 /* 背景图在内边距以内 */
-{ background-clip: padding-box; }
+background-clip: padding-box;
 
 /* 背景图在内容区以内 */
-{ background-clip: content-box; }
+background-clip: content-box;
 ```
 
 
@@ -1254,29 +1254,29 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 标准盒子模型 */
-{ box-sizing: content-box; }
+box-sizing: content-box;
 
 /* 怪异盒子模型 */
-{ box-sizing: border-box; }
+box-sizing: border-box;
 ```
 
 ## 圆角边框 border-radius
 
 ```css
 /* 圆的半径大小 */
-{ border-radius: 25px; }
+border-radius: 25px;
 
 /* 圆的半径相对于盒子宽高的百分比 */
-{ border-radius: 50%; }
+border-radius: 50%;
 
 /* x: 左上 右上 右下 左下 / y: 左上 右上 右下 左下 */
-{ border-radius: 5px 5px 5px 5px / 5px 5px 5px 5px; }
+border-radius: 5px 5px 5px 5px / 5px 5px 5px 5px;
 ```
 
 ## 盒子阴影 box-shadow
 
 ```css
-{ box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .3); }
+box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .3);
 ```
 
 - offset-x: 水平方向的偏移量（必要），正数向右，负数向左
@@ -1295,7 +1295,7 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 父元素的宽度 - 自身的宽度 */
-{ width: calc(100% - 80px); }
+width: calc(100% - 80px);
 ```
 
 
@@ -1309,7 +1309,7 @@ offset-x > offset-y > blur-radius > color
 值越大，图像越模糊
 
 ```css
-{ filter: blur(5px); }
+filter: blur(5px);
 ```
 
 ## 亮度滤镜 brightness()
@@ -1317,7 +1317,7 @@ offset-x > offset-y > blur-radius > color
 值越大，图像越明亮。值为 0 时图像全黑，值为 1 时图像无变化
 
 ```css
-{ filter: brightness(2); }
+filter: brightness(2);
 ```
 
 ## 阴影滤镜 drop-shadow()
@@ -1325,7 +1325,7 @@ offset-x > offset-y > blur-radius > color
 与 box-shadow 属性相似，但是 `filter: drop-shadow()` 性能更好
 
 ```css
-{ filter: drop-shadow(16px 16px 10px black); }
+filter: drop-shadow(16px 16px 10px black);
 ```
 
 - offset-x: 水平方向的偏移量（必要），正数向右，负数向左
@@ -1341,13 +1341,13 @@ offset-x > offset-y > blur-radius > color
 与 opacity 属性相似，但是 `filter: opacity()` 性能更好
 
 ```css
-{ filter: opacity(0.5); }
+filter: opacity(0.5);
 ```
 
 ## 复合属性 filter
 
 ```css
-{ filter: blur(5px) brightness(2) drop-shadow(16px 16px 10px black) blur(5px); }
+filter: blur(5px) brightness(2) drop-shadow(16px 16px 10px black) blur(5px);
 ```
 
 
@@ -1359,7 +1359,7 @@ offset-x > offset-y > blur-radius > color
 ## 线性渐变 linear-gradient()
 
 ```css
-{ background: linear-gradient(to left, red, orange 30%, blue); }
+background: linear-gradient(to left, red, orange 30%, blue);
 ```
 
 - direction: 渐变方向
@@ -1379,7 +1379,7 @@ offset-x > offset-y > blur-radius > color
 ## 放射渐变 radial-gradient()
 
 ```css
-{ background: radial-gradient(circle at center, red 0, blue, green 100%); }
+background: radial-gradient(circle at center, red 0, blue, green 100%);
 ```
 
 - shape: 渐变形状
@@ -1412,42 +1412,42 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 相对于自身原点偏移 */
-{ transform: translate(100px, 100px); }
+transform: translate(100px, 100px);
 
 /* 水平偏移量 */
-{ transform: translateX(50%); }
+transform: translateX(50%);
 
 /* 垂直偏移量 */
-{ transform: translateY(50%); }
+transform: translateY(50%);
 ```
 
 ## 旋转变换 rotate()
 
 ```css
 /* 相对于自身中心旋转 */
-{ transform: rotate(45deg); }
+transform: rotate(45deg);
 
 /* 绕水平中心轴旋转, 度数为正, 上边缘向里旋转 */
-{ transform: rotateX(45deg); }
+transform: rotateX(45deg);
 
 /* 绕垂直中心轴旋转, 度数为正, 右边缘向里旋转 */
-{ transform: rotateY(45deg); }
+transform: rotateY(45deg);
 ```
 
 ## 缩放变换 scale()
 
 ```css
 /* 相对于自身中心缩放 */
-{ transform: scale(2); }
+transform: scale(2);
 
 /* 水平方向缩放 0.5, 垂直方向缩放 1.5 */
-{ transform: scale(0.5, 1.5); }
+transform: scale(0.5, 1.5);
 ```
 
 ## 复合属性 transform
 
 ```css
-{ transform: translate(100px, 100px) rotate(45deg) scale(0.5, 0.5); }
+transform: translate(100px, 100px) rotate(45deg) scale(0.5, 0.5);
 ```
 
 ## 变换中心 transform-origin
@@ -1456,10 +1456,10 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 默认相对于自身原点的偏移量为(50%, 50%) */
-{ transform-origin: 50% 50%; }
+transform-origin: 50% 50%;
 
 /* 以自身的左上角为旋转中心 */
-{ transform-origin: left top; }
+transform-origin: left top;
 ```
 
 
@@ -1472,10 +1472,10 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 单个属性写法 */
-{ transition: all 0.5s ease 0.2s; }
+transition: all 0.5s ease 0.2s;
 
 /* 多个属性写法 */
-{ transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s; }
+transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
 ```
 
 - transition-property: 设置需要过渡的 CSS 属性
@@ -1527,7 +1527,7 @@ offset-x > offset-y > blur-radius > color
 ## 动画 animation
 
 ```css
-{ animation: move 2s linear 1s infinite alternate; }
+animation: move 2s linear 1s infinite alternate;
 ```
 
 - animation-name: 关键帧名称
@@ -1570,16 +1570,16 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 水平向右 */
-{ flex-direction: row; }
+flex-direction: row;
 
 /* 水平向左 */
-{ flex-direction: row-reverse; }
+flex-direction: row-reverse;
 
 /* 垂直向下 */
-{ flex-direction: column; }
+flex-direction: column;
 
 /* 垂直向上 */
-{ flex-direction: column-reverse; }
+flex-direction: column-reverse;
 ```
 
 ### 主轴对齐 justify-content
@@ -1588,22 +1588,22 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* item 从主轴头部开始排列 (默认) */
-{ justify-content: flex-start; }
+justify-content: flex-start;
 
 /* item 居中对齐 */
-{ justify-content: center; }
+justify-content: center;
 
 /* item 从主轴尾部开始排列 */
-{ justify-content: flex-end; }
+justify-content: flex-end;
 
 /* item 均匀排列, 首个 item 位于主轴开始位置, 末尾 item 位于主轴结束位置 */
-{ justify-content: space-between; }
+justify-content: space-between;
 
 /* item 均匀排列, 每个 item 周围分配相同的空间(拉手对齐) */
-{ justify-content: space-around; }
+justify-content: space-around;
 
 /* item 均匀排列, 每个 item 之间的间隔相同 */
-{ justify-content: space-evenly; }
+justify-content: space-evenly;
 ```
 
 ### 侧轴对齐 align-items
@@ -1612,19 +1612,19 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* item 未设置宽/高时, 默认在交叉轴方向上拉伸至撑满弹性容器 */
-{ align-items: stretch; }
+align-items: stretch;
 
 /* item 从交叉轴起始位置开始排列 */
-{ align-items: flex-start; }
+align-items: flex-start;
 
 /* item 居中排列 */
-{ align-items: center; }
+align-items: center;
 
 /* item 从交叉轴结束位置开始排列 */
-{ align-items: flex-end; }
+align-items: flex-end;
 
 /* item 以基线对齐 */
-{ align-items: baseline; }
+align-items: baseline;
 ```
 
 ### 侧轴对齐 align-content
@@ -1633,22 +1633,22 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* item 默认从交叉轴起始位置开始排列 */
-{ align-content: flex-start; }
+align-content: flex-start;
 
 /* item 居中排列 */
-{ align-content: center; }
+align-content: center;
 
 /* item 从交叉轴结束位置开始排列 */
-{ align-content: flex-end; }
+align-content: flex-end;
 
 /* item 均匀排列, 首个 item 位于交叉轴开始位置, 末尾 item 位于交叉轴结束位置 */
-{ align-content: space-between; }
+align-content: space-between;
 
 /* item 均匀排列, 每个 item 周围分配相同的空间(拉手对齐) */
-{ align-content: space-around; }
+align-content: space-around;
 
 /* item 均匀排列, 每个 item 之间的间隔相同 */
-{ align-content: space-evenly; }
+align-content: space-evenly;
 ```
 
 ### 换行排列 flex-wrap
@@ -1657,26 +1657,24 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 默认不换行 */
-{ flex-wrap: nowrap; }
+flex-wrap: nowrap;
 
 /* 溢出换行 */
-{ flex-wrap: wrap; }
+flex-wrap: wrap;
 
 /* 换行并使交叉轴反向 */
-{ flex-wrap: wrap-reverse; }
+flex-wrap: wrap-reverse;
 ```
 
 ### 复合属性 flex-flow
 
 ```css
 /* 主轴方向 换行排列 */
-{ flex-flow: column wrap; }
+flex-flow: column wrap;
 
 /* 等价于 */
-{
-  flex-direction: column;
-  flex-wrap: wrap;
-}
+flex-direction: column;
+flex-wrap: wrap;
 ```
 
 ## 弹性元素样式
@@ -1687,19 +1685,19 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* item 未设置宽/高时, 默认在交叉轴方向上拉伸至撑满弹性容器 */
-{ align-self: stretch; }
+align-self: stretch;
 
 /* item 从交叉轴起始位置开始排列 */
-{ align-self: flex-start; }
+align-self: flex-start;
 
 /* item 居中排列 */
-{ align-self: center; }
+align-self: center;
 
 /* item 从交叉轴结束位置开始排列 */
-{ align-self: flex-end; }
+align-self: flex-end;
 
 /* item 以基线对齐 */
-{ align-self: baseline; }
+align-self: baseline;
 ```
 
 ### 排列顺序 order
@@ -1732,10 +1730,10 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 默认等比例压缩 */
-{ flex-shrink: 1; }
+flex-shrink: 1;
 
 /* 不压缩 */
-{ flex-shrink: 0; }
+flex-shrink: 0;
 ```
 
 ### 初始大小 flex-basis
@@ -1746,17 +1744,15 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 剩余分配 收缩规则 初始大小 */
-{ flex: 1 1 100%; }
+flex: 1 1 100%;
 
 /* 等价于 */
-{
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 100%;
-}
+flex-grow: 1;
+flex-shrink: 1;
+flex-basis: 100%;
 
 /* 省略 flex-shrink 和 flex-basis, 默认分别为 1 0% */
-{ flex: 1; }
+flex: 1;
 ```
 
 
@@ -1771,32 +1767,32 @@ offset-x > offset-y > blur-radius > color
 
 ```css
 /* 分为两列，每列占比相等 */
-{ grid-template-columns: 1fr 1fr; }
+grid-template-columns: 1fr 1fr;
 
 /* 分为两列，占比为 1:2 */
-{ grid-template-columns: 1fr 2fr; }
+grid-template-columns: 1fr 2fr;
 
 /* 分为三列，第一列为 100px，其余两列按 1:2 占父元素剩余宽度 */
-{ grid-template-columns: 100px 1fr 2fr; }
+grid-template-columns: 100px 1fr 2fr;
 
 /* 分为三列，每列占比相等, 1fr 被重复3次 */
-{ grid-template-columns: repeat(3,1fr); }
+grid-template-columns: repeat(3,1fr);
 ```
 
 ### 行 grid-template-rows
 
 ```css
 /* 分为两行，每行占比相等 */
-{ grid-template-columns: 1fr 1fr; }
+grid-template-columns: 1fr 1fr;
 
 /* 分为两行，占比为 1:2 */
-{ grid-template-columns: 1fr 2fr; }
+grid-template-columns: 1fr 2fr;
 
 /* 分为三行，第一行为 100px，其余两行按 1:2 占父元素剩余宽度 */
-{ grid-template-columns: 100px 1fr 2fr; }
+grid-template-columns: 100px 1fr 2fr;
 
 /* 分为三行，每行占比相等, 1fr 被重复3次 */
-{ grid-template-columns: repeat(3,1fr); }
+grid-template-columns: repeat(3,1fr);
 ```
 
 ### 命名 grid-template-area
@@ -1847,10 +1843,10 @@ grid-column-start 和 grid-column-end 的复合属性
 
 ```css
 /* 从列的第 1 条网格线开始，在第 5 条网格线结束 */
-{ grid-column: 1/5; }
+grid-column: 1/5;
 
 /* 从列的第 1 条网格线开始，跨越 3 列 */
-{ grid-column: 1/span 3; }
+grid-column: 1/span 3;
 ```
 
 ### 行位置 grid-row
@@ -1863,7 +1859,7 @@ grid-column 和 grid-row 的复合属性
 
 ```css
 /* 从行的第 1 条网格线和列的第 2 条网格线开始，在行的第 3 条网格线和列的第 4 条网格线结束 */
-{ grid-area: 1/2/3/4; }
+grid-area: 1/2/3/4;
 ```
 
 ### 水平排列 justify-self
@@ -1884,23 +1880,21 @@ justify-self 和 align-self 的复合属性
 
 # CSS3-鼠标样式
 
-鼠标悬停时显示
-
 ```css
 /* 默认光标 */
-{ cursor: default; }
+cursor: default;
 
 /* 指示链接 */
-{ cursor: pointer; }
+cursor: pointer;
 
 /* 指示可移动 */
-{ cursor: move; }
+cursor: move;
 
 /* 指示文本 */
-{ cursor: text; }
+cursor: text;
 
 /* 指示禁止 */
-{ cursor: not-allowed; }
+cursor: not-allowed;
 ```
 
 

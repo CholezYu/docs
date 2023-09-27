@@ -1128,7 +1128,7 @@ app.get("/", (req, res) => {
 
 
 
-# middleware
+# 中间件
 
 ## 错误处理中间件
 
@@ -1266,19 +1266,7 @@ app.get("get-session", (req, res) => {
 
 
 
-# ejs
-
-## 模板引擎
-
-模板引擎可以将特定的模板渲染成 html
-
-```html
-<ul>
-  <li>姓名: 小明, 年龄: 20</li>
-  <li>姓名: 小红, 年龄: 23</li>
-  <li>姓名: 小强, 年龄: 21</li>
-</ul>
-```
+# 模板引擎
 
 ## 浏览器渲染
 
@@ -1554,7 +1542,7 @@ const decoded = jwt.verify(token, "secret")
 
 **参考**：https://www.npmjs.com/package/jsonwebtoken
 
-## 服务器签发 token
+## 服务器签发
 
 用户首次登录时，验证用户名密码，如果验证成功，由服务器签发 token，并返回给客户端
 
@@ -1568,7 +1556,7 @@ app.post("/login", (req, res) => {
 })
 ```
 
-## 客户端携带 token
+## 客户端携带
 
 客户端接收到 token 后在本地存储，并在下次请求（登录或路由跳转）时携带
 
@@ -1581,7 +1569,7 @@ fetch("http://127.0.0.1:8000/user", {
 })
 ```
 
-## 服务器验证 token
+## 服务器验证
 
 ```js
 app.get("/user", (req, res) => {

@@ -1,4 +1,4 @@
-# ES6: 变量声明
+# 变量声明
 
 ## let
 
@@ -182,7 +182,7 @@ MAX // ReferenceError: MAX is not defined
 
 
 
-# ES6: 解构赋值
+# 解构赋值
 
 ## 数组的解构赋值
 
@@ -2699,7 +2699,7 @@ str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 
 
 
-# ES6: Symbol
+# Symbol
 
 ## 概述
 
@@ -2876,7 +2876,7 @@ s + 2 // TypeError: Cannot convert a Symbol value to a number
 
 
 
-# ES6: Set & Map
+# Set & Map
 
 ## Set
 
@@ -3150,19 +3150,19 @@ for (let item of set) {
 
 
 
-# ES6: Proxy
+# Proxy
 
 
 
 
 
-# ES6: Reflect
+# Reflect
 
 
 
 
 
-# ES6: Promise
+# Promise
 
 ## Promise 介绍
 
@@ -3448,19 +3448,19 @@ console.log(4)
 
 
 
-# ES6: Iterator
+# Iterator
 
 
 
 
 
-# ES6: Generator
+# Generator
 
 
 
 
 
-# ES6: async & await
+# async & await
 
 ## async 函数
 
@@ -3547,7 +3547,7 @@ console.log(4)
 
 
 
-# ES6: Class
+# Class
 
 
 

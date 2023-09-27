@@ -1,90 +1,6 @@
-# http
+# XMLHttpRequest
 
-## 请求报文
-
-- 请求首行：
-
-  - method: 请求方式
-
-  - url: 请求地址
-
-  - version: 协议版本
-
-- 请求头：
-
-  - Accept: 浏览器可以接收的数据类型
-
-  - User-Agent: 浏览器类型
-
-  - Content-Type: 请求体的数据类型
-
-- 空行：分隔请求头和请求体
-
-- 请求体：通过 Post 请求提交到服务器的数据
-
-  > Get 请求的请求体为空
-
-## 响应报文
-
-- 响应行：
-
-  - version: 协议版本
-
-  - status: 响应状态码
-
-  - statusText: 状态码信息
-
-- 响应头：
-
-  - Access-Control-Allow-Origin: 允许跨域的地址
-  
-  - Content-Type: 响应体的数据类型
-  
-  - Cache-Control: 强制缓存字段
-  
-  - Etag / Last-Modifined: 协商缓存字段
-  
-- 空行：隔离响应头和响应体
-
-- 响应体：服务器返回给客户端的数据
-
-## 请求方法
-
-- 发送 Get 请求的方式：
-
-  - 通过 url 直接访问
-
-  - 通过 a 标签跳转
-
-  - 加载 css、js、img 等静态资源
-
-  - 通过 form 表单发送
-
-  - 通过 ajax 发送
-
-- 发送 Post 请求的方式：
-
-  - 通过 form 表单发送
-
-  - 通过 ajax 发送
-
-- Get 与 Post 的区别：
-
-  - get 用于查询数据；post 用于添加数据
-
-  - get 将数据携带在 url 中发送；post 将数据携带请求体中发送
-
-  - get 携带数据大小有限，因为 url 有长度限制；post 携带数据大小没有限制
-  
-  - get 默认有缓存；post 没有缓存
-
-
-
-
-
-# xhr
-
-## XMLHttpRequest
+## 状态码
 
 - readyState: 请求状态码
 
@@ -97,7 +13,6 @@
   - 3: 正在接收响应体中的部分数据
 
   - 4: Ajax 请求完成，响应报文被全部接收
-
 - status: 响应状态码
 
   - 200: 请求成功
@@ -120,15 +35,7 @@
 
   - 503: 服务器由于各种原因停止运行，无法处理请求
 
-- statusText: 状态码信息
-
-- getAllresponseHeaders(): 获取响应头
-
-- response: 响应体
-
-- responseText: 响应体字符串
-
-## 发送 get 请求
+## Get 请求
 
 ```js
 // 创建 xhr 对象
@@ -155,7 +62,7 @@ xhr.onload = () => {
 }
 ```
 
-## 发送 post 请求
+## Post 请求
 
 ```js
 const xhr = new XMLHttpRequest()
@@ -224,7 +131,7 @@ xhr.onload = () => {
 
 # fetch
 
-## 发送 get 请求
+## Get 请求
 
 Promise 风格
 
@@ -252,7 +159,7 @@ const request = async () => {
 }
 ```
 
-## 发送 post 请求
+## Post 请求
 
 ```js
 fetch("http://127.0.0.1:8000/user", {
@@ -292,7 +199,7 @@ element.onclick = () => {
 
 # axios
 
-## 发送 get 请求
+## Get 请求
 
 - 参数：
 
@@ -314,7 +221,7 @@ element.onclick = () => {
   axios.get("http://127.0.0.1:8000/user")
   ```
 
-## 发送 post 请求
+## Post 请求
 
 - 参数：
 
@@ -434,15 +341,15 @@ instance.interceptors.response.use(
 
 - 无法读取 Cookie、LocalStorage、IndexedDB
 
-## jsonp
+## Jsonp
 
 使用：`<script>` 标签不受同源策略的影响，可以通过 src 属性携带执行代码发送跨域请求
 
 优点：没有兼容性问题
 
-缺点：只支持 get 请求；可能会存在恶意代码
+缺点：只支持 Get 请求；可能会存在恶意代码
 
-## cors
+## CORS
 
 使用：跨域资源共享。由 **服务器** 设置一组响应头字段实现跨域
 
@@ -463,7 +370,7 @@ res.setHeader("Access-Control-Allow-Headers", "Content-type")
 
 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS
 
-## proxy
+## Proxy
 
 使用：浏览器有跨域限制，但是服务器不存在跨域问题。所以可以由代理服务器向目标服务器请求资源再返回给客户端
 
