@@ -1,6 +1,4 @@
-# Less
-
-## 嵌套
+# 嵌套
 
 使用 Less 提供的嵌套语法代替 CSS 层叠
 
@@ -10,7 +8,7 @@
   height: 200px;
   background-color: blue;
 
-  &:hover /* &: container */ {
+  &:hover /* & => container */ {
     background-color: orange;
   }
 
@@ -22,27 +20,11 @@
 }
 ```
 
-编译成 CSS:
 
-```css
-.container {
-  width: 200px;
-  height: 200px;
-  background-color: blue;
-}
 
-.container:hover {
-  background-color: orange;
-}
 
-.container .inner {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-}
-```
 
-## 变量
+# 变量
 
 Less 可以定义变量
 
@@ -56,16 +38,7 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  width: 10px;
-  height: 20px;
-}
-```
-
-**插值语法**
+插值语法
 
 ```less
 @my-selector: .container;
@@ -78,101 +51,59 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.container {
-  width: 100px;
-  height: 100px;
-  background: url("https://www.baidu.com");
-}
-```
-
-**加法运算**，算术运算符在加法运算之前会进行单位转换
+加法运算，算术运算符在加法运算之前会进行单位转换
 
 ```less
 @a: 100;
 @b: 20px;
 
 .box {
-  width: @a + @b;
+  width: @a + @b; /* 120px */
   height: 200px;
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  width: 120px;
-  height: 200px;
-}
-```
-
-**减法运算**，算术运算符在减法运算之前会进行单位转换
+减法运算，算术运算符在减法运算之前会进行单位转换
 
 ```less
 @a: 100;
 @b: 20px;
 
 .box {
-  width: @a - @b;
+  width: @a - @b; /* 80px */
   height: 200px;
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  width: 80px;
-  height: 200px;
-}
-```
-
-**乘法运算**
+乘法运算
 
 ```less
 @a: 100;
 @b: 20px;
 
 .box {
-  width: @a * @b;
+  width: @a * @b; /* 2000px */
   height: 200px;
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  width: 2000px;
-  height: 200px;
-}
-```
-
-**除法运算**
+除法运算
 
 ```less
 @a: 100;
 @b: 20px;
 
 .box {
-  width: (@a / @b);
+  width: (@a / @b); /* 5px */
   height: 100px;
 }
 ```
 
-编译成 CSS:
 
-```css
-.box {
-  width: 5px;
-  height: 100px;
-}
-```
 
-## 混入
+
+
+# 混入
 
 混入可以将一组定义属性运用在选择器中
 
@@ -188,17 +119,7 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  width: 100px;
-  height: 100px;
-  border: 1px solid red;
-}
-```
-
-**携带参数的混入**
+携带参数的混入
 
 ```less
 .common(@w, @h, @c: red /* 默认参数 */) {
@@ -216,23 +137,7 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.box1 {
-  width: 100px;
-  height: 200px;
-  color: blue;
-}
-
-.box2 {
-  width: 200px;
-  height: 300px;
-  color: red;
-}
-```
-
-**访问其他作用域中的混入函数**
+访问其他作用域中的混入函数
 
 ```less
 .container {
@@ -246,15 +151,7 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.box {
-  color: red;
-}
-```
-
-**模式匹配**，可以根据传递不同的参数更改 mixin 函数
+模式匹配，可以根据传递不同的参数更改 mixin 函数
 
 ```less
 .common(@_) {
@@ -279,23 +176,7 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
-
-```css
-.box1 {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-}
-
-.box2 {
-  width: 100px;
-  height: 100px;
-  background-color: blue;
-}
-```
-
-**重载**，可以根据传递参数的个数更改 mixin 函数
+重载，可以根据传递参数的个数更改 mixin 函数
 
 ```less
 .common(@a, @b) {
@@ -319,37 +200,25 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
 
-```css
-.box1 {
-  width: 100px;
-  height: 100px;
-  background-color: red;
-}
 
-.box2 {
-  width: 200px;
-  height: 200px;
-  background-color: blue;
-}
-```
 
-## 守卫
+
+# 守卫
 
 类似于 if...else 判断
 
 ```less
-.common(@num) when (@num<100), (@num>200) /* 或 */ {
-  width: 200px;
-  height: 200px;
-  background-color: red;
-}
-
 .common(@num) when (@num>=100) and (@num<=200) /* 与 */ {
   width: 150px;
   height: 150px;
   background-color: blue;
+}
+
+.common(@num) when (@num<100), (@num>200) /* 或 */ {
+  width: 200px;
+  height: 200px;
+  background-color: red;
 }
 
 .box1 {
@@ -361,23 +230,11 @@ Less 可以定义变量
 }
 ```
 
-编译成 CSS:
 
-```css
-.box1 {
-  width: 150px;
-  height: 150px;
-  background-color: blue;
-}
 
-.box2 {
-  width: 200px;
-  height: 200px;
-  background-color: red;
-}
-```
 
-## 函数
+
+# 函数
 
 Less 提供了预定义函数
 
@@ -385,7 +242,7 @@ Less 提供了预定义函数
 @flag: boolean(5 > 3);
 
 .box1 {
-  width: if((@flag) 100px, 200px);
+  width: if((@flag) 100px, 200px); /* 100px */
   height: 300px;
 }
 
@@ -393,28 +250,18 @@ Less 提供了预定义函数
 @b: 3;
 
 .box2 {
-  width: ceil((@a / @b));
-  height: floor((@a / @b));
+  width: ceil((@a / @b)); /* 67px */
+  height: floor((@a / @b)); /* 66px */
 }
 ```
 
-编译成 CSS:
 
-```css
-.box1 {
-  width: 100px;
-  height: 300px;
-}
 
-.box2 {
-  width: 67px;
-  height: 66px;
-}
-```
 
-## 导入
+
+# 导入
 
 ```less
-@import url("https://meyerweb.com/eric/tools/css/reset/reset200802.css");
+@import url("https://necolas.github.io/normalize.css/8.0.1/normalize.css");
 ```
 

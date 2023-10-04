@@ -1,3 +1,133 @@
+# 选择器
+
+## 伪类选择器
+
+link > visited > hover > active
+
+```css
+/* 未访问过的链接 */
+:link
+
+/* 已访问过的链接 */
+:visited
+
+/* 鼠标悬停的链接 */
+:hover
+
+/* 鼠标点击的链接 */
+:active
+```
+
+
+
+```css
+/* 属性名 */
+[name]
+
+/* 属性等于值 */
+[name="value"]
+
+/* 属性以值开始 */
+[name^="value"]
+
+/* 属性以值结尾 */
+[name$="value"]
+
+/* 属性包含值 */
+[name*="value"]
+```
+
+
+
+```css
+/* 获取焦点的表单元素 */
+:focus
+
+
+/* 未被禁用的表单元素 */
+:enabled
+
+/* 被禁用的表单元素 */
+:disabled
+
+/* 被选中的表单元素 */
+:checked
+```
+
+
+
+```css
+/* <ul> 中的 <li>，且该元素是第一个子元素 */
+ul li:first-child
+
+/* <ul> 中的 <li>，且该元素是最后一个子元素 */
+ul li:last-child
+
+/* <ul> 中的 <li>，且该元素是第 n 个子元素 */
+ul li:nth-child(n)
+
+
+/* <ul> 中的第一个 <li> */
+ul li:first-of-type
+
+/* <ul> 中的最后一个 <li> */
+ul li:last-of-type
+
+/* <ul> 中的第 n 个 <li> */
+ul li:nth-of-type(n)
+
+
+/* <ul> 中的唯一一个 <li> */
+ul li:only-child
+```
+
+
+
+```css
+/* 偶数元素 */
+:nth-child(even)
+:nth-child(2n)
+
+/* 奇数元素 */
+:nth-child(odd)
+:nth-child(2n+1)
+```
+
+
+
+```css
+/* 不匹配的元素 */
+:not(.active)
+
+/* 没有后代节点元素的元素 */
+:empty
+```
+
+## 伪元素选择器
+
+```css
+/* 在元素内部的最前面插入内容（必须设置 content 属性） */
+::before
+
+/* 在元素内部的最后面插入内容（必须设置 content 属性） */
+::after
+
+
+/* 元素的首字母 */
+::first-letter
+
+/* 元素的首行 */
+::first-line
+
+
+/* 元素中被选中的部分 */
+::selection
+```
+
+
+
+
+
 # 文本样式
 
 ## 文本装饰 text-decoration
@@ -38,22 +168,6 @@ text-decoration-style: wavy;
 
 /* 复合属性 */
 text-decoration: underline red solid;
-```
-
-## 内容溢出 overflow
-
-```css
-/* 显示溢出部分（默认） */
-overflow: visible;
-
-/* 隐藏溢出部分 */
-overflow: hidden;
-
-/* 始终显示滚动条 */
-overflow: scroll;
-
-/* 若有溢出部分则显示滚动条，否则不显示 */
-overflow: auto;
 ```
 
 ## 文本阴影 text-shadow
@@ -259,6 +373,385 @@ list-style-image: url("http://baidu.baike.com");
 
 
 
+# 过渡动画
+
+## 过渡 transition
+
+```css
+/* 单个属性写法 */
+transition: all 0.5s ease 0.2s;
+
+/* 多个属性写法 */
+transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
+```
+
+- transition-property: 设置需要过渡的 CSS 属性
+
+- transition-duration: 过渡执行时间
+
+- transition-timing-function: 速度曲线函数
+
+  - ease: 逐渐变慢（默认）
+
+  - linear: 匀速
+
+  - ease-in: 加速
+
+  - ease-out: 减速
+
+  - ease-in-out: 先加速，再减速
+
+- transition-delay: 过渡延迟时间
+
+## 动画 animation
+
+```css
+animation: move 2s linear 1s infinite alternate;
+```
+
+- animation-name: 动画（关键帧）名称
+
+- animation-duration: 动画执行时间
+
+- animation-timing-function: 速度曲线函数
+
+- animation-delay: 动画延迟时间
+
+- animation-iteration-count: 动画执行次数
+  - infinite: 无限次
+
+- animation-direction: 动画方向
+  - alternate: 来回播放
+
+- animation-play-state: 动画的播放和暂停
+
+  - running: 播放动画
+
+  - paused: 暂停动画
+
+- animation-fill-mode: 动画开始和结束状态
+
+  - none: 动画等待时和动画结束后，不会对元素的样式产生改变
+
+  - forwards: 动画结束后，元素的样式为动画的最后一帧
+
+  - backwards: 在动画等待时间内，元素的样式为动画的第一帧
+
+  - both: 在动画等待时和动画结束后，元素的样式分别为动画第一帧和最后一帧
+
+
+
+
+
+# 弹性布局
+
+## 弹性容器样式
+
+### 主轴方向 flex-direction
+
+```css
+/* 水平向右 */
+flex-direction: row;
+
+/* 水平向左 */
+flex-direction: row-reverse;
+
+/* 垂直向下 */
+flex-direction: column;
+
+/* 垂直向上 */
+flex-direction: column-reverse;
+```
+
+### 主轴对齐 justify-content
+
+弹性元素在主轴的排列方式
+
+```css
+/* 弹性元素从主轴起始位置开始排列（默认） */
+justify-content: flex-start;
+
+/* 弹性元素居中对齐 */
+justify-content: center;
+
+/* 弹性元素从主轴结束位置开始排列 */
+justify-content: flex-end;
+
+/* 弹性元素均匀排列, 首个弹性元素位于主轴起始位置, 最后一个弹性元素位于主轴结束位置 */
+justify-content: space-between;
+
+/* 弹性元素均匀排列, 每个弹性元素周围分配相同的空间 */
+justify-content: space-around;
+
+/* 弹性元素均匀排列, 每个弹性元素之间的间隔相同 */
+justify-content: space-evenly;
+```
+
+### 侧轴对齐 align-items
+
+弹性元素在侧轴的排列方式
+
+```css
+/* 弹性元素未设置宽高时, 在侧轴方向上拉伸至撑满弹性容器（默认） */
+align-items: stretch;
+
+/* 弹性元素从侧轴起始位置开始排列 */
+align-items: flex-start;
+
+/* 弹性元素居中排列 */
+align-items: center;
+
+/* 弹性元素从侧轴结束位置开始排列 */
+align-items: flex-end;
+
+/* 弹性元素以基线对齐 */
+align-items: baseline;
+```
+
+### 侧轴对齐 align-content
+
+换行的弹性元素在侧轴的排列方式
+
+```css
+/* 弹性元素从侧轴起始位置开始排列（默认） */
+align-content: flex-start;
+
+/* 弹性元素居中排列 */
+align-content: center;
+
+/* 弹性元素从侧轴结束位置开始排列 */
+align-content: flex-end;
+
+/* 弹性元素均匀排列, 首个弹性元素位于侧轴起始位置, 最后一个弹性元素位于侧轴结束位置 */
+align-content: space-between;
+
+/* 弹性元素均匀排列, 每个弹性元素周围分配相同的空间 */
+align-content: space-around;
+
+/* 弹性元素均匀排列, 每个弹性元素之间的间隔相同 */
+align-content: space-evenly;
+```
+
+### 换行排列 flex-wrap
+
+```css
+/* 不换行（默认） */
+flex-wrap: nowrap;
+
+/* 溢出换行 */
+flex-wrap: wrap;
+
+/* 换行并使侧轴反向 */
+flex-wrap: wrap-reverse;
+```
+
+### 复合属性 flex-flow
+
+```css
+/* 主轴方向 换行排列 */
+flex-flow: column wrap;
+
+/* 等价于 */
+flex-direction: column;
+flex-wrap: wrap;
+```
+
+## 弹性元素样式
+
+### 侧轴对齐 align-self
+
+单个弹性元素在侧轴的排列方式
+
+```css
+/* 弹性元素未设置宽高时, 在侧轴方向上拉伸至撑满弹性容器（默认） */
+align-self: stretch;
+
+/* 弹性元素从侧轴起始位置开始排列 */
+align-self: flex-start;
+
+/* 弹性元素居中排列 */
+align-self: center;
+
+/* 弹性元素从侧轴结束位置开始排列 */
+align-self: flex-end;
+
+/* 弹性元素以基线对齐 */
+align-self: baseline;
+```
+
+### 排列顺序 order
+
+弹性元素的排列顺序，数值越小次序越高
+
+### 富余空间 flex-grow
+
+给弹性元素按比例分配富余空间，默认为 0，表示不分配
+
+```css
+.outer {
+  width: 300px;
+}
+
+.box1 {
+  flex-grow: 1; /* 100px */
+}
+
+.box2 {
+  flex-grow: 2; /* 200px */
+}
+```
+
+### 收缩规则 flex-shrink
+
+按比例压缩弹性元素，默认为 1，表示等比例压缩
+
+```css
+/* 默认等比例压缩 */
+flex-shrink: 1;
+
+/* 不压缩 */
+flex-shrink: 0;
+```
+
+### 初始大小 flex-basis
+
+弹性元素被压缩时的最小宽高，默认为 auto
+
+### 复合属性 flex
+
+```css
+/* 弹性元素等比例分配富余空间或等比例压缩，且被压缩时的最小宽高为 0 */
+flex: 1;
+
+/* 等价于 */
+flex-grow: 1;
+flex-shrink: 1;
+flex-basis: 0;
+```
+
+
+
+
+
+# 网格布局
+
+## 网格容器样式
+
+### 列 grid-template-columns
+
+```css
+/* 分为两列，每列占比相等 */
+grid-template-columns: 1fr 1fr;
+
+/* 分为两列，占比为 1:2 */
+grid-template-columns: 1fr 2fr;
+
+/* 分为三列，第一列为 100px，其余两列按 1:2 占父元素剩余宽度 */
+grid-template-columns: 100px 1fr 2fr;
+
+/* 分为三列，每列占比相等, 1fr 被重复3次 */
+grid-template-columns: repeat(3, 1fr);
+```
+
+### 行 grid-template-rows
+
+```css
+/* 分为两行，每行占比相等 */
+grid-template-columns: 1fr 1fr;
+
+/* 分为两行，占比为 1:2 */
+grid-template-columns: 1fr 2fr;
+
+/* 分为三行，第一行为 100px，其余两行按 1:2 占父元素剩余宽度 */
+grid-template-columns: 100px 1fr 2fr;
+
+/* 分为三行，每行占比相等, 1fr 被重复3次 */
+grid-template-columns: repeat(3, 1fr);
+```
+
+### 命名 grid-template-area
+
+命名单元格，相同名称的单元格被划分为一个区域
+
+### 行列间距 grid-gap
+
+
+
+### 行间距 grid-row-gap
+
+
+
+### 列间距 grid-column-gap
+
+
+
+### 水平排列 justify-items
+
+网格元素的水平排列方式
+
+### 垂直排列 align-items
+
+网格元素的垂直排列方式
+
+### 复合属性 place-items
+
+justify-items 和 align-items 的复合属性
+
+### 水平排列 justify-content
+
+网格元素整体的水平排列方式，同弹性容器的 justify-content
+
+### 垂直排列 align-content
+
+网格元素整体的垂直排列方式，同弹性容器的 align-content
+
+### 复合属性 place-content
+
+justify-content 和 align-content 的复合属性
+
+## 网格元素样式
+
+### 列位置 grid-column
+
+grid-column-start 和 grid-column-end 的复合属性
+
+```css
+/* 从列的第 1 条网格线开始，在第 5 条网格线结束 */
+grid-column: 1/5;
+
+/* 从列的第 1 条网格线开始，跨越 3 列 */
+grid-column: 1/span 3;
+```
+
+### 行位置 grid-row
+
+grid-row-start 和 grid-row-end 的复合属性
+
+### 复合属性 grid-area
+
+grid-column 和 grid-row 的复合属性
+
+```css
+/* 从行的第 1 条网格线和列的第 2 条网格线开始，在行的第 3 条网格线和列的第 4 条网格线结束 */
+grid-area: 1/2/3/4;
+```
+
+### 水平排列 justify-self
+
+网格元素自身的水平排列方式
+
+### 垂直排列 align-self
+
+网格元素自身的垂直排列方式
+
+### 复合属性 place-self
+
+justify-self 和 align-self 的复合属性
+
+
+
+
+
 # 文本居中
 
 ## 单行文本垂直居中
@@ -390,7 +883,26 @@ margin: 0 auto;
 
 # 特殊样式
 
-## 取消表单框的默认轮廓线
+## 鼠标样式
+
+```css
+/* 默认光标 */
+cursor: default;
+
+/* 指示链接 */
+cursor: pointer;
+
+/* 指示可移动 */
+cursor: move;
+
+/* 指示文本 */
+cursor: text;
+
+/* 指示禁止 */
+cursor: not-allowed;
+```
+
+## 取消输入框的默认轮廓线
 
 ```css
 input {
@@ -445,720 +957,79 @@ display: -webkit-box;
 
 
 
-# 选择器
+# 移动端
 
-## 伪类选择器
-
-link > visited > hover > active
+## 媒体查询
 
 ```css
-/* 未访问过的链接 */
-:link
-
-/* 已访问过的链接 */
-:visited
-
-/* 鼠标悬停的链接 */
-:hover
-
-/* 鼠标点击的链接 */
-:active
-```
-
-
-
-```css
-/* 属性名 */
-[name]
-
-/* 属性等于值 */
-[name="value"]
-
-/* 属性以值开始 */
-[name^="value"]
-
-/* 属性以值结尾 */
-[name$="value"]
-
-/* 属性包含值 */
-[name*="value"]
-```
-
-
-
-```css
-/* 获取焦点的表单元素 */
-:focus
-
-
-/* 未被禁用的表单元素 */
-:enabled
-
-/* 被禁用的表单元素 */
-:disabled
-
-/* 被选中的表单元素 */
-:checked
-```
-
-
-
-```css
-/* <ul> 中的 <li>，且该元素是第一个子元素 */
-ul li:first-child
-
-/* <ul> 中的 <li>，且该元素是最后一个子元素 */
-ul li:last-child
-
-/* <ul> 中的 <li>，且该元素是第 n 个子元素 */
-ul li:nth-child(n)
-
-
-/* <ul> 中的第一个 <li> */
-ul li:first-of-type
-
-/* <ul> 中的最后一个 <li> */
-ul li:last-of-type
-
-/* <ul> 中的第 n 个 <li> */
-ul li:nth-of-type(n)
-
-
-/* <ul> 中的唯一一个 <li> */
-ul li:only-child
-```
-
-
-
-```css
-/* 偶数元素 */
-:nth-child(even)
-:nth-child(2n)
-
-/* 奇数元素 */
-:nth-child(odd)
-:nth-child(2n+1)
-```
-
-
-
-```css
-/* 不匹配的元素 */
-:not(.active)
-
-/* 没有后代节点元素的元素 */
-:empty
-```
-
-## 伪元素选择器
-
-```css
-/* 在元素内部的最前面插入内容(必须设置 content 属性) */
-::before
-
-/* 在元素内部的最后面插入内容(必须设置 content 属性) */
-::after
-
-
-/* 元素的首字母 */
-::first-letter
-
-/* 元素的首行 */
-::first-line
-
-
-/* 元素中被选中的部分 */
-::selection
-```
-
-
-
-
-
-# 滤镜
-
-## 模糊滤镜 blur()
-
-值越大，图像越模糊
-
-```css
-filter: blur(5px);
-```
-
-## 亮度滤镜 brightness()
-
-值越大，图像越明亮。值为 0 时图像全黑，值为 1 时图像无变化
-
-```css
-filter: brightness(2);
-```
-
-## 阴影滤镜 drop-shadow()
-
-与 box-shadow 属性相似，但是 `filter: drop-shadow()` 性能更好
-
-```css
-filter: drop-shadow(16px 16px 10px black);
-```
-
-- offset-x: 水平方向的偏移量（必要），正数向右，负数向左
-
-- offset-y: 垂直方向的偏移量（必要），正数向下，负数向上
-
-- blur-radius: 模糊距离
-
-- color: 阴影颜色
-
-## 透明滤镜 opacity()
-
-与 opacity 属性相似，但是 `filter: opacity()` 性能更好
-
-```css
-filter: opacity(0.5);
-```
-
-## 复合属性 filter
-
-```css
-filter: blur(5px) brightness(2) drop-shadow(16px 16px 10px black) blur(5px);
-```
-
-
-
-
-
-# 渐变
-
-## 线性渐变 linear-gradient()
-
-```css
-background: linear-gradient(to left, red, orange 30%, blue);
-```
-
-- direction: 渐变方向
-
-  - to left: 从右到左
-
-  - to right: 从左到右
-
-  - to top: 从上到下
-
-  - to bottom: 从下到上
-
-  - deg: 角度
-
-- color: 渐变颜色，可以设置每个颜色的渐变范围
-
-## 放射渐变 radial-gradient()
-
-```css
-background: radial-gradient(circle at center, red 0, blue, green 100%);
-```
-
-- shape: 渐变形状
-
-  - ellipse: 默认椭圆
-
-  - circle: 圆
-
-- size: 渐变大小
-
-  - closest-side
-
-  - closest-corner
-
-  - farthest-side
-
-  - farthest-corner
-
-- at position: 渐变中心
-
-- color: 渐变颜色
-
-
-
-
-
-# 变换
-
-## 平移 translate()
-
-```css
-/* 相对于自身原点偏移 */
-transform: translate(100px, 100px);
-
-/* 水平偏移量 */
-transform: translateX(50%);
-
-/* 垂直偏移量 */
-transform: translateY(50%);
-```
-
-## 旋转 rotate()
-
-```css
-/* 相对于自身中心旋转 */
-transform: rotate(45deg);
-
-/* 绕水平中心轴旋转, 度数为正, 上边缘向里旋转 */
-transform: rotateX(45deg);
-
-/* 绕垂直中心轴旋转, 度数为正, 右边缘向里旋转 */
-transform: rotateY(45deg);
-```
-
-## 缩放 scale()
-
-```css
-/* 相对于自身中心缩放 */
-transform: scale(2);
-
-/* 水平方向缩放 0.5, 垂直方向缩放 1.5 */
-transform: scale(0.5, 1.5);
-```
-
-## 复合属性 transform
-
-```css
-transform: translate(100px, 100px) rotate(45deg) scale(0.5, 0.5);
-```
-
-## 变换中心 transform-origin
-
-设置旋转与缩放的中心点
-
-```css
-/* 默认相对于自身原点的偏移量为(50%, 50%) */
-transform-origin: 50% 50%;
-
-/* 以自身的左上角为旋转中心 */
-transform-origin: left top;
-```
-
-
-
-
-
-# 过渡
-
-## 过渡 transition
-
-```css
-/* 单个属性写法 */
-transition: all 0.5s ease 0.2s;
-
-/* 多个属性写法 */
-transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
-```
-
-- transition-property: 设置需要过渡的 CSS 属性
-
-- transition-duration: 过渡执行时间
-
-- transition-timing-function: 速度曲线函数
-
-  - ease: 默认逐渐变慢
-
-  - linear: 匀速
-
-  - ease-in: 加速
-
-  - ease-out: 减速
-
-- transition-delay: 过渡延迟时间
-
-
-
-
-
-# 动画
-
-## 关键帧 @keyframes
-
-```css
-@keyframes move {
-  25% {
-    transform: translate(800px, 0);
-  }
-  50% {
-    transform: translate(800px, 400px);
-  }
-  75% {
-    transform: translate(0px, 400px);
+/* 在屏幕上, 并且最小宽度为 900px 时（屏幕宽度大于 900px）的样式 */
+@media screen and (min-width: 900px) {
+  article {
+    padding: 1rem 3rem;
   }
 }
 ```
 
-## 动画 animation
+- mediatype: 媒体类型
 
-```css
-animation: move 2s linear 1s infinite alternate;
+  - all: 用于所有设备
+
+  - print: 用于打印机
+
+  - screen: 用于屏幕
+
+- media feature: 媒体特性
+
+  - width: 宽度
+
+  - min-width: 最小宽度
+
+  - max-width: 最大宽度
+
+## 引入资源
+
+```html
+<!-- 在屏幕上, 并且最小宽度为 320px 时（屏幕宽度大于 320px）引入资源 -->
+<link rel="stylesheet" href="./style.css" media="screen and (min-width: 320px)" />
 ```
 
-- animation-name: 动画名称
+## 移动端适配
 
-- animation-duration: 动画执行时间
+媒体查询 + rem
 
-- animation-timing-function: 速度曲线函数
-
-- animation-delay: 动画延迟时间
-
-- animation-iteration-count: 动画执行次数（infinite 无限次）
-
-- animation-direction: 动画方向（alternate 来回播放）
-
-- animation-play-state: 动画的播放和暂停
-
-  - running: 播放动画
-
-  - paused: 暂停动画
-
-- animation-fill-mode: 动画开始和结束状态
-
-  - none: 动画等待时和动画结束后，不会对元素的样式产生改变
-
-  - forwards: 动画结束后，元素的样式为动画的最后一帧
-
-  - backwards: 在动画等待时间内，元素的样式为动画的第一帧
-  
-  - both: 在动画等待时和动画结束后，元素的样式分别为动画第一帧和最后一帧
-
-
-
-
-
-# 弹性布局
-
-## 弹性容器样式
-
-### 主轴方向 flex-direction
-
-```css
-/* 水平向右 */
-flex-direction: row;
-
-/* 水平向左 */
-flex-direction: row-reverse;
-
-/* 垂直向下 */
-flex-direction: column;
-
-/* 垂直向上 */
-flex-direction: column-reverse;
-```
-
-### 主轴对齐 justify-content
-
-弹性元素的整体对齐方式
-
-```css
-/* item 从主轴头部开始排列 (默认) */
-justify-content: flex-start;
-
-/* item 居中对齐 */
-justify-content: center;
-
-/* item 从主轴尾部开始排列 */
-justify-content: flex-end;
-
-/* item 均匀排列, 首个 item 位于主轴开始位置, 末尾 item 位于主轴结束位置 */
-justify-content: space-between;
-
-/* item 均匀排列, 每个 item 周围分配相同的空间(拉手对齐) */
-justify-content: space-around;
-
-/* item 均匀排列, 每个 item 之间的间隔相同 */
-justify-content: space-evenly;
-```
-
-### 侧轴对齐 align-items
-
-单行弹性元素的排列方式
-
-```css
-/* item 未设置宽/高时, 默认在交叉轴方向上拉伸至撑满弹性容器 */
-align-items: stretch;
-
-/* item 从交叉轴起始位置开始排列 */
-align-items: flex-start;
-
-/* item 居中排列 */
-align-items: center;
-
-/* item 从交叉轴结束位置开始排列 */
-align-items: flex-end;
-
-/* item 以基线对齐 */
-align-items: baseline;
-```
-
-### 侧轴对齐 align-content
-
-多行弹性元素换行后(`flex-wrap: wrap;`)在容器中的整体排列方式
-
-```css
-/* item 默认从交叉轴起始位置开始排列 */
-align-content: flex-start;
-
-/* item 居中排列 */
-align-content: center;
-
-/* item 从交叉轴结束位置开始排列 */
-align-content: flex-end;
-
-/* item 均匀排列, 首个 item 位于交叉轴开始位置, 末尾 item 位于交叉轴结束位置 */
-align-content: space-between;
-
-/* item 均匀排列, 每个 item 周围分配相同的空间(拉手对齐) */
-align-content: space-around;
-
-/* item 均匀排列, 每个 item 之间的间隔相同 */
-align-content: space-evenly;
-```
-
-### 换行排列 flex-wrap
-
-换行之后，justify-content 和 align-items 都是控制弹性元素在当前行/列内排列
-
-```css
-/* 默认不换行 */
-flex-wrap: nowrap;
-
-/* 溢出换行 */
-flex-wrap: wrap;
-
-/* 换行并使交叉轴反向 */
-flex-wrap: wrap-reverse;
-```
-
-### 复合属性 flex-flow
-
-```css
-/* 主轴方向 换行排列 */
-flex-flow: column wrap;
-
-/* 等价于 */
-flex-direction: column;
-flex-wrap: wrap;
-```
-
-## 弹性元素样式
-
-### 侧轴对齐 align-self
-
-单个弹性元素的排列方式，会覆盖 align-items
-
-```css
-/* item 未设置宽/高时, 默认在交叉轴方向上拉伸至撑满弹性容器 */
-align-self: stretch;
-
-/* item 从交叉轴起始位置开始排列 */
-align-self: flex-start;
-
-/* item 居中排列 */
-align-self: center;
-
-/* item 从交叉轴结束位置开始排列 */
-align-self: flex-end;
-
-/* item 以基线对齐 */
-align-self: baseline;
-```
-
-### 排列顺序 order
-
-子元素在弹性容器中的排列顺序，数值越小越靠前
-
-`order: -1` > `order: 0` > `order: 1`
-
-### 剩余空间 flex-grow
-
-将剩余空间按比例分配给弹性元素，默认为 0
-
-```css
-.outer {
-  width: 300px;
+```less
+/* PC */
+html {
+  font-size: 50px;
 }
 
-.box1 {
-  flex-grow: 1; /* 100px */
+@part: 10;
+
+/* 320 iPhone 5 */
+@media screen and (min-width: 320px) {
+  html {
+    font-size: 320px / @part;
+  }
 }
 
-.box2 {
-  flex-grow: 2; /* 200px */
+/* 375 iPhone 6/7/8 */
+@media screen and (min-width: 375px) {
+  html {
+    font-size: 375px / @part;
+  }
+}
+
+// ...
+
+@media screen and (min-width: 750px) {
+  html {
+    font-size: 750px / @part;
+  }
 }
 ```
 
-### 收缩规则 flex-shrink
 
-当弹性元素溢出容器时，元素被压缩的比例
 
-```css
-/* 默认等比例压缩 */
-flex-shrink: 1;
 
-/* 不压缩 */
-flex-shrink: 0;
-```
 
-### 初始大小 flex-basis
-
-弹性元素的初始宽高，默认为 0，优先级高于 width/height
-
-### 复合属性 flex
-
-```css
-/* 剩余分配 收缩规则 初始大小 */
-flex: 1 1 100%;
-
-/* 等价于 */
-flex-grow: 1;
-flex-shrink: 1;
-flex-basis: 100%;
-
-/* 省略 flex-shrink 和 flex-basis, 默认分别为 1 0% */
-flex: 1;
-```
-
-
-
-
-
-# 网格布局
-
-## 网格容器样式
-
-### 列 grid-template-columns
-
-```css
-/* 分为两列，每列占比相等 */
-grid-template-columns: 1fr 1fr;
-
-/* 分为两列，占比为 1:2 */
-grid-template-columns: 1fr 2fr;
-
-/* 分为三列，第一列为 100px，其余两列按 1:2 占父元素剩余宽度 */
-grid-template-columns: 100px 1fr 2fr;
-
-/* 分为三列，每列占比相等, 1fr 被重复3次 */
-grid-template-columns: repeat(3,1fr);
-```
-
-### 行 grid-template-rows
-
-```css
-/* 分为两行，每行占比相等 */
-grid-template-columns: 1fr 1fr;
-
-/* 分为两行，占比为 1:2 */
-grid-template-columns: 1fr 2fr;
-
-/* 分为三行，第一行为 100px，其余两行按 1:2 占父元素剩余宽度 */
-grid-template-columns: 100px 1fr 2fr;
-
-/* 分为三行，每行占比相等, 1fr 被重复3次 */
-grid-template-columns: repeat(3,1fr);
-```
-
-### 命名 grid-template-area
-
-命名单元格，相同名称的单元格被划分为一个区域
-
-### 行列间距 grid-gap
-
-
-
-### 行间距 grid-row-gap
-
-
-
-### 列间距 grid-column-gap
-
-
-
-### 水平排列 justify-items
-
-网格元素的水平排列方式
-
-### 垂直排列 align-items
-
-网格元素的垂直排列方式
-
-### 复合属性 place-items
-
-justify-items 和 align-items 的复合属性
-
-### 水平排列 justify-content
-
-网格元素整体的水平排列方式，同弹性容器的 justify-content
-
-### 垂直排列 align-content
-
-网格元素整体的垂直排列方式，同弹性容器的 align-content
-
-### 复合属性 place-content
-
-justify-content 和 align-content 的复合属性
-
-## 网格元素样式
-
-### 列位置 grid-column
-
-grid-column-start 和 grid-column-end 的复合属性
-
-```css
-/* 从列的第 1 条网格线开始，在第 5 条网格线结束 */
-grid-column: 1/5;
-
-/* 从列的第 1 条网格线开始，跨越 3 列 */
-grid-column: 1/span 3;
-```
-
-### 行位置 grid-row
-
-grid-row-start 和 grid-row-end 的复合属性
-
-### 复合属性 grid-area
-
-grid-column 和 grid-row 的复合属性
-
-```css
-/* 从行的第 1 条网格线和列的第 2 条网格线开始，在行的第 3 条网格线和列的第 4 条网格线结束 */
-grid-area: 1/2/3/4;
-```
-
-### 水平排列 justify-self
-
-网格元素自身的水平排列方式
-
-### 垂直排列 align-self
-
-网格元素自身的垂直排列方式
-
-### 复合属性 place-self
-
-justify-self 和 align-self 的复合属性
-
-
-
-
-
-# 鼠标样式
-
-```css
-/* 默认光标 */
-cursor: default;
-
-/* 指示链接 */
-cursor: pointer;
-
-/* 指示可移动 */
-cursor: move;
-
-/* 指示文本 */
-cursor: text;
-
-/* 指示禁止 */
-cursor: not-allowed;
-```
-
+# 响应式布局
