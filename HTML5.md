@@ -1,6 +1,6 @@
-# HTML5
+# 语义化标签
 
-## 语义化标签
+## 布局标签
 
 ```html
 <!-- 头部 -->
@@ -15,7 +15,7 @@
 <!-- 分区 -->
 <section></section>
 
-<!-- 文章、博客、用户评论等 -->
+<!-- 文章、评论等 -->
 <article></article>
 
 <!-- 侧边栏 -->
@@ -25,29 +25,31 @@
 <footer></footer>
 ```
 
+## 其他标签
+
 ```html
-<!-- 引用图片、插画、表格、代码段等 -->
-<figure>
-  <!-- 引用元素的标题 -->
-  <figcaption></figcaption>
-</figure>
-
-<!-- 引用元素的标记文本 -->
-<mark></mark>
-
-<!-- 定义时间 -->
-<time></time>
+<!-- 手机电量 -->
+<meter max="100" min="0" low="20" high="80" value="90"></meter>
 
 <!-- 进度条 -->
-<progress value=""></progress>
+<progress max="100" value="30"></progress>
 
-<!-- 包含下拉列表的输入框 -->
+<!-- 搜索框 -->
 <datalist>
   <option value=""></option>
 </datalist>
+
+<!-- 标记文本 -->
+<mark></mark>
 ```
 
-## 表单元素
+
+
+
+
+# 表单控件
+
+## 表单标签
 
 ```html
 <!-- 调色板 -->
@@ -84,7 +86,7 @@
 <input type="range">
 ```
 
-## 表单元素属性
+## 表单属性
 
 - autocomplete: 显示历史输入（必须设置 name 属性才会生效）
 
@@ -106,7 +108,13 @@
 
 - `<input type="file" capture="photo">`: 调用相册权限
 
-## 媒体标签
+
+
+
+
+# 媒体标签
+
+## 音频标签
 
 ```html
 <!-- 音频 -->
@@ -115,15 +123,15 @@
 
 - src: 音频路径（必要）
 
-- controls: 无属性值，允许用户控制播放
+- controls: 允许用户控制播放（无属性值）
 
-- autoplay: 无属性值，自动播放
+- autoplay: 自动播放（无属性值）
 
-- muted: 无属性值，静音
+- muted: 静音（无属性值）
 
-- loop: 无属性值，循环播放
+- loop: 循环播放（无属性值）
 
-
+## 视频标签
 
 ```html
 <!-- 视频 -->
@@ -132,20 +140,20 @@
 
 - src: 视频路径（必要）
 
-- controls: 无属性值，允许用户控制播放进度条
+- controls: 允许用户控制播放进度条（无属性值）
 
-- autoplay: 无属性值，自动播放（Chrome 浏览器中静音时才生效）
+- autoplay: 自动播放（无属性值，必须静音）
 
-- muted: 无属性值，静音
+- muted: 静音（无属性值）
 
-- loop: 无属性值，循环播放
+- loop: 循环播放（无属性值）
 
-- poster: 海报帧的路径，显示视频封面
+- poster: 海报帧的路径，显示视频封面（值为图片地址）
 
-- preload: 视频初始化加载模式
+- preload: 视频预加载模式
 
-  - none: 视频不缓存
+  - none: 不进行预加载
 
-  - metadata: 提示尽管我们认为用户不需要查看该视频，不过抓取元数据（长度）还是合理的
+  - metadata: 加载部分视频信息
 
-  - auto: 用户需要这个视频优先加载
+  - auto: 预加载

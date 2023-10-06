@@ -21,25 +21,6 @@ link > visited > hover > active
 
 
 ```css
-/* 属性名 */
-[name]
-
-/* 属性等于值 */
-[name="value"]
-
-/* 属性以值开始 */
-[name^="value"]
-
-/* 属性以值结尾 */
-[name$="value"]
-
-/* 属性包含值 */
-[name*="value"]
-```
-
-
-
-```css
 /* 获取焦点的表单元素 */
 :focus
 
@@ -186,25 +167,7 @@ text-shadow: 1px 1px 2px black;
 
 - color: 阴影颜色
 
-## 盒子阴影 box-shadow
-
-```css
-box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, .3);
-```
-
-- offset-x: 水平方向的偏移量（必要），正数向右，负数向左
-
-- offset-y: 垂直方向的偏移量（必要），正数向下，负数向上
-
-- blur-radius: 模糊距离
-
-- spread-radius: 阴影大小
-
-- color: 阴影颜色
-
-- inset: 设置为内部阴影（默认为外部阴影）
-
-## 空白处理 white-space
+## 文本换行 white-space
 
 ```css
 /* 将连续的多个空格变成一个空格，文本溢出则换行（默认） */
@@ -418,9 +381,11 @@ animation: move 2s linear 1s infinite alternate;
 - animation-delay: 动画延迟时间
 
 - animation-iteration-count: 动画执行次数
+
   - infinite: 无限次
 
 - animation-direction: 动画方向
+
   - alternate: 来回播放
 
 - animation-play-state: 动画的播放和暂停
@@ -579,10 +544,6 @@ align-self: flex-end;
 align-self: baseline;
 ```
 
-### 排列顺序 order
-
-弹性元素的排列顺序，数值越小次序越高
-
 ### 富余空间 flex-grow
 
 给弹性元素按比例分配富余空间，默认为 0，表示不分配
@@ -613,14 +574,34 @@ flex-shrink: 1;
 flex-shrink: 0;
 ```
 
-### 初始大小 flex-basis
+### 基准宽度 flex-basis
 
-弹性元素被压缩时的最小宽高，默认为 auto
+弹性元素被压缩时的基准宽度，默认为 auto
+
+```css
+.container {
+  display: flex;
+  width: 500px;
+}
+
+.container div:nth-child(1) {
+  width: 200px; /* 125px */
+}
+
+.container div:nth-child(2) {
+  width: 200px; /* 250px */
+  flex-basis: 400px;
+}
+
+.container div:nth-child(3) {
+  width: 200px; /* 125px */
+}
+```
 
 ### 复合属性 flex
 
 ```css
-/* 弹性元素等比例分配富余空间或等比例压缩，且被压缩时的最小宽高为 0 */
+/* 弹性元素等比例分配富余空间或等比例压缩，且被压缩时的基准宽度为 0 */
 flex: 1;
 
 /* 等价于 */
@@ -883,25 +864,6 @@ margin: 0 auto;
 
 # 特殊样式
 
-## 鼠标样式
-
-```css
-/* 默认光标 */
-cursor: default;
-
-/* 指示链接 */
-cursor: pointer;
-
-/* 指示可移动 */
-cursor: move;
-
-/* 指示文本 */
-cursor: text;
-
-/* 指示禁止 */
-cursor: not-allowed;
-```
-
 ## 取消输入框的默认轮廓线
 
 ```css
@@ -995,8 +957,6 @@ display: -webkit-box;
 
 ## 移动端适配
 
-媒体查询 + rem
-
 ```less
 /* PC */
 html {
@@ -1028,8 +988,31 @@ html {
 }
 ```
 
+## 响应式布局
 
+```css
+/* 超小屏幕 */
+@media screen and (max-width: 576px) {
+  width: 100%;
+}
 
+/* 小屏幕 */
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  width: 540px;
+}
 
+/* 中等屏幕 */
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  width: 720px;
+}
 
-# 响应式布局
+/* 大屏幕 */
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  width: 960px;
+}
+
+/* 超大屏幕 */
+@media screen and (min-width: 1200px) {
+  width: 1140px;
+}
+```
