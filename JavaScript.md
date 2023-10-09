@@ -3422,9 +3422,9 @@ new Promise((resolve, reject) => {
 
 ## 任务队列
 
-微任务：Promise 回调、MutationObserver 回调、queueMicrotask 回调
+微任务：Promise、MutationObserver、queueMicrotask
 
-宏任务：setImmediate 回调、定时器回调、DOM 事件回调、Ajax 回调
+宏任务：setImmediate、定时器、DOM 事件、Ajax
 
 ```js
 setTimeout(() => {

@@ -16,7 +16,7 @@
 └── sitemap.json                  站点地图
 ```
 
-## 页面配置
+## 全局配置
 
 https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html
 
@@ -24,31 +24,115 @@ https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.htm
 /* app.json */
 {
   "pages": [
-    "pages/index/index"
+    "pages/index/index",
+    "pages/about/about"
   ],
   
-  /* 页面窗口配置 */
+  /* 全局页面窗口配置 */
   "window": {
     "navigationBarBackgroundColor": "#ff0000", // 导航栏背景颜色
     "navigationBarTextStyle": "white", // 导航栏标题颜色
     "navigationBarTitleText": "Weapp", //导航栏标题内容
-    "navigationStyle": "default", // 导航栏样式 (default | custom)
-    "backgroundColor": "ff0000", // 窗口背景色 (下拉窗口可见)
+    "navigationStyle": "default", // 导航栏样式（default | custom）
+    "backgroundColor": "ff0000", // 窗口背景色（下拉窗口可见）
   },
   
-  "style": "v2",
-  "rendererOptions": {
-    "skyline": {
-      "defaultDisplayBlock": true,
-      "disableABTest": true,
-      "sdkVersionBegin": "3.0.0",
-      "sdkVersionEnd": "15.255.255"
-    }
-  },
-  "componentFramework": "glass-easel",
-  "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  /* 全局页面底部导航栏配置 */
+  "tabBar": {
+    "color": "#000", // 文本颜色
+    "selectedColor": "#ff0000", // 选中时的文本颜色
+    "list": [
+      // 至少两个
+      {
+        "pagePath": "pages/index/index", // 页面路径
+        "text": "首页", // 按钮文本
+        "iconPath": "static/tabbar/home.png", // 图片路径
+        "selectedIconPath": "static/tabbar/home-selected.png" // 选中时的图片路径
+      },
+      {
+        "pagePath": "pages/about/about",
+        "text": "关于"
+      }
+    ]
+  }
 }
+```
+
+## 页面配置
+
+https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html
+
+会覆盖 `app.json` 中相同的配置项
+
+## 页面生命周期
+
+```js
+// index.js
+Page({
+
+  /**
+   * 页面的初始数据
+   */
+  data: {
+    
+  },
+
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
+    
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+    
+  },
+
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+    
+  },
+
+  /**
+   * 生命周期函数--监听页面隐藏
+   */
+  onHide: function () {
+    
+  },
+
+  /**
+   * 生命周期函数--监听页面卸载
+   */
+  onUnload: function () {
+    
+  },
+
+  /**
+   * 页面相关事件处理函数--监听用户下拉动作
+   */
+  onPullDownRefresh: function () {
+    
+  },
+
+  /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+    
+  },
+
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function () {
+    
+  }
+})
 ```
 
 
