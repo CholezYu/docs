@@ -69,8 +69,11 @@
 ## 版本操作
 
 - 查看版本: `git tag`
+
 - 创建版本: `git tag [tag]`
+
 - 切换版本: `git checkout [tag]`
+
 - 删除版本: `git tag -d [tag]`
 
 ## 线上仓库
@@ -100,6 +103,14 @@
   - 提交到仓库区: `git commit -m "注释"`
 
   - 推送到线上仓库: `git push`
+
+- 撤销线上仓库提交记录
+
+  - 查看历史记录: `git log`
+
+  - 重置到指定版本: `git reset –soft [commit(id)]`
+
+  - 强制提交: `git push origin master --force`
 
 ## 同步分支
 
