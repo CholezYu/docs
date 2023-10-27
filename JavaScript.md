@@ -1,1076 +1,44 @@
-# 变量声明
-
-## let
-
-### 不存在声明提升
-
-let 不存在 "声明提升"，声明的变量一定要在声明后使用，否则就会报错
-
-```js
-console.log(foo) // undefined
-var foo = 'foo'
-
-console.log(bar) // ReferenceError: Cannot access 'bar' before initialization
-let bar = 'bar'
-```
-
-### 暂时性死区
-
-在代码块中，从块级作用域开始到 let 声明变量前会形成封闭作用域，如果在声明之前访问该变量，就会报错
-
-语法上称为 "暂时性死区" (temporal dead zone, TDZ)，从 TDZ 开始到 TDZ 结束都属于变量的死区
-
-```js
-if(true) {
-  // TDZ 开始
-  
-  tmp // ReferenceError: Cannot access 'tmp' before initialization
-  
-  // TDZ 结束
-  
-  let tmp
-  console.log(tmp) // undefined
-  
-  tmp = 123
-  console.log(tmp) // 123
-}
-```
-
-参数 x 的默认值等于另一个参数 y，而此时 y 还没有声明，属于 y 的 "死区"
-
-```js
-function fun(x = y, y = 2) {
-  return [x, y]
-}
-
-fun() // ReferenceError: Cannot access 'y' before initialization
-```
-
-如果 y 的默认值是 x，就不会报错，因为此时 x 已经声明
-
-```js
-function fun(x = 2, y = x) {
-  return [x, y]
-}
-
-fun() // [2, 2]
-```
-
-### 不允许重复声明
-
-let 不允许在相同作用域内重复声明同一个变量
-
-```js
-function fun() {
-  let a = 10
-  var a = 1 // SyntaxError: Identifier 'a' has already been declared
-}
-```
-
-let 不能在函数内部重新声明参数
-
-```js
-function fun(arg) {
-  let arg // SyntaxError: Identifier 'arg' has already been declared
-}
-```
-
-### 块级作用域
-
-外部作用域不受内部作用域的影响
-
-```js
-let n = 5
-
-{ let n = 10 }
-
-n // 5
-```
-
-外部作用域无法访问内部作用域的变量
-
-```js
-{ let msg = 'hello world' }
-console.log(msg) // ReferenceError: msg is not defined
-```
-
-内部作用域可以声明外部作用域的同名变量
-
-```js
-let insane = 'hello world'
-{ let insane = 'hello world' }
-```
-
-用于生成封闭作用域时，块级作用域将取代匿名自调用函数(IIFE)
-
-```js
-// IIFE
-(function() {
-  var tmp = ...
-  ...
-}())
-
-// 块级作用域
-{
-  let tmp = ...
-}
-```
-
-## const
-
-### 常量值不可变
-
-const 声明常量必须初始化，且不能改变
-
-```js
-const foo // SyntaxError: Missing initializer in const declaration
-
-const PI = 3.1415
-PI // 3.1415
-
-PI = 3 // TypeError: Assignment to constant variable
-```
-
-### 内部结构可变
-
-如果 const 命令声明的常量是一个对象或数组，则其指向的地址是不可变的，但是内部的数据结构可以改变
-
-```js
-const foo = { prop: "abc" }
-
-// 改变 foo 的地址指向
-foo = {} // TypeError: Assignment to constant variable
-
-// 改变 foo 的内部结构
-foo.prop = 123
-```
-
-### 不存在声明提升
-
-const 没有 "声明提升"，且存在 "暂时性死区"，只能在声明后访问
-
-```js
-{
-  console.log(MAX) // ReferenceError: Cannot access "MAX" before initialization
-  const MAX = 5
-}
-```
-
-### 不允许重复声明
-
-const 不允许重复声明
-
-```js
-let msg = "hello"
-
-const msg = "world" // SyntaxError: Identifier 'msg' has already been declared
-```
-
-### 块级作用域
-
-const 存在块级作用域
-
-```js
-{
-  const MAX = 5
-}
-
-MAX // ReferenceError: MAX is not defined
-```
-
-
-
-
-
-# 解构赋值
-
-## 数组的解构赋值
-
-### 基本用法
-
-ES6 中，我们可以对变量解构赋值
-
-```js
-let [a, b, c] = [1, 2, 3]
-```
-
-解构赋值可以用于嵌套的数组
-
-```js
-let [a, [[b], c]] = [1, [[2], 3]]
-```
-
-可以忽略不需要赋值的变量
-
-```js
-let [ , , c] = [1, 2, 3]
-
-c // 3
-```
-
-```js
-let [a, , c] = [1, 2, 3]
-
-a // 1
-c // 3
-```
-
-结合剩余运算符使用
-
-```js
-let [a, ...b] = [1, 2, 3]
-
-a // 1
-b // [2, 3]
-```
-
-```js
-let [a, b, ...c] = [1]
-
-a // 1
-b // undefined
-c // []
-```
-
-如果解构不成功，变量的值就等于 undefined
-
-```js
-let [a] = []
-
-a // undefined
-```
-
-```js
-let [a, b] = [1]
-
-a // 1
-b // undefined
-```
-
-不完全解构
-
-```js
-let [a, b] = [1, 2, 3]
-
-a // 1
-b // 2
-```
-
-```js
-let [a, [b], c] = [1, [2, 3], 4]
-
-a // 1
-b // 2
-c // 4
-```
-
-### 默认值
-
-解构赋值可以使用默认值
-
-```js
-let [a = 1] = []
-
-a // 1
-```
-
-```js
-let [a, b = 2] = [1]
-
-a // 1
-b // 2
-```
-
-当数组中的元素严格等于 undefined 时，默认值才会生效
-
-```js
-let [a = 1] = [undefined]
-
-a // 1
-```
-
-null 不严格等于 undefined，所以默认值不会生效
-
-```js
-let [a = 1] = [null]
-
-a // null
-```
-
-默认值可以引用解构赋值的其他变量，但该变量必须已经声明
-
-```js
-let [a = 1, b = a] = []      // a = 1, b = 1
-let [a = 1, b = a] = [2]     // a = 2, b = 2
-let [a = 1, b = a] = [1, 2]  // a = 1, b = 2
-let [a = b, b = 1] = []      // ReferenceError
-```
-
-## 对象的解构赋值
-
-### 基本用法
-
-解构赋值也可以用于对象
-
-```js
-let { foo: foo, bar: bar } = { foo: "hello", bar: "world" }
-
-foo // "hello"
-bar // "world"
-```
-
-当变量名与值相同时，可以简写，但是变量名必须与对象的属性名相同
-
-```js
-let { foo, bar } = { foo: "aaa", bar: "bbb" }
-
-foo // "aaa"
-bar // "bbb"
-baz // undefined
-```
-
-解构赋值也可以用于嵌套的对象
-
-```js
-let { p: [foo, { bar }] } = { p: ["aaa", { bar: "bbb" }] }
-
-foo // "aaa"
-bar // "bbb"
-```
-
-```js
-let { foo, foo: { bar }, foo: { bar: { baz } } } = { foo: { bar: { baz: "hello" } } }
-
-foo // { bar: { baz: "hello" } }
-bar // { baz: "hello" }
-baz // "hello"
-```
-
-结合剩余运算符使用
-
-```js
-let { a, b, ...rest } = { a: 1, b: 2, c: 3, d: 4 }
-
-a // 1
-b // 2
-rest // { c: 3, d: 4 }
-```
-
-如果解构失败，变量的值就等于 undefined
-
-```js
-let { foo } = { bar: "aaa", baz: "bbb" }
-
-foo // undefined
-```
-
-对象的解构赋值可以很方便地将现有对象的方法赋值到某个变量
-
-```js
-let { log, sin, cos } = Math
-```
-
-### 默认值
-
-对象的解构赋值也可以指定默认值
-
-```js
-let { a, b = 2 } = { a: 1 }
-
-a // 1
-b // 2
-```
-
-当对象的属性值严格等于 undefined 时，默认值才会生效
-
-```js
-let { a = 1 } = { a: undefined }
-
-a // 1
-```
-
-null 不严格等于 undefined，默认值不会生效
-
-```js
-let { a = 1 } = { a: null }
-
-a // null
-```
-
-## 字符串的解构赋值
-
-解构赋值也可以用于字符串
-
-```js
-let [a, b, c, d] = "Paul"
-
-a // "P"
-b // "a"
-c // "u"
-d // "l"
-```
-
-## 函数参数的解构赋值
-
-函数的参数也可以解构赋值
-
-```js
-const add = ([x, y]) => x + y
-
-add([1, 2]) // 3
-```
-
-```js
-[[1, 2], [3, 4]].map(([a, b]) => a + b) // [3, 7]
-```
-
-函数参数的解构也可以使用默认值
-
-```js
-const move = ({ x = 0, y = 0 } = {}) => [x, y]
-
-move({ x: 3, y: 8 })  // [3, 8]
-move({ x: 3 })        // [3, 0]
-move({})              // [0, 0]
-move()                // [0, 0]
-```
-
-```js
-const move = ({ x, y } = { x: 0, y: 0 }) => [x, y]
-
-move({ x: 3, y: 8 })  // [3, 8]
-move({ x: 3 })        // [3, undefined]
-move({})              // [undefined, undefined]
-move()                // [0, 0]
-```
-
-undefined 会触发函数参数的默认值
-
-```js
-[1, undefined, 3].map((x = "yes") => x) // [1, "yes", 3]
-```
-
-## 用途
-
-### 交换变量的值
-
-```js
-let x = 1
-let y = 2
-
-[x, y] = [y, x]
-```
-
-### 从函数返回多个值
-
-```js
-// 返回一个数组
-function example() {
-  return [1, 2, 3]
-}
-
-let [a, b, c] = example()
-```
-
-```js
-// 返回一个对象
-function example() {
-  return {
-    foo: 1,
-    bar: 2
-  }
-}
-
-let { foo, bar } = example()
-```
-
-### 函数参数的定义
-
-```js
-// 参数是一组有次序的值
-function fun([x, y, z]) { ... }
-fun([1, 2, 3])
-```
-
-```js
-// 参数是一组无次序的值
-function fun({ x, y, z }) { ... }
-fun({ z: 3, y: 2, x: 1 })
-```
-
-### 提取 JSON 数据
-
-```js
-let data = {
-  id: 42,
-  status: 'ok',
-  data: [867, 5309]
-}
-
-let { id, status, data: number } = data
-```
-
-### 函数参数的默认值
-
-```js
-jQuery.ajax = function(url, {
-  async = true,
-  brforeSend = function() {},
-  cache = true,
-  complete = function() {},
-  crossDomain = false,
-  global = true,
-  // ... more config
-}) {
-  // ... do something
-}
-```
-
-### 使用 for...of 遍历
-
-```js
-let map = new Map([["first", "hello"], ["second", "world"]])
-
-for (let [key, value] of map) {
-  // ...
-}
-```
-
-### 输入模块的指定方法
-
-```js
-const { readFile, writeFile } = require("node:fs/promises")
-```
-
-
-
-
-
-# 字符串
-
-## str.concat
-
-`str.concat(str1, [str2])`
-
-拼接字符串，并返回
-
-> 推荐使用 "+" 拼接字符串
-
-```js
-let str1 = "hello"
-let str2 = "world"
-
-str1.concat(" ", str2) // hello world
-```
-
-## str.charAt
-
-`str.charAt(index)`
-
-查找字符串对应索引值的字符，返回这个字符。若查找不到，则返回空字符串
-
-- index: 需要查找的字符串对应的索引值
-
-> 推荐使用 "[]" 获取对应的字符，若获取不到，则返回 undefined
-
-```js
-let str = "hello world"
-
-str.charAt(3) // l
-str.charAt(20) // ""
-```
-
-## str.indexOf
-
-`str.indexOf(item, [start])`
-
-查找 item 元素在字符串 str 中的位置，返回首次出现的索引。若不存在，则返回 -1
-
-- item: 要查找的元素
-
-- start: 开始查找的索引值，默认为 0
-
-```js
-let str = "hello world hello world"
-
-str.indexOf("world") // 6
-str.indexOf("world", 10) // 18
-str.indexOf("woood") // -1
-```
-
-## str.lastIndexOf
-
-`str.lastIndexOf(item, [start])`
-
-反向查找 item 元素在字符串 str 中的位置，返回首次出现的索引。若不存在，则返回 -1
-
-- item: 要查找的元素
-
-- start: 开始查找的索引值，默认为 str.length - 1
-
-```js
-let str = "hello world hello world"
-
-str.lastIndexOf("world") // 18
-str.lastIndexOf("world", 10) // 6
-str.indexOf("woood") // -1
-```
-
-## str.search
-
-`str.search(item|regexp)`
-
-查找 item 元素在字符串 str 中的位置，返回首次出现的索引。若不存在，则返回 -1
-
-- item: 要查找的元素。可以是正则表达式
-
-```js
-let str = "hello world 666"
-
-str.search(/[0-9]+/g) // 12
-```
-
-## str.match
-
-`str.match(regexp)`
-
-查找字符串 str 中与正则表达式 reg 匹配的部分，将所有匹配项组成数组，并返回。若匹配不到，则返回 -1
-
-- regexp: 要匹配的正则表达式
-
-```js
-let str = "1 hello 2 world 666"
-
-str.match(/[0-9]+/g) // [1, 2, 666]
-```
-
-## str.replace
-
-`str.replace(item|regexp, newItem|function)`
-
-查找字符串 str 中与 item 元素匹配的部分，替换为新元素 newItem
-
-- item: 被替换的元素。可以是正则表达式
-
-- newItem: 替换的元素。可以是函数，接收被替换的元素(匹配项)作为参数，返回将要替换的元素
-
-```js
-let str = "18-31-56"
-
-/* 当第一个参数是字符串时, 只替换第一个匹配项 */
-str.replace("-", ":") // 18:31-56
-
-/* 第一个参数使用正则表达式全局匹配, 可以替换所有匹配项 */
-str.replace(/-/g, ":") // 18:31:56
-```
-
-```js
-let str = "html and css"
-
-str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
-```
-
-## str.slice
-
-`str.slice([start, [end]])`
-
-截取字符串 str 中从 start 到 end 的部分，返回截取的部分
-
-- start: 截取开始的索引值
-
-- end: 截取结束的索引值
-
-```js
-let str = "hello world"
-
-str.slice() // "hello world"
-str.slice(6) // "world"
-str.slice(2, 5) // "llo"
-str.slice(-5) // "world"
-str.slice(3, -1) // "lo worl"
-str.slice(-5, -2) // "wor"
-```
-
-## str.substring
-
-`str.substring(start, [end])`
-
-截取字符串 str 中从 start 到 end 的部分，返回截取的部分。若 start 大于 end，则交换顺序
-
-- start: 截取开始的索引值。若参数为负数，则默认为 0
-
-- end: 截取结束的索引值。若参数为负数，则默认为 0
-
-```js
-let str = "hello world"
-
-str.substring(1, 4) // "ell"
-str.substring(6) // "world"
-str.substring(-10, -5) // ""
-```
-
-## str.substr
-
-`str.substr(start, [count])`
-
-从 start 开始截取字符串 str，截取长度为 count，返回截取的字符串
-
-- start: 截取开始的索引值
-
-- count: 截取的长度
-
-> ES 不推荐使用
-
-```js
-let str = "hello world"
-
-str.substr(6, 3) // "wor"
-str.substr(3) // "lo world"
-```
-
-## str.toUpperCase
-
-`str.toUpperCase()`
-
-将字符串 str 全部转为大写，并返回
-
-```js
-let str = "I love JavaScript"
-
-str.toUpperCase() // "I LOVE JAVASCRIPT"
-```
-
-## str.toLowerCase
-
-`str.toLowerCase()`
-
-将字符串 str 全部转为小写，并返回
-
-```js
-let str = "I love JavaScript"
-
-str.toLowerCase() // "i love javascript"
-```
-
-## str.split
-
-`str.split([separator|regexp, [count]])`
-
-以 separator 为分隔符拆分字符串 str，将被拆分的部分作为数组的元素组成数组
-
-- separator: 分割符。可以为正则表达式
-
-- count: 拆分的数量
-
-```js
-let str = "hello world"
-
-str.split() // ["hello world"]
-str.split("") // ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
-str.split(" ") // ["hello", "world"]
-```
-
-## str.trim
-
-去除字符串 str 两边的空格
-
-```js
-let str = "   hello world   "
-
-str.trim() // "hello world"
-```
-
-
-
-
-
-# 字符串 (ES6)
-
-## 模板字符串
-
-ES6 引入了模板字符串，在模板字符串中可以换行、嵌入变量或表达式、以及调用函数
-
-```js
-section.innerHTML = `
-  <a href="${item.url}">${item.title}</a>
-`
-```
-
-## str.includes
-
-`str.includes(item)`
-
-判断字符串 str 中是否含有 item 元素
-
-- item: 要查找的元素
-
-```js
-let str = "hello world"
-
-str.includes("world") // true
-str.includes("yeah") // false
-```
-
-## str.startsWith
-
-`str.startsWith(item, [index])`
-
-判断字符串 str 是否以 item 元素开始
-
-* item：要查找的元素
-
-* index：开始查找的索引值。默认为 0
-
-```js
-let str = "abcdefg"
-
-str.startsWith("ab") // true
-```
-
-## str.endsWith
-
-`str.endsWith(item[, index])`
-
-判断字符串 str 是否以 item 元素结束
-
-* item：要查找的元素
-
-* index：开始查找的索引值。默认为 0
-
-```js
-let str = "abcdefg"
-
-str.endsWith("ef") // false
-```
-
-## str.repeat
-
-`str.repeat(count)`
-
-重复字符串，并返回
-
-- count: 重复次数
-
-```js
-let str = "abc"
-
-str.repeat(3) // "abcabcabc"
-```
-
-## str.padStart
-
-`str.padStart(length, [item])`
-
-当字符串 str 的长度不足 length 时，在开头填充 item 元素，并返回
-
-- length：目标长度
-
-- item：要填充的元素。默认为空格
-
-```js
-let str = "abc"
-
-str.padStart(10, "*") // "*******abc"
-```
-
-## str.padEnd
-
-`str.padEnd(length, [item])`
-
-当字符串 str 的长度不足 length 时，在结尾填充 item 元素，并返回
-
-- length：目标长度
-
-- item：要填充的元素。默认为空格
-
-```js
-let str = "abc"
-
-str.padEnd(10, "*") // "abc*******"
-```
-
-## str.trimStart
-
-去除字符串 str 前面的空格
-
-```js
-let str = "   hello world   "
-
-str.trimStart() // "hello world   "
-```
-
-## str.trimEnd
-
-去除字符串 str 后面的空格
-
-```js
-let str = "   hello world   "
-
-str.trimEnd() // "   hello world"
-```
-
-
-
-
-
 # 函数
 
-## 参数
+## 执行上下文
 
-- 声明函数时传递的参数称为形参，调用函数时传递的参数称为实参
+执行一段 JS 代码时，会做一个预处理，我们称之为执行上下文。
 
-- 实参与形参应一一对应。多余的形参默认为 undefined，多余的实参无法通过形参访问
+每执行一段代码，都会创建一个执行上下文，所以 JS 创建了一个执行上下文栈 (stack) 用来存放执行上下文。
 
-- arguments 表示当前所在函数的实参列表，可以通过 "[]" 访问元素，且拥有 length 属性
-
-- 函数也有 length 属性，表示形参的个数
-
-## 默认值
-
-"||" 运算符
-
-```js
-function add(a, b) {
-  b = b || 1
-}
-```
-
-三元运算符
-
-```js
-function add(a, b) {
-  b = b ? b : 1
-}
-```
-
-ES6
-
-```js
-function add(a, b = 1) {
-  // ...
-}
-```
-
-## 局部变量
-
-在函数内部声明的变量就是局部变量，只在该函数内部可见
-
-```js
-function showMsg() {
-  let msg = "Hello JavaScript" // 声明局部变量
-  console.log(msg)
-}
-
-showMsg() // "Hello JavaScript"
-msg // ReferenceError: msg is not defined
-```
-
-## 全局变量
-
-在函数外部声明的变量就是全局变量，函数对全局变量拥有全部的访问权限，在函数中也可以修改全局变量
-
-```js
-let userName = "Joan" // 声明全局变量
-
-function showMsg() {
-  userName = "Jan" // 修改全局变量
-  
-  let msg = "Hello " + userName
-  console.log(msg)
-}
-
-userName // "Joan"
-
-showMsg() // "Hello Jan"
-
-userName // "Jan", 全局变量被修改
-```
-
-如果存在全局变量与函数内部声明的变量同名，那么在函数内部会忽略全局变量
-
-```js
-let userName = "Joan"
-
-function showMsg() {
-  let userName = "Jan"
-  
-  let msg = "Hello " + userName
-  console.log(msg)
-}
-
-showMsg()  // "Hello Jan"
-
-userName // "Joan", 全局变量未被修改
-```
-
-在任何位置，没有使用 var let const 声明的变量都是为 window 添加的属性，这些变量都是全局变量
-
-```js
-a = 100 // 等同于 window.a = 100
-
-window.a === a // true
-```
-
-在函数中定义一个没有声明的变量，若要访问这个变量，必须调用该函数
-
-```js
-function showMsg() {
-  msg = "Hello JavaScript"
-}
-
-msg // ReferenceError: msg is not defined
-
-showMsg()
-msg // Hello JavaScript
-```
-
-## 执行上下文环境
-
-执行一段 JS 代码时，会做一个预处理，我们称之为执行上下文
-
-每执行一段代码，都会创建一个执行上下文，所以 JS 创建了一个执行上下文栈 (stack) 用来存放执行上下文
-
-预处理包含: 
-
-1. 开辟一个内存空间
-
-2. 确定变量对象
-
-3. 完成作用域链
-
-4. 确定 this 指向
+预处理包含：1. 开辟一个内存空间；2. 确定变量对象；3. 完成作用域链；4. 确定 this 指向。
 
 ### 全局执行上下文
 
-当程序开始解析时，将全局执行上下文 (window) 压入到执行上下文栈中，对全局变量进行预处理: 
+当程序开始解析时，将全局执行上下文 (window) 压入到执行上下文栈中，对全局变量进行预处理：
 
-- var 声明的全局变量赋值为 undefined，作为 window 的属性
+- var 声明的全局变量赋值为 undefined，作为 window 的属性；
 
-- function 声明的全局函数，作为 window 的方法
+- function 声明的全局函数，作为 window 的方法；
 
-- this 指向 window
+- this 指向 window。
 
-  页面关闭时，全局执行上下文从执行上下文栈中弹出
+页面关闭时，全局执行上下文从执行上下文栈中弹出。
 
 ### 函数执行上下文
 
-当执行函数时，会创建一个函数执行上下文，并压入到执行上下文栈中，对局部变量进行预处理: 
+当执行函数时，会创建一个函数执行上下文，并压入到执行上下文栈中，对局部变量进行预处理：
 
-- 将传递进来的实参赋值给形参变量，作为函数执行上下文的属性
+- 将实参赋值给形参，作为函数执行上下文的属性；
 
-- 将传递进来的实参列表赋值给 arguments，作为函数执行上下文的属性
+- 将实参列表赋值给 arguments，作为函数执行上下文的属性；
 
-- var 声明的局部变量赋值为 undefined，作为函数执行上下文的属性
+- var 声明的局部变量赋值为 undefined，作为函数执行上下文的属性；
 
-- function 声明的局部函数，作为函数执行上下文的方法
+- function 声明的局部函数，作为函数执行上下文的方法；
 
-- this 指向调用函数的对象 (调用全局函数的对象为 window)
+- this 指向调用函数的对象。
 
-  函数执行完成时，函数执行上下文会从执行上下文栈中弹出
+函数执行完成时，函数执行上下文会从执行上下文栈中弹出。
 
-## 声明提升
+## 变量提升
 
-通过 var 声明的变量会提升到所在作用域的顶部，但是变量的赋值还在原来的位置
+通过 var 声明的变量会提升到所在作用域的顶部，但是变量的赋值还在原来的位置。
 
 ```js
 console.log(a) // undefined
@@ -1084,39 +52,35 @@ a = 100
 console.log(a) // 100
 ```
 
-通过 function 声明的函数 (包括函数体) 会提升到所在作用域的顶部，在此之后都可以调用
+通过 function 声明的函数（包括函数体）会提升到所在作用域的顶部，在此之后都可以调用。
 
-先执行函数声明提升，再执行变量声明提升，如果变量名与已声明的函数名相同，变量声明失效 (不影响赋值)
+先执行函数声明提升，再执行变量声明提升，如果变量名与已声明的函数名相同，变量声明失效（不影响赋值）。
 
 ## 作用域链
 
-作用域链在函数声明时产生，在函数调用时将当前函数的变量对象放到作用域链上，完成作用域链
+作用域链在函数声明时产生，在函数调用时将当前函数的变量对象放到作用域链上，完成作用域链。
 
-在局部作用域中访问变量时，从当前作用域的变量对象中沿作用域链向上访问
+在局部作用域中访问变量时，从当前作用域的变量对象中沿作用域链向上访问。
 
 ## 闭包
 
 ### 产生闭包的条件
 
-1. 在一个函数中定义一个嵌套的函数
+- 一个函数嵌套在另一个函数中；
 
-2. 内部函数访问了外部函数中定义的变量
+- 内部函数访问了外部函数中定义的变量；
 
-3. 每调用一次外部函数，就会产生一个闭包
-
-### 自由变量
-
-定义在外部函数中但由内部函数使用的局部变量称为自由变量
+- 每调用一次外部函数，就会产生一个闭包。
 
 ### 闭包的生命周期
 
-产生：外部函数定义执行完
+产生：外部函数执行完。
 
-死亡：存放闭包的变量成为垃圾对象(赋值为 null)
+死亡：存放闭包的变量变成垃圾对象（赋值为 null）。
 
 ### 常见的闭包
 
-将内部函数作为外部函数的返回值
+将内部函数作为外部函数的返回值。
 
 ```js
 function fn1() {
@@ -1130,7 +94,7 @@ function fn1() {
 var f = fn1() // 调用外部函数，产生一个闭包，并赋值给一个变量存放该闭包
 ```
 
-将内部函数作为实参传递给另一个函数，在外部函数中调用
+将内部函数作为实参传递给另一个函数，在外部函数中调用。
 
 ```js
 function fn(a, time) {
@@ -1144,185 +108,23 @@ fn("延时输出", 2000) // 调用外部函数，产生一个闭包
 
 ### 闭包的作用
 
-- 外部函数执行完后，自由变量仍会存在于闭包中，延长了生命周期
+- 外部函数执行完后，自由变量仍会存在于闭包中，延长了生命周期。
 
-- 通过闭包可以操作自由变量，该操作由内部函数决定 
-
-
+- 通过闭包可以操作自由变量，该操作由内部函数决定。
 
 
 
-# 函数 (ES6)
-
-## 参数默认值
-
-### 基本用法
-
-在 ES6 之前，不能直接为函数的参数指定默认值
-
-```js
-function add(a, b) {
-  a = a || 10
-  b = b || 20
-  return a + b
-}
-
-add() // 30
-```
-
-ES6 允许为函数的参数设置默认值
-
-```js
-function add(a, b = 20) {
-  return a + b
-}
-
-add() // NaN
-add(20) // 40
-add(20, 30) // 50
-```
-
-参数默认值也可以是一个函数
-
-```js
-function getValue(value) {
-  return value + 5
-}
-
-function add(a, b = getValue(5)) {
-  return a + b
-}
-
-add(20) // 30
-```
-
-参数默认值不是传值的，而是每次都重新计算默认值表达式的值，也就是说，参数默认值是惰性求值的
-
-```js
-let x = 99
-function foo(p = x + 1) {
-  console.log(p)
-}
-
-foo() // 100
-
-x = 100
-foo() // 101
-```
-
-### 与解构赋值默认值结合使用
-
-参数默认值可以与解构赋值的默认值结合起来使用
-
-下面的代码使用了对象的解构赋值默认值，而没有使用函数参数的默认值，只有当函数 foo 的参数是一个对象时，变量 x 和 y 才会通过解构赋值而生成
-
-```js
-function foo({ x, y = 5 }) {
-  console.log(x, y)
-}
-
-foo({}) // undefined, 5
-foo(123) // undefined, 5
-foo({ x: 1 }) // 1, 5
-foo({ x: 1, y: 2 }) // 1, 2
-foo() // TypeError: Cannot destructure property 'x' of 'undefined' as it is undefined
-```
-
-下面的代码中，如果函数 fetch 的第二个参数是一个对象，就可以为它的属性设置默认值
-
-```js
-function fetch(url, { method = 'GET' }) {
-  console.log(method)
-}
-
-fetch('http://example.com', {}) // GET
-fetch('http://example.com', 123) // GET
-fetch('http://example.com') // TypeError: Cannot read properties of undefined
-```
-
-上面的写法不能省略第二个参数，如果结合函数参数的默认值，就可以省略第二个参数，这时就出现了双重默认值
-
-下面的代码中，函数 fetch 没有第二个参数时，函数参数的默认值就会生效，然后才是解构赋值的默认值生效。变量 method 取到默认值 GET
-
-```js
-function fetch(url, { method = 'GET' } = {}) {
-  console.log(method)
-}
-
-fetch('http://example.com') // GET
-```
-
-下面两种写法都对函数的参数设定了默认值，区别在于，写法一中函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；写法二中函数参数的默认值是一个有具体属性的函数，但是没有设置对象解构赋值的默认值
-
-```js
-// 写法一
-function m1({ x = 0, y = 0 } = {}) {
-  return [x, y]
-}
-
-// 写法二
-function m2({ x, y } = { x: 0, y: 0 }) {
-  return [x, y]
-}
-
-// 函数没有参数的情况
-m1() // [0, 0]
-m2() // [0, 0]
-
-// x 和 y 都有值的情况
-m1({ x: 3, y: 8 }) // [3, 8]
-m2({ x: 3, y: 8 }) // [3, 8]
 
 
-// x 有值，y 无值的情况
-m1({ x: 3 }) // [3, 0]
-m2({ x: 3 }) // [3, undefined]
-
-// x 和 y 都无值的情况
-m1({}) // [0, 0]
-m2({}) // [undefined, undefined]
-
-m1({ z: 3 }) // [0, 0]
-m2({ z: 3 }) // [undefined, undefined]
-```
-
-### 参数默认值的位置
-
-通常情况下，定义了默认值的参数应该是函数的尾部参数，这样比较容易看出省略了哪些参数。如果非尾部的参数设置默认值，那么这个参数是无法省略的
-
-下面的代码中，有默认值的参数都不是尾部参数，这时，无法只省略该参数而不省略后面的参数，除非显式输入 undefined，这样可以触发参数默认值。如果传入 undefined 将触发该参数的默认值，null 则没有这个效果
-
-```js
-// 例一
-function fun(x = 1, y) {
-  return [x, y]
-}
-
-fun() // [1, undefined]
-fun(2) // [2, undefined]
-fun(, 1) // SyntaxError: Unexpected token ','
-fun(undefined, 1) // [1, 1]
-fun(null, 1) // [null, 1]
-```
-
-```js
-// 例二
-function fun(x, y = 5, z) {
-  return [x, y, z]
-}
-
-fun() // [undefined, 5, undefined]
-fun(1) // [1, 5, undefined]
-fun(1, , 2) // SyntaxError: Unexpected token ','
-fun(1, undefined, 2) // [1, 5, 2]
-fun(1, null, 2) // [1, null, 2]
-```
+# 函数（ES6）
 
 ## rest 参数
 
-ES6 引入了 rest 参数 (形式为 "...rest")，用于获取函数的剩余参数，这样就不需要使用 arguments 对象了。rest 参数匹配的变量是一个数组，该变量将剩余的参数放入这个数组中
+ES6 引入了 rest 参数，用于获取函数的剩余参数，这样就不需要使用 arguments 对象了。
 
-下面的代码中 add 函数是一个求和函数，利用 rest 参数可以向该函数传入任意数目的参数
+rest 参数匹配的变量是一个数组，该变量将剩余的参数放入这个数组中。
+
+下面的代码中 add 函数是一个求和函数，利用 rest 参数可以向该函数传入任意数目的参数。
 
 ```js
 function add(...values) {
@@ -1338,7 +140,7 @@ function add(...values) {
 add(2, 5, 3) // 10
 ```
 
-下面是一个 rest 参数代替 arguments 变量的例子，比较发现，rest 参数的写法更简洁易读
+下面是一个 rest 参数代替 arguments 变量的例子，比较发现，rest 参数的写法更简洁易读。
 
 ```js
 // arguments 变量的写法
@@ -1350,9 +152,7 @@ function sortNumbers() {
 const sortNumbers = (...numbers) => numbers.sort()
 ```
 
-rest 参数中的变量代表一个数，所以数组特有的方法都可以用于这个变量
-
-组下面是一个利用 rest 参数改写数组 push 方法的例子
+下面是一个利用 rest 参数改写数组 push 方法的例子。
 
 ```js
 function push(arr, ...items) {
@@ -1366,7 +166,7 @@ push(arr, 1, 2, 3)
 arr // [1, 2, 3]
 ```
 
-rest 参数之后不能再有其他参数，即 rest 参数只能是最后一个参数，否则会报错
+rest 参数只能是最后一个参数。
 
 ```js
 function fun(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal parameter
@@ -1374,14 +174,14 @@ function fun(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal p
 
 ## name 属性
 
-函数的 name 属性返回该函数的函数名
+函数的 name 属性返回该函数的函数名。
 
 ```js
 function fun() {}
 fun.name // "fun"
 ```
 
-如果将一个匿名函数赋值给一个变量，ES5 的 name 属性会返回空字符串，而 ES6 的 name 属性会返回实际的函数名
+如果将一个匿名函数赋值给一个变量，在 ES5 中 name 的值为空字符串，而 ES6 中 name 的值为实际函数名。
 
 ```js
 var fun = function() {}
@@ -1393,7 +193,7 @@ fun.name // ""
 fun.name // "fun"
 ```
 
-如果将一个具名函数赋值给一个变量，则 ES5 和 ES6 的 name 属性都会返回这个具名函数原本的名字
+如果将一个具名函数赋值给一个变量，ES5 和 ES6 中 name 的值都为这个具名函数原本的名字。
 
 ```js
 let foo = function bar() {}
@@ -1405,13 +205,13 @@ foo.name // "bar"
 foo.name // "bar"
 ```
 
-Function 构造函数返回的函数实例，name 属性的值为 anonymous
+Function 构造函数返回的函数实例，name 的值为 anonymous。
 
 ```js
 (new Function).name // "anonymous"
 ```
 
-bind 返回的函数，name 属性值会加上 bound 前缀
+bind 返回的函数，name 的值会加上 bound 前缀。
 
 ```js
 function fun() {}
@@ -1423,92 +223,13 @@ fun.bind({}).name // "bound fun"
 
 ## 箭头函数
 
-### 基本用法
+- 没有 this，而是继承上一层作用域的 this；
 
-ES6 允许使用 "=>" 定义函数
+- 没有原型对象，不能使用 new 关键字，不可以作为构造函数；
 
-```js
-let fun = (x, y) => {}
-```
+- 没有 arguments 对象，而是使用 rest 参数代替；
 
-如果箭头函数只有一个参数时，可以省略小括号
-
-```js
-let fun = x => {}
-```
-
-如果箭头函数的代码块只有一条语句时，可以省略大括号和 return
-
-```js
-let fun = x => x
-```
-
-如果箭头函数返回的是一个对象，必须在对象外面加上小括号，否则会报错
-
-```js
-let fun = () => ({ x: 1, y: 2 })
-let fun = () => { x: 1, y: 2 } // SyntaxError: Unexpected token ':'
-```
-
-箭头函数可以结合变量的解构赋值使用
-
-```js
-const full = ({ first, last }) => first + " " + last
-
-// 等同于
-
-function full(person) {
-  return person.first + " " + person.last
-}
-```
-
-箭头函数可以简化回调函数
-
-```js
-// 普通函数
-[1, 2, 3].map(function(x) {
-  return x * x
-})
-
-// 箭头函数
-[1, 2, 3].map(x => x * x)
-```
-
-```js
-// 普通函数
-let result = [5, 3, 9, 1].sort(function(a, b) {
-  return a - b
-})
-
-// 箭头函数
-let result = [5, 3, 9, 1].sort((a, b) => a - b)
-
-result // [1, 3, 5, 9]
-```
-
-箭头函数可以结合 rest 参数使用
-
-```js
-const fun = (...args) => args
-
-fun(1, 2, 3, 4, 5) // [1, 2, 3, 4, 5]
-```
-
-```js
-const fun = (a, ...b) => [a, b]
-
-fun(1, 2, 3, 4, 5) // [1, [2, 3, 4, 5]]
-```
-
-### 注意事项
-
-- this 指向函数声明时所在的作用域，而不是函数体内的作用域。也就是会继承作用域链上一层的 this
-
-- 没有原型对象。也就是说，不能使用 new 关键字，不可以作为构造函数
-
-- 没有 arguments 对象，使用 rest 参数代替
-
-- 不能使用 yield 命令，因此箭头函数不能作为 Generator 函数
+- 不能使用 yield 命令，因此箭头函数不能作为 Generator 函数。
 
 
 
@@ -1516,211 +237,117 @@ fun(1, 2, 3, 4, 5) // [1, [2, 3, 4, 5]]
 
 # 对象
 
-## 创建对象
+## new 关键字
 
-### new Object
+1. 创建一个空对象，作为将要返回的实例对象；
 
-适用场景：不确定对象内部的属性和方法
+2. 将这个空对象的原型，指向构造函数的 prototype 属性；
 
-缺点：创建之后需动态添加属性与方法，语句较多
+3. 将这个空对象赋值给函数内部的 this；
 
-```js
-const p = new Object()
+4. 开始执行构造函数内部的代码。
 
-p.name = "Tom"
-p.fun = function () {}
-```
+如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
 
-### 字面量
-
-适用场景：已确定对象内部的属性和方法
-
-缺点：如果创建多个对象，会有重复代码
-
-```js
-const p = {
-	name: "Tom",
-	fun() {}
-}
-```
-
-### 工厂模式
-
-适用场景：需要创建多个对象
-
-缺点：创建的对象不能共享属性与方法
-
-```js
-function Person(name) {
-  return {
-    name,
-    fun() {}
-  }
-}
-
-const p = Person("Tom")
-```
-
-### 原型模式
-
-适用场景：需要创建多个可共享属性与方法的对象，将方法添加到构造函数的原型上
-
-优点：属性与方法分离，并且共享方法，节省内存
-
-```js
-function Person(name) {
-	this.name = name
-}
-
-Person.prototype.fun = function () {}
-
-const p = new Person("Tom")
-```
-
-## 构造函数
-
-### 创建构造函数
-
-```js
-function Person(name) {
-	this.name = name
-	this.fun = function () {}
-}
-
-const per = new Person("Bob")
-```
-
-缺点：在构造函数中添加方法，会导致每次通过该构造函数创建对象时，就会创建一个方法
-
-### 优化构造函数
-
-```js
-function Person(name) {
-	this.name = name
-	this.fun = fun
-}
-
-function fun() {}
-
-const per = new Person('Bob')
-```
-
-
-优点：所有通过该构造函数创建的对象都能共用此方法
-
-缺点：容易造成函数重名，污染全局环境
-
-### 原型模式
-
-```js
-function Person(name) {
-	this.name = name
-}
-
-Person.prototype.fun = function () {}
-
-const p = Person("Tom")
-```
-
-优点：属性与方法分离，并且共享方法，节省内存
-
-## this 指向
-
-- 直接在全局作用域中获取 this，指向 window
-
-- 默认调用：非严格模式下 this 指向 window；严格模式下 this 指向 undefined
-
-- 对象调用：this 指向调用方法的上下文对象
-
-- 实例调用：this 指向 new 实例化的对象
-
-- call 调用：this 指向第一个参数
-
-## 原型链
-
-### 链式查找
-
-访问对象的属性或方法时
-
-1. 先在对象自身中寻找
-
-2. 再去对象的 \_\_proto\_\_ 中寻找
-
-3. 再去对象的 \_\_proto\_\_ 的 \_\_proto\_\_ 中寻找...
-
-4. 原型链的尽头是 Object 的原型对象 => Object.prototype.\_\_proto\_\_ = null
-
-### in
+## in 关键字
 
 `prop in obj`
 
-判断属性是否在指定对象或其原型链上
+判断一个属性是否在一个对象或其原型链上。
 
-### hasOwnProperty()
-
-`obj.hasOwnProperty(prop)`
-
-判断一个属性是否是**对象自身**的属性
-
-### isPrototypeOf()
-
-`prototypeObj.isPrototypeOf(obj)`
-
-判断**原型对象**是否在另一个对象的原型链上
-
-### instanceof
+## instanceof 关键字
 
 `obj instanceof constructor`
 
-判断**构造函数的原型对象**是否在实例对象的原型链上
+判断一个构造函数的原型对象是否在某个实例对象的原型链上。
 
-## 面向对象
+## obj.hasOwnProperty
 
-### 单例模式
+`obj.hasOwnProperty(prop)`
 
-使用全局变量记录实例化的状态
+判断一个属性是否是对象自身的属性。
+
+## obj.isPrototypeOf
+
+`obj.isPrototypeOf(other)`
+
+判断一个对象是否是另一个对象的原型（在其原型链上）。
+
+## descriptor 描述符
+
+- value: 属性值，默认为 undefined。
+
+- writable: 是否可修改，默认为 false。
+
+- enumerable: 是否可枚举，默认为 false。
+
+- configurable: 是否可删除，默认为 false。
+
+- get: getter 函数。
+
+- set: setter 函数。
+
+## Object.create
+
+`Object.create(proto, [descriptor])`
+
+创建一个对象，并指定它的原型对象。
 
 ```js
-let instance
+const obj = Object.create(null, {
+	name: {
+		value: "Bob",
+		enumerable: true
+	},
+	sex: {
+		value: "男"
+	}
+})
 
-function Person(name, age) {
-  this.name = name
-  this.age = age
-  if (!instance) {
-    instance = this
-  }
-  return instance
-}
-
-const person = new Person("小明", 20) // Person { name: "小明", age: 20 }
-const a = new Person("张三", 21) // Person { name: "小明", age: 20 }
-const b = new Person("李四", 22) // Person { name: "小明", age: 20 }
-const c = new Person("王五", 19) // Person { name: "小明", age: 20 }
+obj // { name: "Bob", sex: "男" }
 ```
 
-使用静态成员记录实例化的对象
+## Object.defineProperty
+
+`Object.defineProperty(obj, prop, descriptor)`
+
+劫持对象的某个属性。
 
 ```js
-function Person(name, age) {
-  this.name = name
-  this.age = age
-  if (!Person.instance) {
-    Person.instance = this
+const obj = { name: "Bob" }
+
+Object.defineProperty(obj, "age", {
+  value: 15,
+  enumerable: true
+})
+
+obj // { name: "Bob", age: 15 }
+```
+
+## Object.defineProperties
+
+`Object.defineProperties(obj, props: descriptor)`
+
+劫持对象的多个属性。
+
+```js
+const obj = { name: "Bob" }
+
+Object.defineProperties(obj, {
+  "age": {
+    value: 15,
+    enumerable: true
+  },
+  "sex": {
+    value: "男",
+    enumerable: true
   }
-  return Person.instance
-}
+})
 
-Person.instance
-
-const person = new Person("小明", 20) // Person { name: "小明", age: 20 }
-const a = new Person("张三", 21) // Person { name: "小明", age: 20 }
-const b = new Person("李四", 22) // Person { name: "小明", age: 20 }
-const c = new Person("王五", 19) // Person { name: "小明", age: 20 }
+obj // { name: "Bob", age: 15, sex: "男" }
 ```
 
 ## 继承
-
-当一个对象能够使用另外一个对象的属性和方法的时候，称为继承
 
 ### 组合继承
 
@@ -1758,274 +385,81 @@ class Person {
 
 class Student extends Person {
   constructor(name, age) {
-    // 如果需要使用继承的属性或方法, 必须调用 super 方法
+    // 如果需要使用继承的属性或方法，必须调用 super 方法
     super(name, age)
   }
 }
 ```
 
-## 存取器
 
-### getter
 
-`get prop() {}` 访问 prop 属性时调用函数
 
-```js
-const obj = {
-  name: "Bob",
-  get fun() {
-    console.log(this.name)
-    return this.name
-  }
-}
 
-obj.fun // Bob
-```
+# 对象（ES6）
 
-### setter
+## Object.keys
 
-`set prop(val) {}` 修改 prop 属性时调用函数
+`Object.keys(obj)`
 
-- prop: 属性名
-
-- val: 接收 prop 修改后的属性值
-
-```js
-let obj = {
-  name: 'Bob',
-  set fun(val) {
-    this.name = val
-    console.log(this.name)
-  }
-}
-
-obj.fun = 'Jack' // Jack
-```
-
-## 对象的扩展方法
-
-### Object.create()
-
-`Object.create(proto, [config])` 创建一个对象，并将 proto 作为它的原型对象
-
-- proto：新创建对象的原型对象
-
-- config: 配置对象
-
-  - value：属性值，默认为 undefined
-
-  - writable：是否可修改，默认为 false
-
-  - enumerable：是否可枚举，默认为 false
-
-  - configurable：是否可删除，默认为 false
-
-```js
-let obj = Object.create(null, {
-	name: {
-		value: "Bob",
-		enumerable: true
-	},
-	sex: {
-		value: "男"
-	}
-})
-
-obj // { name: "Bob", sex: "男" }
-```
-
-### Object.defineProperty()
-
-`Object.defineProperty(obj, prop, config)` 为 obj 定义或修改 prop 属性
-
-- obj：需要定义属性的对象
-
-- prop：需要定义的属性
-
-- config: 配置对象
-
-  - value：属性值，默认为 undefined
-
-  - writable：是否可修改，默认为 false
-
-  - enumerable：是否可枚举，默认为 false
-
-  - configurable：是否可删除，默认为 false
-
-```js
-let obj = { name: "Bob" }
-
-Object.defineProperty(obj, "age", {
-  value: 15,
-  enumerable: true
-})
-
-obj // { name: "Bob", age: 15 }
-```
-
-### Object.defineProperties()
-
-`Object.defineProperties(obj, props)` 为 obj 定义或修改多个 prop 属性
-
-- obj：需要定义属性的对象
-
-- props：{ prop: config }, { prop: config }...
-
-- config: 配置对象
-
-  - value：属性值，默认为 undefined
-
-  - writable：是否可修改，默认为 false
-
-  - enumerable：是否可枚举，默认为 false
-
-  - configurable：是否可删除，默认为 false
-
-```js
-let obj = { name: "Bob" }
-
-Object.defineProperties(obj, {
-  "age": {
-    value: 15,
-    enumerable: true
-  },
-  "sex": {
-    value: '男',
-    enumerable: true
-  }
-})
-
-obj // { name: "Bob", age: 15, sex: "男" }
-```
-
-
-
-
-
-# 对象 (ES6)
-
-## 属性的简化写法
-
-ES6 允许直接写入变量作为对象的属性
-
-```js
-let name = "Paul"
-let age = 20
-let person = { name, age }
-
-// 等同于
-
-let person = { name: "Paul", age: 20 }
-```
-
-对象的方法也可以简写
-
-```js
-let foo = {
-  showMessage() {
-    alert("hello")
-  }
-}
-
-// 等同于
-
-let foo = {
-  showMessage: function() {
-    alert("hello")
-  }
-}
-```
-
-## 属性名表达式
-
-ES6 可以使用表达式作为属性名
-
-```js
-const show = "showMessage"
-const person = {
-  name: "Paul",
-  [show]() {}
-}
-```
-
-属性名表达式如果是一个对象，会自动转为字符串 "[object, Object]"
-
-```js
-const foo = { a: 1 }
-const bar = { b: 2 }
-
-const msg = {
-  [foo]: "hello",
-  [bar]: "world"
-}
-
-msg // { "[object Object]": "world" }
-```
-
-## 展开运算符
-
-### 合并对象
-
-```js
-const figure = { height: 178, wight: 135 }
-
-const person = {
-  name: "小明",
-  age: 20,
-  ...figure
-}
-```
-
-## 遍历对象
-
-### Object.keys()
-
-遍历对象，将对象的属性名作为数组的元素组成数组，并返回
+遍历对象，返回对象属性名组成的数组。
 
 ```js
 Object.keys({
   name: "xiaoming",
   age: 18
-}) // ['name', 'age']
+})
+// ['name', 'age']
 ```
 
-### Object.values()
+## Object.values
 
-遍历对象，将对象的属性值作为数组的元素组成数组，并返回
+`Object.values(obj)`
+
+遍历对象，返回对象属性值组成的数组。
 
 ```js
 Object.values({
   name: "xiaoming",
   age: 18
-}) // ['xiaoming', 18]
+})
+// ['xiaoming', 18]
 ```
 
-### Object.entries()
+## Object.entries
 
-遍历对象，将对象的属性名与属性值合并作为数组的元素组成二维数组，并返回
+`Object.entries(obj)`
+
+遍历对象，返回对象属性名与属性值组成的二维数组。
 
 ```js
 Object.entries({
   name: "xiaoming",
   age: 18
-}) // [['name', 'xiaoming'], ['age', 18]]
+})
+// [['name', 'xiaoming'], ['age', 18]]
 ```
 
-## 合并对象
+## Object.assign
 
-### Object.assign()
+`Object.assign(target, ...sources)`
 
-合并对象，并返回
+合并对象，并返回。可用于浅拷贝。
 
 ```js
-Object.assign({ a: 1 }, { b: 2 }, { c: 3 }) // { a: 1, b: 2, c: 3 }
+const obj = { a: 1 }
+
+Object.assign({}, obj)
+
+/* 等价于 */
+
+{ ...obj }
 ```
 
-## 冻结属性
+## Object.freeze
 
-### Object.freeze()
+`Object.freeze(obj)`
 
-将对象的属性冻结，变为只读的属性，但是可以改变内部结构
+冻结对象属性。如果属性是对象或数组，可以改变其内部结构，必要时需要深冻结。
 
 ```js
 const person = {
@@ -2039,11 +473,11 @@ person.age = 30
 person // { name: 'xiaoming', age: 18 }
 ```
 
-## 判断相等
+## Object.is
 
-### Object.is()
+`Object.is(value1, value2)`
 
-判断两个值是否相等，解决了 "==" 会自动转换数据类型、`NaN === NaN => false` 等问题
+判断两个值是否相等，解决了 "==" 会自动转换数据类型、`NaN === NaN => false` 等问题。
 
 ```js
 1 == "1" // true
@@ -2053,11 +487,11 @@ NaN === NaN // false
 Object.is(NaN, NaN) // true
 ```
 
-## 判断属性
+## Object.hasOwn
 
-### Object.hasOwn()
+`Object.hasOwn(obj, prop)`
 
-判断一个属性是否是对象自身的属性，与 `obj.hasOwnProperty(prop)` 相同
+判断一个属性是否是对象自身的属性，与 `obj.hasOwnProperty(prop)` 相同。
 
 ```js
 const person = {
@@ -2077,23 +511,11 @@ Object.hasOwn(person, "foo") // false
 
 # 数组
 
-## arr.concat
-
-`arr.concat(arr1, [arr2])`
-
-合并数组，并返回。不会修改原数组
-
-```js
-const arr = [2, 3, 4]
-
-arr.concat([5, 6]) // [2, 3, 4, 5, 6]
-```
-
 ## arr.push
 
 `arr.push(value...)`
 
-向数组末尾添加一个或多个元素，返回新数组的长度。会修改原数组
+向数组末尾添加元素，返回新数组的长度。
 
 ```js
 const arr = [2, 3, 4]
@@ -2107,7 +529,7 @@ arr // [2, 3, 4, 5]
 
 `arr.pop()`
 
-删除数组中最后一个元素，返回被删除的元素。会修改原数组
+删除数组最后一个元素，返回被删除的元素。
 
 ```js
 const arr = [1, 2, 3, 4, 5]
@@ -2121,7 +543,7 @@ arr // [1, 2, 3, 4]
 
 `arr.unshift(value...)`
 
-向数组首部添加一个或多个元素，返回新数组的长度。会修改原数组
+向数组首部添加元素，返回新数组的长度。
 
 ```js
 const arr = [2, 3, 4]
@@ -2135,7 +557,7 @@ arr // [1, 2, 3, 4]
 
 `arr.shift()`
 
-删除数组中第一个元素，返回被删除的元素。会修改原数组
+删除数组第一个元素，返回被删除的元素。
 
 ```js
 const arr = [1, 2, 3, 4, 5]
@@ -2147,15 +569,9 @@ arr // [2, 3, 4, 5]
 
 ## arr.splice
 
-`arr.splice(start, [count], [value...])`
+`arr.splice(startIndex, [count], [value...])`
 
-- start: 开始删除的索引值
-
-- count: 删除的元素个数
-
-- value: 添加的元素
-
-从 start 开始删除元素，删除个数为 count，在 start 添加新的元素，返回被删除的元素。会修改原数组
+删除元素 | 添加元素，返回被删除的元素。
 
 ```js
 /* 删除元素 */
@@ -2187,61 +603,11 @@ arr.splice(1, 0, 7, 8, 9) // []
 arr // [2, 7, 8, 9, 3, 4, 5, 6]
 ```
 
-## arr.slice
-
-`arr.slice([start], [end])`
-
-截取数组从 start 到 end 的部分，返回截取的部分。不会修改原数组
-
-- start: 截取开始的索引值
-
-- end: 截取结束的索引值
-
-```js
-const arr = [2, 3, 4, 5, 6]
-
-arr.slice(1, 3) // [3, 4]
-
-arr.slice(0, arr.length) // [2, 3, 4, 5, 6]
-
-arr.slice() // [2, 3, 4, 5, 6]
-```
-
-## arr.join
-
-`arr.join([separator])`
-
-以 separator 为分隔符拆分数组，将被拆分的部分组成字符串。不会修改原数组
-
-```js
-const arr = ["h", "e", "l", "l", "o"]
-
-arr.join("") // "hello"
-
-arr.join(" ") // "h e l l o"
-
-arr.join("") === "" // false, 判断 arr 是否为空数组
-```
-
-## arr.reverse
-
-`arr.reverse()`
-
-颠倒数组元素的顺序。会修改原数组
-
-```js
-const arr = [1, 2, 3, 4, 5]
-
-arr.reverse()
-
-arr // [5, 4, 3, 2, 1]
-```
-
 ## arr.sort
 
 `arr.sort()`
 
-默认将元素按 ASCII 顺序排列，可以传入比较函数进行排序。会修改原数组
+将元素按 UTF-16 升序排列。可以传入比较函数进行排序。
 
 ```js
 const arr = [
@@ -2255,15 +621,65 @@ arr.sort((a, b) => a.age - b.age)
 arr // [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
 ```
 
+## arr.reverse
+
+`arr.reverse()`
+
+反转数组中的元素。
+
+```js
+const arr = [1, 2, 3, 4, 5]
+
+arr.reverse()
+
+arr // [5, 4, 3, 2, 1]
+```
+
+## arr.slice
+
+`arr.slice([startIndex], [endIndex])`
+
+截取数组，返回被截取的部分。
+
+```js
+const arr = [2, 3, 4, 5, 6]
+
+arr.slice(1, 3) // [3, 4]
+arr.slice(0, arr.length) // [2, 3, 4, 5, 6]
+arr.slice() // [2, 3, 4, 5, 6]
+```
+
+## arr.concat
+
+`arr.concat(arr1, [arr2])`
+
+合并数组，并返回。
+
+```js
+const arr = [2, 3, 4]
+
+arr.concat([5, 6]) // [2, 3, 4, 5, 6]
+```
+
+## arr.join
+
+`arr.join([separator])`
+
+拆分数组，将被拆分的部分组成字符串，并返回。
+
+```js
+const arr = ["h", "e", "l", "l", "o"]
+
+arr.join("") // "hello"
+arr.join(" ") // "h e l l o"
+arr.join("") === "" // false, 判断 arr 是否为空数组
+```
+
 ## arr.indexOf
 
-`arr.indexOf(item, [start])`
+`arr.indexOf(item, [startIndex])`
 
-查找 item 元素在数组 arr 中的位置，返回首次出现的索引。若不存在，则返回 -1
-
-- item: 要查找的元素
-
-- start: 开始查找的索引值，默认为 0
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
 const arr = ['a', 'b', 'c', 'd', 'b']
@@ -2277,11 +693,7 @@ arr.indexOf('g') // -1
 
 `arr.lastIndexOf(item, [start])`
 
-反向查找 item 元素在数组 arr 中的位置，返回首次出现的索引。若不存在，则返回 -1
-
-- item: 要查找的元素
-
-- start: 开始查找的索引值，默认为 arr.length - 1
+查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
 const arr = ['a', 'b', 'c', 'd', 'b']
@@ -2295,11 +707,7 @@ arr.lastIndexOf('g') // -1
 
 `arr.forEach(callback(item, [index], [arr]))`
 
-- item: 正在遍历的元素
-
-- index: 正在遍历的元素索引值
-
-- arr: 执行遍历的数组
+遍历数组。
 
 
 ```js
@@ -2308,15 +716,25 @@ const arr = [4, 9, 16, 25]
 arr.forEach(item => console.log(item)) // 4 9 16 25
 ```
 
+## arr.filter
+
+`arr.filter(callback(item, [index], [arr]))`
+
+遍历数组，过滤出一个新数组。
+
+```js
+const arr = [4, 9, 16, 25]
+
+const newArr = arr.filter(item => item > 12)
+
+newArr // [16, 25]
+```
+
 ## arr.map
 
 `arr.map(callback(item, [index], [arr]))`
 
-- item: 正在遍历的元素
-
-- index: 正在遍历的元素索引值
-
-- arr: 执行遍历的数组
+遍历数组，映射出一个新数组。
 
 
 ```js
@@ -2327,42 +745,16 @@ const newArr = arr.map(item => Math.sqrt(item))
 newArr // [2, 3, 4, 5]
 ```
 
-## arr.filter
-
-`arr.filter(callback(item, [index], [arr]))`
-
-- item: 正在遍历的元素
-
-- index: 正在遍历的元素索引值
-
-- arr: 执行遍历的数组
-
-```js
-const arr = [4, 9, 16, 25]
-
-const newArr = arr.filter(item => item > 12)
-
-newArr // [16, 25]
-```
-
 ## arr.reduce
 
 `arr.reduce(callback(prev, item, [index], [arr]), [initial])`
 
-- prev: 上次循环的返回值
-
-- item: 正在遍历的元素值
-
-- index: 正在遍历的元素索引，若指定了 initial 则起始索引为 0，否则为 1
-
-- arr: 执行遍历的数组
-
-- initial: 作为第一次回调时 prev 参数的值
+遍历数组，得到一个值。
 
 ```js
 const arr = [4, 9, 16, 25]
 
-let total = arr.reduce((prev, item) => prev + item, 1)
+const total = arr.reduce((prev, item) => prev + item, 1)
 
 total // 55 (1 + 4 + 9 + 16 + 25)
 ```
@@ -2371,54 +763,13 @@ total // 55 (1 + 4 + 9 + 16 + 25)
 
 
 
-# 数组 (ES6)
-
-## 展开运算符
-
-### 展开数组
-
-```js
-// ES5
-Math.max.apply(null, [3, 2, 6, 4])
-
-// ES6
-Math.max(...[3, 2, 6, 4])
-
-// 等同于
-Math.max(3, 2, 6, 4)
-```
-
-### 合并数组
-
-```js
-const arr1 = [1, 3, 5]
-const arr2 = [2, 4, 6]
-const arr3 = [7, 8, 9]
-
-// ES5
-arr1.concat(arr2, arr3)
-
-// ES6
-[...arr1, ...arr2, ...arr3]
-```
-
-### 伪数组转为数组
-
-```js
-[...document.querySelectorAll("li")]
-```
-
-### 字符串转为数组
-
-```js
-[...'hello'] // ['h', 'e', 'l', 'l', 'o']
-```
+# 数组（ES6）
 
 ## Array.of
 
 `Array.of(value...)`
 
-创建数组，相比于 `new Array()`，`Array.of()` 可以创建一个元素的数组
+创建数组，相比于 `new Array()`，`Array.of()` 可以创建一个元素的数组。
 
 ```js
 new Array(3) // [empty × 3]
@@ -2428,13 +779,9 @@ Array.of(3) // [3]
 
 ## Array.from
 
-`Array.from(arrLike, [mapFn])`
+`Array.from(arrLike, [mapFn(item)])`
 
-将伪数组或可迭代对象转换为数组。不会修改原数组
-
-- arrLike: 伪数组或可迭代对象
-
-- mapFn: 每个将要添加到数组中的值会先传递给该函数，然后将返回值作为数组元素添加到数组中
+将伪数组或可迭代对象转换为数组。
 
 ```js
 Array.from(document.querySelectorAll("li"))
@@ -2452,11 +799,7 @@ Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3,
 
 `arr.includes(item, [index])`
 
-查找数组 arr 中是否含有 item 元素
-
-- item：要查找的元素
-
-- index：开始查找的索引值。默认为 0
+判断数组中是否含有某元素。
 
 ```js
 const arr = [1, 2, 3, 4, 5]
@@ -2467,15 +810,9 @@ arr.includes(9) // false
 
 ## arr.fill
 
-`arr.fill(item, [start], [end])`
+`arr.fill(item, [startIndex], [endIndex])`
 
-用 item 元素替换数组从 start 到 end 的部分。会修改原数组
-
-- item: 要替换的元素
-
-- start: 替换开始的索引值
-
-- end: 替换结束的索引值
+用某个元素填充数组。
 
 ```js
 const arr = [1, 2, 3]
@@ -2489,9 +826,7 @@ arr // ["*", "*", "*"]
 
 `arr.flat([count])`
 
-将多维数组降为低维数组。不会修改原数组
-
-- count：降维次数，默认降为一维数组
+数组降维。
 
 ```js
 const arr = [1, 2, 3, [4, 5, [6]]]
@@ -2503,13 +838,7 @@ arr.flat(2) // [1, 2, 3, 4, 5, 6]
 
 `arr.find(callback(item, [index, [arr]])`
 
-遍历数组，返回过滤出的首个元素
-
-- item：正在遍历的元素
-
-- index：正在遍历的元素索引值
-
-- arr：执行遍历的数组
+遍历数组，返回符合条件的第一个元素。
 
 ```js
 const arr = [1, 3, 5, 7, 9]
@@ -2521,13 +850,7 @@ arr.find(item => item > 3) // 5
 
 `arr.findIndex(callback(item, [index], [array])`
 
-遍历数组，返回过滤出的首个元素的索引值
-
-- item：正在遍历的元素
-
-- index：正在遍历的元素索引值
-
-- arr：执行遍历的数组
+遍历数组，返回符合条件的第一个元素的索引。
 
 ```js
 const arr = [1, 3, 5, 7, 9]
@@ -2535,159 +858,133 @@ const arr = [1, 3, 5, 7, 9]
 arr.findIndex(item => item > 3) // 2
 ```
 
-## arr.keys
-
-`arr.keys()` 返回 Array Iterator 对象，使用 for...of 遍历数组元素的索引
-
-## arr.values
-
-`arr.values()` 返回 Array Iterator 对象，使用 for...of 遍历数组元素的值
-
-## arr.entries
-
-`arr.entries()` 返回 Array Iterator 对象，使用 for...of 遍历数组元素的 [索引, 值]
 
 
 
 
+# 字符串
 
-# 正则
+## str.indexOf
 
-## 正则的创建
+`str.indexOf(item, [startIndex])`
 
-使用字面量创建正则
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
-let reg = /at/g
+let str = "hello world hello world"
+
+str.indexOf("world") // 6
+str.indexOf("world", 10) // 18
+str.indexOf("woood") // -1
 ```
 
-使用内置构造函数创建正则
+## str.lastIndexOf
+
+`str.lastIndexOf(item, [startIndex])`
+
+查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
-let reg = new RegExp("at", "g")
+let str = "hello world hello world"
+
+str.lastIndexOf("world") // 18
+str.lastIndexOf("world", 10) // 6
+str.indexOf("woood") // -1
 ```
 
-## 修饰符
+## str.slice
 
-`g` 全局匹配
+`str.slice([startIndex, [endIndex]])`
 
-`i` 忽略大小写
-
-## 元字符
-
-`.` 匹配任意字符(除了换行符)
-
-`\w` 匹配单词字符(字母、数字、下划线)
-
-`\W` 匹配非单词字符
-
-`\d` 匹配数字字符
-
-`\D` 匹配非数字字符
-
-`\s` 匹配空格字符
-
-`\S` 匹配非空格字符
-
-## 量词
-
-`{n}` 匹配 n 次
-
-`{m,n}` 匹配 m～n 次
-
-`{m,} ` 匹配至少 m 次
-
-`+` 匹配 1 次或多次，相当于 `{1,}`
-
-`*` 匹配 0 次或多次，相当于 `{0,}`
-
-`?` 匹配 0 次或 1 次，相当于 `{0,1}`
-
-## 边界符
-
-`^` 匹配以...开头的字符
-
-`$` 匹配以...结尾的字符
-
-`\b` 匹配单词边界符
-
-`\B` 匹配非单词边界符
-
-## 字符集合
-
-`[0-9]` 任意数字
-
-`[a-z]` 任意小写字母
-
-`[A-Z]` 任意大写字母
-
-`[a-zA-Z]` 任意字母
-
-## 正则的方法
-
-### reg.test()
-
-`reg.test(str)`
-
-检查字符串中是否有正则的匹配项
+截取字符串，返回被截取的部分。
 
 ```js
-let reg = /\d+/
+let str = "hello world"
 
-reg.test("abcdef") // false
-
-reg.test("abc123") // true
+str.slice() // "hello world"
+str.slice(6) // "world"
+str.slice(2, 5) // "llo"
+str.slice(3, -1) // "lo worl"
 ```
 
-## 正则的字符串方法
+## str.substring
 
-### str.search()
+`str.substring(startIndex, [endIndex])`
 
-`str.search(regexp)`
-
-查找字符串中正则的匹配项，返回首次匹配项的索引。若不存在，则返回 -1
+截取字符串，返回被截取的部分。若 startIndex 大于 endIndex，则交换顺序。
 
 ```js
-let str = "hello world 666"
+let str = "hello world"
 
-str.search(/[0-9]+/g) // 12
+str.substring(1, 4) // "ell"
+str.substring(6) // "world"
+str.substring(-10, -5) // ""
 ```
 
-### str.match()
+## str.substr
 
-`str.match(regexp)`
+`str.substr(startIndex, [count])`
 
-查找字符串中正则的匹配项，将所有匹配项组成数组，并返回。若匹配不到，则返回 -1
+截取字符串，返回被截取的部分。
+
+> 不推荐使用
 
 ```js
-let str = "1 hello 2 world 666"
+let str = "hello world"
 
-str.match(/[0-9]+/g) // [1, 2, 666]
+str.substr(6, 3) // "wor"
+str.substr(3) // "lo world"
 ```
 
-### str.replace()
+## str.toUpperCase
 
-`str.replace(regexp, newStr)`
+`str.toUpperCase()`
 
-查找字符串中正则的匹配项，替换为新的字符串
+将字符串转为大写，并返回。
 
 ```js
-let str = "18-31-56"
+let str = "I love JavaScript"
 
-str.replace(/-/g, ":") // 18:31:56
+str.toUpperCase() // "I LOVE JAVASCRIPT"
 ```
+
+## str.toLowerCase
+
+`str.toLowerCase()`
+
+将字符串转为小写，并返回。
 
 ```js
-let str = "html and css"
+let str = "I love JavaScript"
 
-str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
+str.toLowerCase() // "i love javascript"
 ```
 
-### str.split()
+## str.trim
 
-`str.split(regexp[, count])`
+`str.trim()`
 
-以正则的匹配项为分隔符拆分字符串，将被拆分的部分作为数组的元素组成数组
+去除字符串两边的空格。
+
+```js
+let str = "   hello world   "
+
+str.trim() // "hello world"
+```
+
+## str.split
+
+`str.split([separator|regexp, [count]])`
+
+拆分字符串，将被拆分的部分组成数组，并返回。
+
+```js
+let str = "hello world"
+
+str.split() // ["hello world"]
+str.split("") // ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
+str.split(" ") // ["hello", "world"]
+```
 
 ```js
 let str = "fdaf123fdsa12321fdas123fda"
@@ -2695,182 +992,153 @@ let str = "fdaf123fdsa12321fdas123fda"
 str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 ```
 
+## str.search
 
+`str.search(item|regexp)`
 
-
-
-# Symbol
-
-## 概述
-
-ES6 引入了一种新的原始数据类型 Symbol，表示独一无二的值，它是 JavaScript 语言的第 7 种数据类型，前 6 种分别是 Undefined、Null、Boolean、String、Number、Object
-
-Symbol 值通过 Symbol 函数生成。对象的属性名现在可以有两种类型：字符串和 Symbol 类型。只要属性名属于 Symbol 类型，就是独一无二的，不会与其他属性名产生冲突
-
-下面的代码中，变量 s 就是一个独一无二的值，typeof 运算符的结果表明变量 s 是 Symbol 类型
+查找元素，返回元素（正则）首次出现（匹配）的索引。若不存在，则返回 -1。
 
 ```js
-let s = Symbol()
+let str = "hello world 666"
 
-typeof s // "Symbol"
+str.search(/[0-9]+/g) // 12
 ```
 
-> Symbol 函数前不能使用 new 命令，否则会报错，这是因为生成的 Symbol 是一个原始类型的值，不是对象。由于 Symbol 值不是对象，所以不能添加属性。基本上，它是一种类似于字符串的数据类型
+## str.match
 
-Symbol 函数可以接受一个字符串作为参数，表示对 Symbol 实例的描述，主要是为了在控制台显示，或者转为字符串时比较容易区分
+`str.match(regexp)`
 
-下面的代码中，s1 和 s2 是两个 Symbol 值。如果不加参数，它们在控制台的输出都是 Symbol()，不利于区分。有了参数以后，就等于为它们加上了描述，输出时就能区分这两个值
+返回匹配项组成的数组。若匹配不到，则返回 -1。
 
 ```js
-let s1 = Symbol('foo')
-let s2 = Symbol('bar')
+let str = "1 hello 2 world 666"
 
-s1 // Symbol(foo)
-s2 // Symbol(bar)
-
-s1.toString() // "Symbol(foo)"
-s2.toString() // "Symbol(bar)"
+str.match(/[0-9]+/g) // [1, 2, 666]
 ```
 
-如果 Symbol 的参数是一个对象，就会调用该对象的 toString 方法，将其转为字符串，然后才生成一个 Symbol 值
+## str.replace
+
+`str.replace(item|regexp, newItem|function)`
+
+替换匹配到的元素。
 
 ```js
-const obj = {
-  foo: 'bar'
-}
+let str = "18-31-56"
+ 
+// 当第一个参数是字符串时, 只替换第一个匹配项
+str.replace("-", ":") // 18:31-56
 
-Symbol(obj) // Symbol([object Object])
+// 第一个参数使用正则表达式全局匹配, 可以替换所有匹配项
+str.replace(/-/g, ":") // 18:31:56
+
+
+let str = "html and css"
+
+str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 ```
+
+
+
+
+
+# 字符串（ES6）
+
+## str.includes
+
+`str.includes(item)`
+
+判断字符串中是否含有某元素。
 
 ```js
-const obj = {
-  toString() {
-    return 'abc'
-  }
-}
+let str = "hello world"
 
-Symbol(obj) // Symbol(abc)
+str.includes("world") // true
+str.includes("yeah") // false
 ```
 
-Symbol 函数的参数只表示对当前 Symbol 值的描述，因此相同的参数的 Symbol 函数的返回值是不相等的
+## str.startsWith
 
-下面的代码中，s1 和 s2 都是 Symbol 函数的返回值，而且参数相同，但是它们是不相等的
+`str.startsWith(item, [index])`
+
+判断字符串是否以某元素开始。
 
 ```js
-// 没有参数的情况
-let s1 = Symbol()
-let s2 = Symbol()
+let str = "abcdefg"
 
-s1 === s2 // false
+str.startsWith("ab") // true
 ```
+
+## str.endsWith
+
+`str.endsWith(item, [index])`
+
+判断字符串是否以某元素结束。
 
 ```js
-// 有参数的情况
-let s1 = Symbol('foo')
-let s2 = Symbol('foo')
+let str = "abcdefg"
 
-s1 === s2 // false
+str.endsWith("ef") // false
 ```
 
-Symbol 值不能与其他类型的值进行计算，否则会报错
+## str.repeat
+
+`str.repeat(count)`
+
+重复字符串，并返回。
 
 ```js
-let s = Symbol('my symbol')
+let str = "abc"
 
-'your symbol is ' + s // TypeError: Cannot convert a Symbol value to a string
-`your symbol is ${s}` // TypeError: Cannot convert a Symbol value to a string
+str.repeat(3) // "abcabcabc"
 ```
 
-但是，Symbol 可以显式转为字符串
+## str.padStart
+
+`str.padStart(length, [item])`
+
+当字符串不足某长度时，在首部填充元素，并返回。
 
 ```js
-let s = Symbol('my symbol')
+let str = "abc"
 
-String(s) // 'Symbol(my symbol)'
-s.toString() // 'Symbol(my symbol)'
+str.padStart(10, "*") // "*******abc"
 ```
 
-Symbol 也可以转为布尔值，但是不能转为数值
+## str.padEnd
+
+`str.padEnd(length, [item])`
+
+当字符串不足某长度时，在尾部填充元素，并返回。
 
 ```js
-let s = Symbol()
+let str = "abc"
 
-Boolean(s) // true
-!s // false
-
-if (s) {
-  // ...
-}
-
-Number(s) // TypeError: Cannot convert a Symbol value to a number
-s + 2 // TypeError: Cannot convert a Symbol value to a number
+str.padEnd(10, "*") // "abc*******"
 ```
 
-## 作为属性名的 Symbol
+## str.trimStart
 
+`str.trimStart()`
 
+去除字符串首部的空格。
 
-## 实例：消除魔术字符串
+```js
+let str = "   hello world   "
 
+str.trimStart() // "hello world   "
+```
 
+## str.trimEnd
 
-## 属性名的遍历
+`str.trimEnd()`
 
+去除字符串尾部的空格。
 
+```js
+let str = "   hello world   "
 
-## Symbol.for()、Symbol.keyFor()
-
-
-
-## 实例：模块的 Singleton 模式
-
-
-
-## 内置的 Symbol 值
-
-### Symbol.hasInstance
-
-
-
-### Symbol.isConcatSpreadable
-
-
-
-### Symbol.species
-
-
-
-### Symbol.match
-
-
-
-### Symbol.replace
-
-
-
-### Symbol.search
-
-
-
-### Symbol.split
-
-
-
-### Symbol.iterator
-
-
-
-### Symbol.toPrimitive
-
-
-
-### Symbol.toStringTag
-
-
-
-### Symbol.unscopables
-
-
+str.trimEnd() // "   hello world"
+```
 
 
 
@@ -3118,27 +1386,11 @@ for (let item of set) {
 
 
 
-
-
 ## WeakSet
 
 
 
-
-
-
-
-
-
 ## Map
-
-
-
-
-
-
-
-
 
 
 
@@ -3168,7 +1420,7 @@ for (let item of set) {
 
 ```js
 new Promise((resolve, reject) => {
-  if (/* success */) {
+  if (true /* success */) {
     resolve(value)
   }
   else /* error */ {
@@ -3180,9 +1432,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-## Promise API
-
-### Promise.prototype.then
+## Promise.prototype.then
 
 `promise.then(value => {}, error => {})`
 
@@ -3193,7 +1443,7 @@ promise.then(
 )
 ```
 
-### Promise.prototype.catch
+## Promise.prototype.catch
 
 `promise.catch(error => {})`
 
@@ -3205,11 +1455,11 @@ promise.catch(
 )
 ```
 
-### Promise.prototype.finally
+## Promise.prototype.finally
 
 `promise.finally(() => {})`
 
-在 promise 结束时，无论结果是 fulfilled 或者是 rejected，都会执行回调函数
+在 promise 结束时，无论结果是 fulfilled 或者是 rejected，都会执行回调函数。
 
 ```js
 promise.finally(
@@ -3217,7 +1467,7 @@ promise.finally(
 )
 ```
 
-### Promise.resolve
+## Promise.resolve
 
 `Promise.resolve(value)`
 
@@ -3228,7 +1478,7 @@ new Promise((resolve, reject) => {
 })
 ```
 
-### Promise.reject
+## Promise.reject
 
 `Promise.reject(error)`
 
@@ -3239,19 +1489,19 @@ new Promise((resolve, reject) => {
 })
 ```
 
-### Promise.all
+## Promise.all
 
 `Promise.all([p1, p2, p3])`
 
-只有 p1, p2, p3 都成功时，p 才会成功
+只有 p1, p2, p3 都成功时，p 才会成功，
 
-如果 p 成功，p 返回的 Promise 结果为 p1, p2, p3 返回的 Promise 的值组成的数组
+如果 p 成功，p 返回的 Promise 结果为 p1, p2, p3 返回的 Promise 的值组成的数组；
 
 
 
-只要 p1, p2, p3 有一个失败，p 就会失败
+只要 p1, p2, p3 有一个失败，p 就会失败，
 
-如果 p 失败，p 返回的 Promise 结果为 p1, p2, p3 中第一个失败返回的 Promise 的值
+如果 p 失败，p 返回的 Promise 结果为 p1, p2, p3 中第一个失败返回的 Promise 的值。
 
 ```js
 const p1 = Promise.resolve(1)
@@ -3269,13 +1519,13 @@ Promise.all([p1, p2, p3]).then(
 )
 ```
 
-### Promise.allSettled
+## Promise.allSettled
 
 `Promise.allSettled([p1, p2, p3])`
 
-无论 p1, p2, p3 成功还是失败，p 都会成功
+无论 p1, p2, p3 成功还是失败，p 都会成功，
 
-p 返回的 Promise 结果为包含 [p1, p2, p3 返回的 Promise 的状态和值] 的对象组成的数组
+p 返回的 Promise 结果为包含 [p1, p2, p3 返回的 Promise 的状态和值] 的对象组成的数组。
 
 ```js
 const p1 = Promise.resolve(1)
@@ -3292,21 +1542,21 @@ Promise.all([p1, p2, p3]).then(
 )
 ```
 
-### Promise.any
+## Promise.any
 
 `Promise.any([p1, p2, p3])`
 
-只有 p1, p2, p3 都失败时，p 才会失败
+只有 p1, p2, p3 都失败时，p 才会失败；
 
-只要 p1, p2, p3 有一个成功，p 就会成功
+只要 p1, p2, p3 有一个成功，p 就会成功。
 
-### Promise.race
+## Promise.race
 
 `Promise.race([p1, p2, p3])`
 
-只要 p1, p2, p3 中有一个状态发生改变，p 的状态就随之改变
+只要 p1, p2, p3 中有一个状态发生改变，p 的状态就随之改变，
 
-p 返回的 Promise 为 p1, p2, p3 中率先改变状态的实例返回的 Promise
+p 返回的 Promise 为 p1, p2, p3 中率先改变状态的实例返回的 Promise。
 
 ```js
 const p1 = new Promise((resolve, reject) => {
@@ -3324,11 +1574,9 @@ Promise.race([p1, p2, p3]).then(
 )
 ```
 
-## Promise 理解
+## then 的返回值
 
-### then 的返回值
-
-返回非 Promise 的任意值，`.then()` 返回的 Promise 状态为 fulfilled，值为 [value]
+返回非 Promise 的任意值，`.then()` 返回的 Promise 状态为 fulfilled，值为 [value]。
 
 ```js
 new Promise((resolve, reject) => {
@@ -3343,7 +1591,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-返回一个 Promise，则该 Promise 的状态和值就会作为 `.then()` 返回的 Promise 的状态和值
+返回一个 Promise，则该 Promise 的状态和值就会作为 `.then()` 返回的 Promise 的状态和值。
 
 ```js
 new Promise((resolve, reject) => {
@@ -3358,7 +1606,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-抛出异常，`.then()` 返回的 Promise 状态为 rejected，值为 [error]
+抛出异常，`.then()` 返回的 Promise 状态为 rejected，值为 [error]。
 
 ```js
 new Promise((resolve, reject) => {
@@ -3373,9 +1621,9 @@ new Promise((resolve, reject) => {
 )
 ```
 
-### 异常穿透
+## 异常穿透
 
-在 Promise 链式调用中，如果 `.then()` 无法处理上一步的异常结果，会出现异常穿透，直到被 `.catch()` 捕获
+在 Promise 链式调用中，如果 `.then()` 无法处理上一步的异常，会出现异常穿透，直到被 `.catch()` 捕获。
 
 ```js
 new Promise((resolve, reject) => {
@@ -3401,9 +1649,9 @@ new Promise((resolve, reject) => {
 )
 ```
 
-### 中断 Promise 链
+## 中断 Promise 链
 
-返回一个 pendding 状态的 Promise
+返回一个 pendding 状态的 Promise。
 
 ```js
 new Promise((resolve, reject) => {
@@ -3422,9 +1670,9 @@ new Promise((resolve, reject) => {
 
 ## 任务队列
 
-微任务：Promise、MutationObserver、queueMicrotask
+微任务：Promise、MutationObserver、queueMicrotask。
 
-宏任务：setImmediate、定时器、DOM 事件、Ajax
+宏任务：定时器、DOM 事件、Ajax、setImmediate。
 
 ```js
 setTimeout(() => {
@@ -3557,12 +1805,12 @@ console.log(4)
 
 ## 节点
 
-|      | 节点类型(nodeType) | 节点名(nodeName) | 节点值(nodeValue) |
-| :--: | :----------------: | :--------------: | :---------------: |
-| 元素 |         1          |    大写标签名    |       null        |
-| 属性 |         2          |      属性名      |      属性值       |
-| 文本 |         3          |      #text       |     文本内容      |
-| 注释 |         8          |     #comment     |     注释内容      |
+|      | 节点类型（nodeType） | 节点名（nodeName） | 节点值（nodeValue） |
+| :--: | :------------------: | :----------------: | :-----------------: |
+| 元素 |          1           |     大写标签名     |        null         |
+| 属性 |          2           |       属性名       |       属性值        |
+| 文本 |          3           |       #text        |      文本内容       |
+| 注释 |          8           |      #comment      |      注释内容       |
 
 ## 查询元素
 
@@ -3611,7 +1859,7 @@ console.log(4)
 | `element.classList.contains("value")` | 判断元素是否有该类名 |
 | `element.classList.toggle("value")`   | 切换元素类名         |
 
-## 操作元素
+## 操作元素节点树
 
 | API                                        | 用法                         |
 | ------------------------------------------ | ---------------------------- |
@@ -3627,87 +1875,44 @@ console.log(4)
 
 ## 获取元素宽高
 
-| API                    | 用法                     |
-| ---------------------- | ------------------------ |
-| `element.clientWidth`  | 获取元素宽度（不含边框） |
-| `element.clientHeight` | 获取元素高度（不含边框） |
-| `element.offsetWidth`  | 获取元素宽度（含边框）   |
-| `element.offsetHeight` | 获取元素高度（含边框）   |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-|                        |                          |
-
-
-
-`element.clientLeft`
-
-获取元素左边框宽度
-
-`element.clientTop`
-
-获取元素上边框宽度
-
-
-
-`window.innerWidth`
-
-获取浏览器宽度 (包含滚动条)，获取不包含滚动条的宽度: `document.documentElement.offsetWidth`
-
-`window.innerHeight`
-
-获取浏览器高度 (包含滚动条)，获取不包含滚动条的高度: `document.documentElement.offsetHeight`
-
-
-
-`element.scrollWidth`
-
-获取元素滚动区域的宽度
-
-`element.scrollHeight`
-
-获取元素滚动区域的高度
+| API                                     | 用法                           |
+| --------------------------------------- | ------------------------------ |
+| `element.clientWidth`                   | 获取元素宽度（不含边框）       |
+| `element.clientHeight`                  | 获取元素高度（不含边框）       |
+| `element.offsetWidth`                   | 获取元素宽度（含边框）         |
+| `element.offsetHeight`                  | 获取元素高度（含边框）         |
+| `element.clientLeft`                    | 获取元素左边框宽度             |
+| `element.clientTop`                     | 获取元素上边框宽度             |
+| `window.innerWidth`                     | 获取浏览器宽度（包含滚动条）   |
+| `window.innerHeight`                    | 获取浏览器高度（包含滚动条）   |
+| `document.documentElement.offsetWidth`  | 获取浏览器宽度（不包含滚动条） |
+| `document.documentElement.offsetHeight` | 获取浏览器高度（不包含滚动条） |
+| `element.scrollWidth`                   | 获取元素滚动区域的宽度         |
+| `element.scrollHeight`                  | 获取元素滚动区域的高度         |
 
 ## 获取元素偏移量
 
-`element.offsetLeft`
-
-获取元素相对于定位父元素的水平偏移量
-
-`element.offsetTop`
-
-获取元素相对于定位父元素的垂直偏移量
-
-
-
-`element.scrollLeft`
-
-获取元素水平滚动条滚动的距离
-
-`element.scrollTop`
-
-获取元素垂直滚动条滚动的距离
+| API                  | 用法                                 |
+| -------------------- | ------------------------------------ |
+| `element.offsetLeft` | 获取元素相对于定位父元素的水平偏移量 |
+| `element.offsetTop`  | 获取元素相对于定位父元素的垂直偏移量 |
+| `element.scrollLeft` | 获取元素水平滚动条滚动的距离         |
+| `element.scrollTop`  | 获取元素垂直滚动条滚动的距离         |
 
 ## 宽高偏移量函数
 
 `element.getBoundingClientRect()`
 
-获取元素 { width height left top right bottom }
+获取元素的宽高及偏移量。
 
-```
-{
-  width: 元素宽度 (content + padding + border)
-  height: 元素高度 (content + padding + border)
-  x/left: 元素相对于浏览器的水平偏移量
-  y/top: 元素相对于浏览器的垂直偏移量
-  right: x/left + width
-  bottom: y/top + height
-}
-```
+| 属性     | 描述                                  |
+| -------- | ------------------------------------- |
+| `width`  | 元素宽度 (content + padding + border) |
+| `height` | 元素高度 (content + padding + border) |
+| `x/left` | 元素相对于浏览器的水平偏移量          |
+| `y/top`  | 元素相对于浏览器的垂直偏移量          |
+| `right`  | x/left + width                        |
+| `bottom` | y/top + height                        |
 
 ## 事件类型
 
@@ -3787,26 +1992,6 @@ console.log(4)
 | `ontransitionend` | 过渡结束 |
 | `onanimationend`  | 动画结束 |
 
-## 事件绑定
-
-### 零级事件绑定
-
-绑定多个事件会被覆盖
-
-```js
-element.onclick = function() {}
-```
-
-### 二级事件绑定
-
-可以绑定多个事件
-
-```js
-element.addEventListener("click", function() {}, false /* true: 捕获, false: 冒泡 */)
-
-element.attachEvent("onclick", function() {} /* 捕获 */) // IE8
-```
-
 ## 事件传播
 
 - 捕获阶段: 
@@ -3845,187 +2030,10 @@ element.attachEvent("onclick", function() {} /* 捕获 */) // IE8
 
 将多个元素的事件监听委托给祖先元素处理，当该元素中的事件被触发时，会一直冒泡到祖先元素
 
-祖先元素不会直接处理事件，而是通过 event.target 得到触发事件的元素，调用回调函数
+祖先元素不会直接处理事件，而是通过 `event.target` 得到触发事件的元素，调用回调函数
 
 应用场景: 
 
 - 通过委派可以减少事件绑定的次数，提高了程序的性能
 
 - 添加新的子元素，会自动响应事件处理函数
-
-
-
-
-
-# BOM
-
-## Window
-
-`window.open(url)`
-
-在新窗口打开页面
-
-
-
-`window.open(url, "_self")`
-
-在当前窗口打开页面
-
-
-
-`window.close()`
-
-关闭窗口
-
-## Location
-
-`window.location.href`
-
-获取(设置)当前页面 url，页面将跳转到新路径，并生成历史记录
-
-> href 是 location 的默认值，可以直接使用 `window.location = url` 设置 url
-
-```js
-/* 普通路由跳转 */
-
-// "https://www.baidu.com"
-
-window.location.href = "./index.html"
-
-// "https://www.baidu.com/index.html"
-```
-
-
-
-`window.location.reload()`
-
-重新加载当前页面
-
-
-
-`window.location.reload(true)`
-
-重新加载当前页面，并强制清空缓存
-
-
-
-`window.location.search`
-
-获取(设置)当前页面 url 的查询参数
-
-
-
-`window.location.hash`
-
-获取(设置)当前页面 url 的哈希参数
-
-```js
-/* 哈希路由跳转 */
-
-// "https://www.baidu.com"
-
-window.location.hash = "home" // "https://www.baidu.com#home"
-```
-
-
-
-`window.replace(url)`
-
-跳转到新路径，但不会生成历史记录，无法后退
-
-
-
-`window.location.assign(url)`
-
-跳转路径，相当于 `window.location = url`
-
-## History
-
-`window.history.back()`
-
-向后跳转一个页面
-
-
-
-`window.history.forward()`
-
-向前跳转一个页面
-
-
-
-`window.history.go(±n)`
-
-向前或向后跳转 n 个页面
-
-
-
-`window.history.length`
-
-获取历史记录次数
-
-
-
-
-
-# Error
-
-## 错误类型
-
-### ReferenceError
-
-引用错误
-
-```js
-let a = x // ReferenceError: x is not defined
-```
-
-### TypeError
-
-类型错误
-
-```js
-new undefined // TypeError: undefined is not a constructor
-
-undefined() // TypeError: undefined is not a function
-```
-
-### SyntaxError
-
-语法错误
-
-```js
-let 123 // SyntaxError: Unexpected number
-```
-
-### RangeError
-
-范围错误
-
-```js
-new Array(-20) // RangeError: Invalid array length
-```
-
-## 抛出错误
-
-### throw
-
-```js
-if (Date.now() % 2 === 1) {
-  console.log("当前时间为奇数，可以执行")
-} else {
-  throw new Error("当前时间为偶数，无法执行")
-}
-```
-
-## 捕获错误
-
-### try...catch
-
-```js
-try {
-  new undefined()
-} catch (error) {
-  error // TypeError: undefined is not a constructor
-  error.message // undefined is not a constructor
-}
-```

@@ -33,7 +33,7 @@ module.exports = {
 }
 ```
 
-## loader
+## Loader
 
 ### 处理样式资源
 
@@ -237,42 +237,6 @@ module.exports = {
 }
 ```
 
-### 处理 Vue
-
-`npm install vue-loader@15 vue-template-compiler --save-dev` 指定 15 版本的 vue-loader
-
-`npm install @vue/compiler-sfc --save-dev`
-
-> `vue-loader` 解析 vue 文件
->
-> `vue-template-compiler` 解析 `<template>` 模板
->
-> `vue-compiler-sfc` 解析 `<template>` `<script>` `<style>` 模板
-
-```js
-const { VueLoaderPlugin } = require('vue-loader')
-
-module.exports = {
-  // ...
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        use: ["vue-loader"]
-      }
-    ]
-  },
-  plugins: [
-    new VueLoaderPlugin()
-  ],
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.js'
-    }
-  }
-}
-```
-
 ### 处理字体图标
 
 http://xxpromise.gitee.io/webpack5-docs/base/font.html
@@ -281,7 +245,7 @@ http://xxpromise.gitee.io/webpack5-docs/base/font.html
 
 http://xxpromise.gitee.io/webpack5-docs/base/other.html
 
-## plugins
+## Plugins
 
 ### 处理 HTML
 
@@ -391,23 +355,6 @@ module.exports = {
 }
 ```
 
-## devServer
-
-`npm i webpack-dev-server -D`
-
-```js
-/* webpack.config.js */
-
-module.exports = {
-  // ...
-  devServer: {
-    host: "127.0.0.1", // 服务器域名
-    port: 8000, // 端口号
-    open: true, // 自动打开浏览器
-  }
-}
-```
-
 
 
 
@@ -427,3 +374,64 @@ module.exports = {
 
 
 ## 优化代码性能
+
+
+
+
+
+# 项目配置
+
+## React
+
+
+
+## Vue
+
+### 处理 Vue
+
+`npm install vue-loader@15 vue-template-compiler --save-dev` 指定 15 版本的 vue-loader
+
+`npm install @vue/compiler-sfc --save-dev`
+
+> `vue-loader` 解析 vue 文件
+>
+> `vue-template-compiler` 解析 `<template>` 模板
+>
+> `vue-compiler-sfc` 解析 `<template>` `<script>` `<style>` 模板
+
+```js
+const { VueLoaderPlugin } = require('vue-loader')
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        use: ["vue-loader"]
+      }
+    ]
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ],
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.js'
+    }
+  }
+}
+```
+
+
+
+
+
+# 原理分析
+
+## Loader
+
+
+
+## Plugins
+

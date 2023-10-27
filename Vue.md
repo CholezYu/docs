@@ -1,599 +1,54 @@
-# 动态绑定 v-bind
-
-## 字符串语法
-
-```vue
-<!-- 动态绑定类名 -->
-<div v-bind:class="isActive ? 'active' : ''"></div>
-```
-
-## 对象语法
-
-```vue
-<!-- 动态绑定类名 -->
-<div v-bind:class="{ active: isActive }"></div>
-
-<!-- 动态绑定样式 -->
-<div :style="{ color: 'red', fontSize: '13px' }"></div>
-```
-
-## 数组语法
-
-```vue
-<!-- 动态绑定类名 -->
-<div v-bind:class="['active', 'visible']"></div>
-
-<!-- 动态绑定样式 -->
-<div :style="[{ color: 'red' }, { fontSize: '13px' }]"></div>
-```
-
-
-
-
-
-# 条件渲染 v-if & v-show
-
-## 添加 & 删除 v-if
-
-v-if 初始渲染表达式的值为 "真" 的元素，在切换时销毁 DOM 元素
-
-```vue
-<span v-if="score >= 90">优秀</span>
-<span v-else-if="score >= 80">良好</span>
-<span v-else-if="score >= 60">及格</span>
-<span v-else>不及格</span>
-```
-
-## 显示 & 隐藏 v-show
-
-v-show 初始渲染所有元素，但只显示表达式的值为 "真" 的元素，在切换时隐藏 DOM 元素
-
-```vue
-<span v-show="true">{{ name }}</span><!-- 显示 -->
-<span v-show="false">{{ name }}</span><!-- display: none -->
-```
-
-## 使用 template 渲染分组
-
-在 `<template>` 标签上条件渲染多个元素，最终的渲染结果不包含 \<template>
-
-```vue
-<template v-if="true">
-  <h1>Title</h1>
-  <p>Paragraph</p>
-</template>
-```
-
-## v-if vs v-show
-
-- v-if 的切换是元素的销毁与创建，v-show 的切换是元素的显示与隐藏
-
-- v-if 有更高的切换开销，v-show 有更高的初始渲染开销
-
-- 如果在运行时条件很少改变，使用 v-if 较好；如果需要频繁地切换，使用 v-show 较好
-
-- v-if 支持 `<template>`， v-show 不支持 `<template>`
-
-
-
-
-
-# 列表渲染 v-for
-
-## 遍历列表
-
-```vue
-<!-- 遍历数组 -->
-<li v-for="(item, index) in array" :key="item.id"></li>
-
-<!-- 遍历对象, 按 Object.keys() 的结果遍历 -->
-<li v-for="(value, key, index) in object" :key="value.id"></li>
-
-<!-- 遍历数字, item: 1 to target, index: 0 to target -->
-<li v-for="(item, index) in number"></li>
-
-<!-- 遍历字符串 -->
-<li v-for="(item, index) in string"></li>
-```
-
-## 使用 template 渲染分组
-
-在 `<template>` 标签上列表渲染多个元素，最终的渲染结果不包含 `<template>`
-
-```vue
-<template v-for="item in items">
-  <li>{{ item.name }}</li>
-  <li>{{ item.age }}</li>
-</template>
-```
-
-## v-for 与 v-if 一起使用
-
-当它们处于同一节点：
-
-- v-for 的优先级高于 v-if，这意味着在编译阶段会先渲染所有节点，再根据条件渲染部分节点，造成性能浪费
-
-- 可能造成不明确的预期结果
-
-
-
-我们一般会这么做：
-
-- 对于部分节点条件渲染：使用计算属性，返回过滤后的列表，再对列表中的元素进行渲染
-
-- 对于所有节点条件渲染：将 v-if 移至外层元素上
-
-
-
-
-
-# 事件处理 v-on
-
-## 事件监听
-
-```vue
-<button v-on:click="count++"></button>
-```
-
-## 事件参数
-
-事件函数默认接收 event 事件对象作为参数
-
-在 v-on 的插值语法区域，默认存在一个 `$event` 事件对象，可以将其作为参数传递给事件函数
-
-```vue
-<!-- event -->
-<button @click="click"></button>
-
-<!-- undefined -->
-<button @click="click()"></button>
-
-<!-- event -->
-<button @click="click($event)"></button>
-
-<!-- param event -->
-<button @click="click(param, $event)"></button>
-```
-
-## 事件修饰符
-
-- prevent：阻止默认行为，调用 `event.preventDefault()`
-
-- stop：阻止事件传播，调用 `event.stopPropagation()`
-
-- once：只触发一次事件函数
-
-- capture：在捕获阶段触发事件函数
-
-- self：当 `event.target` 是当前操作的元素时触发事件函数
-
-## 按键修饰符
-
-`keyup.{keyCode | keyAlias}` - 监听键盘事件
-
-```vue
-<!-- 按键码 -->
-<input @keyup.13="onEnter" />
-
-<!-- 按键别名 -->
-<input @keyup.enter="onEnter" />
-```
-
-
-
-
-
-# 表单绑定 v-model
-
-## 原始模式
-
-输入框：使用 `:value` 和 `@input`
-
-```vue
-<!-- input -->
-<input type="text" :value="message" @input="message = $event.target.value" />
-
-<!-- textarea -->
-<textarea :value="message" @input="message = $event.target.value"></textarea>
-```
-
-多选框：使用 `:checked` 和 `@change`
-
-```vue
-<!-- checkbox -->
-<input type="checkbox" :checked="isAgree" @input="isAgree = $event.target.checked" />
-```
-
-单选框：使用 `:checked` 和 `@change`
-
-```vue
-<!-- radio -->
-<input type="radio" value="男" :checked="sex" @change="sex = $event.target.checked" />
-<input type="radio" value="女" :checked="sex" @change="sex = $event.target.checked" />
-```
-
-下拉框：使用 `:value` 和 `@change`
-
-```vue
-<!-- select -->
-<select :value="city" @input="city = $event.target.value">
-  <option value="北京">北京</option>
-  <option value="上海">上海</option>
-  <option value="深圳">深圳</option>
-  <option value="广州">广州</option>
-</select>
-```
-
-## 语法糖模式
-
-当需要绑定 props 中的数据时，无法使用 v-model（会修改父组件数据），则使用 `v-bind` + `v-on` 模式
-
-```vue
-<!-- 文本框 -->
-<input type="text" v-model="message" />
-
-<!-- 文本域 -->
-<textarea v-model="message"></textarea>
-```
-
-```vue
-<!-- 一个多选框时，绑定布尔值 -->
-<input type="checkbox" v-model="isAgree" />
-
-<!-- 多个多选框时，绑定一个数组 -->
-<input type="checkbox" value="篮球" v-model="hobbies" />
-<input type="checkbox" value="足球" v-model="hobbies" />
-<input type="checkbox" value="排球" v-model="hobbies" />
-```
-
-```vue
-<!-- 单选框 -->
-<input type="radio" value="男" v-model="sex" />
-<input type="radio" value="女" v-model="sex" />
-```
-
-```vue
-<!-- 下拉框单选时, 绑定一个字符串 -->
-<select v-model="fruit">
-  <option value="苹果">苹果</option>
-  <option value="香蕉">香蕉</option>
-  <option value="芒果">芒果</option>
-  <option value="葡萄">葡萄</option>
-</select>
-
-<!-- 下拉框多选时, 绑定一个数组 -->
-<select v-model="fruits" multiple>
-  <option value="苹果">苹果</option>
-  <option value="香蕉">香蕉</option>
-  <option value="芒果">芒果</option>
-  <option value="葡萄">葡萄</option>
-</select>
-```
-
-## 修饰符
-
-- `.lazy`：失去焦点或按下回车时才会更新数据。将 `@input` 改为 `@change`
-
-- `.number`：将输入的字符串转为有效的数，通常配合 number 输入框使用
-
-- `.trim`：失去焦点或按下回车时清除输入框首尾空格
-
-
-
-
-
-# 其他指令
-
-## v-text
-
-更新元素的 textContent。如果要更新部分 textContent，需要使用插值语法
-
-```vue
-<span v-text="message"></span>
-<!-- 效果相同 -->
-<span>{{ message }}</span>
-```
-
-## v-html
-
-更新元素的 innerHTML。将数据按照 HTML 格式解析并渲染
-
-```vue
-<span v-html="<a href='https://www.baidu.com'>百度一下</a>"></span>
-```
-
-## v-cloak
-
-与 CSS `[v-cloak] { display: none }` 一起使用，可以隐藏未编译的插值语法，指令会在编译结束后消失
-
-```css
-[v-cloak] {
-  display: none
-}
-```
-
-```vue
-<!-- 不会显示, 直到编译结束 -->
-<span v-cloak>{{ message }}</span>
-```
-
-## v-once
-
-只渲染一次元素和组件，跳过随后的所有重新渲染
-
-## v-pre
-
-跳过这个元素和子元素的编译过程。用于没有指令或 Mustache 的节点，加快编译
-
-```html
-<!-- 跳过编译过程，加快编译 -->
-<span v-pre>hello</span>
-
-<!-- 检查是否有 Vue 语法 -->
-<span>{{ message }}</span>
-```
-
-
-
-
-
-# 计算属性 computed
-
-## getter & setter
-
-通过 getter 和 setter 返回一个可读可写的响应式属性
-
-```js
-computed: {
-  fullName: {
-    get() {
-      return this.firstName + " " + this.lastName
-    },
-    set(value) {
-      const [firstName, lastName] = value.split(" ")
-      this.firstName = firstName
-      this.lastName = lastName
-    }
-  }
-}
-```
-
-## computed vs methods
-
-- 计算属性会基于响应式依赖进行缓存，只有在依赖的响应式属性改变时计算属性才会更新
-
-- 只要访问的 computed 没有发生改变，多次访问会返回缓存的计算结果；而多次调用 methods 会重新执行函数
-
-`Date.now()` 不是响应式依赖，所以计算属性不会更新
-
-```js
-computed: {
-  now() {
-    return Date.now()
-  }
-}
-```
-
-## computed vs watch
-
-- 相同点：computed 和 watch 都可以监听数据的变化
-
-- computed 主要为了得到一个值；watch 主要为了当监听的属性发生改变的时候可以执行其他操作
-
-- computed 会基于响应式依赖进行缓存，只有在依赖的响应式属性改变时计算属性才会更新；watch 没有缓存
-
-- computed 不能用于异步操作，否则计算结果会返回给异步回调；watch 可以用于异步操作
-
-计算属性
-
-```js
-computed: {
-  fullName() {
-    setTimeout(() => {
-      return this.firstName + " " + this.lastName  // 返回给定时器回调
-    })
-  }
-}
-```
-
-侦听属性
-
-```js
-watch: {
-  firstName(value) {
-    setTimeout(() => {
-      this.fullName = value + " " + this.lastName  // 可以执行异步操作
-    })
-  },
-  lastName(value) {
-    setTimeout(() => {
-      this.fullName = this.firstName + " " + value  // 可以执行异步操作
-    })
-  }
-}
-```
-
-
-
-
-
-# 侦听属性 watch
-
-## 基本使用
-
-侦听 data 或 computed 中的属性，当属性变化时执行回调
-
-```js
-data: {
-  count: 1
-},
-watch: {
-  count: {
-    handler(value, oldValue) {
-      // do something...
-    }
-  }
-}
-```
-
-侦听 data 中属性内部的属性，键名需要写成字符串形式
-
-```js
-data: {
-  numbers: {
-    count: 1
-  }
-},
-watch: {
-  "numbers.count": {
-    handler() { /* ... */ }
-  }
-}
-```
-
-## 立即侦听
-
-`immediate: true` - 侦听开始后 (初始化渲染) 立即调用 handler
-
-```js
-data: {
-  count: 1
-},
-watch: {
-  count: {
-    immediate: true,
-    handler(value, oldValue) { /* ... */ }
-  }
-}
-```
-
-## 深度侦听
-
-`deep: true` - 侦听 data 中的属性与其内部的属性
-
-```js
-data: {
-  numbers: {
-    count: 1
-  }
-},
-watch: {
-  numbers: {
-    deep: true,
-    handler() { /* ... */ }
-  }
-}
-```
-
-## 监听多个属性
-
-- 使用计算属性返回一个对象，包含需要监听的属性
-
-- 使用 watch 深度监听这个计算属性
-
-
-
-
-
-# 动态更新
-
-## 对象更新方法
-
-- 直接为对象添加属性，没有响应式
-
-- 通过 `$set` 为对象添加属性，具有响应式
-
-- 直接删除对象的属性，没有响应式
-
-- 通过 `$delete` 删除对象的属性，具有响应式
-
-- 为对象的属性重新赋值，具有响应式
-
-- 为对象重新赋值，具有响应式
-
-## 数组变更方法
-
-Vue 将被监听的数组的变更方法进行了封装 (调用对应的原生方法更新数组，然后重新解析模板并更新视图)
-
-- `.push()`
-
-- `.pop()`
-
-- `.shift()`
-
-- `.unshift()`
-
-- `.splice()`
-
-- `.sort()`
-
-- `.reverse()`
-
-## 数组替换方法
-
-使用非变更方法更新数组也会更新视图，但是它们不会变更原数组，而是返回新数组，可以用新数组替换原数组
-
-- `.filter()`
-
-- `.concat()`
-
-- `.slice()`
-
-
-
-
-
 # 生命周期
 
 ## 初始化流程
 
-Vue 或组件被实例化（new Vue），进入初始化阶段：
+Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
-1. 初始化事件和生命周期
+- 初始化事件和生命周期；
 
-2. `beforeCreate` 触发，此时无法通过实例访问数据（data methods computed watch 等）
+- `beforeCreate` 触发，此时还无法访问实例上的数据；
 
-3. 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据
+- 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据；
 
-4. `created` 触发，此时可以通过实例访问数据
+- `created` 触发，此时可以通过实例访问数据。
 
 ## 编译流程
 
-判断 Vue 是否配置 el 选项
+判断 Vue 是否配置 el 选项：
 
-- 没有 el 选项，则等待使用 `$mount` 提供 el 选项
+- 没有 el 选项，则等待使用 `$mount` 提供 el 选项；
 
-- 存在 el 选项，再判断是否配置 template 选项
+- 存在 el 选项，再判断是否配置 template 选项：
 
-  - 如果有 template 选项，则编译模板得到 render 函数，返回虚拟 DOM
+  - 如果有 template 选项，则编译模板得到 render 函数，返回虚拟 DOM；
 
-  - 如果没有 template 选项，则将 el 挂载容器的 outerHTML 作为模板进行编译
+  - 如果没有 template 选项，则将 el 挂载容器的 outerHTML 作为模板进行编译。
 
 ## 挂载流程
 
-- 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效，因为 Vue 即将把虚拟 DOM 转为真实 DOM 插入到页面
+- 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效；
 
-- 挂载：将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器
+- 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器；
 
-- 挂载之后，`mounted` 触发，视图呈现的是编译后的 DOM。一般在这个阶段进行 **开启定时器、发送网络请求、订阅消息、监听自定义事件** 等操作
+- 挂载之后，`mounted` 触发，视图呈现真实 DOM。一般在这个阶段发送请求、监听自定义事件、开启定时器。
 
 ## 更新流程
 
 当响应式数据发生改变的时候，进入更新阶段：
 
-- `beforeUpdate` 触发，此时数据已更新，视图还未更新
+- `beforeUpdate` 触发，此时数据已更新，视图还未更新；
 
-- 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM
+- 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM；
 
-- `updated` 触发，此时数据和视图都完成更新
+- `updated` 触发，此时数据和视图都完成更新。
 
 ## 销毁流程
 
 当 `$destroy` 被调用，或条件渲染组件或路由时，进入销毁阶段：
 
-- 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段进行 **关闭定时器、取消订阅、移除自定义事件** 等操作
+- 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段移除自定义事件、关闭定时器，防止内存泄漏；
 
-- 实例销毁：取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器
+- 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，解绑所有指令；
 
 - 实例销毁之后，`destroyed` 触发
 
@@ -601,7 +56,7 @@ Vue 或组件被实例化（new Vue），进入初始化阶段：
 
 
 
-# 深入组件
+# 组件通信
 
 ## Props
 
@@ -644,57 +99,11 @@ props: {
 
 ## 自定义事件
 
-### 监听事件 $on
-
 监听当前实例的自定义事件，回调函数会接收所有传入事件触发函数的额外参数
 
 - `v-on`：用在普通元素上，可以监听原生事件；用在组件上，可以监听子组件触发的自定义事件
 
 - `vm.$on`：监听实例自身的自定义事件，一般在 App 组件的 mounted 阶段监听所有组件的自定义事件
-
-```vue
-<Comp @my-event="callback" />
-```
-
-```js
-mounted() {
-  this.$refs.component.$on("my-event", value => {})
-}
-```
-
-### 监听事件 $once
-
-监听当前实例的自定义事件，触发一次后移除监听器
-
-### 触发事件 $emit
-
-触发当前实例的自定义事件，并将附加参数传递给监听器回调
-
-```js
-this.$emit("my-event", [...this.args])
-```
-
-### 移除监听 $off
-
-移除自定义事件监听器
-
-- 如果没有提供参数，则移除所有的事件监听器
-
-- 如果只提供了事件，则移除该事件所有的监听器
-
-- 如果同时提供了事件与回调，则只移除这个回调的监听器
-
-```js
-this.$off([event], [listener])
-```
-
-### 绑定原生事件 .native
-
-将原生事件绑定到组件。*绑定在组件上的事件默认为自定义事件*
-
-```vue
-<Comp @click.native="callback" />
-```
 
 ## 事件总线
 
@@ -798,7 +207,7 @@ Pubsub.publish("my-message", [...this.args]) // 发布消息
 <button @click="$emit('update:count', count + 1)"></button>
 ```
 
-## 透传 Attributes
+## 透传
 
 > 祖孙组件间通信
 
@@ -840,30 +249,6 @@ provide() {
 ```js
 inject: ["count", "increment"]
 ```
-
-## 访问组件
-
-### $root
-
-返回根组件实例
-
-### $parent
-
-返回父组件实例
-
-### $children
-
-返回子组件实例（数组）
-
-**注意**：`$children` 不保证顺序，也不是响应式的，需要使用 v-for 来遍历子组件
-
-### $refs
-
-为普通 DOM 元素注册一个 ref 属性，返回这个 DOM 元素
-
-为子组件注册一个 ref 属性，返回这个子组件实例（数组）
-
-**注意**：`$refs` 在组件渲染完成之后生效，并且不是响应式的，所以应该避免使用它在模板中做数据绑定
 
 ## 插槽
 
@@ -1172,24 +557,6 @@ MyPlugin.install = function(Vue, options) {
     console.log("hello world")
   }
 }
-```
-
-## 混入
-
-### 全局混入 Vue.mixin
-
-配置多个组件的共用选项
-
-```js
-Vue.mixin(mixin)
-```
-
-### 局部混入 mixins
-
-**注意**：当组件和混入对象含有同名数据时，以组件数据优先
-
-```js
-mixins: [mixin]
 ```
 
 
