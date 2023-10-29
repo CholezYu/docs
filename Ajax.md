@@ -1,6 +1,8 @@
-# XMLHttpRequest
+# Ajax
 
-## 状态码
+## XMLHttpRequest
+
+### 状态码
 
 - readyState: 请求状态码
 
@@ -13,6 +15,7 @@
   - 3: 正在接收响应体中的部分数据
 
   - 4: Ajax 请求完成，响应报文被全部接收
+
 - status: 响应状态码
 
   - 200: 请求成功
@@ -35,7 +38,7 @@
 
   - 503: 服务器由于各种原因停止运行，无法处理请求
 
-## Get 请求
+### Get 请求
 
 ```js
 // 创建 xhr 对象
@@ -62,7 +65,7 @@ xhr.onload = () => {
 }
 ```
 
-## Post 请求
+### Post 请求
 
 ```js
 const xhr = new XMLHttpRequest()
@@ -80,7 +83,7 @@ xhr.onreadystatechange = () => {
 }
 ```
 
-## 异常请求处理
+### 异常请求处理
 
 ```js
 // 设置延迟时间
@@ -99,7 +102,7 @@ xhr.abort()
 xhr.onerror = () => {}
 ```
 
-## 上传文件
+### 上传文件
 
 ```js
 // 获取文件对象
@@ -125,13 +128,9 @@ xhr.onload = () => {
 }
 ```
 
+## Fetch
 
-
-
-
-# fetch
-
-## Get 请求
+### Get 请求
 
 Promise 风格
 
@@ -159,7 +158,7 @@ const request = async () => {
 }
 ```
 
-## Post 请求
+### Post 请求
 
 ```js
 fetch("http://127.0.0.1:8000/user", {
@@ -173,7 +172,7 @@ fetch("http://127.0.0.1:8000/user", {
 })
 ```
 
-## 取消请求
+### 取消请求
 
 ```js
 const controller = new AbortController()
@@ -193,13 +192,9 @@ element.onclick = () => {
 }
 ```
 
+## Axios
 
-
-
-
-# axios
-
-## Get 请求
+### Get 请求
 
 - 参数：
 
@@ -221,7 +216,7 @@ element.onclick = () => {
   axios.get("http://127.0.0.1:8000/user")
   ```
 
-## Post 请求
+### Post 请求
 
 - 参数：
 
@@ -248,7 +243,7 @@ element.onclick = () => {
   })
   ```
 
-## 请求配置
+### 请求配置
 
 ```js
 {
@@ -270,7 +265,7 @@ element.onclick = () => {
 }
 ```
 
-## 响应信息
+### 响应信息
 
 ```js
 {
@@ -288,10 +283,8 @@ element.onclick = () => {
 }
 ```
 
-## 实例和拦截器
+### 实例和拦截器
 
-> 如果有多个请求拦截器，倒序执行；如果有多个响应拦截器，顺序执行
->
 > 队列：[请求拦截器3, 请求拦截器2, 请求拦截器1, axios, 响应拦截器1, 响应拦截器2, 响应拦截器3]
 
 ```js
@@ -325,13 +318,9 @@ instance.interceptors.response.use(
 )
 ```
 
+## 跨域
 
-
-
-
-# 跨域
-
-## 同源策略
+### 同源策略
 
 同源策略指的是：请求时浏览器和服务器的协议、域名、端口必须保持一致。不同源的网站不能进行资源交互：
 
@@ -341,7 +330,7 @@ instance.interceptors.response.use(
 
 - 无法读取 Cookie、LocalStorage、IndexedDB
 
-## Jsonp
+### Jsonp
 
 使用：`<script>` 标签不受同源策略的影响，可以通过 src 属性携带执行代码发送跨域请求
 
@@ -349,7 +338,7 @@ instance.interceptors.response.use(
 
 缺点：只支持 Get 请求；可能会存在恶意代码
 
-## CORS
+### CORS
 
 使用：跨域资源共享。由 **服务器** 设置一组响应头字段实现跨域
 
@@ -370,7 +359,7 @@ res.setHeader("Access-Control-Allow-Headers", "Content-type")
 
 参考：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS
 
-## Proxy
+### Proxy
 
 使用：浏览器有跨域限制，但是服务器不存在跨域问题。所以可以由代理服务器向目标服务器请求资源再返回给客户端
 

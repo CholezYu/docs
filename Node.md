@@ -1,6 +1,8 @@
-# npm
+# Node
 
 ## npm
+
+### npm
 
 - 查看下载源: `npm get registry`
 - 修改下载源: `npm config set registry https://registry.npmmirror.com`
@@ -20,7 +22,7 @@
 
 - 删除包: `npm unpublish --force`
 
-## yarn
+### yarn
 
 - 查看版本: `yarn --version`
 
@@ -36,13 +38,7 @@
 
 - 删除模块: `yarn remove [package]`
 
-
-
-
-
-# process
-
-## 进程
+## process
 
 ### process.exit()
 
@@ -79,13 +75,7 @@ console.log(4)
 // 执行顺序: 4 3 2 1
 ```
 
-
-
-
-
-# path
-
-## 本地路径
+## path
 
 ### path.resolve()
 
@@ -118,13 +108,7 @@ const path = require("node:path")
 path.extname("./public/index.html") // .html
 ```
 
-
-
-
-
-# url
-
-## 网络路径
+## url
 
 ### url.parse()
 
@@ -173,13 +157,7 @@ const url = new URL("http://localhost:1118/user?name=xiaoming&age=20")
 */
 ```
 
-
-
-
-
-# fs
-
-## 读取文件
+## fs
 
 ### fs.readFileSync()
 
@@ -237,8 +215,6 @@ const path = require("node:path")
 })()
 ```
 
-## 写入文件
-
 ### fs.writeFileSync()
 
 同步写入文件
@@ -267,8 +243,6 @@ fs.writeFile(path.resolve(__dirname, "./file.txt"), "hello world")
     throw error
   })
 ```
-
-## 追加文件
 
 ### fs.appendFileSync()
 
@@ -299,8 +273,6 @@ fs.appendFile(path.resolve(__dirname, "./file.txt"), "hello world")
   })
 ```
 
-## 删除文件
-
 ### fs.unlinkSync()
 
 同步删除文件
@@ -329,8 +301,6 @@ fs.unlink(path.resolve(__dirname, "./file.txt"))
     throw error
   })
 ```
-
-## 复制文件
 
 ### fs.copyFileSync()
 
@@ -366,8 +336,6 @@ fs.copyFile(
 })
 ```
 
-## 读取目录
-
 ### fs.readdirSync()
 
 同步读取目录
@@ -397,8 +365,6 @@ fs.readdir(path.resolve(__dirname, "./dir"))
     throw error
   })
 ```
-
-## 创建目录
 
 ### fs.mkdirSync()
 
@@ -432,8 +398,6 @@ fs.mkdir(path.resolve(__dirname, "./dir/src"), {
 })
 ```
 
-## 删除目录
-
 ### fs.rmdirSync()
 
 同步删除目录
@@ -462,8 +426,6 @@ fs.rmdir(path.resolve(__dirname, "./dir"))
     throw error
   })
 ```
-
-## 删除文件/目录
 
 ### fs.rmSync()
 
@@ -499,8 +461,6 @@ fs.rm(path.resolve(__dirname, "./dir"), {
 })
 ```
 
-## 重命名文件/目录
-
 ### fs.renameSync()
 
 同步重命名文件/目录
@@ -535,8 +495,6 @@ fs.rename(
 })
 ```
 
-## 是否为文件/目录
-
 ### fs.statSync()
 
 同步判断是否为文件/目录
@@ -570,8 +528,6 @@ fs.stat(path.resolve(__dirname, "./dir"))
   })
 ```
 
-## 是否存在文件/目录
-
 ### fs.existsSync()
 
 同步判断文件/目录是否存在
@@ -593,13 +549,7 @@ try {
 
 > "fs/promises" 模块中没有 exists 方法
 
-
-
-
-
-# buffer
-
-## 创建 buffer
+## buffer
 
 ### Buffer.alloc()
 
@@ -631,8 +581,6 @@ const { Buffer } = require("node:buffer")
 const buf = Buffer.allocUnsafe(5) // <Buffer 00 00 00 00 00>
 ```
 
-## 转换 buffer
-
 ### Buffer.from()
 
 将字符串转换为 buffer
@@ -652,13 +600,7 @@ const buf = Buffer.from([0x68, 0x65, 0x6c, 0x6c, 0x6f])
 buf.toString() // "hello"
 ```
 
-
-
-
-
-# stream
-
-## 可读流事件
+## stream
 
 ### stream.on("data")
 
@@ -682,13 +624,7 @@ const stream = fs.createReadStream("./file")
 stream.on("end", () => {})
 ```
 
-
-
-
-
-# events
-
-## 绑定监听器
+## events
 
 ### emitter.on()
 
@@ -716,8 +652,6 @@ emitter.once("myEvent", args => {})
 
 监听自定义事件，`emitter.on()` 的别名
 
-## 触发监听器
-
 ### emitter.emit()
 
 触发事件监听器，并将附加参数传递给监听器回调
@@ -728,8 +662,6 @@ const emitter = new EventEmitter()
 
 emitter.emit("myEvent", [...args])
 ```
-
-## 移除监听器
 
 ### emitter.off()
 
@@ -766,8 +698,6 @@ emitter.on("myEvent", () => {})
 emitter.removeAllListeners() // myEvent []
 ```
 
-## 监听器队列
-
 ### emitter.listeners()
 
 获取监听器队列
@@ -799,8 +729,6 @@ emitter.on("myEvent", () => {})
 emitter.listenerCount("myEvent") // 2
 ```
 
-## 自定义事件队列
-
 ### emitter.eventNames()
 
 获取自定义事件队列
@@ -816,13 +744,7 @@ emitter.on("cEvent", () => {})
 emitter.eventNames() // ['aEvent', 'bEvent', 'cEvent']
 ```
 
-
-
-
-
-# http
-
-## 服务器
+## http
 
 ### http.createServer()
 
@@ -838,8 +760,6 @@ const server = http.createServer((req, res) => {
 server.listen(1118)
 ```
 
-## 请求
-
 ### req.method
 
 获取请求方法
@@ -849,8 +769,6 @@ const server = http.createServer((req, res) => {
   req.method // GET
 })
 ```
-
-## 响应
 
 ### res.setHeader()
 
@@ -882,13 +800,7 @@ const server = http.createServer((req, res) => {
 })
 ```
 
-
-
-
-
-# express
-
-## 路由方法
+## express
 
 ### app.get()
 
@@ -913,8 +825,6 @@ app.post("/", (req, res) => {})
 
 app.listen(1118)
 ```
-
-## 请求
 
 ### req.path
 
@@ -1022,8 +932,6 @@ app.get("/user", (req, res) => {
 */
 ```
 
-## 响应
-
 ### res.end()
 
 结束响应进程。用于不发送任何数据的情况下，快速结束响应
@@ -1124,13 +1032,9 @@ app.get("/", (req, res) => {
 })
 ```
 
+## 中间件
 
-
-
-
-# 中间件
-
-## 错误处理中间件
+### 错误处理中间件
 
 错误处理中间件需要提供四个参数，否则为常规中间件
 
@@ -1142,7 +1046,7 @@ app.use((err, req, res, next) => {
 })
 ```
 
-## 自定义中间件
+### 自定义中间件
 
 ```js
 // middleware.js
@@ -1162,9 +1066,9 @@ const middleware = require("./middleware.js")
 app.use(middleware({ option1: "one", option2: "two" }))	
 ```
 
-## 内置中间件
+### 内置中间件
 
-### express.static
+#### express.static
 
 加载静态资源
 
@@ -1174,7 +1078,7 @@ const static = express.static
 app.use(static("./static")) // 设置静态资源目录
 ```
 
-### express.Router()
+#### express.Router()
 
 配置路由
 
@@ -1218,9 +1122,9 @@ const adminRouter = require("./routers/adminRouter.js")
 app.use("/admin" /* 路由前缀 */, adminRouter)
 ```
 
-## 第三方中间件
+### 第三方中间件
 
-### body-parser
+#### body-parser
 
 解析请求体中的数据，并转换为对象
 
@@ -1234,7 +1138,7 @@ app.post("/post", (req, res) => {
 })
 ```
 
-### cookie-parser
+#### cookie-parser
 
 解析请求头中的 Cookie
 
@@ -1248,7 +1152,7 @@ app.get("/get-cookie", (req, res) => {
 })
 ```
 
-### express-session
+#### express-session
 
 处理 Session
 
@@ -1262,13 +1166,9 @@ app.get("get-session", (req, res) => {
 })
 ```
 
+## 模板引擎
 
-
-
-
-# 模板引擎
-
-## 浏览器渲染
+### 浏览器渲染
 
 ```js
 const users = [
@@ -1288,7 +1188,7 @@ const template = `
 const html = ejs.render(template, { users })
 ```
 
-## 服务器渲染
+### 服务器渲染
 
 ```js
 const users = [
@@ -1315,13 +1215,7 @@ app.get("/", (req, res) => {
 </ul>
 ```
 
-
-
-
-
-# Cookie & Session
-
-## Cookie
+## Cookie & Session
 
 ### Cookie 简介
 
@@ -1413,8 +1307,6 @@ app.get("/del-cookie", (req, res) => {
 })
 ```
 
-## Session
-
 ### Session 简介
 
 我们发现当客户端向服务器发送请求时，总会携带 Cookie，这就导致我们不能在 Cookie 中存储较多数据，并且 Cookie 是存储在客户端的，安全性较低
@@ -1484,45 +1376,9 @@ app.get("/del-session", (req, res) => {
 })
 ```
 
-## localStorage
+## JWT
 
-可以持久化存储
-
-```js
-/* 设置 */
-localStorage.setItem("username", "admin")
-
-/* 获取 */
-localStorage.getItem("username")
-
-/* 删除 */
-localStorage.removeItem("username")
-localStorage.clear() // 清除所有
-```
-
-## sessionStorage
-
-在关闭浏览器时被清除
-
-```js
-/* 设置 */
-localStorage.setItem("username", "admin")
-
-/* 获取 */
-sessionStorage.getItem("username")
-
-/* 删除 */
-sessionStorage.removeItem("username")
-sessionStorage.clear() // 清除所有
-```
-
-
-
-
-
-# JWT
-
-## 加密与解密
+### 加密与解密
 
 加密：`jwt.sign(payload, secretOrPrivateKey, [options, callback])`
 
@@ -1542,7 +1398,7 @@ const decoded = jwt.verify(token, "secret")
 
 **参考**：https://www.npmjs.com/package/jsonwebtoken
 
-## 服务器签发
+### 服务器签发
 
 用户首次登录时，验证用户名密码，如果验证成功，由服务器签发 token，并返回给客户端
 
@@ -1556,7 +1412,7 @@ app.post("/login", (req, res) => {
 })
 ```
 
-## 客户端携带
+### 客户端携带
 
 客户端接收到 token 后在本地存储，并在下次请求（登录或路由跳转）时携带
 
@@ -1569,7 +1425,7 @@ fetch("http://127.0.0.1:8000/user", {
 })
 ```
 
-## 服务器验证
+### 服务器验证
 
 ```js
 app.get("/user", (req, res) => {
@@ -1585,13 +1441,9 @@ app.get("/user", (req, res) => {
 })
 ```
 
+## Csrf
 
-
-
-
-# Csrf
-
-## 处理 Csrf 攻击
+### 处理 Csrf 攻击
 
 - 通过 Referer 请求头来检查请求的来源
 
@@ -1599,13 +1451,7 @@ app.get("/user", (req, res) => {
 
 - 使用 token 校验
 
-
-
-
-
-# MongoDB
-
-## 命令行操作
+## MongoDB
 
 ### 基本操作
 
@@ -1693,7 +1539,7 @@ app.get("/user", (req, res) => {
 
 - `db.[col].find().skip((n - 1) * perpage).limit(perpage)` 查询第 n 页数据
 
-## mongoose
+### mongoose
 
 ```js
 const mongoose = require("mongoose")

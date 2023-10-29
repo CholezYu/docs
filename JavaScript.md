@@ -1,6 +1,8 @@
-# 函数
+# JavaScript
 
-## 执行上下文
+## 函数
+
+### 执行上下文
 
 执行一段 JS 代码时，会做一个预处理，我们称之为执行上下文。
 
@@ -8,7 +10,7 @@
 
 预处理包含：1. 开辟一个内存空间；2. 确定变量对象；3. 完成作用域链；4. 确定 this 指向。
 
-### 全局执行上下文
+#### 全局执行上下文
 
 当程序开始解析时，将全局执行上下文 (window) 压入到执行上下文栈中，对全局变量进行预处理：
 
@@ -20,7 +22,7 @@
 
 页面关闭时，全局执行上下文从执行上下文栈中弹出。
 
-### 函数执行上下文
+#### 函数执行上下文
 
 当执行函数时，会创建一个函数执行上下文，并压入到执行上下文栈中，对局部变量进行预处理：
 
@@ -36,7 +38,7 @@
 
 函数执行完成时，函数执行上下文会从执行上下文栈中弹出。
 
-## 变量提升
+### 变量提升
 
 通过 var 声明的变量会提升到所在作用域的顶部，但是变量的赋值还在原来的位置。
 
@@ -56,15 +58,15 @@ console.log(a) // 100
 
 先执行函数声明提升，再执行变量声明提升，如果变量名与已声明的函数名相同，变量声明失效（不影响赋值）。
 
-## 作用域链
+### 作用域链
 
 作用域链在函数声明时产生，在函数调用时将当前函数的变量对象放到作用域链上，完成作用域链。
 
 在局部作用域中访问变量时，从当前作用域的变量对象中沿作用域链向上访问。
 
-## 闭包
+### 闭包
 
-### 产生闭包的条件
+#### 产生闭包的条件
 
 - 一个函数嵌套在另一个函数中；
 
@@ -72,13 +74,13 @@ console.log(a) // 100
 
 - 每调用一次外部函数，就会产生一个闭包。
 
-### 闭包的生命周期
+#### 闭包的生命周期
 
 产生：外部函数执行完。
 
 死亡：存放闭包的变量变成垃圾对象（赋值为 null）。
 
-### 常见的闭包
+#### 常见的闭包
 
 将内部函数作为外部函数的返回值。
 
@@ -106,19 +108,15 @@ function fn(a, time) {
 fn("延时输出", 2000) // 调用外部函数，产生一个闭包
 ```
 
-### 闭包的作用
+#### 闭包的作用
 
 - 外部函数执行完后，自由变量仍会存在于闭包中，延长了生命周期。
 
 - 通过闭包可以操作自由变量，该操作由内部函数决定。
 
+## 函数（ES6）
 
-
-
-
-# 函数（ES6）
-
-## rest 参数
+### rest 参数
 
 ES6 引入了 rest 参数，用于获取函数的剩余参数，这样就不需要使用 arguments 对象了。
 
@@ -172,7 +170,7 @@ rest 参数只能是最后一个参数。
 function fun(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal parameter
 ```
 
-## name 属性
+### name 属性
 
 函数的 name 属性返回该函数的函数名。
 
@@ -221,7 +219,7 @@ fun.bind({}).name // "bound fun"
 (function() {}).bind({}).name // "bound"
 ```
 
-## 箭头函数
+### 箭头函数
 
 - 没有 this，而是继承上一层作用域的 this；
 
@@ -231,13 +229,9 @@ fun.bind({}).name // "bound fun"
 
 - 不能使用 yield 命令，因此箭头函数不能作为 Generator 函数。
 
+## 对象
 
-
-
-
-# 对象
-
-## new 关键字
+### new 关键字
 
 1. 创建一个空对象，作为将要返回的实例对象；
 
@@ -249,31 +243,31 @@ fun.bind({}).name // "bound fun"
 
 如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
 
-## in 关键字
+### in 关键字
 
 `prop in obj`
 
 判断一个属性是否在一个对象或其原型链上。
 
-## instanceof 关键字
+### instanceof 关键字
 
 `obj instanceof constructor`
 
 判断一个构造函数的原型对象是否在某个实例对象的原型链上。
 
-## obj.hasOwnProperty
+### obj.hasOwnProperty
 
 `obj.hasOwnProperty(prop)`
 
 判断一个属性是否是对象自身的属性。
 
-## obj.isPrototypeOf
+### obj.isPrototypeOf
 
 `obj.isPrototypeOf(other)`
 
 判断一个对象是否是另一个对象的原型（在其原型链上）。
 
-## descriptor 描述符
+### descriptor 描述符
 
 - value: 属性值，默认为 undefined。
 
@@ -287,7 +281,7 @@ fun.bind({}).name // "bound fun"
 
 - set: setter 函数。
 
-## Object.create
+### Object.create
 
 `Object.create(proto, [descriptor])`
 
@@ -307,7 +301,7 @@ const obj = Object.create(null, {
 obj // { name: "Bob", sex: "男" }
 ```
 
-## Object.defineProperty
+### Object.defineProperty
 
 `Object.defineProperty(obj, prop, descriptor)`
 
@@ -324,7 +318,7 @@ Object.defineProperty(obj, "age", {
 obj // { name: "Bob", age: 15 }
 ```
 
-## Object.defineProperties
+### Object.defineProperties
 
 `Object.defineProperties(obj, props: descriptor)`
 
@@ -347,9 +341,9 @@ Object.defineProperties(obj, {
 obj // { name: "Bob", age: 15, sex: "男" }
 ```
 
-## 继承
+### 继承
 
-### 组合继承
+#### 组合继承
 
 构造函数 + 原型链组合继承
 
@@ -373,7 +367,7 @@ Student.prototype = new Person()
 Student.prototype.constructor = Student
 ```
 
-### 类的继承
+#### 类的继承
 
 ```js
 class Person {
@@ -391,13 +385,9 @@ class Student extends Person {
 }
 ```
 
+## 对象（ES6）
 
-
-
-
-# 对象（ES6）
-
-## Object.keys
+### Object.keys
 
 `Object.keys(obj)`
 
@@ -411,7 +401,7 @@ Object.keys({
 // ['name', 'age']
 ```
 
-## Object.values
+### Object.values
 
 `Object.values(obj)`
 
@@ -425,7 +415,7 @@ Object.values({
 // ['xiaoming', 18]
 ```
 
-## Object.entries
+### Object.entries
 
 `Object.entries(obj)`
 
@@ -439,7 +429,7 @@ Object.entries({
 // [['name', 'xiaoming'], ['age', 18]]
 ```
 
-## Object.assign
+### Object.assign
 
 `Object.assign(target, ...sources)`
 
@@ -455,7 +445,7 @@ Object.assign({}, obj)
 { ...obj }
 ```
 
-## Object.freeze
+### Object.freeze
 
 `Object.freeze(obj)`
 
@@ -473,7 +463,7 @@ person.age = 30
 person // { name: 'xiaoming', age: 18 }
 ```
 
-## Object.is
+### Object.is
 
 `Object.is(value1, value2)`
 
@@ -487,7 +477,7 @@ NaN === NaN // false
 Object.is(NaN, NaN) // true
 ```
 
-## Object.hasOwn
+### Object.hasOwn
 
 `Object.hasOwn(obj, prop)`
 
@@ -505,17 +495,13 @@ person.hasOwnProperty("foo") // false
 Object.hasOwn(person, "foo") // false
 ```
 
+## 数组
 
-
-
-
-# 数组
-
-## arr.push
+### arr.push
 
 `arr.push(value...)`
 
-向数组末尾添加元素，返回新数组的长度。
+向数组尾部添加元素，返回新数组的长度。
 
 ```js
 const arr = [2, 3, 4]
@@ -525,7 +511,7 @@ arr.push(5)
 arr // [2, 3, 4, 5]
 ```
 
-## arr.pop
+### arr.pop
 
 `arr.pop()`
 
@@ -539,7 +525,7 @@ arr.pop()
 arr // [1, 2, 3, 4]
 ```
 
-## arr.unshift
+### arr.unshift
 
 `arr.unshift(value...)`
 
@@ -553,7 +539,7 @@ arr.unshift(1)
 arr // [1, 2, 3, 4]
 ```
 
-## arr.shift
+### arr.shift
 
 `arr.shift()`
 
@@ -567,7 +553,7 @@ arr.shift()
 arr // [2, 3, 4, 5]
 ```
 
-## arr.splice
+### arr.splice
 
 `arr.splice(startIndex, [count], [value...])`
 
@@ -603,7 +589,7 @@ arr.splice(1, 0, 7, 8, 9) // []
 arr // [2, 7, 8, 9, 3, 4, 5, 6]
 ```
 
-## arr.sort
+### arr.sort
 
 `arr.sort()`
 
@@ -621,7 +607,7 @@ arr.sort((a, b) => a.age - b.age)
 arr // [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
 ```
 
-## arr.reverse
+### arr.reverse
 
 `arr.reverse()`
 
@@ -635,7 +621,7 @@ arr.reverse()
 arr // [5, 4, 3, 2, 1]
 ```
 
-## arr.slice
+### arr.slice
 
 `arr.slice([startIndex], [endIndex])`
 
@@ -649,7 +635,7 @@ arr.slice(0, arr.length) // [2, 3, 4, 5, 6]
 arr.slice() // [2, 3, 4, 5, 6]
 ```
 
-## arr.concat
+### arr.concat
 
 `arr.concat(arr1, [arr2])`
 
@@ -661,7 +647,7 @@ const arr = [2, 3, 4]
 arr.concat([5, 6]) // [2, 3, 4, 5, 6]
 ```
 
-## arr.join
+### arr.join
 
 `arr.join([separator])`
 
@@ -675,7 +661,7 @@ arr.join(" ") // "h e l l o"
 arr.join("") === "" // false, 判断 arr 是否为空数组
 ```
 
-## arr.indexOf
+### arr.indexOf
 
 `arr.indexOf(item, [startIndex])`
 
@@ -689,7 +675,7 @@ arr.indexOf('b', 2) // 4
 arr.indexOf('g') // -1
 ```
 
-## arr.lastIndexOf
+### arr.lastIndexOf
 
 `arr.lastIndexOf(item, [start])`
 
@@ -703,7 +689,7 @@ arr.lastIndexOf('b', -2) // 1
 arr.lastIndexOf('g') // -1
 ```
 
-## arr.forEach
+### arr.forEach
 
 `arr.forEach(callback(item, [index], [arr]))`
 
@@ -716,7 +702,7 @@ const arr = [4, 9, 16, 25]
 arr.forEach(item => console.log(item)) // 4 9 16 25
 ```
 
-## arr.filter
+### arr.filter
 
 `arr.filter(callback(item, [index], [arr]))`
 
@@ -730,7 +716,7 @@ const newArr = arr.filter(item => item > 12)
 newArr // [16, 25]
 ```
 
-## arr.map
+### arr.map
 
 `arr.map(callback(item, [index], [arr]))`
 
@@ -745,7 +731,7 @@ const newArr = arr.map(item => Math.sqrt(item))
 newArr // [2, 3, 4, 5]
 ```
 
-## arr.reduce
+### arr.reduce
 
 `arr.reduce(callback(prev, item, [index], [arr]), [initial])`
 
@@ -759,13 +745,9 @@ const total = arr.reduce((prev, item) => prev + item, 1)
 total // 55 (1 + 4 + 9 + 16 + 25)
 ```
 
+## 数组（ES6）
 
-
-
-
-# 数组（ES6）
-
-## Array.of
+### Array.of
 
 `Array.of(value...)`
 
@@ -777,7 +759,7 @@ new Array(3) // [empty × 3]
 Array.of(3) // [3]
 ```
 
-## Array.from
+### Array.from
 
 `Array.from(arrLike, [mapFn(item)])`
 
@@ -795,7 +777,7 @@ Array.from([1, 2, 3], value => value * 2) // [2, 4, 6]
 Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3, 4, 5, 6, 7]
 ```
 
-## arr.includes
+### arr.includes
 
 `arr.includes(item, [index])`
 
@@ -808,7 +790,7 @@ arr.includes(3) // true
 arr.includes(9) // false
 ```
 
-## arr.fill
+### arr.fill
 
 `arr.fill(item, [startIndex], [endIndex])`
 
@@ -822,7 +804,7 @@ arr.fill("*")
 arr // ["*", "*", "*"]
 ```
 
-## arr.flat
+### arr.flat
 
 `arr.flat([count])`
 
@@ -834,7 +816,7 @@ const arr = [1, 2, 3, [4, 5, [6]]]
 arr.flat(2) // [1, 2, 3, 4, 5, 6]
 ```
 
-## arr.find
+### arr.find
 
 `arr.find(callback(item, [index, [arr]])`
 
@@ -846,7 +828,7 @@ const arr = [1, 3, 5, 7, 9]
 arr.find(item => item > 3) // 5
 ```
 
-## arr.findIndex
+### arr.findIndex
 
 `arr.findIndex(callback(item, [index], [array])`
 
@@ -858,13 +840,9 @@ const arr = [1, 3, 5, 7, 9]
 arr.findIndex(item => item > 3) // 2
 ```
 
+## 字符串
 
-
-
-
-# 字符串
-
-## str.indexOf
+### str.indexOf
 
 `str.indexOf(item, [startIndex])`
 
@@ -878,7 +856,7 @@ str.indexOf("world", 10) // 18
 str.indexOf("woood") // -1
 ```
 
-## str.lastIndexOf
+### str.lastIndexOf
 
 `str.lastIndexOf(item, [startIndex])`
 
@@ -892,7 +870,7 @@ str.lastIndexOf("world", 10) // 6
 str.indexOf("woood") // -1
 ```
 
-## str.slice
+### str.slice
 
 `str.slice([startIndex, [endIndex]])`
 
@@ -907,7 +885,7 @@ str.slice(2, 5) // "llo"
 str.slice(3, -1) // "lo worl"
 ```
 
-## str.substring
+### str.substring
 
 `str.substring(startIndex, [endIndex])`
 
@@ -921,7 +899,7 @@ str.substring(6) // "world"
 str.substring(-10, -5) // ""
 ```
 
-## str.substr
+### str.substr
 
 `str.substr(startIndex, [count])`
 
@@ -936,7 +914,7 @@ str.substr(6, 3) // "wor"
 str.substr(3) // "lo world"
 ```
 
-## str.toUpperCase
+### str.toUpperCase
 
 `str.toUpperCase()`
 
@@ -948,7 +926,7 @@ let str = "I love JavaScript"
 str.toUpperCase() // "I LOVE JAVASCRIPT"
 ```
 
-## str.toLowerCase
+### str.toLowerCase
 
 `str.toLowerCase()`
 
@@ -960,7 +938,7 @@ let str = "I love JavaScript"
 str.toLowerCase() // "i love javascript"
 ```
 
-## str.trim
+### str.trim
 
 `str.trim()`
 
@@ -972,7 +950,7 @@ let str = "   hello world   "
 str.trim() // "hello world"
 ```
 
-## str.split
+### str.split
 
 `str.split([separator|regexp, [count]])`
 
@@ -992,7 +970,7 @@ let str = "fdaf123fdsa12321fdas123fda"
 str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 ```
 
-## str.search
+### str.search
 
 `str.search(item|regexp)`
 
@@ -1004,7 +982,7 @@ let str = "hello world 666"
 str.search(/[0-9]+/g) // 12
 ```
 
-## str.match
+### str.match
 
 `str.match(regexp)`
 
@@ -1016,7 +994,7 @@ let str = "1 hello 2 world 666"
 str.match(/[0-9]+/g) // [1, 2, 666]
 ```
 
-## str.replace
+### str.replace
 
 `str.replace(item|regexp, newItem|function)`
 
@@ -1037,13 +1015,9 @@ let str = "html and css"
 str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 ```
 
+## 字符串（ES6）
 
-
-
-
-# 字符串（ES6）
-
-## str.includes
+### str.includes
 
 `str.includes(item)`
 
@@ -1056,7 +1030,7 @@ str.includes("world") // true
 str.includes("yeah") // false
 ```
 
-## str.startsWith
+### str.startsWith
 
 `str.startsWith(item, [index])`
 
@@ -1068,7 +1042,7 @@ let str = "abcdefg"
 str.startsWith("ab") // true
 ```
 
-## str.endsWith
+### str.endsWith
 
 `str.endsWith(item, [index])`
 
@@ -1080,7 +1054,7 @@ let str = "abcdefg"
 str.endsWith("ef") // false
 ```
 
-## str.repeat
+### str.repeat
 
 `str.repeat(count)`
 
@@ -1092,7 +1066,7 @@ let str = "abc"
 str.repeat(3) // "abcabcabc"
 ```
 
-## str.padStart
+### str.padStart
 
 `str.padStart(length, [item])`
 
@@ -1104,7 +1078,7 @@ let str = "abc"
 str.padStart(10, "*") // "*******abc"
 ```
 
-## str.padEnd
+### str.padEnd
 
 `str.padEnd(length, [item])`
 
@@ -1116,7 +1090,7 @@ let str = "abc"
 str.padEnd(10, "*") // "abc*******"
 ```
 
-## str.trimStart
+### str.trimStart
 
 `str.trimStart()`
 
@@ -1128,7 +1102,7 @@ let str = "   hello world   "
 str.trimStart() // "hello world   "
 ```
 
-## str.trimEnd
+### str.trimEnd
 
 `str.trimEnd()`
 
@@ -1140,15 +1114,11 @@ let str = "   hello world   "
 str.trimEnd() // "   hello world"
 ```
 
+## Set & Map
 
+### Set
 
-
-
-# Set & Map
-
-## Set
-
-### 基本用法
+#### 基本用法
 
 Set 本身是一个构造函数，用来生成 Set 数据结构，它类似于数组，但是成员的值都是唯一的，没有重复
 
@@ -1233,7 +1203,7 @@ set.add({})
 set.size // 2
 ```
 
-### Set 实例的属性和操作方法
+#### Set 实例的属性和操作方法
 
 Set 结构的实例有以下属性
 
@@ -1308,7 +1278,7 @@ function dedupe(array) {
 dedupe([1, 2, 2, 3]) // [1, 2, 3]
 ```
 
-### Set 实例的遍历方法
+#### Set 实例的遍历方法
 
 Set 结构的实例有 4 个遍历方法，可用于遍历成员
 
@@ -1322,7 +1292,7 @@ Set 结构的实例有 4 个遍历方法，可用于遍历成员
 
 Set 的遍历顺序就是插入顺序。使用 Set 保存一个回调函数列表，调用时就能保证按照添加顺序调用
 
-#### keys()、values()、entries()
+##### keys()、values()、entries()
 
 keys()、values()、entries() 返回的都是遍历器对象 (详见 Iterator)
 
@@ -1382,41 +1352,25 @@ for (let item of set) {
 // 'blue'
 ```
 
-#### forEach()
+##### forEach()
+
+### WeakSet
 
 
 
-## WeakSet
+### Map
 
 
 
-## Map
+### WeakMap
 
+## Proxy
 
+## Reflect
 
-## WeakMap
+## Promise
 
-
-
-
-
-
-
-# Proxy
-
-
-
-
-
-# Reflect
-
-
-
-
-
-# Promise
-
-## Promise 介绍
+### Promise 介绍
 
 ```js
 new Promise((resolve, reject) => {
@@ -1432,7 +1386,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-## Promise.prototype.then
+### Promise.prototype.then
 
 `promise.then(value => {}, error => {})`
 
@@ -1443,7 +1397,7 @@ promise.then(
 )
 ```
 
-## Promise.prototype.catch
+### Promise.prototype.catch
 
 `promise.catch(error => {})`
 
@@ -1455,7 +1409,7 @@ promise.catch(
 )
 ```
 
-## Promise.prototype.finally
+### Promise.prototype.finally
 
 `promise.finally(() => {})`
 
@@ -1467,7 +1421,7 @@ promise.finally(
 )
 ```
 
-## Promise.resolve
+### Promise.resolve
 
 `Promise.resolve(value)`
 
@@ -1478,7 +1432,7 @@ new Promise((resolve, reject) => {
 })
 ```
 
-## Promise.reject
+### Promise.reject
 
 `Promise.reject(error)`
 
@@ -1489,7 +1443,7 @@ new Promise((resolve, reject) => {
 })
 ```
 
-## Promise.all
+### Promise.all
 
 `Promise.all([p1, p2, p3])`
 
@@ -1519,7 +1473,7 @@ Promise.all([p1, p2, p3]).then(
 )
 ```
 
-## Promise.allSettled
+### Promise.allSettled
 
 `Promise.allSettled([p1, p2, p3])`
 
@@ -1542,7 +1496,7 @@ Promise.all([p1, p2, p3]).then(
 )
 ```
 
-## Promise.any
+### Promise.any
 
 `Promise.any([p1, p2, p3])`
 
@@ -1550,7 +1504,7 @@ Promise.all([p1, p2, p3]).then(
 
 只要 p1, p2, p3 有一个成功，p 就会成功。
 
-## Promise.race
+### Promise.race
 
 `Promise.race([p1, p2, p3])`
 
@@ -1574,7 +1528,7 @@ Promise.race([p1, p2, p3]).then(
 )
 ```
 
-## then 的返回值
+### then 的返回值
 
 返回非 Promise 的任意值，`.then()` 返回的 Promise 状态为 fulfilled，值为 [value]。
 
@@ -1621,7 +1575,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-## 异常穿透
+### 异常穿透
 
 在 Promise 链式调用中，如果 `.then()` 无法处理上一步的异常，会出现异常穿透，直到被 `.catch()` 捕获。
 
@@ -1649,7 +1603,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-## 中断 Promise 链
+### 中断 Promise 链
 
 返回一个 pendding 状态的 Promise。
 
@@ -1668,7 +1622,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-## 任务队列
+### 任务队列
 
 微任务：Promise、MutationObserver、queueMicrotask。
 
@@ -1692,25 +1646,13 @@ console.log(4)
 // 执行顺序: 4 2 3 1
 ```
 
+## Iterator
 
+## Generator
 
+## async & await
 
-
-# Iterator
-
-
-
-
-
-# Generator
-
-
-
-
-
-# async & await
-
-## async 函数
+### async 函数
 
 async 函数是 Promise 的语法糖
 
@@ -1750,7 +1692,7 @@ const fn = () => {
 
 async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定
 
-## await 表达式
+### await 表达式
 
 在 async 声明的异步函数中可以使用 await 关键字来调用异步函数
 
@@ -1791,19 +1733,11 @@ console.log(4)
 // 执行顺序: 1 2 4 3
 ```
 
+## Class
 
+## DOM
 
-
-
-# Class
-
-
-
-
-
-# DOM
-
-## 节点
+### 节点
 
 |      | 节点类型（nodeType） | 节点名（nodeName） | 节点值（nodeValue） |
 | :--: | :------------------: | :----------------: | :-----------------: |
@@ -1812,7 +1746,7 @@ console.log(4)
 | 文本 |          3           |       #text        |      文本内容       |
 | 注释 |          8           |      #comment      |      注释内容       |
 
-## 查询元素
+### 查询元素
 
 | API                              | 用法               |
 | -------------------------------- | ------------------ |
@@ -1830,7 +1764,7 @@ console.log(4)
 | `element.nextElementSilbing`     | 获取下一个兄弟元素 |
 | `element.nextSibling`            | 获取下一个兄弟节点 |
 
-## 操作元素的样式
+### 操作元素的样式
 
 | API                                 | 用法                           |
 | ----------------------------------- | ------------------------------ |
@@ -1839,7 +1773,7 @@ console.log(4)
 | `getComputedStyle(element)["attr"]` | 获取元素实时样式，*不兼容 IE8* |
 | `element.currentStyle["attr"]`      | 获取元素实时样式，*仅支持 IE8* |
 
-## 操作元素的属性
+### 操作元素的属性
 
 | API                                     | 用法                 |
 | --------------------------------------- | -------------------- |
@@ -1848,7 +1782,7 @@ console.log(4)
 | `element.removeAttribute("attr")`       | 移除元素属性         |
 | `element.hasAttribute("attr")`          | 判断元素是否有该属性 |
 
-## 操作元素的类名
+### 操作元素的类名
 
 | API                                   | 用法                 |
 | ------------------------------------- | -------------------- |
@@ -1859,7 +1793,7 @@ console.log(4)
 | `element.classList.contains("value")` | 判断元素是否有该类名 |
 | `element.classList.toggle("value")`   | 切换元素类名         |
 
-## 操作元素节点树
+### 操作元素节点树
 
 | API                                        | 用法                         |
 | ------------------------------------------ | ---------------------------- |
@@ -1873,7 +1807,7 @@ console.log(4)
 | `element.cloneNode()`                      | 克隆一个元素                 |
 | `element.cloneNode(true)`                  | 克隆一个元素及其内容         |
 
-## 获取元素宽高
+### 获取元素宽高
 
 | API                                     | 用法                           |
 | --------------------------------------- | ------------------------------ |
@@ -1890,7 +1824,7 @@ console.log(4)
 | `element.scrollWidth`                   | 获取元素滚动区域的宽度         |
 | `element.scrollHeight`                  | 获取元素滚动区域的高度         |
 
-## 获取元素偏移量
+### 获取元素偏移量
 
 | API                  | 用法                                 |
 | -------------------- | ------------------------------------ |
@@ -1899,7 +1833,7 @@ console.log(4)
 | `element.scrollLeft` | 获取元素水平滚动条滚动的距离         |
 | `element.scrollTop`  | 获取元素垂直滚动条滚动的距离         |
 
-## 宽高偏移量函数
+### 宽高偏移量函数
 
 `element.getBoundingClientRect()`
 
@@ -1914,9 +1848,9 @@ console.log(4)
 | `right`  | x/left + width                        |
 | `bottom` | y/top + height                        |
 
-## 事件类型
+### 事件类型
 
-### 鼠标事件
+#### 鼠标事件
 
 | 事件名（属性）  | 触发条件（描述）          |
 | :-------------- | ------------------------- |
@@ -1937,7 +1871,7 @@ console.log(4)
 | `event.pageX`   | 鼠标相对于页面的 X 坐标   |
 | `event.pageY`   | 鼠标相对于页面的 Y 坐标   |
 
-### 键盘事件
+#### 键盘事件
 
 | 事件名（属性）   | 触发条件（描述）          |
 | ---------------- | ------------------------- |
@@ -1950,7 +1884,7 @@ console.log(4)
 | `event.ctrlKey`  | Ctrl 键                   |
 | `event.shiftKey` | Shift 键                  |
 
-### 滚轮事件
+#### 滚轮事件
 
 | 事件名（属性）     | 触发条件（描述）                                     |
 | ------------------ | ---------------------------------------------------- |
@@ -1959,7 +1893,7 @@ console.log(4)
 | `event.wheelDelta` | 滚轮滚动的方向，正值向上，负值向下，*不支持 Firefox* |
 | `event.detail`     | 滚轮滚动的方向，正值向下，负值向上，*仅支持 Firefox* |
 
-### 表单事件
+#### 表单事件
 
 | 事件名     | 触发条件           |
 | ---------- | ------------------ |
@@ -1969,7 +1903,7 @@ console.log(4)
 | `onchange` | 内容改变且失去焦点 |
 | `onsubmit` | 提交表单           |
 
-### 浏览器事件
+#### 浏览器事件
 
 | 事件名     | 触发条件                   |
 | ---------- | -------------------------- |
@@ -1977,7 +1911,7 @@ console.log(4)
 | `onresize` | 浏览器窗口尺寸发生改变     |
 | `onscroll` | 滚动条滚动                 |
 
-### 移动端事件
+#### 移动端事件
 
 | 事件名         | 触发条件 |
 | -------------- | -------- |
@@ -1985,14 +1919,14 @@ console.log(4)
 | `ontouchmove`  | 正在触摸 |
 | `ontouchend`   | 触摸结束 |
 
-### 其他事件
+#### 其他事件
 
 | 事件名            | 触发条件 |
 | ----------------- | -------- |
 | `ontransitionend` | 过渡结束 |
 | `onanimationend`  | 动画结束 |
 
-## 事件传播
+### 事件传播
 
 - 捕获阶段: 
 
@@ -2026,7 +1960,7 @@ console.log(4)
 
   - `return false`
 
-## 事件委派
+### 事件委派
 
 将多个元素的事件监听委托给祖先元素处理，当该元素中的事件被触发时，会一直冒泡到祖先元素
 

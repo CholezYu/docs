@@ -1,6 +1,8 @@
-# 选择器
+# CSS
 
-## 伪类选择器
+## 选择器
+
+### 伪类选择器
 
 link > visited > hover > active
 
@@ -84,7 +86,7 @@ ul li:only-child
 :empty
 ```
 
-## 伪元素选择器
+### 伪元素选择器
 
 ```css
 /* 在元素内部的最前面插入内容（必须设置 content 属性） */
@@ -105,13 +107,9 @@ ul li:only-child
 ::selection
 ```
 
+## 文本样式
 
-
-
-
-# 文本样式
-
-## 文本装饰 text-decoration
+### 文本装饰 text-decoration
 
 ```css
 /* 无装饰线（默认） */
@@ -151,7 +149,7 @@ text-decoration-style: wavy;
 text-decoration: underline red solid;
 ```
 
-## 文本阴影 text-shadow
+### 文本阴影 text-shadow
 
 offset-x > offset-y > blur-radius > color
 
@@ -167,7 +165,7 @@ text-shadow: 1px 1px 2px black;
 
 - color: 阴影颜色
 
-## 文本换行 white-space
+### 文本换行 white-space
 
 ```css
 /* 将连续的多个空格变成一个空格，文本溢出则换行（默认） */
@@ -180,7 +178,7 @@ white-space: nowrap;
 white-space: pre;
 ```
 
-## 文本转换 text-transform
+### 文本转换 text-transform
 
 ```css
 /* 所有字母大写 */
@@ -193,13 +191,9 @@ text-transform: lowercase;
 text-transform: capitalize;
 ```
 
+## 背景样式
 
-
-
-
-# 背景样式
-
-## 背景定位 background-position
+### 背景定位 background-position
 
 ```css
 /* 位于左上角（默认） */
@@ -209,7 +203,7 @@ background-position: left top;
 background-position: 20px 50px;
 ```
 
-## 背景填充 background-repeat
+### 背景填充 background-repeat
 
 ```css
 /* 填充整个页面（默认） */
@@ -225,7 +219,7 @@ background-repeat: repeat-y;
 background-repeat: no-repeat;
 ```
 
-## 背景大小 background-size
+### 背景大小 background-size
 
 ```css
 /* 数值 */
@@ -238,7 +232,7 @@ background-size: cover;
 background-size: contain;
 ```
 
-## 背景原点 background-origin
+### 背景原点 background-origin
 
 ```css
 /* 背景原点在内边距左上角（默认） */
@@ -251,7 +245,7 @@ background-origin: border-box;
 background-origin: content-box;
 ```
 
-## 背景裁剪 background-clip
+### 背景裁剪 background-clip
 
 ```css
 /* 背景图在边框以内（默认） */
@@ -264,13 +258,9 @@ background-clip: padding-box;
 background-clip: content-box;
 ```
 
+## 列表样式
 
-
-
-
-# 列表样式
-
-## 标号类型 list-style-type
+### 标号类型 list-style-type
 
 无序列表
 
@@ -316,7 +306,7 @@ list-style-type: upper-latin;
 list-style-type: lower-latin;
 ```
 
-## 标号位置 list-style-position
+### 标号位置 list-style-position
 
 ```css
 /* 标号在列表区域内（默认） */
@@ -326,19 +316,15 @@ list-style-position: inside;
 list-style-position: outside;
 ```
 
-## 标号图像 list-style-image
+### 标号图像 list-style-image
 
 ```css
 list-style-image: url("http://baidu.baike.com");
 ```
 
+## 过渡动画
 
-
-
-
-# 过渡动画
-
-## 过渡 transition
+### 过渡 transition
 
 ```css
 /* 单个属性写法 */
@@ -366,7 +352,7 @@ transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
 
 - transition-delay: 过渡延迟时间
 
-## 动画 animation
+### 动画 animation
 
 ```css
 animation: move 2s linear 1s infinite alternate;
@@ -404,15 +390,11 @@ animation: move 2s linear 1s infinite alternate;
 
   - both: 在动画等待时和动画结束后，元素的样式分别为动画第一帧和最后一帧
 
+## 弹性布局
 
+### 弹性容器样式
 
-
-
-# 弹性布局
-
-## 弹性容器样式
-
-### 主轴方向 flex-direction
+#### 主轴方向 flex-direction
 
 ```css
 /* 水平向右 */
@@ -428,7 +410,7 @@ flex-direction: column;
 flex-direction: column-reverse;
 ```
 
-### 主轴对齐 justify-content
+#### 主轴对齐 justify-content
 
 弹性元素在主轴的排列方式
 
@@ -452,7 +434,7 @@ justify-content: space-around;
 justify-content: space-evenly;
 ```
 
-### 侧轴对齐 align-items
+#### 侧轴对齐 align-items
 
 弹性元素在侧轴的排列方式
 
@@ -473,7 +455,7 @@ align-items: flex-end;
 align-items: baseline;
 ```
 
-### 侧轴对齐 align-content
+#### 侧轴对齐 align-content
 
 换行的弹性元素在侧轴的排列方式
 
@@ -497,7 +479,7 @@ align-content: space-around;
 align-content: space-evenly;
 ```
 
-### 换行排列 flex-wrap
+#### 换行排列 flex-wrap
 
 ```css
 /* 不换行（默认） */
@@ -510,7 +492,7 @@ flex-wrap: wrap;
 flex-wrap: wrap-reverse;
 ```
 
-### 复合属性 flex-flow
+#### 复合属性 flex-flow
 
 ```css
 /* 主轴方向 换行排列 */
@@ -521,9 +503,9 @@ flex-direction: column;
 flex-wrap: wrap;
 ```
 
-## 弹性元素样式
+### 弹性元素样式
 
-### 侧轴对齐 align-self
+#### 侧轴对齐 align-self
 
 单个弹性元素在侧轴的排列方式
 
@@ -544,7 +526,7 @@ align-self: flex-end;
 align-self: baseline;
 ```
 
-### 富余空间 flex-grow
+#### 富余空间 flex-grow
 
 给弹性元素按比例分配富余空间，默认为 0，表示不分配
 
@@ -562,7 +544,7 @@ align-self: baseline;
 }
 ```
 
-### 收缩规则 flex-shrink
+#### 收缩规则 flex-shrink
 
 按比例压缩弹性元素，默认为 1，表示等比例压缩
 
@@ -574,7 +556,7 @@ flex-shrink: 1;
 flex-shrink: 0;
 ```
 
-### 基准宽度 flex-basis
+#### 基准宽度 flex-basis
 
 弹性元素被压缩时的基准宽度，默认为 auto
 
@@ -598,7 +580,7 @@ flex-shrink: 0;
 }
 ```
 
-### 复合属性 flex
+#### 复合属性 flex
 
 ```css
 /* 弹性元素等比例分配富余空间或等比例压缩，且被压缩时的基准宽度为 0 */
@@ -610,15 +592,11 @@ flex-shrink: 1;
 flex-basis: 0;
 ```
 
+## 网格布局
 
+### 网格容器样式
 
-
-
-# 网格布局
-
-## 网格容器样式
-
-### 列 grid-template-columns
+#### 列 grid-template-columns
 
 ```css
 /* 分为两列，每列占比相等 */
@@ -634,7 +612,7 @@ grid-template-columns: 100px 1fr 2fr;
 grid-template-columns: repeat(3, 1fr);
 ```
 
-### 行 grid-template-rows
+#### 行 grid-template-rows
 
 ```css
 /* 分为两行，每行占比相等 */
@@ -650,49 +628,49 @@ grid-template-columns: 100px 1fr 2fr;
 grid-template-columns: repeat(3, 1fr);
 ```
 
-### 命名 grid-template-area
+#### 命名 grid-template-area
 
 命名单元格，相同名称的单元格被划分为一个区域
 
-### 行列间距 grid-gap
+#### 行列间距 grid-gap
 
 
 
-### 行间距 grid-row-gap
+#### 行间距 grid-row-gap
 
 
 
-### 列间距 grid-column-gap
+#### 列间距 grid-column-gap
 
 
 
-### 水平排列 justify-items
+#### 水平排列 justify-items
 
 网格元素的水平排列方式
 
-### 垂直排列 align-items
+#### 垂直排列 align-items
 
 网格元素的垂直排列方式
 
-### 复合属性 place-items
+#### 复合属性 place-items
 
 justify-items 和 align-items 的复合属性
 
-### 水平排列 justify-content
+#### 水平排列 justify-content
 
 网格元素整体的水平排列方式，同弹性容器的 justify-content
 
-### 垂直排列 align-content
+#### 垂直排列 align-content
 
 网格元素整体的垂直排列方式，同弹性容器的 align-content
 
-### 复合属性 place-content
+#### 复合属性 place-content
 
 justify-content 和 align-content 的复合属性
 
-## 网格元素样式
+### 网格元素样式
 
-### 列位置 grid-column
+#### 列位置 grid-column
 
 grid-column-start 和 grid-column-end 的复合属性
 
@@ -704,11 +682,11 @@ grid-column: 1/5;
 grid-column: 1/span 3;
 ```
 
-### 行位置 grid-row
+#### 行位置 grid-row
 
 grid-row-start 和 grid-row-end 的复合属性
 
-### 复合属性 grid-area
+#### 复合属性 grid-area
 
 grid-column 和 grid-row 的复合属性
 
@@ -717,25 +695,21 @@ grid-column 和 grid-row 的复合属性
 grid-area: 1/2/3/4;
 ```
 
-### 水平排列 justify-self
+#### 水平排列 justify-self
 
 网格元素自身的水平排列方式
 
-### 垂直排列 align-self
+#### 垂直排列 align-self
 
 网格元素自身的垂直排列方式
 
-### 复合属性 place-self
+#### 复合属性 place-self
 
 justify-self 和 align-self 的复合属性
 
+## 文本居中
 
-
-
-
-# 文本居中
-
-## 单行文本垂直居中
+### 单行文本垂直居中
 
 将容器的 `line-height` 设置与 `height` 相等。
 
@@ -774,7 +748,7 @@ justify-self 和 align-self 的复合属性
 </div>
 ```
 
-## 多行文本垂直居中
+### 多行文本垂直居中
 
 将容器的 `line-height` 设置与 `height` 相等；
 
@@ -801,13 +775,9 @@ justify-self 和 align-self 的复合属性
 </div>
 ```
 
+## 元素居中
 
-
-
-
-# 元素居中
-
-## 块元素水平居中
+### 块元素水平居中
 
 给块元素设置宽度，并将水平方向的 margin 设置为 auto。
 
@@ -821,7 +791,7 @@ width: 500px;
 margin: 0 auto;
 ```
 
-## 元素水平垂直居中（定位）
+### 元素水平垂直居中（定位）
 
 ```css
 .outer {
@@ -848,7 +818,7 @@ margin: 0 auto;
 }
 ```
 
-## 元素水平垂直居中（弹性布局）
+### 元素水平垂直居中（弹性布局）
 
 ```css
 .outer {
@@ -858,13 +828,9 @@ margin: 0 auto;
 }
 ```
 
+## 文本溢出
 
-
-
-
-# 文本溢出
-
-## 单行文本溢出
+### 单行文本溢出
 
 ```css
 /* 文本在一行内显示 */
@@ -877,7 +843,7 @@ overflow: hidden;
 text-overflow: ellipsis;
 ```
 
-## 多行文本溢出
+### 多行文本溢出
 
 ```css
 /* 隐藏溢出部分 */
@@ -899,13 +865,9 @@ display: -webkit-box;
 -webkit-line-clamp: 2;
 ```
 
+## 响应式布局
 
-
-
-
-# 响应式布局
-
-## 媒体查询
+### 媒体查询
 
 ```css
 /* 在屏幕上, 并且最小宽度为 900px 时（屏幕宽度大于 900px）的样式 */
@@ -932,14 +894,14 @@ display: -webkit-box;
 
   - max-width: 最大宽度
 
-## 引入资源
+### 引入资源
 
 ```html
 <!-- 在屏幕上, 并且最小宽度为 320px 时（屏幕宽度大于 320px）引入资源 -->
 <link rel="stylesheet" href="./style.css" media="screen and (min-width: 320px)" />
 ```
 
-## 移动端适配
+### 移动端适配
 
 ```less
 /* PC */
@@ -972,7 +934,7 @@ html {
 }
 ```
 
-## 常用阈值
+### 常用阈值
 
 ```css
 /* 超小屏幕 */

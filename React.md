@@ -1,6 +1,8 @@
-# 基本使用
+# React
 
-## 引入 React
+## 基本使用
+
+### 引入 React
 
 ```html
 <!-- React 核心模块, 提供 React 核心语法 -->
@@ -10,7 +12,7 @@
 <script src="./react-dom.development.js"></script>
 ```
 
-## 基本使用
+### 基本使用
 
 - `React.createElement()`
   - 创建虚拟 DOM
@@ -40,7 +42,7 @@ const root = ReactDOM.createRoot(app)
 root.render(v)
 ```
 
-## JSX 创建虚拟 DOM
+### JSX 创建虚拟 DOM
 
 ```jsx
 const v = (
@@ -57,7 +59,7 @@ root.render(v)
 
 > 虚拟 DOM 不能写成字符串
 
-## JSX 注意事项
+### JSX 注意事项
 
 - 使用插值语法混入 JS 表达式
 
@@ -91,13 +93,7 @@ const v = (
 )
 ```
 
-
-
-
-
-# 条件渲染
-
-## 基本使用
+## 条件渲染
 
 ```jsx
 const v = (
@@ -107,13 +103,7 @@ const v = (
 )
 ```
 
-
-
-
-
-# 列表渲染
-
-## 基本使用
+## 列表渲染
 
 ```jsx
 const v = (
@@ -125,13 +115,9 @@ const v = (
 ReactDOM.createRoot(app).render(v)
 ```
 
+## Diffing
 
-
-
-
-# Diffing
-
-## 简单介绍
+### 简单介绍
 
 - 当数据发生变化时，React 会生成新的虚拟 DOM，然后对新生成的虚拟 DOM 与当前虚拟 DOM 进行比较
 
@@ -139,7 +125,7 @@ ReactDOM.createRoot(app).render(v)
 
 - diffing 算法可以提升 React 的渲染性能，计算出虚拟 DOM 中变化的部分，针对该部分进行 DOM 操作
 
-## 算法策略
+### 算法策略
 
 > **策略一**
 
@@ -167,7 +153,7 @@ ReactDOM.createRoot(app).render(v)
 
 - 更新：元素只是属性发生了改变，则进行更新操作
 
-## key
+### key
 
 - 当某个节点添加了同级节点中唯一的 key 属性，当它在当前层级的位置发生变化后，diffing 算法通过比较之后，如果发现了 key 值相同的新旧节点，就会执行移动操作，而不会执行删除旧节点与创建新节点的操作
 
@@ -179,13 +165,9 @@ ReactDOM.createRoot(app).render(v)
 
   - key 必须具有稳定性
 
+## 类式组件
 
-
-
-
-# 类式组件
-
-## 基本使用
+### 基本使用
 
 ```jsx
 class Header extends React.Component {
@@ -207,9 +189,9 @@ class App extends React.Component {
 ReactDOM.createRoot(app).render(<App />)
 ```
 
-## 三大属性
+### 三大属性
 
-### state
+#### state
 
 在 state 中定义的数据都具有响应式特性
 
@@ -243,7 +225,7 @@ class App extends React.Component {
 }
 ```
 
-### props
+#### props
 
 在子组件中可以通过 props 接收父组件传递的数据
 
@@ -301,7 +283,7 @@ render() {
 }
 ```
 
-### refs
+#### refs
 
 为虚拟 DOM 元素注册一个 ref 属性，就可以通过 refs 获取这个原生 DOM 元素
 
@@ -324,7 +306,7 @@ class App extends React.Component {
 }
 ```
 
-## 双向绑定
+### 双向绑定
 
 将响应式数据设置给表单元素的 value 属性，实现响应式数据对表单元素的绑定
 
@@ -353,15 +335,11 @@ class App extends React.Component {
 }
 ```
 
+## 生命周期
 
+### 挂载阶段
 
-
-
-# 生命周期
-
-## 挂载阶段
-
-### constructor
+#### constructor
 
 原生 class 的构造器函数
 
@@ -373,11 +351,11 @@ class App extends React.Component {
 }
 ```
 
-### render
+#### render
 
 解析模板，渲染虚拟 DOM
 
-### componentDidMount★
+#### componentDidMount★
 
 组件挂载完成，初始化结束。通常进行 **开启定时器、发送网络请求、订阅消息、监听自定义事件** 等操作
 
@@ -389,9 +367,9 @@ class App extends React.Component {
 }
 ```
 
-## 更新阶段
+### 更新阶段
 
-### 进入更新阶段
+#### 进入更新阶段
 
 - 父组件传递的 props 被修改
 
@@ -399,7 +377,7 @@ class App extends React.Component {
 
 - 使用 `forceUpdate()` 强制更新
 
-### shouldComponentUpdate
+#### shouldComponentUpdate
 
 控制是否执行更新。一般当子组件不需要随着父组件更新的时候，控制子组件不执行更新
 
@@ -411,13 +389,13 @@ class App extends React.Component {
 }
 ```
 
-### componentDidUpdate
+#### componentDidUpdate
 
 组件更新完成，更新阶段结束
 
-## 卸载阶段
+### 卸载阶段
 
-### 进入卸载阶段
+#### 进入卸载阶段
 
 - 条件渲染卸载
 
@@ -425,7 +403,7 @@ class App extends React.Component {
 
 - 使用 `root.unmount()` 卸载根容器
 
-### componentWillUnmount★
+#### componentWillUnmount★
 
 组件即将被卸载。通常进行 **关闭定时器、取消订阅、移除自定义事件** 等操作
 
@@ -437,13 +415,7 @@ class App extends React.Component {
 }
 ```
 
-
-
-
-
-# 函数组件
-
-## 基本使用
+## 函数组件
 
 ```jsx
 function Header(props) {
@@ -461,13 +433,9 @@ function App() {
 ReactDOM.createRoot(app).render(<App />)
 ```
 
+## Hooks
 
-
-
-
-# Hooks
-
-## useState
+### useState
 
 `const [state, setState] = useState(initialState)`
 
@@ -492,7 +460,7 @@ function App() {
 }
 ```
 
-## useEffect
+### useEffect
 
 `useEffect(setup, [dependencies])`
 
@@ -526,7 +494,7 @@ function App() {
 }
 ```
 
-## useRef
+### useRef
 
 `const ref = useRef()`
 
@@ -546,7 +514,7 @@ function MyComponent({ count, setCount }) {
 }
 ```
 
-## useContext
+### useContext
 
 `const { value, setValue } = useContext(SomeContext)`
 
@@ -583,13 +551,9 @@ function MyComponent() {
 }
 ```
 
+## Router
 
-
-
-
-# Router
-
-## Router Hooks
+### Router Hooks
 
  React Router 中用到的 Hooks：
 
@@ -603,7 +567,7 @@ function MyComponent() {
 
 - `useParams`: 动态路由传参，在子组件中获取查询参数 (params) 对象
 
-## 基本使用
+### 基本使用
 
 `<BrowserRouter>` 中的组件可以使用 React 路由
 
@@ -636,7 +600,7 @@ export default function App() {
 }
 ```
 
-## 路由配置
+### 路由配置
 
 使用 `useRoutes` 将路由配置解析成虚拟 DOM
 
@@ -668,7 +632,7 @@ const routes = [
 ]
 ```
 
-## 嵌套路由
+### 嵌套路由
 
 > 以 "/" 开头的嵌套路径会被当作根路径，所以子路由的路径不加 "/"
 
@@ -711,7 +675,7 @@ export default function Home() {
 }
 ```
 
-## 默认路由
+### 默认路由
 
 `<Navigate>` 可以设置默认路由路径（重定向）
 
@@ -736,7 +700,7 @@ const routes = [
 ]
 ```
 
-## 任意路由
+### 任意路由
 
 "*" 可以匹配所有未配置的路由，用来处理错误页面
 
@@ -759,7 +723,7 @@ const routes = [
 ]
 ```
 
-## 声明式导航
+### 声明式导航
 
 ```jsx
 /* Home/index.jsx */
@@ -789,7 +753,7 @@ export default function Home() {
 >
 > `<NavLink>` 可以设置 "activeclassname" 属性，当对应路由匹配成功时，会自动设置 `class="active"`
 
-## 编程式导航
+### 编程式导航
 
 | 声明式                   | 编程式                   |
 | ------------------------ | ------------------------ |
@@ -823,9 +787,9 @@ export default function Home() {
 }
 ```
 
-## 动态路由
+### 动态路由
 
-### search(query)
+#### search(query)
 
 使用 query 传递参数
 
@@ -877,7 +841,7 @@ export default function Item() {
 }
 ```
 
-### params
+#### params
 
 使用 params 传递参数。需要在路由表中配置路径时，使用 ":" 占位
 
@@ -911,7 +875,7 @@ export default function Item() {
 }
 ```
 
-### state
+#### state
 
 使用 state 传递参数。`navigate()` 第二个参数可以传入 `state` 对象
 
@@ -948,7 +912,7 @@ export default function Item() {
 }
 ```
 
-## 路由懒加载
+### 路由懒加载
 
 `<Suspense>` 用于在加载过程中作为替换的临时组件。`fallback` 属性可以指定临时替换的组件
 
@@ -978,19 +942,15 @@ export default [
 ]
 ```
 
+## Redux
 
-
-
-
-# Redux
-
-## 工作流程
+### 工作流程
 
 ![](https://s4.ax1x.com/2021/12/28/TsDeK0.jpg)
 
 `dispatch(action)` => Store == `(state, action)` => Reducers == `return state` => Store
 
-## 基本使用
+### 基本使用
 
 ```jsx
 import { createStore, combineReducers } from "redux"
@@ -1022,7 +982,7 @@ store.dispatch({ type: "count/increment", payload: 1 })
 store.dispatch({ type: "count/decrement", payload: 1 })
 ```
 
-## 异步操作
+### 异步操作
 
 > https://pcw-api.iqiyi.com/search/recommend/list?channel_id=1&data_type=1&mode=11&page_id=2&ret_num=48&session=b9fd987164f6aa47fad266f57dffaa6a
 
@@ -1056,20 +1016,16 @@ function getMovieList() {
 store.dispatch(getMovieList())
 ```
 
+## Redux Toolkit
 
-
-
-
-# Redux Toolkit
-
-## Redux Hooks
+### Redux Hooks
 
  Redux Toolkit 中用到的 Hooks：
 
 - `useSelector`: 获取 state 中的数据
 - `useDispatch`: 生成 dispatch，用于派发 action 命令
 
-## 基本使用
+### 基本使用
 
 项目目录
 
@@ -1161,7 +1117,7 @@ export default function Home() {
 }
 ```
 
-## 拆分模块
+### 拆分模块
 
 项目目录
 
@@ -1216,7 +1172,7 @@ const store = configureStore({
 export default store
 ```
 
-## 异步操作
+### 异步操作
 
 项目目录
 
@@ -1308,4 +1264,4 @@ export default function Home() {
 }
 ```
 
-## RTK Query
+### RTK Query
