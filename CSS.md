@@ -392,9 +392,7 @@ animation: move 2s linear 1s infinite alternate;
 
 ## 弹性布局
 
-### 弹性容器样式
-
-#### 主轴方向 flex-direction
+### 主轴方向 flex-direction
 
 ```css
 /* 水平向右 */
@@ -410,7 +408,7 @@ flex-direction: column;
 flex-direction: column-reverse;
 ```
 
-#### 主轴对齐 justify-content
+### 主轴对齐 justify-content
 
 弹性元素在主轴的排列方式
 
@@ -434,7 +432,7 @@ justify-content: space-around;
 justify-content: space-evenly;
 ```
 
-#### 侧轴对齐 align-items
+### 侧轴对齐 align-items
 
 弹性元素在侧轴的排列方式
 
@@ -455,7 +453,7 @@ align-items: flex-end;
 align-items: baseline;
 ```
 
-#### 侧轴对齐 align-content
+### 侧轴对齐 align-content
 
 换行的弹性元素在侧轴的排列方式
 
@@ -479,7 +477,7 @@ align-content: space-around;
 align-content: space-evenly;
 ```
 
-#### 换行排列 flex-wrap
+### 换行排列 flex-wrap
 
 ```css
 /* 不换行（默认） */
@@ -492,7 +490,7 @@ flex-wrap: wrap;
 flex-wrap: wrap-reverse;
 ```
 
-#### 复合属性 flex-flow
+### 复合属性 flex-flow
 
 ```css
 /* 主轴方向 换行排列 */
@@ -503,9 +501,7 @@ flex-direction: column;
 flex-wrap: wrap;
 ```
 
-### 弹性元素样式
-
-#### 侧轴对齐 align-self
+### 侧轴对齐 align-self
 
 单个弹性元素在侧轴的排列方式
 
@@ -526,7 +522,7 @@ align-self: flex-end;
 align-self: baseline;
 ```
 
-#### 富余空间 flex-grow
+### 富余空间 flex-grow
 
 给弹性元素按比例分配富余空间，默认为 0，表示不分配
 
@@ -544,7 +540,7 @@ align-self: baseline;
 }
 ```
 
-#### 收缩规则 flex-shrink
+### 收缩规则 flex-shrink
 
 按比例压缩弹性元素，默认为 1，表示等比例压缩
 
@@ -556,7 +552,7 @@ flex-shrink: 1;
 flex-shrink: 0;
 ```
 
-#### 基准宽度 flex-basis
+### 基准宽度 flex-basis
 
 弹性元素被压缩时的基准宽度，默认为 auto
 
@@ -580,7 +576,7 @@ flex-shrink: 0;
 }
 ```
 
-#### 复合属性 flex
+### 复合属性 flex
 
 ```css
 /* 弹性元素等比例分配富余空间或等比例压缩，且被压缩时的基准宽度为 0 */
@@ -591,121 +587,6 @@ flex-grow: 1;
 flex-shrink: 1;
 flex-basis: 0;
 ```
-
-## 网格布局
-
-### 网格容器样式
-
-#### 列 grid-template-columns
-
-```css
-/* 分为两列，每列占比相等 */
-grid-template-columns: 1fr 1fr;
-
-/* 分为两列，占比为 1:2 */
-grid-template-columns: 1fr 2fr;
-
-/* 分为三列，第一列为 100px，其余两列按 1:2 占父元素剩余宽度 */
-grid-template-columns: 100px 1fr 2fr;
-
-/* 分为三列，每列占比相等, 1fr 被重复3次 */
-grid-template-columns: repeat(3, 1fr);
-```
-
-#### 行 grid-template-rows
-
-```css
-/* 分为两行，每行占比相等 */
-grid-template-columns: 1fr 1fr;
-
-/* 分为两行，占比为 1:2 */
-grid-template-columns: 1fr 2fr;
-
-/* 分为三行，第一行为 100px，其余两行按 1:2 占父元素剩余宽度 */
-grid-template-columns: 100px 1fr 2fr;
-
-/* 分为三行，每行占比相等, 1fr 被重复3次 */
-grid-template-columns: repeat(3, 1fr);
-```
-
-#### 命名 grid-template-area
-
-命名单元格，相同名称的单元格被划分为一个区域
-
-#### 行列间距 grid-gap
-
-
-
-#### 行间距 grid-row-gap
-
-
-
-#### 列间距 grid-column-gap
-
-
-
-#### 水平排列 justify-items
-
-网格元素的水平排列方式
-
-#### 垂直排列 align-items
-
-网格元素的垂直排列方式
-
-#### 复合属性 place-items
-
-justify-items 和 align-items 的复合属性
-
-#### 水平排列 justify-content
-
-网格元素整体的水平排列方式，同弹性容器的 justify-content
-
-#### 垂直排列 align-content
-
-网格元素整体的垂直排列方式，同弹性容器的 align-content
-
-#### 复合属性 place-content
-
-justify-content 和 align-content 的复合属性
-
-### 网格元素样式
-
-#### 列位置 grid-column
-
-grid-column-start 和 grid-column-end 的复合属性
-
-```css
-/* 从列的第 1 条网格线开始，在第 5 条网格线结束 */
-grid-column: 1/5;
-
-/* 从列的第 1 条网格线开始，跨越 3 列 */
-grid-column: 1/span 3;
-```
-
-#### 行位置 grid-row
-
-grid-row-start 和 grid-row-end 的复合属性
-
-#### 复合属性 grid-area
-
-grid-column 和 grid-row 的复合属性
-
-```css
-/* 从行的第 1 条网格线和列的第 2 条网格线开始，在行的第 3 条网格线和列的第 4 条网格线结束 */
-grid-area: 1/2/3/4;
-```
-
-#### 水平排列 justify-self
-
-网格元素自身的水平排列方式
-
-#### 垂直排列 align-self
-
-网格元素自身的垂直排列方式
-
-#### 复合属性 place-self
-
-justify-self 和 align-self 的复合属性
 
 ## 文本居中
 
@@ -878,7 +759,7 @@ display: -webkit-box;
 }
 ```
 
-- mediatype: 媒体类型
+- type: 媒体类型
 
   - all: 用于所有设备
 
@@ -886,7 +767,7 @@ display: -webkit-box;
 
   - screen: 用于屏幕
 
-- media feature: 媒体特性
+- feature: 媒体特性
 
   - width: 宽度
 

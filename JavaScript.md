@@ -86,11 +86,11 @@ console.log(a) // 100
 
 ```js
 function fn1() {
-	var a = 2
-	function fn2() {
-		return a++
+  var a = 2
+  function fn2() {
+    return a++
 	}
-	return fn2
+  return fn2
 }
 
 var f = fn1() // 调用外部函数，产生一个闭包，并赋值给一个变量存放该闭包
@@ -100,9 +100,9 @@ var f = fn1() // 调用外部函数，产生一个闭包，并赋值给一个变
 
 ```js
 function fn(a, time) {
-	setTimeout(() => {
-		alert(a)
-	}, time)
+  setTimeout(() => {
+    alert(a)
+  }, time)
 }
 
 fn("延时输出", 2000) // 调用外部函数，产生一个闭包
@@ -1282,21 +1282,21 @@ dedupe([1, 2, 2, 3]) // [1, 2, 3]
 
 Set 结构的实例有 4 个遍历方法，可用于遍历成员
 
-- keys(): 返回键名的遍历器
+- keys: 返回键名的遍历器
 
-- values(): 返回键值的遍历器
+- values: 返回键值的遍历器
 
-- entries(): 返回键值对的遍历器
+- entries: 返回键值对的遍历器
 
-- forEach(): 使用回调函数遍历每个成员
+- forEach: 使用回调函数遍历每个成员
 
 Set 的遍历顺序就是插入顺序。使用 Set 保存一个回调函数列表，调用时就能保证按照添加顺序调用
 
-##### keys()、values()、entries()
+##### keys、values、entries
 
-keys()、values()、entries() 返回的都是遍历器对象 (详见 Iterator)
+keys、values、entries 返回的都是遍历器对象 (详见 Iterator)
 
-由于 Set 结构没有键名，只有键值 (或者说键名和键值是同一个值)，所以 keys() 和 values() 的行为完全一致
+由于 Set 结构没有键名，只有键值 (或者说键名和键值是同一个值)，所以 keys 和 values 的行为完全一致
 
 ```js
 let set = new Set(['red', 'green', 'blue'])
@@ -1318,7 +1318,7 @@ for (let item of set.values()) {
 // 'blue'
 ```
 
-下面的代码中，entries() 返回的遍历器同时包括键名和键值，所以每次输出一个数组，其中为两个完全相同的元素
+下面的代码中，entries 返回的遍历器同时包括键名和键值，所以每次输出一个数组，其中为两个完全相同的元素
 
 ```js
 let set = new Set(['red', 'green', 'blue'])
@@ -1332,7 +1332,7 @@ for (let item of set.entries()) {
 // ["blue", "blue"]
 ```
 
-Set 结构的实例默认可遍历，其默认遍历器生成函数就是它的 values() 方法
+Set 结构的实例默认可遍历，其默认遍历器生成函数就是它的 values 方法
 
 ```js
 Set.prototype[Symbol.iterator] === Set.prototype.values // true
@@ -1354,6 +1354,8 @@ for (let item of set) {
 
 ##### forEach()
 
+
+
 ### WeakSet
 
 
@@ -1364,9 +1366,15 @@ for (let item of set) {
 
 ### WeakMap
 
+
+
 ## Proxy
 
+
+
 ## Reflect
+
+
 
 ## Promise
 
@@ -1648,7 +1656,11 @@ console.log(4)
 
 ## Iterator
 
+
+
 ## Generator
+
+
 
 ## async & await
 
@@ -1734,6 +1746,8 @@ console.log(4)
 ```
 
 ## Class
+
+
 
 ## DOM
 
