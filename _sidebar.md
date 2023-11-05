@@ -10,6 +10,8 @@
 
 * [JavaScript](JavaScript.md)
 
+* [JavaScript数据结构与算法](JavaScript数据结构与算法.md)
+
 * [TypeScript](TypeScript.md)
 
 * [Ajax](Ajax.md)
@@ -24,7 +26,7 @@
 
 * [Vue](Vue.md)
 
-* [Weapp](Weapp.md)
+* [Wxapp](Wxapp.md)
 
 * [ECharts](ECharts.md)
 
@@ -32,12 +34,16 @@
 
 * [Exceljs](Exceljs.md)
 
-* [jQuery](jQuery.md)
+* [Python](Python.md)
 
 * [Java](Java.md)
 
-* [Python](Python.md)
+* [Java数据结构与算法](Java数据结构与算法.md)
 
-* [数据结构与算法](数据结构与算法.md)
+* [MySQL](MySQL.md)
+
+* [JDBC](JDBC.md)
+
+* [JavaWeb](JavaWeb.md)
 
 * [总结](总结.md)

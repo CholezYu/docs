@@ -161,7 +161,7 @@ function Queue() {
 
 ### queue.enqueue
 
-在插入操作时，需要比较元素的优先级，而不是先进先出。其他操作与普通队列相同（继承）。
+在插入操作时，需要比较元素的优先级，而不是先进先出。其他操作与普通队列相同。
 
 ```js
 Queue.prototype.enqueue = function (item, priority) {
@@ -207,7 +207,7 @@ function LinkedList() {
 }
 ```
 
-### linkList.append
+### link.append
 
 向链表尾部添加节点
 
@@ -232,7 +232,7 @@ LinkedList.prototype.append = function (data) {
 }
 ```
 
-### linkList.insert
+### link.insert
 
 向链表指定位置插入节点
 
@@ -265,7 +265,7 @@ LinkedList.prototype.insert = function (position, data) {
 }
 ```
 
-### linkList.indexOf
+### link.indexOf
 
 查找对应节点数据的索引
 
@@ -285,7 +285,7 @@ LinkedList.prototype.indexOf = function (data) {
 }
 ```
 
-### linkList.get
+### link.get
 
 返回对应索引的节点数据
 
@@ -305,7 +305,7 @@ LinkedList.prototype.get = function (position) {
 }
 ```
 
-### linkList.update
+### link.update
 
 修改对应索引的节点数据
 
@@ -325,7 +325,7 @@ LinkedList.prototype.update = function (position, data) {
 }
 ```
 
-### linkList.removeAt
+### link.removeAt
 
 移除对应索引的节点
 
@@ -356,7 +356,7 @@ LinkedList.prototype.removeAt = function (position) {
 }
 ```
 
-### linkList.remove
+### link.remove
 
 移除链表中的某个节点
 
@@ -368,7 +368,7 @@ LinkedList.prototype.remove = function (data) {
 }
 ```
 
-### linkList.isEmpty
+### link.isEmpty
 
 判断链表是否为空
 
@@ -378,7 +378,7 @@ LinkedList.prototype.isEmpty = function () {
 }
 ```
 
-### linkList.size
+### link.size
 
 返回链表的节点个数
 
@@ -388,7 +388,7 @@ LinkedList.prototype.size = function () {
 }
 ```
 
-### linkList.toString
+### link.toString
 
 将链表转为字符串
 
@@ -408,9 +408,111 @@ LinkedList.prototype.toString = function () {
 
 ## 双向链表
 
-### LinkList.append
+相比于单向链表，双向链表相连的过程是双向的。既可以从头部遍历到尾部，也可以从尾部遍历到头部。
 
+```js
+function LinkedList() {
+  this.head = null
+  this.tail = null
+  this.length = 0
+  
+  function Node(data) {
+    this.data = data
+    this.prev = null
+    this.next = null
+  }
+}
+```
 
+### link.append
+
+向链表尾部添加节点
+
+```js
+LinkedList.prototype.append = function (data) {
+  const node = new Node(data)
+  
+  if (this.length === 0) {
+    this.head = node
+    this.tail = node
+  }
+  else {
+    this.tail.next = node
+    node.prev = this.tail
+    this.tail = node
+  }
+  
+  this.length += 1
+}
+```
+
+### link.insert
+
+向链表指定位置插入节点
+
+### link.indexOf
+
+查找对应节点数据的索引
+
+### link.get
+
+返回对应索引的节点数据
+
+### link.update
+
+修改对应索引的节点数据
+
+### link.removeAt
+
+移除对应索引的节点
+
+### link.remove
+
+移除链表中的某个节点
+
+### link.isEmpty
+
+判断链表是否为空
+
+### link.size
+
+返回链表的节点个数
+
+### link.forwardToString
+
+将链表转为字符串（正向遍历链表）
+
+```js
+LinkedList.prototype.forwardToString = function () {
+  let current = this.head
+  let result = ""
+  
+  while (current) {
+    result += current.data + " "
+    current = current.next
+  }
+  
+  return result
+}
+```
+
+### link.reverseToString
+
+将链表转为字符串（反向遍历链表）
+
+```js
+LinkedList.prototype.reverseToString = function () {
+  let current = this.tail
+  let result = ""
+  
+  while (current) {
+    result += current.data + " "
+    current = current.prev
+  }
+  
+  return result
+}
+```
 
 ## 哈希表 Hash Table
 

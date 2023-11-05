@@ -10,35 +10,40 @@
 
 - [ ] [JavaScript](JavaScript.md)
 
-* [x] [TypeScript](TypeScript.md)
+* [ ] [JavaScript数据结构与算法](JavaScript数据结构与算法.md)
 
-- [x] [Ajax](Ajax.md)
+- [x] [TypeScript](TypeScript.md)
 
-* [x] [Node](Node.md)
+* [x] [Ajax](Ajax.md)
 
-- [ ] [Git](Git.md)
+- [x] [Node](Node.md)
 
-* [ ] [Webpack](Webpack.md)
+* [ ] [Git](Git.md)
 
-- [x] [React](React.md)
+- [ ] [Webpack](Webpack.md)
 
-* [x] [Vue](Vue.md)
+* [x] [React](React.md)
 
-- [ ] [Weapp](Weapp.md)
+- [x] [Vue](Vue.md)
 
-* [x] [ECharts](ECharts.md)
+* [ ] [Wxapp](Wxapp.md)
 
-- [ ] [Threejs](Threejs.md)
+- [x] [ECharts](ECharts.md)
 
-* [x] [Exceljs](Exceljs.md)
+* [ ] [Threejs](Threejs.md)
 
-- [ ] [jQuery](jQuery.md)
+- [x] [Exceljs](Exceljs.md)
 
-* [ ] [Java](Java.md)
+* [ ] [Python](Python.md)
 
-- [ ] [Python](Python.md)
+- [ ] [Java](Java.md)
 
-* [ ] [数据结构与算法](数据结构与算法.md)
+* [ ] [Java数据结构与算法](Java数据结构与算法.md)
 
-- [ ] [总结](总结.md)
+- [ ] [MySQL](MySQL.md)
 
+* [ ] [JDBC](JDBC.md)
+
+- [ ] [JavaWeb](JavaWeb.md)
+
+* [ ] [总结](总结.md)
