@@ -341,139 +341,174 @@ studentinfo(**d)
 
 ## 模块
 
+### import
+
+`import 模块名` 导入模块
+
+`模块名.函数名` 调用模块中的函数
+
+### 全局变量 \__name__
+
+`print(__name__)`
+
+如果当前模块单独执行,则输出 \__main__
+
+如果作为模块导入,则输出模块名
+
+实例: exercise/模块调用
+
+### from ... import ...
+
+```python
+from 模块名 import 函数名
+from 模块名 import* #导入所有标识符
+  # 在第一行定义__all__=['函数名'],则只导入括号中的函数
+import fibo as f # 用f代替模块名fibo
+  # f.PrintFib(5) # 表示fibo.PrintFib(5)
+from fibo import PrintFib as pf # 用pf代替函数名PrintFib
+  # pf(5) # 表示PrintFib(5)
 ```
- import语句
-　　　　import 模块名  # 导入模块
-　　　　模块名.函数名  # 调用模块中的函数
 
- 全局变量__name__
-　　　　print(__name__)
-　　　　　　如果当前模块单独执行,则输出__main__
-　　　　　　如果作为模块导入,则输出模块名
-　　　　实例: exercise/模块调用
+### 包
 
- from ... import ...
-　　　　from 模块名 import 函数名
-　　　　from 模块名 import* #导入所有标识符
-　　　　　　# 在第一行定义__all__=['函数名'],则只导入括号中的函数
-　　　　import fibo as f # 用f代替模块名fibo
-　　　　　　# f.PrintFib(5) # 表示fibo.PrintFib(5)
-　　　　from fibo import PrintFib as pf # 用pf代替函数名PrintFib
-　　　　　　# pf(5) # 表示PrintFib(5)
-
- 包
-　　　　from A.B import C
-　　　　　　# 从A包的B子包中导入C模块,通过C.d()调用C模块中的函数d
-　　　　from A.B.C import d
-　　　　　　# 直接导入函数d,通过d()调用该函数
-　　　　import A.B.C
-　　　　　　# 导入A包的B子包的C模块,用A.B.C.d调用函数d
-　　　　import A.B.C.d
-　　　　　　# 报错,无法通过import直接导入一个标识符
-
- 猴子补丁
-　　　　def Sum(a,b):
-　　　　def NewSum(*args):
-　　　　Sum=NewSum # 将NewSum赋给Sum,再调用Sum函数则执行NewSum函数
-
- 第三方模块
-　　　　在命令提示符输入'pip install 安装包名称'可获取并安装第三方模块
+```python
+from A.B import C
+  # 从A包的B子包中导入C模块,通过C.d()调用C模块中的函数d
+from A.B.C import d
+  # 直接导入函数d,通过d()调用该函数
+import A.B.C
+  # 导入A包的B子包的C模块,用A.B.C.d调用函数d
+import A.B.C.d
+  # 报错,无法通过import直接导入一个标识符
 ```
+
+### 猴子补丁
+
+```python
+def Sum(a,b):
+def NewSum(*args):
+Sum=NewSum # 将NewSum赋给Sum,再调用Sum函数则执行NewSum函数
+```
+
+### 第三方模块
+
+在命令提示符输入'pip install 安装包名称'可获取并安装第三方模块
 
 ## 局部变量与全局变量
 
+### global关键字
+
+```python
+def GlobalVar():
+  global x  # 声明在GlobalVar函数中使用的是全局变量x
+  x=100  # 将全局变量x的值赋为100
+  print(x)  # 输出全局变量
 ```
- 局部变量
-　　　　在一个函数中定义的变量就是局部变量(包括形参)
-　　　　作用域为从定义局部变量的位置到函数结束位置
 
- 全局变量
-　　　　在函数之外定义的变量就是全局变量
+### nonlocal关键字
 
- global关键字
-　　　　def GlobalVar():
-　　　　　　　　global x  # 声明在GlobalVar函数中使用的是全局变量x
-　　　　　　　　x=100  # 将全局变量x的值赋为100
-　　　　　　　　print(x)  # 输出全局变量
+声明在内层函数中使用外层函数定义的变量
 
- nonlocal关键字
-　　　　声明在内层函数中使用外层函数定义的变量
-　　　　　　def outer():
-　　　　　　　　x=10
-　　　　　　　　def inner():
-　　　　　　　　　　x=20  # 定义一个新的局部变量并赋值为20
-　　　　　　　　　　print(x)
-　　　　　　　　inner()
-　　　　　　　　print(x)
-　　　　　　outer()
-　　　　　　输出结果:20    10
+在内层函数仅获取外层函数中定义变量的值,可以省略nonlocal声明
 
-　　　　　　def outer():
-　　　　　　　　x=10
-　　　　　　　　def inner():
-　　　　　　　　　　nonlocal x  # 声明在inner函数中使用outer函数中的变量
-　　　　　　　　　　x=20  # 将outer函数中的变量x的值改为20
-　　　　　　　　　　print(x)
-　　　　　　　　inner()
-　　　　　　　　print(x)
-　　　　　　outer()
-　　　　　　输出结果:20    20
-　　　　在内层函数仅获取外层函数中定义变量的值,可以省略nonlocal声明
-　　　　在内层函数中需要修改外层函数中定义变量的值,必须使用nonlocal关键字
+在内层函数中需要修改外层函数中定义变量的值,必须使用nonlocal关键字
 
+```python
+def outer():
+  x=10
+  def inner():
+    x=20  # 定义一个新的局部变量并赋值为20
+    print(x)
+  inner()
+  print(x)
+outer()
+"""
+  20  10
+"""
+
+def outer():
+  x=10
+  def inner():
+    nonlocal x  # 声明在inner函数中使用outer函数中的变量
+    x=20  # 将outer函数中的变量x的值改为20
+    print(x)
+  inner()
+  print(x)
+outer()
+"""
+  20  20
+"""
 ```
 
 ## 函数的高级应用
 
+### 递归函数
+
+在一个函数内部通过调用自己来完成一个问题的求解
+
+必须要有结束递归的条件
+
+适合当问题规模较小时求解
+
+### 高阶函数
+
+把函数作为参数
+
+```python
+def FunAdd(f,x,y):
+  return f(x)+f(y)
+def Square(x):
+  return x**2
+def Cube(x):
+  return x**3
+print(FunAdd(Square,3,-5))  # 计算3^2+(-5)^2
+print(FunAdd(Cube,3,-5))  # 计算3^3+(-5)^3
 ```
- 递归函数
-　　　　在一个函数内部通过调用自己来完成一个问题的求解
-　　　　必须要有结束递归的条件
-　　　　适合当问题规模较小时求解
 
- 高阶函数
-　　　　把函数作为参数
-　　　　　　def FunAdd(f,x,y):
-　　　　　　　　return f(x)+f(y)
-　　　　　　def Square(x):
-　　　　　　　　return x**2
-　　　　　　def Cube(x):
-　　　　　　　　return x**3
-　　　　　　print(FunAdd(Square,3,-5))  # 计算3^2+(-5)^2
-　　　　　　print(FunAdd(Cube,3,-5))  # 计算3^3+(-5)^3
+### lambda函数
 
- lambda函数
-　　　　匿名函数,不适用def定义函数的形式
-　　　　实现比较简单的功能
-　　　　　　def FunAdd(f,x,y):
-　　　　　　　　return f(x)+f(y)
-　　　　　　print(FunAdd(lambda x:x**2,3,-5))  # 计算3^2+(-5)^2
-　　　　　　print(FunAdd(lambda x:x**3,3,-5))  # 计算3^3+(-5)^3
+匿名函数,不适用def定义函数的形式
 
-　　　　　　fun=lambda x:x**2
-　　　　　　print(fun(3))
-　　　　　　输出结果:9
+实现比较简单的功能
 
- 闭包
-　　　　声明在一个函数中的函数,叫做闭包函数
-　　　　定义在外层函数中但由内层函数使用的变量称为自由变量
-　　　　外层函数必须返回内层函数的引用,这样每调用一次外层函数才会形成一个闭包
-　　　　　　def outer(x):
-　　　　　　　　y=10
-　　　　　　　　def inner(z):
-　　　　　　　　　　　　nonloal x,y
-　　　　　　　　　　　　return x+y+z
-　　　　　　　　return inner
-　　　　　　f=outer(5)  # 闭包函数
-　　　　　　g=outer(50)  # 闭包函数
-　　　　　　print(f(20))  # 即print(outer(5)(20))
-　　　　　　print(g(20))  # 即print(outer(50)(20))
+```python
+def FunAdd(f,x,y):
+  return f(x)+f(y)
+print(FunAdd(lambda x:x**2,3,-5))  # 计算3^2+(-5)^2
+print(FunAdd(lambda x:x**3,3,-5))  # 计算3^3+(-5)^3
 
- 装饰器
-　　　　可以在不修改已有函数的情况下向已有函数中注入代码
-　　　　一个装饰器可为多个函数注入代码,一个函数也可注入多个装饰器代码
-　　　　实例: exercise/装饰器
+fun=lambda x:x**2
+print(fun(3)) # 9
 ```
+
+### 闭包
+
+声明在一个函数中的函数,叫做闭包函数
+
+定义在外层函数中但由内层函数使用的变量称为自由变量
+
+外层函数必须返回内层函数的引用,这样每调用一次外层函数才会形成一个闭包
+
+```python
+def outer(x):
+  y=10
+  def inner(z):
+    nonloal x,y
+    return x+y+z
+  return inner
+f=outer(5)  # 闭包函数
+g=outer(50)  # 闭包函数
+print(f(20))  # 即print(outer(5)(20))
+print(g(20))  # 即print(outer(50)(20))
+```
+
+### 装饰器
+
+可以在不修改已有函数的情况下向已有函数中注入代码
+
+一个装饰器可为多个函数注入代码,一个函数也可注入多个装饰器代码
+
+实例: exercise/装饰器
 
 ## 类与属性
 

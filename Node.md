@@ -1,19 +1,25 @@
 # Node
 
-## npm
+## 包管理
 
 ### npm
 
 - 查看下载源: `npm get registry`
+
 - 修改下载源: `npm config set registry https://registry.npmmirror.com`
+
 - 安装依赖: `npm install [package]`
+
 - 全局依赖: `npm install [package] -g`
+
 - 生产依赖: `npm install [package] --save`
 
   - 简写:  `npm i [package] -S`
+
 - 开发依赖: `npm install [package] --save-dev`
 
   - 简写:  `npm i [package] -D`
+
 - 删除依赖: `npm uninstall [package]`
 
 - 添加用户名和密码: `npm adduser`
@@ -40,7 +46,7 @@
 
 ## process
 
-### process.exit()
+### process.exit
 
 结束当前进程
 
@@ -53,7 +59,7 @@ process.exit()
 console.log(3)
 ```
 
-### process.nextTick()
+### process.nextTick
 
 向 next tick 队列中添加一个任务，优先级会高于微任务
 
@@ -77,7 +83,7 @@ console.log(4)
 
 ## path
 
-### path.resolve()
+### path.resolve
 
 生成绝对路径
 
@@ -88,7 +94,7 @@ path.resolve(__dirname)               // "E:/0215/index"
 path.resolve(__dirname, "./file.txt") // "E:/0215/index/file.txt"
 ```
 
-### path.join()
+### path.join
 
 拼接多个路径
 
@@ -98,7 +104,7 @@ const path = require("node:path")
 path.join("./src", "./js", "./index.js") // src/js/index.js
 ```
 
-### path.extname()
+### path.extname
 
 获取文件的扩展名
 
@@ -110,7 +116,7 @@ path.extname("./public/index.html") // .html
 
 ## url
 
-### url.parse()
+### url.parse
 
 解析网络路径并返回相关信息 (旧版 API)
 
@@ -134,7 +140,7 @@ url.parse("http://localhost:1118/user?name=xiaoming&age=20", true)
 */
 ```
 
-### new URL()
+### new URL
 
 解析网络路径并返回相关信息 (新版 API)
 
@@ -159,7 +165,7 @@ const url = new URL("http://localhost:1118/user?name=xiaoming&age=20")
 
 ## fs
 
-### fs.readFileSync()
+### fs.readFileSync
 
 同步读取文件，不推荐
 
@@ -169,12 +175,13 @@ const path = require("node:path")
 
 try {
   const data = fs.readFileSync(path.resolve(__dirname, "./file.txt"), "utf-8")
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.readFile()
+### fs.readFile
 
 异步读取文件 (callback)，不推荐
 
@@ -182,9 +189,7 @@ try {
 const fs = require("node:fs")
 const path = require("node:path")
 
-fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8", (error, data) => {
-  if (error) throw error
-})
+fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8", (error, data) => {})
 ```
 
 异步读取文件 (Promise)，推荐
@@ -195,9 +200,7 @@ const path = require("node:path")
 
 fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8")
   .then(data => {})
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
 异步读取文件 (async)，推荐
@@ -209,13 +212,14 @@ const path = require("node:path")
 ;(async () => {
   try {
     const data = await fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8")
-  } catch (error) {
-    throw error
+  }
+  catch {
+    // ...
   }
 })()
 ```
 
-### fs.writeFileSync()
+### fs.writeFileSync
 
 同步写入文件
 
@@ -225,12 +229,13 @@ const path = require("node:path")
 
 try {
   fs.writeFileSync(path.resolve(__dirname, "./file.txt"), "hello world")
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.writeFile()
+### fs.writeFile
 
 异步写入文件
 
@@ -239,12 +244,10 @@ const fs = require("node:fs/promises")
 const path = require("node:path")
 
 fs.writeFile(path.resolve(__dirname, "./file.txt"), "hello world")
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
-### fs.appendFileSync()
+### fs.appendFileSync
 
 同步追加内容，若文件不存在，则创建该文件
 
@@ -254,12 +257,13 @@ const path = require("node:path")
 
 try {
   fs.appendFileSync(path.resolve(__dirname, "./file.txt"), "hello world")
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.appendFile()
+### fs.appendFile
 
 异步追加内容，若文件不存在，则创建该文件
 
@@ -268,12 +272,10 @@ const fs = require("node:fs/promises")
 const path = require("node:path")
 
 fs.appendFile(path.resolve(__dirname, "./file.txt"), "hello world")
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
-### fs.unlinkSync()
+### fs.unlinkSync
 
 同步删除文件
 
@@ -283,12 +285,13 @@ const path = require("node:path")
 
 try {
   fs.unlinkSync(path.resolve(__dirname, "./file.txt"))
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.unlink()
+### fs.unlink
 
 异步删除文件
 
@@ -297,12 +300,10 @@ const fs = require("node:fs/promises")
 const path = require("node:path")
 
 fs.unlink(path.resolve(__dirname, "./file.txt"))
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
-### fs.copyFileSync()
+### fs.copyFileSync
 
 同步复制文件
 
@@ -315,12 +316,13 @@ try {
     path.resolve(__dirname, "./file.txt"),
     path.resolve(__dirname, "./docs.txt")
   )
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.copyFile()
+### fs.copyFile
 
 异步复制文件
 
@@ -331,12 +333,10 @@ const path = require("node:path")
 fs.copyFile(
   path.resolve(__dirname, "./file.txt"),
   path.resolve(__dirname, "./docs.txt")
-).catch(error => {
-  throw error
-})
+).catch(error => {})
 ```
 
-### fs.readdirSync()
+### fs.readdirSync
 
 同步读取目录
 
@@ -346,12 +346,13 @@ const path = require("node:path")
 
 try {
   const data = fs.readdirSync(path.resolve(__dirname, "./dir"))
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.readdir()
+### fs.readdir
 
 异步读取目录
 
@@ -361,12 +362,10 @@ const path = require("node:path")
 
 fs.readdir(path.resolve(__dirname, "./dir"))
   .then(data => {})
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
-### fs.mkdirSync()
+### fs.mkdirSync
 
 同步创建目录
 
@@ -378,12 +377,13 @@ try {
   fs.mkdirSync(path.resolve(__dirname, "./dir/src"), {
     recursive: true /* 执行递归创建 */
   })
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.mkdir()
+### fs.mkdir
 
 异步创建目录
 
@@ -393,12 +393,10 @@ const path = require("node:path")
 
 fs.mkdir(path.resolve(__dirname, "./dir/src"), {
   recursive: true /* 执行递归创建 */
-}).catch(error => {
-  throw error
-})
+}).catch(error => {})
 ```
 
-### fs.rmdirSync()
+### fs.rmdirSync
 
 同步删除目录
 
@@ -408,12 +406,13 @@ const path = require("node:path")
 
 try {
   fs.rmdirSync(path.resolve(__dirname, "./dir"))
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.rmdir()
+### fs.rmdir
 
 异步删除目录
 
@@ -422,12 +421,10 @@ const fs = require("node:fs/promises")
 const path = require("node:path")
 
 fs.rmdir(path.resolve(__dirname, "./dir"))
-  .catch(error => {
-    throw error
-  })
+  .catch(error => {})
 ```
 
-### fs.rmSync()
+### fs.rmSync
 
 同步删除文件/目录
 
@@ -440,12 +437,13 @@ try {
     recursive: true, /* 执行递归删除 */
     force: true /* 忽略路径导致的异常 */
   })
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.rm()
+### fs.rm
 
 异步删除文件/目录
 
@@ -456,12 +454,10 @@ const path = require("node:path")
 fs.rm(path.resolve(__dirname, "./dir"), {
   recursive: true, /* 执行递归删除 */
   force: true /* 忽略路径导致的异常 */
-}).catch(error => {
-  throw error
-})
+}).catch(error => {})
 ```
 
-### fs.renameSync()
+### fs.renameSync
 
 同步重命名文件/目录
 
@@ -474,12 +470,13 @@ try {
     path.resolve(__dirname, "./file.txt"),
     path.resolve(__dirname, "./file.md")
   )
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.rename()
+### fs.rename
 
 异步重命名文件/目录
 
@@ -490,12 +487,10 @@ const path = require("node:path")
 fs.rename(
   path.resolve(__dirname, "./dir"),
   path.resolve(__dirname, "./src")
-).catch(error => {
-  throw error
-})
+).catch(error => {})
 ```
 
-### fs.statSync()
+### fs.statSync
 
 同步判断是否为文件/目录
 
@@ -506,12 +501,13 @@ const path = require("node:path")
 try {
   const data = fs.statSync(path.resolve(__dirname, "./file.txt"))
   data.isFile()
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.stat()
+### fs.stat
 
 异步判断是否为文件/目录
 
@@ -520,15 +516,11 @@ const fs = require("node:fs/promises")
 const path = require("node:path")
 
 fs.stat(path.resolve(__dirname, "./dir"))
-  .then(data => {
-    data.isDirectory()
-  })
-  .catch(error => {
-    throw error
-  })
+  .then(data => data.isDirectory())
+  .catch(error => {})
 ```
 
-### fs.existsSync()
+### fs.existsSync
 
 同步判断文件/目录是否存在
 
@@ -538,12 +530,13 @@ const path = require("node:path")
 
 try {
   const data = fs.existsSync(path.resolve(__dirname, "./file.txt"))
-} catch (error) {
-  throw error
+}
+catch {
+  // ...
 }
 ```
 
-### fs.exists()
+### fs.exists
 
 异步判断文件/目录是否存在，**已弃用**
 
@@ -551,7 +544,7 @@ try {
 
 ## buffer
 
-### Buffer.alloc()
+### Buffer.alloc
 
 创建一个 buffer
 
@@ -571,7 +564,7 @@ const buf = Buffer.alloc(64 * 1024)
 fs.writeFileSync("file", buf)
 ```
 
-### Buffer.allocUnsafe()
+### Buffer.allocUnsafe
 
 创建一个 buffer，可以快速创建，但是不安全
 
@@ -581,7 +574,7 @@ const { Buffer } = require("node:buffer")
 const buf = Buffer.allocUnsafe(5) // <Buffer 00 00 00 00 00>
 ```
 
-### Buffer.from()
+### Buffer.from
 
 将字符串转换为 buffer
 
@@ -626,7 +619,7 @@ stream.on("end", () => {})
 
 ## events
 
-### emitter.on()
+### emitter.on
 
 监听自定义事件
 
@@ -637,7 +630,7 @@ const emitter = new EventEmitter()
 emitter.on("myEvent", args => {})
 ```
 
-### emitter.once()
+### emitter.once
 
 监听自定义事件，触发一次后移除监听器
 
@@ -648,11 +641,11 @@ const emitter = new EventEmitter()
 emitter.once("myEvent", args => {})
 ```
 
-### emitter.addListener()
+### emitter.addListener
 
 监听自定义事件，`emitter.on()` 的别名
 
-### emitter.emit()
+### emitter.emit
 
 触发事件监听器，并将附加参数传递给监听器回调
 
@@ -663,7 +656,7 @@ const emitter = new EventEmitter()
 emitter.emit("myEvent", [...args])
 ```
 
-### emitter.off()
+### emitter.off
 
 移除事件监听器
 
@@ -680,11 +673,11 @@ emitter.on("myEvent", bListener)
 emitter.off("myEvent", bListener) // myEvent [aListener]
 ```
 
-### emitter.removeListener()
+### emitter.removeListener
 
 移除事件监听器，`emitter.off()` 的别名
 
-### emitter.removeAllListeners()
+### emitter.removeAllListeners
 
 移除所有事件监听器
 
@@ -698,7 +691,7 @@ emitter.on("myEvent", () => {})
 emitter.removeAllListeners() // myEvent []
 ```
 
-### emitter.listeners()
+### emitter.listeners
 
 获取监听器队列
 
@@ -715,7 +708,7 @@ emitter.on("myEvent", bListener)
 emitter.listeners("myEvent") // myEvent [aListener, bListener]
 ```
 
-### emitter.listenerCount()
+### emitter.listenerCount
 
 获取监听器数量
 
@@ -729,7 +722,7 @@ emitter.on("myEvent", () => {})
 emitter.listenerCount("myEvent") // 2
 ```
 
-### emitter.eventNames()
+### emitter.eventNames
 
 获取自定义事件队列
 
@@ -746,7 +739,7 @@ emitter.eventNames() // ['aEvent', 'bEvent', 'cEvent']
 
 ## http
 
-### http.createServer()
+### http.createServer
 
 创建服务器
 
@@ -770,7 +763,7 @@ const server = http.createServer((req, res) => {
 })
 ```
 
-### res.setHeader()
+### res.setHeader
 
 设置响应头
 
@@ -780,7 +773,7 @@ const server = http.createServer((req, res) => {
 })
 ```
 
-### res.write()
+### res.write
 
 发送一块响应体，可以连续发送响应体数据块(chunk)
 
@@ -790,7 +783,7 @@ const server = http.createServer((req, res) => {
 })
 ```
 
-### res.end()
+### res.end
 
 结束响应进程
 
@@ -802,7 +795,7 @@ const server = http.createServer((req, res) => {
 
 ## express
 
-### app.get()
+### app.get
 
 ```js
 const express = require("express")
@@ -815,7 +808,7 @@ app.get("/user", (req, res) => {})
 app.listen(1118, () => { /* 服务器启动后执行 */ })
 ```
 
-### app.post()
+### app.post
 
 ```js
 const express = require("express")
@@ -866,7 +859,7 @@ app.get("/user/:name", (req, res) => {
 })
 ```
 
-### req.get()
+### req.get
 
 获取请求头中的数据
 
@@ -932,7 +925,7 @@ app.get("/user", (req, res) => {
 */
 ```
 
-### res.end()
+### res.end
 
 结束响应进程。用于不发送任何数据的情况下，快速结束响应
 
@@ -942,7 +935,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.send()
+### res.send
 
 发送响应体，并结束响应进程
 
@@ -954,7 +947,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.sendFile()
+### res.sendFile
 
 发送文件(绝对路径)，并结束响应进程
 
@@ -968,7 +961,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.json()
+### res.json
 
 发送 JSON 数据，并结束响应进程
 
@@ -980,7 +973,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.redirect()
+### res.redirect
 
 重定向请求(跳转路径)
 
@@ -990,7 +983,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.cookie()
+### res.cookie
 
 设置 Cookie，并将其携带在响应头中
 
@@ -1000,7 +993,7 @@ app.get("set-cookie", (req, res) => {
 })
 ```
 
-### res.clearCookie()
+### res.clearCookie
 
 清除 Cookie
 
@@ -1010,7 +1003,7 @@ app.get("/del-cookie", (req, res) => {
 })
 ```
 
-### res.status()
+### res.status
 
 设置响应状态码
 
@@ -1020,7 +1013,7 @@ app.get("/", (req, res) => {
 })
 ```
 
-### res.sendStatus()
+### res.sendStatus
 
 发送响应状态码，并结束响应进程
 
@@ -1078,9 +1071,7 @@ const static = express.static
 app.use(static("./static")) // 设置静态资源目录
 ```
 
-#### express.Router()
-
-配置路由
+#### express.Router
 
 **一级路由**
 

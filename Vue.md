@@ -74,7 +74,6 @@ props: ["name", "age"]
 
 - validator：自定义验证函数
 
-
 ```js
 props: {
   name: String,
@@ -694,7 +693,7 @@ window 提供了 hashchange 事件，可以监听 hash 地址的变化
 ```js
 window.onhashchange = event => {
   event.newURL.split("#")[1] // "/home"
-})
+}
 ```
 
 #### HTML5 模式

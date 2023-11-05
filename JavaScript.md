@@ -1,5 +1,88 @@
 # JavaScript
 
+## 强制转换原理
+
+### Number
+
+参数为基本类型，按基本转换规则转换。
+
+参数为对象，调用 valueOf 方法（默认情况下返回对象本身）：
+
+- 如果 valueOf 返回基本类型值，则对该值使用 Number 函数；
+
+- 如果 valueOf 返回的是对象，则改为调用 toString 方法。
+
+- 如果 toString 返回基本类型值，则对该值使用 Number 函数；
+
+- 如果 toString 返回的是对象，则报错。
+
+```js
+Number({ a: 1 }) // NaN
+
+// 等价于
+
+function _Number(value) {
+  return typeof value.valueOf() === "object"
+    ? typeof value.toString() === "object"
+      ? new TypeError("Cannot convert object to primitive value")
+      : Number(value.toString())
+    : Number(value.valueOf())
+}
+
+_Number({ a: 1 }) // NaN
+
+// 转换过程：{ a: 1 } => [object Object] => NaN
+```
+
+重新定义 valueOf 与 toString 方法。
+
+```js
+Number({
+  valueOf() {
+    return 5
+  }
+}) // valueOf 返回基本类型值，直接返回 Number(5) => 5
+
+Number({
+  toString() {
+    return "z"
+  }
+}) // valueOf 返回对象本身，改为调用 toString，返回 Number("z") => NaN
+
+Number({
+  valueOf() {
+    return {}
+  },
+  toString() {
+    return {}
+  }
+}) // valueOf 和 toString 都返回对象，报错
+```
+
+### String
+
+参数为基本类型，按基本转换规则转换。
+
+参数为对象，调用 toString 方法：
+
+- 如果 toString 返回基本类型值，则对该值使用 String 函数；
+
+- 如果 toString 返回的是对象，则改为调用 valueOf 方法。
+
+- 如果 valueOf 返回基本类型值，则对该值使用 String 函数；
+
+- 如果 valueOf 返回的是对象，则报错。
+
+```js
+String({ a: 1 }) // [object Object]
+
+// 等价于
+
+String({ a: 1 }.toString()) // [object Object]
+```
+
+同样可以重新定义 valueOf 与 toString 方法。如果 valueOf 和 toString 都返回对象，则报错。
+
 ## 函数
 
 ### 执行上下文
@@ -243,39 +326,15 @@ fun.bind({}).name // "bound fun"
 
 如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
 
-### in 关键字
+### descriptor
 
-`prop in obj`
+- value: 属性值。
 
-判断一个属性是否在一个对象或其原型链上。
+- writable: 是否可修改。
 
-### instanceof 关键字
+- enumerable: 是否可枚举。
 
-`obj instanceof constructor`
-
-判断一个构造函数的原型对象是否在某个实例对象的原型链上。
-
-### obj.hasOwnProperty
-
-`obj.hasOwnProperty(prop)`
-
-判断一个属性是否是对象自身的属性。
-
-### obj.isPrototypeOf
-
-`obj.isPrototypeOf(other)`
-
-判断一个对象是否是另一个对象的原型（在其原型链上）。
-
-### descriptor 描述符
-
-- value: 属性值，默认为 undefined。
-
-- writable: 是否可修改，默认为 false。
-
-- enumerable: 是否可枚举，默认为 false。
-
-- configurable: 是否可删除，默认为 false。
+- configurable: 是否可配置。
 
 - get: getter 函数。
 
@@ -695,7 +754,6 @@ arr.lastIndexOf('g') // -1
 
 遍历数组。
 
-
 ```js
 const arr = [4, 9, 16, 25]
 
@@ -721,7 +779,6 @@ newArr // [16, 25]
 `arr.map(callback(item, [index], [arr]))`
 
 遍历数组，映射出一个新数组。
-
 
 ```js
 const arr = [4, 9, 16, 25]
