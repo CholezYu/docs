@@ -10,6 +10,8 @@
 
 * [JavaScript](JavaScript.md)
 
+* [JavaScript 算法](JavaScript 算法.md)
+
 * [TypeScript](TypeScript.md)
 
 * [Ajax](Ajax.md)
@@ -28,6 +30,8 @@
 
 * [ECharts](ECharts.md)
 
+* [WebGL](WebGL.md)
+
 * [Threejs](Threejs.md)
 
 * [Exceljs](Exceljs.md)
@@ -36,14 +40,12 @@
 
 * [Java](Java.md)
 
+* [Java 算法](Java 算法.md)
+
 * [MySQL](MySQL.md)
 
 * [JDBC](JDBC.md)
 
 * [JavaWeb](JavaWeb.md)
-
-* [数据结构与算法-JavaScript](数据结构与算法-JavaScript.md)
-
-* [数据结构与算法-Java](数据结构与算法-Java.md)
 
 * [总结](总结.md)

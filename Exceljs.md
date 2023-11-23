@@ -1,6 +1,8 @@
 # Exceljs
 
-## Style
+## 单元格样式
+
+单元格可以设置的样式。
 
 ```ts
 interface Style {
@@ -24,7 +26,7 @@ interface Style {
 }
 ```
 
-## Font
+### 字体样式
 
 ```ts
 interface Font {
@@ -66,7 +68,7 @@ interface Font {
 }
 ```
 
-## Alignment
+### 文本对齐
 
 ```ts
 interface Alignment {
@@ -93,7 +95,7 @@ interface Alignment {
 }
 ```
 
-## Borders
+### 边框样式
 
 ```ts
 interface Borders {
@@ -122,7 +124,7 @@ interface BorderDiagonal extends Border {
 }
 ```
 
-## Fill
+### 填充
 
 ```ts
 type Fill = FillPattern | FillGradientAngle | FillGradientPath
@@ -172,4 +174,139 @@ interface FillGradientPath {
   // 渐变颜色序列
 	stops: { position: number; color: { argb: string; theme: number } }[]
 }
+```
+
+## 导出
+
+### 封装函数
+
+导出表格，第一列为序号，第二列为图片。
+
+```js
+import { Workbook } from "exceljs"
+import { saveAs } from "file-saver/dist/FileSaver"
+import { urlToBase64 } from "@/utils/urlToBase64" // 百度搜
+
+
+export function excelExport(data, headers, title) {
+  return new Promise(async (resolve, reject) => {
+    const workbook = new Workbook()
+    
+    const sheet = workbook.addWorksheet("sheet")
+    
+    sheet.columns = headers
+    
+    sheet.addRows(data)
+    
+    for (let i = 1; i <= headers.length; i++) { // 列
+      for (let j = 1; j <= data.length + 1; j++) { // 行
+        // 除表头外所有单元格高度
+        if (j > 1) sheet.getRow(j).height = 140
+        
+        // 所有单元格水平垂直居中
+        sheet.getRow(j).getCell(i).alignment = {
+          vertical: "middle",
+          horizontal: "center",
+          wrapText: true
+        }
+        
+        // 所有单元格字体样式
+        sheet.getRow(j).getCell(i).font = {
+          name: "Arial Unicode MS",
+          size: 10
+        }
+      }
+      
+      // 表头字体加粗
+      sheet.getRow(1).getCell(i).font.bold = true
+    }
+    
+    // [empty, "图片", url, url, url ...]
+    const urls = sheet.getColumn(2).values.slice(2)
+    
+    await (async function () {
+      for (let row = 1; row <= urls.length; row++) {
+        // url => base64
+        const base64 = await urlToBase64(urls[row - 1])
+        
+        // 创建图片
+        const imageId = workbook.addImage({
+          base64: base64.toString(),
+          extension: "jpeg"
+        })
+        
+        // 清空 url 文本，只显示图片
+        sheet.getCell(`B${ row + 1 }`).value = ""
+        
+        // 添加图片
+        sheet.addImage(imageId, {
+          tl: { row, col: 1 },
+          ext: { width: 120, height: 120 }
+        })
+      }
+    })()
+    
+    // 导出 Excel
+    await workbook.xlsx.writeBuffer().then(buffer => {
+      const _file = new Blob([buffer], { type: "application/octet-stream" })
+      saveAs(_file, `${ title }.xlsx`)
+    })
+    
+    resolve()
+  })
+}
+```
+
+### 配置
+
+传入配置，表头的 key 必须与表格数据的字段一一对应。
+
+```js
+const toExcelData = [
+  {
+    index: 1,
+    banner: "",
+    title: "vmagiccare丝绒抗静电梳气囊梳子气垫梳女士梳头蓬松头皮按摩",
+    goods_sku: "朱砂红\n咖啡色\n藏蓝色",
+    bottom_price: "9.90",
+    max_price: "9.90",
+    commission_ratio: "12.00",
+    partner_url: "",
+    delivery_place: "48小时内从广东省发货，包邮",
+    platform_product_id: "3646387021733308549",
+    creadit_goods: 97,
+    creadit_service: 100,
+    creadit_logistics: 94
+  },
+  {
+    // ...
+  }
+]
+
+const headers = [
+  { header: "序号", key: "index", width: 11 },
+  { header: "图片", key: "banner", width: 18.5 },
+  { header: "产品名称", key: "title", width: 34 },
+  { header: "产品规格", key: "goods_sku", width: 50 },
+  { header: "SKU最低价", key: "bottom_price", width: 33 },
+  { header: "SKU最高价", key: "max_price", width: 33 },
+  { header: "佣金比例", key: "commission_ratio", width: 33 },
+  { header: "佣金链接", key: "partner_url", width: 40 },
+  { header: "发货地点", key: "delivery_place", width: 33 },
+  { header: "商品编号", key: "platform_product_id", width: 33 },
+  { header: "商品体验分", key: "creadit_goods", width: 33 },
+  { header: "商家服务分", key: "creadit_service", width: 33 },
+  { header: "物流体验分", key: "creadit_logistics", width: 33 }
+]
+
+loading = true
+
+excelExport(toExcelData, headers, "产品信息表").then(() => {
+  loading = false
+  
+  Message({
+    type: "success",
+    message: "导出成功"
+  })
+})
 ```
