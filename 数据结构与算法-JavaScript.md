@@ -7,14 +7,14 @@
 后进先出（LIFO，Last In First Out）。栈顶进，栈顶出。
 
 ```js
-function Stack() { 
+function Stack() {
   this.items = []
 }
 ```
 
 ### stack.push
 
-向栈顶添加元素
+向栈顶添加元素。
 
 ```js
 Stack.prototype.push = function (item) {
@@ -24,7 +24,7 @@ Stack.prototype.push = function (item) {
 
 ### stack.pop
 
-移除栈顶的元素
+移除栈顶的元素。
 
 ```js
 Stack.prototype.pop = function () {
@@ -34,7 +34,7 @@ Stack.prototype.pop = function () {
 
 ### stack.peek
 
-返回栈顶的元素
+返回栈顶的元素。
 
 ```js
 Stack.prototype.peek = function () {
@@ -44,7 +44,7 @@ Stack.prototype.peek = function () {
 
 ### stack.isEmpty
 
-判断栈是否为空
+判断栈是否为空。
 
 ```js
 Stack.prototype.isEmpty = function () {
@@ -54,7 +54,7 @@ Stack.prototype.isEmpty = function () {
 
 ### stack.size
 
-返回栈的元素个数
+返回栈的元素个数。
 
 ```js
 Stack.prototype.size = function () {
@@ -64,7 +64,7 @@ Stack.prototype.size = function () {
 
 ### stack.toString
 
-将栈转为字符串
+将栈转为字符串。
 
 ```js
 Stack.prototype.toString = function () {
@@ -86,7 +86,7 @@ function Queue() {
 
 ### queue.enqueue
 
-向队列尾部插入元素
+向队列尾部插入元素。
 
 ```js
 Queue.prototype.enqueue = function (item) {
@@ -96,7 +96,7 @@ Queue.prototype.enqueue = function (item) {
 
 ### queue.dequeue
 
-移除队列的第一个元素
+移除队列的第一个元素。
 
 ```js
 Queue.prototype.dequeue = function () {
@@ -106,7 +106,7 @@ Queue.prototype.dequeue = function () {
 
 ### quque.front
 
-返回队列的第一个元素
+返回队列的第一个元素。
 
 ```js
 Queue.prototype.front = function () {
@@ -116,7 +116,7 @@ Queue.prototype.front = function () {
 
 ### queue.isEmpty
 
-判断队列是否为空
+判断队列是否为空。
 
 ```js
 Queue.prototype.isEmpty = function () {
@@ -126,7 +126,7 @@ Queue.prototype.isEmpty = function () {
 
 ### queue.size
 
-返回队列的元素个数
+返回队列的元素个数。
 
 ```js
 Queue.prototype.size = function () {
@@ -136,7 +136,7 @@ Queue.prototype.size = function () {
 
 ### queue.toString
 
-将队列转为字符串
+将队列转为字符串。
 
 ```js
 Queue.prototype.toString = function () {
@@ -209,7 +209,7 @@ function LinkedList() {
 
 ### link.append
 
-向链表尾部添加节点
+向链表尾部添加节点。
 
 ```js
 LinkedList.prototype.append = function (data) {
@@ -234,7 +234,7 @@ LinkedList.prototype.append = function (data) {
 
 ### link.insert
 
-向链表指定位置插入节点
+向链表指定位置插入节点。
 
 ```js
 LinkedList.prototype.insert = function (position, data) {
@@ -267,7 +267,7 @@ LinkedList.prototype.insert = function (position, data) {
 
 ### link.indexOf
 
-查找对应节点数据的索引
+查找对应节点数据的索引。
 
 ```js
 LinkedList.prototype.indexOf = function (data) {
@@ -287,7 +287,7 @@ LinkedList.prototype.indexOf = function (data) {
 
 ### link.get
 
-返回对应索引的节点数据
+返回对应索引的节点数据。
 
 ```js
 LinkedList.prototype.get = function (position) {
@@ -307,7 +307,7 @@ LinkedList.prototype.get = function (position) {
 
 ### link.update
 
-修改对应索引的节点数据
+修改对应索引的节点数据。
 
 ```js
 LinkedList.prototype.update = function (position, data) {
@@ -327,7 +327,7 @@ LinkedList.prototype.update = function (position, data) {
 
 ### link.removeAt
 
-移除对应索引的节点
+移除对应索引的节点。
 
 ```js
 LinkedList.prototype.removeAt = function (position) {
@@ -358,7 +358,7 @@ LinkedList.prototype.removeAt = function (position) {
 
 ### link.remove
 
-移除链表中的某个节点
+移除链表中的某个节点。
 
 ```js
 LinkedList.prototype.remove = function (data) {
@@ -370,7 +370,7 @@ LinkedList.prototype.remove = function (data) {
 
 ### link.isEmpty
 
-判断链表是否为空
+判断链表是否为空。
 
 ```js
 LinkedList.prototype.isEmpty = function () {
@@ -380,7 +380,7 @@ LinkedList.prototype.isEmpty = function () {
 
 ### link.size
 
-返回链表的节点个数
+返回链表的节点个数。
 
 ```js
 LinkedList.prototype.size = function () {
@@ -390,7 +390,7 @@ LinkedList.prototype.size = function () {
 
 ### link.toString
 
-将链表转为字符串
+将链表转为字符串。
 
 ```js
 LinkedList.prototype.toString = function () {
@@ -426,7 +426,7 @@ function LinkedList() {
 
 ### link.append
 
-向链表尾部添加节点
+向链表尾部添加节点。
 
 ```js
 LinkedList.prototype.append = function (data) {
@@ -448,39 +448,156 @@ LinkedList.prototype.append = function (data) {
 
 ### link.insert
 
-向链表指定位置插入节点
+向链表指定位置插入节点。
+
+```js
+LinkedList.prototype.insert = function (position, data) {
+  if (position < 0 || position > this.length) return false
+  
+  const node = new Node(data)
+  
+  if (this.length === 0) {
+    this.head = node
+    this.tail = node
+  }
+  else {
+    if (position === 0) {
+      this.head.prev = node
+      node.next = this.head
+      this.head = node
+    }
+    else if (position === this.length) {
+      this.tail.next = node
+      node.prev = this.tail
+      this.tail = node
+    }
+    else {
+      let current = this.head
+      let index = 0
+      
+      while (index < position) {
+        current = current.next
+        index += 1
+      }
+      
+      node.prev = current.prev
+      node.next = current
+      current.prev.next = node
+      current.prev = node
+    }
+  }
+  
+  this.length += 1
+}
+```
 
 ### link.indexOf
 
-查找对应节点数据的索引
+查找对应节点数据的索引。
+
+```js
+LinkedList.prototype.indexOf = function (data) {
+  let current = this.head
+  let index = 0
+  
+  while (current) {
+    if (current.data === data) return index
+    
+    current = current.next
+    index += 1
+  }
+  
+  return -1
+}
+```
 
 ### link.get
 
-返回对应索引的节点数据
+返回对应索引的节点数据。
+
+```js
+LinkedList.prototype.get = function (position) {
+  if (position < 0 || position >= this.length) return null
+  
+  // 从前往后
+  if (this.length / 2 > position) {
+    let current = this.head
+    let index = 0
+    
+    while (index < position) {
+      current = current.next
+      index += 1
+    }
+    
+    return current.data
+  }
+  // 从后往前
+  else {
+    let current = this.tail
+    let index = this.length - 1
+    
+    while (index > position) {
+      current = current.prev
+      index -= 1
+    }
+    
+    return current.data
+  }
+}
+```
 
 ### link.update
 
-修改对应索引的节点数据
+修改对应索引的节点数据。
+
+```js
+LinkedList.prototype.update = function (position, data) {
+  if (position < 0 || position >= this.length) return
+  
+  if (this.length / 2 > position) {
+    let current = this.head
+    let index = 0
+    
+    while (index < position) {
+      current = current.next
+      index += 1
+    }
+    
+    current.data = data
+  }
+  else {
+    let current = this.tail
+    let index = this.length - 1
+    
+    while (index > position) {
+      current = current.prev
+      index -= 1
+    }
+    
+    current.data = data
+  }
+}
+```
 
 ### link.removeAt
 
-移除对应索引的节点
+移除对应索引的节点。
 
 ### link.remove
 
-移除链表中的某个节点
+移除链表中的某个节点。
 
 ### link.isEmpty
 
-判断链表是否为空
+判断链表是否为空。
 
 ### link.size
 
-返回链表的节点个数
+返回链表的节点个数。
 
 ### link.forwardToString
 
-将链表转为字符串（正向遍历链表）
+将链表转为字符串（正向遍历链表）。
 
 ```js
 LinkedList.prototype.forwardToString = function () {
@@ -498,7 +615,7 @@ LinkedList.prototype.forwardToString = function () {
 
 ### link.reverseToString
 
-将链表转为字符串（反向遍历链表）
+将链表转为字符串（反向遍历链表）。
 
 ```js
 LinkedList.prototype.reverseToString = function () {

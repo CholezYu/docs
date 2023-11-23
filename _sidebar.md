@@ -10,8 +10,6 @@
 
 * [JavaScript](JavaScript.md)
 
-* [JavaScript数据结构与算法](JavaScript数据结构与算法.md)
-
 * [TypeScript](TypeScript.md)
 
 * [Ajax](Ajax.md)
@@ -38,12 +36,14 @@
 
 * [Java](Java.md)
 
-* [Java数据结构与算法](Java数据结构与算法.md)
-
 * [MySQL](MySQL.md)
 
 * [JDBC](JDBC.md)
 
 * [JavaWeb](JavaWeb.md)
+
+* [数据结构与算法-JavaScript](数据结构与算法-JavaScript.md)
+
+* [数据结构与算法-Java](数据结构与算法-Java.md)
 
 * [总结](总结.md)

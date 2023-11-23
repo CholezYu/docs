@@ -1,98 +1,10 @@
 # TypeScript
 
-## 简单类型
+## 常用类型
 
-### boolean
+### 类型别名
 
-```ts
-let bool: boolean = true
-
-bool = false
-```
-
-### number
-
-```ts
-let num: number = 5
-
-num = 0b1010
-```
-
-### string
-
-```ts
-let str: string = "hello"
-
-str = "world"
-```
-
-### any
-
-```ts
-let foo: any = "abc"
-
-foo = 1
-foo = true
-foo = undefined
-```
-
-### void
-
-如果函数没有返回值，那么返回值的类型就是 void
-
-```ts
-function fun(): void {
-  // ...
-}
-
-const fun = (): void => {
-  // ...
-}
-```
-
-## 复杂类型
-
-### 函数类型
-
-函数声明，推荐使用
-
-```ts
-function fun(a: number, b: number): number {
-  return a + b
-}
-```
-
-箭头函数，推荐使用
-
-```ts
-const fun = (a: number, b: number): number => a + b
-```
-
-类型别名
-
-```ts
-type fnType = (a: number, b: number) => number
-
-const fun: fnType = (a, b) => a + b
-```
-
-### 数组类型
-
-在元素类型后面加上 "[]"
-
-```ts
-const arr: number[] = [1, 2, 3]
-```
-
-数组泛型
-
-```ts
-const arr: Array<number> = [1, 2, 3]
-```
-
-### 对象类型
-
-类型别名
+定义一个 Type。
 
 ```ts
 type PersonType = {
@@ -106,34 +18,39 @@ const person: PersonType = {
 }
 ```
 
-接口
+### 接口
+
+定义一个 Interface。
 
 ```ts
-interface Person {
+interface PersonType {
   name: string
   age: number
 }
 
-const person: Person = {
+const person: PersonType = {
   name: "xiaoming",
   age: 18
 }
 ```
 
-### 类型别名
+继承一个 Interface，并扩展一些属性。
 
 ```ts
-type ns = number | string
-type todoListType = ns[]
+interface StudentType extends PersonType {
+  subject: string
+}
 
-let foo: ns = 1
-
-const arr: todoListType = [1, "2"]
+const student: StudentType = {
+  name: "xiaoming",
+  age: 18,
+  subject: "TypeScript"
+}
 ```
 
 ### 元组类型
 
-元组是另一种数组类型，它可以确切地知道包含多少个元素，以及这些元素的类型
+元组类似于数组类型，并且它可以确切地知道包含多少个元素，以及这些元素的类型。
 
 ```ts
 const tup: [number, string] = [1, "a"]
@@ -144,24 +61,24 @@ const tup: [string, number] = [1, "a"] // error
 ### 枚举类型
 
 ```ts
-enum ResCode {
+enum ResponseCode {
   OK = 100,
   NOT_FOUND = 404,
   PASSWORD_ERROR = 10001,
 }
 
-ResCode[OK] // 100
-ResCode[NOT_FOUND] // 404
-ResCode[PASSWORD_ERROR] // 10001
+ResponseCode[OK] // 100
+ResponseCode[NOT_FOUND] // 404
+ResponseCode[PASSWORD_ERROR] // 10001
 
-ResCode[100] // OK
-ResCode[404] // NOT_FOUND
-ResCode[10001] // PASSWORD_ERROR
+ResponseCode[100] // OK
+ResponseCode[404] // NOT_FOUND
+ResponseCode[10001] // PASSWORD_ERROR
 ```
 
 ### 联合类型
 
-由多个类型组成的一个组合类型
+由多个类型组成的一个组合类型。
 
 ```ts
 let timer: number | null = null
@@ -174,7 +91,7 @@ const arr: Array<number | boolean> = [true, 1]
 
 ### 交叉类型
 
-合并两个类型，得到一个新类型
+合并两个类型，得到一个新类型。
 
 ```ts
 type PersonType = {
@@ -184,62 +101,14 @@ type PersonType = {
 
 type StudentType = PersonType & { 
   subject: string
-}
-```
-
-## 接口
-
-### 定义
-
-定义一个接口
-
-```ts
-interface Person {
-  name: string
-  age: number
-}
-```
-
-### 继承
-
-继承一个接口，并扩展一些属性
-
-```ts
-interface Student extends Person {
-  subject: string
-}
-
-const student: Student = {
-  name: "xiaoming",
-  age: 18,
-  subject: "TypeScript"
-}
-```
-
-### 实现
-
-TypeScript 可以用它来强制一个**类**去符合某种契约。用的很少
-
-```ts
-interface Clock {
-  currentTime: Date
-  setTime(d: Date)
-}
-
-class Clock implements Clock {
-  currentTime: Date
-  setTime(d: Date) {
-    this.currentTime = d
-  }
-  constructor(h: number, m: number) { }
 }
 ```
 
 ## Type vs Interface
 
-### 合并与继承
+### 合并或继承
 
-通过交叉类型创建一个 Type
+通过交叉类型合并一个 Type。
 
 ```ts
 type PersonType = {
@@ -252,45 +121,44 @@ type StudentType = PersonType & {
 }
 ```
 
-通过继承创建一个 Interface
+通过接口继承一个 Interface。
 
 ```ts
-interface Person {
+interface PersonType {
   name: string
   age: number
 }
 
-interface Stuednt extends Person {
+interface StudentType extends PersonType {
   subject: string
 }
 ```
 
 ### 可扩展性
 
-类型创建后不能更改
+Type 定义后不能更改。
 
 ```ts
 type PersonType = {
   name: string
   age: number
-}
-
-type PersonType = {
-  subject: string
 }
 
 // Error: Duplicate identifier 'PersonType'
+type PersonType = {
+  subject: string
+}
 ```
 
-向现有接口添加新字段
+Interface 可以扩展新字段（并不是覆盖）。
 
 ```ts
-interface Person {
+interface PersonType {
   name: string
   age: number
 }
 
-interface Person {
+interface PersonType {
   subject: string
 }
 ```
@@ -299,13 +167,13 @@ interface Person {
 
 ### 函数泛型
 
-我们希望一个函数可以支持多种类型的数据，但是又不想使用 any，那么我们可以使用泛型来创建这样可复用的函数
+我们希望一个函数可以支持多种类型的数据，但是又不想使用 any，那么我们可以使用泛型来创建这样可复用的函数。
 
 ```ts
-function fun<T, K>(a: T, b: K): void { }
+function fn<T, K>(a: T, b: K): void { }
 
-fun<number, number>(1, 2)
-fun<number, string>(1, "2")
+fn<number, number>(1, 2)
+fn<number, string>(1, "2")
 ```
 
 封装一个 axios 函数
@@ -355,10 +223,54 @@ const person: Person<string[]> = {
 interface Person<T extends any[]> { }
 ```
 
-## 断言
+## 工具类型
+
+### Omit
+
+根据原有类型，生成一个新的类型，并删除了某些字段。
 
 ```ts
-const changeCount = event => {
-  (event.target as HTMLInputElement).value
+interface Todo {
+  title: string
+  description: string
+  completed: boolean
+  createdAt: number
+}
+
+type TodoPreview = Omit<Todo, "description">
+
+const todo: TodoPreview = {
+  title: "Clean room",
+  completed: false,
+  createdAt: 1615544252770
+}
+```
+
+继承父类型，并修改某字段。
+
+```ts
+interface GoodsInfoItem {
+  // ...
+  identity: number
+  contacts: string
+  skuList: null
+}
+
+// Interface GoodsInfoDetails incorrectly extends interface GoodsInfoItem.
+// Types of property skuList are incompatible.
+// Type object is not assignable to type null.
+// error: skuList 类型不兼容
+interface GoodsInfoDetails extends GoodsInfoItem {
+  skuList: object
+}
+
+// 使用 Omit 工具类型删除并重新声明 skuList 类型，然后继承
+interface GoodsInfoDetails extends Omit<GoodsInfoItem, "skuList"> {
+  skuList: {
+    skuId: number
+    skuPrice: number
+    skuStock: number
+    specification: string
+  }
 }
 ```

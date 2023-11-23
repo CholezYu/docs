@@ -6,7 +6,7 @@ JDK = JRE + 开发工具集
 
 JRE = JVM + JavaSE 标准类库
 
-## 数据类型的运算
+## 类型转换
 
 ### 自动类型提升
 
@@ -48,13 +48,112 @@ public static void main(String[] args) {
 }
 ```
 
-## 运算符
-
-## 条件语句
-
-## 循环语句
-
 ## 数组
+
+### 基本语法
+
+```java
+// 静态初始化，数组元素已知
+double[] arr = { 20.32, 43.21, 43.22 };
+
+// 动态初始化，数组元素未知
+String[] arr = new String[5];
+```
+
+### 数组遍历
+
+for 循环
+
+```java
+int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9, 0 } };
+
+for (int i = 0; i < arr.length; i++) {
+  System.out.println(Arrays.toString(arr[i]));
+  
+  for (int j = 0; j < arr[i].length; j++) {
+    System.out.println(arr[i][j]);
+  }
+}
+
+System.out.println(Arrays.deepToString(arr));
+```
+
+for each 循环
+
+```java
+int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9, 0 } };
+
+for (int[] ints : arr) {
+  System.out.println(Arrays.toString(ints));
+  
+  for (int anInt : ints) {
+    System.out.println(anInt);
+  }
+}
+
+System.out.println(Arrays.deepToString(arr));
+```
+
+### 元素查找
+
+线性查找（遍历），时间复杂度为 $O(n)$。
+
+```java
+int[] arr = { 14, 32, 73, 45, 54, 26, 79 };
+
+int target = 45;
+
+boolean flag = false;
+
+for (int i = 0; i < arr.length; i++) {
+  if (target == arr[i]) {
+    System.out.println(i);
+    flag = true;
+    break;
+  }
+}
+
+if (!flag) {
+  System.out.println("not found");
+}
+```
+
+二分查找（必须是有序数组），时间复杂度为 $O(log_2N)$。
+
+```java
+int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
+
+int target = 54;
+
+int head = 0;
+int tail = arr.length - 1;
+
+boolean flag = false;
+
+while (head <= tail) {
+  int mid = (head + tail) / 2;
+  
+  if (target == arr[mid]) {
+    System.out.println(mid);
+    flag = true;
+    break;
+  }
+  else if (target > arr[mid]) {
+    head = mid + 1;
+  }
+  else if (target < arr[mid]) {
+    tail = mid - 1;
+  }
+}
+
+if (!flag) {
+  System.out.println("not found");
+}
+```
+
+### 数组排序
+
+
 
 ## 类和对象
 

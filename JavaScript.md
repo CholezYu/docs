@@ -420,7 +420,12 @@ function Student(name, age) {
 }
 
 // 继承原型链
+// 相当于 Student.prototype = Person.prototype
+// 但是这种做法是地址的指向，会带来副作用
+// 正确的做法是进行深拷贝，或者指向 Person 的实例对象
 Student.prototype = new Person()
+// 或
+Student.prototype = Object.create(Parent.prototype)
 
 // 修改原型对象的 constructor 属性
 Student.prototype.constructor = Student
@@ -1171,6 +1176,10 @@ let str = "   hello world   "
 str.trimEnd() // "   hello world"
 ```
 
+## 正则
+
+## 正则（ES6）
+
 ## Set & Map
 
 ### Set
@@ -1808,6 +1817,8 @@ console.log(4)
 
 ## DOM
 
+https://wangdoc.com/javascript/dom
+
 ### 节点
 
 |      | 节点类型（nodeType） | 节点名（nodeName） | 节点值（nodeValue） |
@@ -1817,7 +1828,7 @@ console.log(4)
 | 文本 |          3           |       #text        |      文本内容       |
 | 注释 |          8           |      #comment      |      注释内容       |
 
-### 查询元素
+### 查询元素节点树
 
 | API                              | 用法               |
 | -------------------------------- | ------------------ |
@@ -1835,35 +1846,6 @@ console.log(4)
 | `element.nextElementSilbing`     | 获取下一个兄弟元素 |
 | `element.nextSibling`            | 获取下一个兄弟节点 |
 
-### 操作元素的样式
-
-| API                                 | 用法                           |
-| ----------------------------------- | ------------------------------ |
-| `element.style.attr`                | 获取元素行内样式               |
-| `element.style.attr = "value"`      | 设置元素行内样式               |
-| `getComputedStyle(element)["attr"]` | 获取元素实时样式，*不兼容 IE8* |
-| `element.currentStyle["attr"]`      | 获取元素实时样式，*仅支持 IE8* |
-
-### 操作元素的属性
-
-| API                                     | 用法                 |
-| --------------------------------------- | -------------------- |
-| `element.getAttribute("attr")`          | 获取元素属性         |
-| `element.setAttribute("attr", "value")` | 设置元素属性         |
-| `element.removeAttribute("attr")`       | 移除元素属性         |
-| `element.hasAttribute("attr")`          | 判断元素是否有该属性 |
-
-### 操作元素的类名
-
-| API                                   | 用法                 |
-| ------------------------------------- | -------------------- |
-| `element.className`                   | 获取元素类名         |
-| `element.className = "value"`         | 设置元素类名         |
-| `element.classList.add("value")`      | 添加元素类名         |
-| `element.classList.remove("value")`   | 删除元素类名         |
-| `element.classList.contains("value")` | 判断元素是否有该类名 |
-| `element.classList.toggle("value")`   | 切换元素类名         |
-
 ### 操作元素节点树
 
 | API                                        | 用法                         |
@@ -1877,6 +1859,35 @@ console.log(4)
 | `element.insertBefore(newChild, oldChild)` | 在一个子元素前插入一个子元素 |
 | `element.cloneNode()`                      | 克隆一个元素                 |
 | `element.cloneNode(true)`                  | 克隆一个元素及其内容         |
+
+### 操作元素的样式
+
+| API                                 | 用法                           |
+| ----------------------------------- | ------------------------------ |
+| `element.style.attr`                | 获取元素行内样式               |
+| `element.style.attr = "value"`      | 设置元素行内样式               |
+| `getComputedStyle(element)["attr"]` | 获取元素实时样式，*不兼容 IE8* |
+| `element.currentStyle["attr"]`      | 获取元素实时样式，*仅支持 IE8* |
+
+### 操作元素的类名
+
+| API                                   | 用法                 |
+| ------------------------------------- | -------------------- |
+| `element.className`                   | 获取元素类名         |
+| `element.className = "value"`         | 设置元素类名         |
+| `element.classList.add("value")`      | 添加元素类名         |
+| `element.classList.remove("value")`   | 删除元素类名         |
+| `element.classList.contains("value")` | 判断元素是否有该类名 |
+| `element.classList.toggle("value")`   | 切换元素类名         |
+
+### 操作元素的属性
+
+| API                                     | 用法                 |
+| --------------------------------------- | -------------------- |
+| `element.getAttribute("attr")`          | 获取元素属性         |
+| `element.setAttribute("attr", "value")` | 设置元素属性         |
+| `element.removeAttribute("attr")`       | 移除元素属性         |
+| `element.hasAttribute("attr")`          | 判断元素是否有该属性 |
 
 ### 获取元素宽高
 
@@ -1918,6 +1929,8 @@ console.log(4)
 | `y/top`  | 元素相对于浏览器的垂直偏移量          |
 | `right`  | x/left + width                        |
 | `bottom` | y/top + height                        |
+
+## 事件
 
 ### 事件类型
 
