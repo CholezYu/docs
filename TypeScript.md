@@ -7,12 +7,12 @@
 定义一个 Type。
 
 ```ts
-type PersonType = {
+type Person = {
   name: string
   age: number
 }
 
-const person: PersonType = {
+const person: Person = {
   name: "xiaoming",
   age: 18
 }
@@ -23,12 +23,12 @@ const person: PersonType = {
 定义一个 Interface。
 
 ```ts
-interface PersonType {
+interface Person {
   name: string
   age: number
 }
 
-const person: PersonType = {
+const person: Person = {
   name: "xiaoming",
   age: 18
 }
@@ -37,11 +37,11 @@ const person: PersonType = {
 继承一个 Interface，并扩展一些属性。
 
 ```ts
-interface StudentType extends PersonType {
+interface Student extends Person {
   subject: string
 }
 
-const student: StudentType = {
+const student: Student = {
   name: "xiaoming",
   age: 18,
   subject: "TypeScript"
@@ -94,12 +94,12 @@ const arr: Array<number | boolean> = [true, 1]
 合并两个类型，得到一个新类型。
 
 ```ts
-type PersonType = {
+type Person = {
   name: string
   age: number
 }
 
-type StudentType = PersonType & { 
+type Student = Person & { 
   subject: string
 }
 ```
@@ -111,12 +111,12 @@ type StudentType = PersonType & {
 通过交叉类型合并一个 Type。
 
 ```ts
-type PersonType = {
+type Person = {
   name: string
   age: number
 }
 
-type StudentType = PersonType & { 
+type Student = Person & { 
   subject: string
 }
 ```
@@ -124,12 +124,12 @@ type StudentType = PersonType & {
 通过接口继承一个 Interface。
 
 ```ts
-interface PersonType {
+interface Person {
   name: string
   age: number
 }
 
-interface StudentType extends PersonType {
+interface Student extends Person {
   subject: string
 }
 ```
@@ -139,13 +139,13 @@ interface StudentType extends PersonType {
 Type 定义后不能更改。
 
 ```ts
-type PersonType = {
+type Person = {
   name: string
   age: number
 }
 
-// Error: Duplicate identifier 'PersonType'
-type PersonType = {
+// Error: Duplicate identifier 'Person'
+type Person = {
   subject: string
 }
 ```
@@ -153,12 +153,12 @@ type PersonType = {
 Interface 可以扩展新字段（并不是覆盖）。
 
 ```ts
-interface PersonType {
+interface Person {
   name: string
   age: number
 }
 
-interface PersonType {
+interface Person {
   subject: string
 }
 ```
@@ -196,22 +196,30 @@ axios<Data>("127.0.0.1:8888", {
 如果类型需要在使用接口的时候传递，可以定义接口泛型
 
 ```ts
-interface Person<T> {
-  name: string
-  age: number
-  subject: T
+interface ResponseResult<T = any> {
+  code: number
+  data: T
+  message: string
 }
 
-const person: Person<string> = {
-  name: "xiaoming"
-  age: 18
-  subject: "Vue"
+interface Info {
+  id: number
+  nickname: string
 }
 
-const person: Person<string[]> = {
-  name: "xiaoming"
-  age: 18
-  subject: ["Vue", "React"]
+const response: ResponseResult<Info> = {
+  code: 200,
+  data: {
+    id: 10000,
+    nickname: "cholez"
+  },
+  message: "success"
+}
+
+const response: ResponseResult<any> = {
+  code: 5001,
+  data: null,
+  message: "权限错误"
 }
 ```
 
@@ -225,9 +233,39 @@ interface Person<T extends any[]> { }
 
 ## 工具类型
 
+### Record
+
+定义对象类型时，指定其 key 和 value 的类型。
+
+```ts
+interface Status {
+  type: "success" | "info" | "warning" | "danger"
+  value: "待审核" | "已上架" | "已拒绝" | "已下架"
+}
+
+const STATUS: Record<string, Status> = {
+  inReview: {
+    type: "info",
+    value: "待审核"
+  },
+  onShelf: {
+    type: "success",
+    value: "已上架"
+  },
+  offShelf: {
+    type: "danger",
+    value: "已拒绝"
+  },
+  rejected: {
+    type: "danger",
+    value: "已下架"
+  }
+}
+```
+
 ### Omit
 
-根据原有类型，生成一个新的类型，并删除了某些字段。
+根据原有类型，生成一个新的类型，并删除某些字段。
 
 ```ts
 interface Todo {
