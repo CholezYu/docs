@@ -10,7 +10,7 @@
 
 - [ ] [JavaScript](JavaScript.md)
 
-* [ ] [JavaScript 算法](JavaScript 算法.md)
+* [ ] [JavaScript 算法](JavaScript-算法.md)
 
 - [x] [TypeScript](TypeScript.md)
 
@@ -40,7 +40,7 @@
 
 * [ ] [Java](Java.md)
 
-- [ ] [Java 算法](Java 算法.md)
+- [ ] [Java 算法](Java-算法.md)
 
 * [ ] [MySQL](MySQL.md)
 
