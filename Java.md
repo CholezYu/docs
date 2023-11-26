@@ -52,6 +52,8 @@ public static void main(String[] args) {
 
 ### 基本语法
 
+定义数组
+
 ```java
 // 静态初始化，数组元素已知
 double[] arr = { 20.32, 43.21, 43.22 };
@@ -153,7 +155,29 @@ if (!flag) {
 
 ### 数组排序
 
+冒泡排序
 
+```java
+int[] arr = { 34, 54, 3, 2, 84, 65, 7, 19, 5, 76, 67 };
+
+for (int i = 0; i < arr.length - 1; i++) {
+  boolean flag = true;
+  
+  for (int j = 0; j < arr.length - 1 - i; j++) {
+    if (arr[j] > arr[j + 1]) {
+      int temp = arr[j];
+      arr[j] = arr[j + 1];
+      arr[j + 1] = temp;
+      
+      flag = false;
+    }
+  }
+  
+  if (flag) {
+    break;
+  }
+}
+```
 
 ## 类和对象
 

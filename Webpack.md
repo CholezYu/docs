@@ -237,14 +237,6 @@ module.exports = {
 }
 ```
 
-### 处理字体图标
-
-http://xxpromise.gitee.io/webpack5-docs/base/font.html
-
-### 处理音频视频
-
-http://xxpromise.gitee.io/webpack5-docs/base/other.html
-
 ## Plugins
 
 ### 处理 HTML

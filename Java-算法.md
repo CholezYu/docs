@@ -34,7 +34,27 @@ $O(1)$ < $O(log_2n)$ < $O(n)$ < $O(nlog_2n)$ < $O(n^2)$ < $O(n^3)$ < $O(2^n)$ < 
 
 ### 冒泡排序
 
+```java
+int[] arr = { 34, 54, 3, 2, 84, 65, 7, 19, 5, 76, 67 };
 
+for (int i = 0; i < arr.length - 1; i++) {
+  boolean flag = true;
+  
+  for (int j = 1; j < arr.length - i; j++) {
+    if (arr[j - 1] > arr[j]) {
+      int temp = arr[j - 1];
+      arr[j - 1] = arr[j];
+      arr[j] = temp;
+      
+      flag = false;
+    }
+  }
+  
+  if (flag) {
+    break;
+  }
+}
+```
 
 ### 快速排序
 
