@@ -1,14 +1,1 @@
-export const data = JSON.parse("{\"key\":\"v-147825fb\",\"path\":\"/docs/\",\"title\":\"概览\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"概览\",\"icon\":\"home\",\"description\":\"VuePress 默认主题只是一个提供基础文档布局的主题。 例如：它不会注入元标记或生成用于 SEO 优化的站点地图。此外，虽然 VuePress 在一定程度上扩展了 Markdown 语法，但仍然缺少一些常用的功能，例如文本对齐、标记、流程图、公式、演示等，同时默认主题提供的一些功能较弱或缺失，如图片预览、代码块复制、目录页等。 在这种情况下，vue...\"},\"headers\":[],\"readingTime\":{\"minutes\":0.62,\"words\":186},\"filePathRelative\":\"docs/README.md\",\"autoDesc\":true}")
-
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept()
-  if (__VUE_HMR_RUNTIME__.updatePageData) {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  }
-}
-
-if (import.meta.hot) {
-  import.meta.hot.accept(({ data }) => {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  })
-}
+export const data = JSON.parse("{\"key\":\"v-147825fb\",\"path\":\"/docs/\",\"title\":\"概览\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"概览\",\"icon\":\"home\",\"description\":\"VuePress 默认主题只是一个提供基础文档布局的主题。 例如：它不会注入元标记或生成用于 SEO 优化的站点地图。此外，虽然 VuePress 在一定程度上扩展了 Markdown 语法，但仍然缺少一些常用的功能，例如文本对齐、标记、流程图、公式、演示等，同时默认主题提供的一些功能较弱或缺失，如图片预览、代码块复制、目录页等。 在这种情况下，vue...\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://vuepress-theme-hope-docs-demo.netlify.app/docs/docs/\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"概览\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"VuePress 默认主题只是一个提供基础文档布局的主题。 例如：它不会注入元标记或生成用于 SEO 优化的站点地图。此外，虽然 VuePress 在一定程度上扩展了 Markdown 语法，但仍然缺少一些常用的功能，例如文本对齐、标记、流程图、公式、演示等，同时默认主题提供的一些功能较弱或缺失，如图片预览、代码块复制、目录页等。 在这种情况下，vue...\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"og:updated_time\",\"content\":\"2023-11-29T10:28:12.000Z\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"meta\",{\"property\":\"article:modified_time\",\"content\":\"2023-11-29T10:28:12.000Z\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"概览\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":\\\"2023-11-29T10:28:12.000Z\\\",\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://mister-hope.com\\\"}]}\"]]},\"headers\":[],\"git\":{\"createdTime\":1701253692000,\"updatedTime\":1701253692000,\"contributors\":[{\"name\":\"choIez\",\"email\":\"galaxy.nebula2021@gmail.com\",\"commits\":1}]},\"readingTime\":{\"minutes\":0.62,\"words\":186},\"filePathRelative\":\"docs/README.md\",\"localizedDate\":\"2023年11月29日\",\"autoDesc\":true}")
