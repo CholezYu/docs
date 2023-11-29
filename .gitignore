@@ -3,3 +3,6 @@ Desktop.ini
 
 # Editor
 .idea
+
+.yarn
+yarn.lock
