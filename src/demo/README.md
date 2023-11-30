@@ -1,7 +1,7 @@
 ---
 title: 其他功能
 index: false
-icon: code
+icon: type
 category:
   - 使用指南
 ---

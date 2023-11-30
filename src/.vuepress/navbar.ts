@@ -3,16 +3,15 @@ import { navbar } from "vuepress-theme-hope"
 
 export default navbar([
   "/",
-  "/demo/",
   {
-    text: "Docs",
-    icon: "info",
-    prefix: "/docs/",
+    text: "导航",
+    icon: "guide",
+    prefix: "/",
     children: [
       {
-        text: "前端",
+        text: "front-end",
         icon: "context",
-        prefix: "前端/",
+        prefix: "front-end/",
         children: [
           "HTML5",
           "CSS",
@@ -35,9 +34,9 @@ export default navbar([
         ]
       },
       {
-        text: "后端",
+        text: "after-end",
         icon: "context",
-        prefix: "后端/",
+        prefix: "after-end/",
         children: [
           "Java",
           "Java-算法",
@@ -50,7 +49,7 @@ export default navbar([
     ]
   },
   {
-    text: "V2 文档",
+    text: "官方文档",
     icon: "book",
     link: "https://theme-hope.vuejs.press/zh/"
   }

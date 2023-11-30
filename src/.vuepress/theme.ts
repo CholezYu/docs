@@ -4,11 +4,11 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
-  hostname: "https://vuepress-theme-hope-docs-demo.netlify.app",
+  hostname: "https://cholez.gitee.io/docs/",
   
   author: {
     name: "俞文健",
-    url: "https://mister-hope.com"
+    url: "https://github.com/choIez"
   },
   
   // iconAssets: "fontawesome",
@@ -17,7 +17,8 @@ export default hopeTheme({
   
   logo: "https://theme-hope-assets.vuejs.press/logo.svg",
   
-  repo: "vuepress-theme-hope/vuepress-theme-hope",
+  // 仓库配置，用于在导航栏中显示仓库链接
+  repo: "choIez/docs",
   
   docsDir: "src",
   
@@ -32,6 +33,7 @@ export default hopeTheme({
   displayFooter: true,
   
   encrypt: {
+    // 加密配置，为一个对象，键名为匹配的路径，键值为对应的密码，接受字符串或字符串数组
     config: {
       "/demo/encrypt.html": ["1234"]
     }

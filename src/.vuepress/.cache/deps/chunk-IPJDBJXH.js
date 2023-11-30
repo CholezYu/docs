@@ -8434,7 +8434,7 @@ function validateComponentName(name, config) {
   const appIsNativeTag = config.isNativeTag || NO;
   if (isBuiltInTag(name) || appIsNativeTag(name)) {
     warn2(
-      "Do not use built-in or reserved 前端 elements as component id: " + name
+      "Do not use built-in or reserved HTML elements as component id: " + name
     );
   }
 }

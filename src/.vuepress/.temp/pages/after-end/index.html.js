@@ -1,0 +1,14 @@
+export const data = JSON.parse("{\"key\":\"v-293e47be\",\"path\":\"/after-end/\",\"title\":\"后端\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"后端\",\"icon\":\"markdown\",\"description\":\"介绍 我们支持 Java 功能，... 详细\\rJava (Java.md); \\rJava 算法 (Java-算法.md); \\rMySQL (MySQL.md); \\rJDBC (JDBC.md); \\rJavaWeb (JavaWeb.md); \\rPython (Python.md);\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://cholez.gitee.io/docs/docs/after-end/\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"后端\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"介绍 我们支持 Java 功能，... 详细\\rJava (Java.md); \\rJava 算法 (Java-算法.md); \\rMySQL (MySQL.md); \\rJDBC (JDBC.md); \\rJavaWeb (JavaWeb.md); \\rPython (Python.md);\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"后端\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://github.com/choIez\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"介绍\",\"slug\":\"介绍\",\"link\":\"#介绍\",\"children\":[]},{\"level\":2,\"title\":\"详细\",\"slug\":\"详细\",\"link\":\"#详细\",\"children\":[]}],\"readingTime\":{\"minutes\":0.11,\"words\":34},\"filePathRelative\":\"after-end/README.md\",\"autoDesc\":true}")
+
+if (import.meta.webpackHot) {
+  import.meta.webpackHot.accept()
+  if (__VUE_HMR_RUNTIME__.updatePageData) {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  }
+}
+
+if (import.meta.hot) {
+  import.meta.hot.accept(({ data }) => {
+    __VUE_HMR_RUNTIME__.updatePageData(data)
+  })
+}

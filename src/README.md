@@ -1,7 +1,7 @@
 ---
 home: true
 icon: home
-title: Home
+title: 主页
 heroImage: /icon.svg
 bgImage: https://theme-hope-assets.vuejs.press/bg/9-light.svg
 bgImageDark: https://theme-hope-assets.vuejs.press/bg/9-dark.svg
@@ -16,15 +16,15 @@ actions:
 
   - text: 开始使用
     icon: markdown
-    link: ./docs/
+    link: ./front-end/
     type: primary
 
 highlights:
   - header: 在 Markdown 中添加你想要的内容
     description: 我们扩展了标准的 CommonMark 规范，为你添加了成吨功能。
     image: /assets/image/markdown.svg
-    bgImage: https://theme-hope-assets.vuejs.press/bg/13-light.svg
-    bgImageDark: https://theme-hope-assets.vuejs.press/bg/4-dark.svg
+    # bgImage: https://theme-hope-assets.vuejs.press/bg/4-light.svg
+    # bgImageDark: https://theme-hope-assets.vuejs.press/bg/4-dark.svg
     bgImageStyle:
       background-repeat: repeat
       background-size: initial
