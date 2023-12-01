@@ -14,7 +14,6 @@ export default sidebar({
       text: "前端",
       icon: "markdown",
       prefix: "front-end/",
-      link: "front-end/",
       collapsible: true,
       children: [
         {
@@ -113,7 +112,6 @@ export default sidebar({
       text: "后端",
       icon: "markdown",
       prefix: "after-end/",
-      link: "after-end/",
       collapsible: true,
       children: [
         {
@@ -152,7 +150,6 @@ export default sidebar({
       text: "其他",
       icon: "markdown",
       prefix: "more/",
-      link: "more/",
       collapsible: true,
       children: [
         "解决报错",

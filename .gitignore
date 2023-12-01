@@ -4,5 +4,13 @@ Desktop.ini
 # Editor
 .idea
 
+# Vuepress Cache
+**/.vuepress/.cache/**
+# Vuepress Temp
+**/.vuepress/.temp/**
+
+.pnp.cjs
+.pnp.loader.mjs
+
 .yarn
 yarn.lock
