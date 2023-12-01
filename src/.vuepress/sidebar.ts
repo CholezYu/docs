@@ -4,9 +4,11 @@ import { sidebar } from "vuepress-theme-hope"
 export default sidebar({
   "/": [
     {
-      text: "返回主页",
-      icon: "home",
-      link: "/"
+      text: "概览",
+      icon: "guide",
+      prefix: "overview/",
+      link: "overview/",
+      collapsible: true
     },
     {
       text: "前端",
@@ -114,33 +116,48 @@ export default sidebar({
       link: "after-end/",
       collapsible: true,
       children: [
-        "Java",
-        "Java-算法",
-        "MySQL",
-        "JDBC",
-        "JavaWeb",
-        "Python"
+        {
+          title: "Java",
+          icon: "java",
+          link: "Java"
+        },
+        {
+          title: "Java 算法",
+          icon: "java",
+          link: "Java-算法"
+        },
+        {
+          title: "MySQL",
+          icon: "mysql",
+          link: "MySQL"
+        },
+        {
+          title: "JDBC",
+          icon: "java",
+          link: "JDBC"
+        },
+        {
+          title: "JavaWeb",
+          icon: "java",
+          link: "JavaWeb"
+        },
+        {
+          title: "Python",
+          icon: "python",
+          link: "Python"
+        }
       ]
     },
     {
       text: "其他",
-      icon: "code",
-      prefix: "demo/",
-      link: "demo/",
-      collapsible: true,
-      children: "structure"
-    },
-    {
-      text: "其他",
-      icon: "code",
-      prefix: "docs/",
-      link: "docs/",
+      icon: "markdown",
+      prefix: "more/",
+      link: "more/",
       collapsible: true,
       children: [
-        "",
-        "Bug",
-        "Experience",
-        "面试"
+        "解决报错",
+        "经验分享",
+        "面试宝典"
       ]
     }
   ]

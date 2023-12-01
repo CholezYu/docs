@@ -1,14 +1,1 @@
-export const data = JSON.parse("{\"key\":\"v-4b37b5b6\",\"path\":\"/after-end/JavaWeb.html\",\"title\":\"JavaWeb\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"JavaWeb\",\"icon\":\"java\",\"description\":\"\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://cholez.gitee.io/docs/docs/after-end/JavaWeb.html\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"JavaWeb\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"JavaWeb\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://github.com/choIez\\\"}]}\"]]},\"headers\":[],\"readingTime\":{\"minutes\":0.02,\"words\":5},\"filePathRelative\":\"after-end/JavaWeb.md\",\"autoDesc\":true}")
-
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept()
-  if (__VUE_HMR_RUNTIME__.updatePageData) {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  }
-}
-
-if (import.meta.hot) {
-  import.meta.hot.accept(({ data }) => {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  })
-}
+export const data = JSON.parse("{\"key\":\"v-4b37b5b6\",\"path\":\"/after-end/JavaWeb.html\",\"title\":\"JavaWeb\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"JavaWeb\",\"icon\":\"java\",\"description\":\"##\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://cholez.gitee.io/docs/docs/after-end/JavaWeb.html\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"JavaWeb\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"##\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"og:updated_time\",\"content\":\"2023-11-30T09:20:17.000Z\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"meta\",{\"property\":\"article:modified_time\",\"content\":\"2023-11-30T09:20:17.000Z\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"JavaWeb\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":\\\"2023-11-30T09:20:17.000Z\\\",\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://github.com/choIez\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"\",\"slug\":\"\",\"link\":\"#\",\"children\":[]}],\"git\":{\"createdTime\":1701336017000,\"updatedTime\":1701336017000,\"contributors\":[{\"name\":\"choIez\",\"email\":\"galaxy.nebula2021@gmail.com\",\"commits\":1}]},\"readingTime\":{\"minutes\":0.01,\"words\":4},\"filePathRelative\":\"after-end/JavaWeb.md\",\"localizedDate\":\"2023年11月30日\",\"autoDesc\":true}")

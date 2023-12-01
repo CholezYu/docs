@@ -16,7 +16,7 @@ actions:
 
   - text: 开始使用
     icon: markdown
-    link: ./front-end/
+    link: ./overview/
     type: primary
 
 highlights:

@@ -1,3 +1,8 @@
+---
+title: Webpack
+icon: javascript
+---
+
 ## 基本配置
 
 `npx webpack` or `webpack`

@@ -1,3 +1,8 @@
+---
+title: JavaScript 算法
+icon: javascript
+---
+
 ## 栈 Stack
 
 栈是一种受限的线性结构。

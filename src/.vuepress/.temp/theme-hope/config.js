@@ -4,8 +4,6 @@ import { VPLink } from "F:/docs/.yarn/__virtual__/vuepress-shared-virtual-87419d
 import { HopeIcon, Layout, NotFound, useScrollPromise, injectDarkmode, setupDarkmode, setupSidebarItems } from "F:/docs/.yarn/__virtual__/vuepress-theme-hope-virtual-f905e326c2/0/cache/vuepress-theme-hope-npm-2.0.0-rc.1-d22c326206-e503de2190.zip/node_modules/vuepress-theme-hope/lib/bundle/export.js";
 
 import { defineAutoCatalogIconComponent } from "F:/docs/.yarn/__virtual__/vuepress-plugin-auto-catalog-virtual-e77ab5793b/0/cache/vuepress-plugin-auto-catalog-npm-2.0.0-rc.1-9e49789223-63ae995619.zip/node_modules/vuepress-plugin-auto-catalog/lib/client/index.js"
-import { GlobalEncrypt, LocalEncrypt } from "F:/docs/.yarn/__virtual__/vuepress-theme-hope-virtual-f905e326c2/0/cache/vuepress-theme-hope-npm-2.0.0-rc.1-d22c326206-e503de2190.zip/node_modules/vuepress-theme-hope/lib/bundle/modules/encrypt/export.js";
-import "F:/docs/.yarn/__virtual__/vuepress-theme-hope-virtual-f905e326c2/0/cache/vuepress-theme-hope-npm-2.0.0-rc.1-d22c326206-e503de2190.zip/node_modules/vuepress-theme-hope/lib/bundle/modules/encrypt/styles/all.scss"
 
 import "F:/docs/.yarn/__virtual__/vuepress-theme-hope-virtual-f905e326c2/0/cache/vuepress-theme-hope-npm-2.0.0-rc.1-d22c326206-e503de2190.zip/node_modules/vuepress-theme-hope/lib/bundle/styles/all.scss";
 
@@ -29,8 +27,7 @@ export default defineClientConfig({
     // provide VPLink as global component
     app.component("VPLink", VPLink);
 
-    app.component("GlobalEncrypt", GlobalEncrypt);
-    app.component("LocalEncrypt", LocalEncrypt);
+
   },
   setup: () => {
     setupDarkmode();

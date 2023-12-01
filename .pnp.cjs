@@ -29,6 +29,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@vuepress/client", "npm:2.0.0-rc.0"],\
+            ["katex", "npm:0.16.9"],\
             ["sass", "npm:1.69.5"],\
             ["ts-node", "virtual:f245e2efefeea8f2e87d1ac6563152b57ada9a2cb2c85ba0b00e0412c1df74a0c13d19c29df2160b49a40e83eff87a65b114cfca02aaa48862061487b8443207#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A5.3.2#~builtin<compat/typescript>::version=5.3.2&hash=29ae49"],\
@@ -4937,6 +4938,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["commander", "npm:2.20.3"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:8.3.0", {\
+          "packageLocation": "./.yarn/cache/commander-npm-8.3.0-c0d18c66d5-0f82321821.zip/node_modules/commander/",\
+          "packageDependencies": [\
+            ["commander", "npm:8.3.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["common-tags", [\
@@ -5154,6 +5162,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["docs", "workspace:."],\
             ["@vuepress/client", "npm:2.0.0-rc.0"],\
+            ["katex", "npm:0.16.9"],\
             ["sass", "npm:1.69.5"],\
             ["ts-node", "virtual:f245e2efefeea8f2e87d1ac6563152b57ada9a2cb2c85ba0b00e0412c1df74a0c13d19c29df2160b49a40e83eff87a65b114cfca02aaa48862061487b8443207#npm:10.9.1"],\
             ["typescript", "patch:typescript@npm%3A5.3.2#~builtin<compat/typescript>::version=5.3.2&hash=29ae49"],\
@@ -6544,6 +6553,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/jsonpointer-npm-5.0.1-8e4c22e512-0b40f71290.zip/node_modules/jsonpointer/",\
           "packageDependencies": [\
             ["jsonpointer", "npm:5.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["katex", [\
+        ["npm:0.16.9", {\
+          "packageLocation": "./.yarn/cache/katex-npm-0.16.9-721692b7ff-861194dfd4.zip/node_modules/katex/",\
+          "packageDependencies": [\
+            ["katex", "npm:0.16.9"],\
+            ["commander", "npm:8.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\

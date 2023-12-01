@@ -15,24 +15,6 @@ export const pagesData = {
   "v-4da4f6df": () => import(/* webpackChunkName: "v-4da4f6df" */"F:/docs/src/.vuepress/.temp/pages/after-end/Python.html.js").then(({ data }) => data),
   // path: /after-end/
   "v-293e47be": () => import(/* webpackChunkName: "v-293e47be" */"F:/docs/src/.vuepress/.temp/pages/after-end/index.html.js").then(({ data }) => data),
-  // path: /docs/Bug.html
-  "v-075f0a00": () => import(/* webpackChunkName: "v-075f0a00" */"F:/docs/src/.vuepress/.temp/pages/docs/Bug.html.js").then(({ data }) => data),
-  // path: /docs/Experience.html
-  "v-28169398": () => import(/* webpackChunkName: "v-28169398" */"F:/docs/src/.vuepress/.temp/pages/docs/Experience.html.js").then(({ data }) => data),
-  // path: /docs/
-  "v-147825fb": () => import(/* webpackChunkName: "v-147825fb" */"F:/docs/src/.vuepress/.temp/pages/docs/index.html.js").then(({ data }) => data),
-  // path: /docs/%E9%9D%A2%E8%AF%95.html
-  "v-501d2b0e": () => import(/* webpackChunkName: "v-501d2b0e" */"F:/docs/src/.vuepress/.temp/pages/docs/面试.html.js").then(({ data }) => data),
-  // path: /demo/disable.html
-  "v-4e65ec78": () => import(/* webpackChunkName: "v-4e65ec78" */"F:/docs/src/.vuepress/.temp/pages/demo/disable.html.js").then(({ data }) => data),
-  // path: /demo/encrypt.html
-  "v-c151bf32": () => import(/* webpackChunkName: "v-c151bf32" */"F:/docs/src/.vuepress/.temp/pages/demo/encrypt.html.js").then(({ data }) => data),
-  // path: /demo/markdown.html
-  "v-438ffe52": () => import(/* webpackChunkName: "v-438ffe52" */"F:/docs/src/.vuepress/.temp/pages/demo/markdown.html.js").then(({ data }) => data),
-  // path: /demo/page.html
-  "v-6e19edb7": () => import(/* webpackChunkName: "v-6e19edb7" */"F:/docs/src/.vuepress/.temp/pages/demo/page.html.js").then(({ data }) => data),
-  // path: /demo/
-  "v-1473bf53": () => import(/* webpackChunkName: "v-1473bf53" */"F:/docs/src/.vuepress/.temp/pages/demo/index.html.js").then(({ data }) => data),
   // path: /front-end/Ajax.html
   "v-532743b0": () => import(/* webpackChunkName: "v-532743b0" */"F:/docs/src/.vuepress/.temp/pages/front-end/Ajax.html.js").then(({ data }) => data),
   // path: /front-end/Bootstrap.html
@@ -71,6 +53,16 @@ export const pagesData = {
   "v-565d13bd": () => import(/* webpackChunkName: "v-565d13bd" */"F:/docs/src/.vuepress/.temp/pages/front-end/Webpack.html.js").then(({ data }) => data),
   // path: /front-end/Wxapp.html
   "v-5136f8ac": () => import(/* webpackChunkName: "v-5136f8ac" */"F:/docs/src/.vuepress/.temp/pages/front-end/Wxapp.html.js").then(({ data }) => data),
+  // path: /more/
+  "v-14f73021": () => import(/* webpackChunkName: "v-14f73021" */"F:/docs/src/.vuepress/.temp/pages/more/index.html.js").then(({ data }) => data),
+  // path: /more/%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB.html
+  "v-2b3ae6f6": () => import(/* webpackChunkName: "v-2b3ae6f6" */"F:/docs/src/.vuepress/.temp/pages/more/经验分享.html.js").then(({ data }) => data),
+  // path: /more/%E8%A7%A3%E5%86%B3%E6%8A%A5%E9%94%99.html
+  "v-06156be7": () => import(/* webpackChunkName: "v-06156be7" */"F:/docs/src/.vuepress/.temp/pages/more/解决报错.html.js").then(({ data }) => data),
+  // path: /more/%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8.html
+  "v-60f2d6d4": () => import(/* webpackChunkName: "v-60f2d6d4" */"F:/docs/src/.vuepress/.temp/pages/more/面试宝典.html.js").then(({ data }) => data),
+  // path: /overview/
+  "v-5c0dd206": () => import(/* webpackChunkName: "v-5c0dd206" */"F:/docs/src/.vuepress/.temp/pages/overview/index.html.js").then(({ data }) => data),
   // path: /404.html
   "v-3706649a": () => import(/* webpackChunkName: "v-3706649a" */"F:/docs/src/.vuepress/.temp/pages/404.html.js").then(({ data }) => data),
 }

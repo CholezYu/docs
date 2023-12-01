@@ -1,14 +1,1 @@
-export const data = JSON.parse("{\"key\":\"v-0313a003\",\"path\":\"/front-end/Threejs.html\",\"title\":\"Threejs\",\"lang\":\"zh-CN\",\"frontmatter\":{\"description\":\"\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://cholez.gitee.io/docs/docs/front-end/Threejs.html\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Threejs\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Threejs\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":null,\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://github.com/choIez\\\"}]}\"]]},\"headers\":[],\"readingTime\":{\"minutes\":0,\"words\":1},\"filePathRelative\":\"front-end/Threejs.md\",\"autoDesc\":true}")
-
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept()
-  if (__VUE_HMR_RUNTIME__.updatePageData) {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  }
-}
-
-if (import.meta.hot) {
-  import.meta.hot.accept(({ data }) => {
-    __VUE_HMR_RUNTIME__.updatePageData(data)
-  })
-}
+export const data = JSON.parse("{\"key\":\"v-0313a003\",\"path\":\"/front-end/Threejs.html\",\"title\":\"Threejs\",\"lang\":\"zh-CN\",\"frontmatter\":{\"title\":\"Threejs\",\"icon\":\"javascript\",\"description\":\"##\",\"head\":[[\"meta\",{\"property\":\"og:url\",\"content\":\"https://cholez.gitee.io/docs/docs/front-end/Threejs.html\"}],[\"meta\",{\"property\":\"og:title\",\"content\":\"Threejs\"}],[\"meta\",{\"property\":\"og:description\",\"content\":\"##\"}],[\"meta\",{\"property\":\"og:type\",\"content\":\"article\"}],[\"meta\",{\"property\":\"og:locale\",\"content\":\"zh-CN\"}],[\"meta\",{\"property\":\"og:updated_time\",\"content\":\"2023-11-30T09:20:17.000Z\"}],[\"meta\",{\"property\":\"article:author\",\"content\":\"俞文健\"}],[\"meta\",{\"property\":\"article:modified_time\",\"content\":\"2023-11-30T09:20:17.000Z\"}],[\"script\",{\"type\":\"application/ld+json\"},\"{\\\"@context\\\":\\\"https://schema.org\\\",\\\"@type\\\":\\\"Article\\\",\\\"headline\\\":\\\"Threejs\\\",\\\"image\\\":[\\\"\\\"],\\\"dateModified\\\":\\\"2023-11-30T09:20:17.000Z\\\",\\\"author\\\":[{\\\"@type\\\":\\\"Person\\\",\\\"name\\\":\\\"俞文健\\\",\\\"url\\\":\\\"https://github.com/choIez\\\"}]}\"]]},\"headers\":[{\"level\":2,\"title\":\"\",\"slug\":\"\",\"link\":\"#\",\"children\":[]}],\"git\":{\"createdTime\":1701336017000,\"updatedTime\":1701336017000,\"contributors\":[{\"name\":\"choIez\",\"email\":\"galaxy.nebula2021@gmail.com\",\"commits\":1}]},\"readingTime\":{\"minutes\":0.01,\"words\":4},\"filePathRelative\":\"front-end/Threejs.md\",\"localizedDate\":\"2023年11月30日\",\"autoDesc\":true}")

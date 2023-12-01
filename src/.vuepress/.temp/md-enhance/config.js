@@ -9,6 +9,8 @@ import MdDemo from "F:/docs/.yarn/__virtual__/vuepress-plugin-md-enhance-virtual
 import "F:/docs/.yarn/__virtual__/vuepress-plugin-md-enhance-virtual-506a65be29/0/cache/vuepress-plugin-md-enhance-npm-2.0.0-rc.1-835fd429ef-5ca96f53ed.zip/node_modules/vuepress-plugin-md-enhance/lib/client/styles/figure.scss";
 import Playground from "F:/docs/.yarn/__virtual__/vuepress-plugin-md-enhance-virtual-506a65be29/0/cache/vuepress-plugin-md-enhance-npm-2.0.0-rc.1-835fd429ef-5ca96f53ed.zip/node_modules/vuepress-plugin-md-enhance/lib/client/components/Playground.js";
 import Tabs from "F:/docs/.yarn/__virtual__/vuepress-plugin-md-enhance-virtual-506a65be29/0/cache/vuepress-plugin-md-enhance-npm-2.0.0-rc.1-835fd429ef-5ca96f53ed.zip/node_modules/vuepress-plugin-md-enhance/lib/client/components/Tabs.js";
+import "F:/docs/.yarn/cache/katex-npm-0.16.9-721692b7ff-861194dfd4.zip/node_modules/katex/dist/katex.min.css";
+import "F:/docs/.yarn/__virtual__/vuepress-plugin-md-enhance-virtual-506a65be29/0/cache/vuepress-plugin-md-enhance-npm-2.0.0-rc.1-835fd429ef-5ca96f53ed.zip/node_modules/vuepress-plugin-md-enhance/lib/client/styles/katex.scss";
 
 export default defineClientConfig({
   enhance: ({ app }) => {

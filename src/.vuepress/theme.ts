@@ -28,16 +28,9 @@ export default hopeTheme({
   // sidebar
   sidebar,
   
-  footer: "默认页脚",
+  footer: "",
   
   displayFooter: true,
-  
-  encrypt: {
-    // 加密配置，为一个对象，键名为匹配的路径，键值为对应的密码，接受字符串或字符串数组
-    config: {
-      "/demo/encrypt.html": ["1234"]
-    }
-  },
   
   // page meta
   metaLocales: {
@@ -120,10 +113,13 @@ export default hopeTheme({
       sub: true,
       sup: true,
       tabs: true,
-      vPre: true
+      vPre: true,
       
       // install @vue/repl before enabling it
       // vuePlayground: true,
+      
+      // 使用 KaTeX 启用 TeX 支持
+      katex: true
     }
     
     // uncomment these if you want a pwa

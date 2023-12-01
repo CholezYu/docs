@@ -3,8 +3,6 @@ title: Java
 icon: java
 ---
 
-# Java
-
 ## JDK
 
 JDK = JRE + 开发工具集

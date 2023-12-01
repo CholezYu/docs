@@ -3,8 +3,6 @@ title: Java 算法
 icon: java
 ---
 
-# Java 算法
-
 ## 算法概述
 
 ### 时间复杂度

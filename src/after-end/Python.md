@@ -3,8 +3,6 @@ title: Python
 icon: python
 ---
 
-# Python
-
 ## 数据类型
 
 ### 数字

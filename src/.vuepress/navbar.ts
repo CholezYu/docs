@@ -9,7 +9,7 @@ export default navbar([
     prefix: "/",
     children: [
       {
-        text: "front-end",
+        text: "前端",
         icon: "context",
         prefix: "front-end/",
         children: [
@@ -34,7 +34,7 @@ export default navbar([
         ]
       },
       {
-        text: "after-end",
+        text: "后端",
         icon: "context",
         prefix: "after-end/",
         children: [

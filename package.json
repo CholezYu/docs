@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@vuepress/client": "2.0.0-rc.0",
+    "katex": "^0.16.9",
     "sass": "^1.69.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2",

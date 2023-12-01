@@ -1,3 +1,8 @@
+---
+title: TypeScript
+icon: typescript
+---
+
 ## 常用类型
 
 ### 类型别名
