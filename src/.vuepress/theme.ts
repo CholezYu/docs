@@ -22,7 +22,7 @@ export default hopeTheme({
   
   docsDir: "src",
   
-  // navbar
+  // navbarf
   navbar,
   
   // sidebar
@@ -34,7 +34,8 @@ export default hopeTheme({
   
   // page meta
   metaLocales: {
-    editLink: "在 GitHub 上编辑此页"
+    editLink: "在 GitHub 上编辑此页",
+    author: "俞文健"
   },
   
   plugins: {
