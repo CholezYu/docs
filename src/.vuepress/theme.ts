@@ -34,8 +34,6 @@ export default hopeTheme({
   
   // page meta
   metaLocales: {
-    author: "俞文健",
-    contributors: "俞文健",
     editLink: "在 GitHub 上编辑此页"
   },
   
