@@ -1,11 +1,12 @@
 ---
 title: Node
 icon: nodeJS
+date: 2023-12-06
 ---
 
 ## packages
 
-npm
+### npm
 
 - 查看下载源：`npm get registry`
 
@@ -27,9 +28,7 @@ npm
 
 - 删除包：`npm unpublish --force`
 
-
-
-yarn
+### yarn
 
 - 查看版本：`yarn --version`
 
@@ -40,6 +39,8 @@ yarn
 - 全局依赖：`yarn global add [package]`
 
 - 删除依赖：`yarn remove [package]`
+
+- 使用 `node_modules`：`yarn config set nodeLinker node-modules`
 
 ## process
 

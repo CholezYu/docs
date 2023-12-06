@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-time: 2023-12-06
+date: 2023-12-06
 ---
 
 ## JDK

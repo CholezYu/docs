@@ -5,12 +5,11 @@ export default navbar([
   "/",
   {
     text: "导航",
-    icon: "guide",
+    icon: "context",
     prefix: "/",
     children: [
       {
         text: "前端",
-        icon: "context",
         prefix: "front-end/",
         children: [
           "HTML5",
@@ -35,7 +34,6 @@ export default navbar([
       },
       {
         text: "后端",
-        icon: "context",
         prefix: "after-end/",
         children: [
           "Java",

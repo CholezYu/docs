@@ -12,97 +12,97 @@ export default sidebar({
     },
     {
       text: "前端",
-      icon: "markdown",
+      icon: "network",
       prefix: "front-end/",
       collapsible: true,
       children: [
         {
-          title: "HTML5",
+          text: "HTML5",
           icon: "html",
           link: "HTML5"
         },
         {
-          title: "CSS",
+          text: "CSS",
           icon: "css",
           link: "CSS"
         },
         {
-          title: "Less",
+          text: "Less",
           icon: "css",
           link: "Less"
         },
         {
-          title: "Bootstrap",
+          text: "Bootstrap",
           icon: "css",
           link: "Bootstrap"
         },
         {
-          title: "JavaScript",
+          text: "JavaScript",
           icon: "javascript",
           link: "JavaScript"
         },
         {
-          title: "JavaScript 算法",
+          text: "JavaScript 算法",
           icon: "javascript",
           link: "JavaScript-算法"
         },
         {
-          title: "TypeScript",
+          text: "TypeScript",
           icon: "typescript",
           link: "TypeScript"
         },
         {
-          title: "Ajax",
+          text: "Ajax",
           icon: "ajax",
           link: "Ajax"
         },
         {
-          title: "Node",
+          text: "Node",
           icon: "nodeJS",
           link: "Node"
         },
         {
-          title: "Git",
+          text: "Git",
           icon: "git",
           link: "Git"
         },
         {
-          title: "Webpack",
+          text: "Webpack",
           icon: "javascript",
           link: "Webpack"
         },
         {
-          title: "React",
+          text: "React",
           icon: "react",
           link: "React"
         },
         {
-          title: "Vue",
+          text: "Vue",
           icon: "vue",
           link: "Vue"
         },
         {
-          title: "Wxapp",
+          text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
         },
         {
-          title: "ECharts",
+          text: "ECharts",
           icon: "javascript",
           link: "ECharts"
         },
         {
-          title: "WebGL",
+          text: "WebGL",
           icon: "javascript",
           link: "WebGL"
         },
         {
-          title: "Threejs",
+          text: "Threejs",
           icon: "javascript",
           link: "Threejs"
         },
         {
-          title: "Exceljs",
+          text: "Exceljs",
           icon: "javascript",
           link: "Exceljs"
         }
@@ -110,51 +110,86 @@ export default sidebar({
     },
     {
       text: "后端",
-      icon: "markdown",
+      icon: "back-stage",
       prefix: "after-end/",
       collapsible: true,
       children: [
         {
-          title: "Java",
+          text: "Java",
           icon: "java",
           link: "Java"
         },
         {
-          title: "Java 算法",
+          text: "Java 算法",
           icon: "java",
           link: "Java-算法"
         },
         {
-          title: "MySQL",
+          text: "MySQL",
           icon: "mysql",
           link: "MySQL"
         },
         {
-          title: "JDBC",
+          text: "JDBC",
           icon: "java",
           link: "JDBC"
         },
         {
-          title: "JavaWeb",
+          text: "JavaWeb",
           icon: "java",
           link: "JavaWeb"
         },
         {
-          title: "Python",
+          text: "Python",
           icon: "python",
           link: "Python"
         }
       ]
     },
     {
-      text: "其他",
-      icon: "markdown",
+      text: "更多",
+      icon: "more",
       prefix: "more/",
       collapsible: true,
       children: [
-        "解决报错",
-        "经验分享",
-        "面试宝典"
+        {
+          text: "解决问题",
+          icon: "question",
+          link: "解决问题"
+        },
+        {
+          text: "项目细节",
+          icon: "write",
+          link: "项目细节"
+        },
+        {
+          text: "面试经验",
+          icon: "storage",
+          link: "面试经验"
+        }
+      ]
+    },
+    {
+      text: "尚博",
+      icon: "computer",
+      prefix: "shang-bo/",
+      collapsible: true,
+      children: [
+        {
+          text: "渠道-抖音",
+          icon: "navigation",
+          link: "渠道-抖音"
+        },
+        {
+          text: "渠道-快手",
+          icon: "navigation",
+          link: "渠道-快手"
+        },
+        {
+          text: "总后台管理系统",
+          icon: "navigation",
+          link: "总后台管理系统"
+        }
       ]
     }
   ]
