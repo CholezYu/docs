@@ -5,7 +5,7 @@ icon: javascript
 
 ## 简单使用
 
-绘制一个红色矩形
+绘制一个红色矩形。
 
 ```js
 const ctx = document.querySelector("#canvas")
@@ -20,22 +20,21 @@ gl.clear(gl.COLOR_BUFFER_BIT)
 - `gl.clearColor(r, g, b, a)` 清空 canvas 的颜色
 
 - `gl.clear(buffer)` 清空缓存
-
-  - gl.COLOR_BUFFER_BIT: 颜色缓存
-
-  - gl.DEPTH_BUFFER_BIT: 清空深度缓冲区
-
-  - gl.STENCLI_BUFFER_BIT: 清空模板缓冲区
+- gl.COLOR_BUFFER_BIT：颜色缓存
+  
+- gl.DEPTH_BUFFER_BIT：清空深度缓冲区
+  
+- gl.STENCLI_BUFFER_BIT：清空模板缓冲区
 
 ## 着色器
 
 ### 顶点着色器
 
-用来描述顶点（空间中的坐标）的特性，通过计算获取**位置**信息
+用来描述顶点（空间中的坐标）的特性，通过计算获取**位置**信息。
 
 ### 片元着色器
 
-进行逐片元（像素）处理程序，通过计算获取**颜色**信息
+进行逐片元（像素）处理程序，通过计算获取**颜色**信息。
 
 ### 着色器源码
 
@@ -103,11 +102,11 @@ gl.drawArrays(gl.TRIANGLES, 0, 3) // 三角形
 
 - `gl.drawArrays(mode, first, count)`
 
-  - mode: 绘制的图形
+  - mode：绘制的图形
 
-  - first: 从哪个开始
+  - first：从哪个开始
 
-  - count: 使用几个顶点
+  - count：使用几个顶点
 
 ### attribute 变量
 

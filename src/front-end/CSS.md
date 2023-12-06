@@ -160,13 +160,13 @@ offset-x > offset-y > blur-radius > color
 text-shadow: 1px 1px 2px black;
 ```
 
-- offset-x: 水平方向的偏移量（必要），正数向右，负数向左
+- offset-x：水平方向的偏移量（必要），正数向右，负数向左
 
-- offset-y: 垂直方向的偏移量（必要），正数向下，负数向上
+- offset-y：垂直方向的偏移量（必要），正数向下，负数向上
 
-- blur-radius: 模糊距离
+- blur-radius：模糊距离
 
-- color: 阴影颜色
+- color：阴影颜色
 
 ### 文本换行 white-space
 
@@ -337,23 +337,23 @@ transition: all 0.5s ease 0.2s;
 transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
 ```
 
-- transition-property: 设置需要过渡的 CSS 属性
+- transition-property：设置需要过渡的 CSS 属性
 
-- transition-duration: 过渡执行时间
+- transition-duration：过渡执行时间
 
-- transition-timing-function: 速度曲线函数
+- transition-timing-function：速度曲线函数
 
-  - ease: 逐渐变慢（默认）
+  - ease：逐渐变慢（默认）
 
-  - linear: 匀速
+  - linear：匀速
 
-  - ease-in: 加速
+  - ease-in：加速
 
-  - ease-out: 减速
+  - ease-out：减速
 
-  - ease-in-out: 先加速，再减速
+  - ease-in-out：先加速，再减速
 
-- transition-delay: 过渡延迟时间
+- transition-delay：过渡延迟时间
 
 ### 动画 animation
 
@@ -361,37 +361,37 @@ transition: width 0.5s ease 0.2s, height 0.5s ease 0.2s;
 animation: move 2s linear 1s infinite alternate;
 ```
 
-- animation-name: 动画（关键帧）名称
+- animation-name：动画（关键帧）名称
 
-- animation-duration: 动画执行时间
+- animation-duration：动画执行时间
 
-- animation-timing-function: 速度曲线函数
+- animation-timing-function：速度曲线函数
 
-- animation-delay: 动画延迟时间
+- animation-delay：动画延迟时间
 
-- animation-iteration-count: 动画执行次数
+- animation-iteration-count：动画执行次数
 
-  - infinite: 无限次
+  - infinite：无限次
 
-- animation-direction: 动画方向
+- animation-direction：动画方向
 
-  - alternate: 来回播放
+  - alternate：来回播放
 
-- animation-play-state: 动画的播放和暂停
+- animation-play-state：动画的播放和暂停
 
-  - running: 播放动画
+  - running：播放动画
 
-  - paused: 暂停动画
+  - paused：暂停动画
 
-- animation-fill-mode: 动画开始和结束状态
+- animation-fill-mode：动画开始和结束状态
 
-  - none: 动画等待时和动画结束后，不会对元素的样式产生改变
+  - none：动画等待时和动画结束后，不会对元素的样式产生改变
 
-  - forwards: 动画结束后，元素的样式为动画的最后一帧
+  - forwards：动画结束后，元素的样式为动画的最后一帧
 
-  - backwards: 在动画等待时间内，元素的样式为动画的第一帧
+  - backwards：在动画等待时间内，元素的样式为动画的第一帧
 
-  - both: 在动画等待时和动画结束后，元素的样式分别为动画第一帧和最后一帧
+  - both：在动画等待时和动画结束后，元素的样式分别为动画第一帧和最后一帧
 
 ## 弹性布局
 
@@ -413,7 +413,7 @@ flex-direction: column-reverse;
 
 ### 主轴对齐 justify-content
 
-弹性元素在主轴的排列方式
+弹性元素在主轴的排列方式。
 
 ```css
 /* 弹性元素从主轴起始位置开始排列（默认） */
@@ -437,7 +437,7 @@ justify-content: space-evenly;
 
 ### 侧轴对齐 align-items
 
-弹性元素在侧轴的排列方式
+弹性元素在侧轴的排列方式。
 
 ```css
 /* 弹性元素未设置宽高时, 在侧轴方向上拉伸至撑满弹性容器（默认） */
@@ -458,7 +458,7 @@ align-items: baseline;
 
 ### 侧轴对齐 align-content
 
-换行的弹性元素在侧轴的排列方式
+换行的弹性元素在侧轴的排列方式。
 
 ```css
 /* 弹性元素从侧轴起始位置开始排列（默认） */
@@ -506,7 +506,7 @@ flex-wrap: wrap;
 
 ### 侧轴对齐 align-self
 
-单个弹性元素在侧轴的排列方式
+单个弹性元素在侧轴的排列方式。
 
 ```css
 /* 弹性元素未设置宽高时, 在侧轴方向上拉伸至撑满弹性容器（默认） */
@@ -527,7 +527,7 @@ align-self: baseline;
 
 ### 富余空间 flex-grow
 
-给弹性元素按比例分配富余空间，默认为 0，表示不分配
+给弹性元素按比例分配富余空间，默认为 0，表示不分配。
 
 ```css
 .outer {
@@ -545,7 +545,7 @@ align-self: baseline;
 
 ### 收缩规则 flex-shrink
 
-按比例压缩弹性元素，默认为 1，表示等比例压缩
+按比例压缩弹性元素，默认为 1，表示等比例压缩。
 
 ```css
 /* 默认等比例压缩 */
@@ -557,7 +557,7 @@ flex-shrink: 0;
 
 ### 基准宽度 flex-basis
 
-弹性元素被压缩时的基准宽度，默认为 auto
+弹性元素被压缩时的基准宽度，默认为 auto。
 
 ```css
 .container {
@@ -762,21 +762,21 @@ display: -webkit-box;
 }
 ```
 
-- type: 媒体类型
+- type：媒体类型
 
-  - all: 用于所有设备
+  - all：用于所有设备
 
-  - print: 用于打印机
+  - print：用于打印机
 
-  - screen: 用于屏幕
+  - screen：用于屏幕
 
-- feature: 媒体特性
+- feature：媒体特性
 
-  - width: 宽度
+  - width：宽度
 
-  - min-width: 最小宽度
+  - min-width：最小宽度
 
-  - max-width: 最大宽度
+  - max-width：最大宽度
 
 ### 引入资源
 

@@ -3,55 +3,49 @@ title: Node
 icon: nodeJS
 ---
 
-## 包管理
+## packages
 
-### npm
+npm
 
-- 查看下载源: `npm get registry`
+- 查看下载源：`npm get registry`
 
-- 修改下载源: `npm config set registry https://registry.npmmirror.com`
+- 修改下载源：`npm config set registry https://registry.npmmirror.com`
 
-- 安装依赖: `npm install [package]`
+- 安装依赖：`npm install [package]`
 
-- 全局依赖: `npm install [package] -g`
+- 生产依赖：`npm install [package] --save`
 
-- 生产依赖: `npm install [package] --save`
+- 开发依赖：`npm install [package] --save-dev`
 
-  - 简写:  `npm i [package] -S`
+- 全局依赖：`npm install [package] -g`
 
-- 开发依赖: `npm install [package] --save-dev`
+- 删除依赖：`npm uninstall [package]`
 
-  - 简写:  `npm i [package] -D`
+- 添加用户名和密码：`npm adduser`
 
-- 删除依赖: `npm uninstall [package]`
+- 发布包：`npm publish`
 
-- 添加用户名和密码: `npm adduser`
+- 删除包：`npm unpublish --force`
 
-- 发布包: `npm publish`
 
-- 删除包: `npm unpublish --force`
 
-### yarn
+yarn
 
-- 查看版本: `yarn --version`
+- 查看版本：`yarn --version`
 
-- 初始化状态: `yarn init`
+- 生产依赖：`yarn add [package]`
 
-- 安装模块: `yarn add [package]`，默认安装生产依赖
+- 开发依赖：`yarn add [package] --dev`
 
-- 全局安装: `yarn global add [package]`
+- 全局依赖：`yarn global add [package]`
 
-- 开发依赖: `yarn add [package] --dev`
-
-- 全部安装: `yarn`
-
-- 删除模块: `yarn remove [package]`
+- 删除依赖：`yarn remove [package]`
 
 ## process
 
-### process.exit
+### process.exit 
 
-结束当前进程
+结束当前进程。
 
 ```js
 console.log(1) // 1
@@ -64,7 +58,7 @@ console.log(3)
 
 ### process.nextTick
 
-向 next tick 队列中添加一个任务，优先级会高于微任务
+向 next tick 队列中添加一个任务，优先级会高于微任务。
 
 ```js
 setTimeout(() => {
@@ -88,7 +82,7 @@ console.log(4)
 
 ### path.resolve
 
-生成绝对路径
+生成绝对路径。
 
 ```js
 const path = require("node:path")
@@ -99,7 +93,7 @@ path.resolve(__dirname, "./file.txt") // "E:/0215/index/file.txt"
 
 ### path.join
 
-拼接多个路径
+拼接多个路径。
 
 ```js
 const path = require("node:path")
@@ -109,7 +103,7 @@ path.join("./src", "./js", "./index.js") // src/js/index.js
 
 ### path.extname
 
-获取文件的扩展名
+获取文件的扩展名。
 
 ```js
 const path = require("node:path")
@@ -121,7 +115,7 @@ path.extname("./public/index.html") // .html
 
 ### url.parse
 
-解析网络路径并返回相关信息 (旧版 API)
+解析网络路径并返回相关信息 (旧版 API)。
 
 ```js
 const url = require("node:url")
@@ -145,7 +139,7 @@ url.parse("http://localhost:1118/user?name=xiaoming&age=20", true)
 
 ### new URL
 
-解析网络路径并返回相关信息 (新版 API)
+解析网络路径并返回相关信息 (新版 API)。
 
 ```js
 const { URL } = require("node:url")
@@ -170,7 +164,7 @@ const url = new URL("http://localhost:1118/user?name=xiaoming&age=20")
 
 ### fs.readFileSync
 
-同步读取文件，不推荐
+同步读取文件，不推荐。
 
 ```js
 const fs = require("node:fs")
@@ -186,7 +180,7 @@ catch {
 
 ### fs.readFile
 
-异步读取文件 (callback)，不推荐
+异步读取文件 (callback)，不推荐。
 
 ```js
 const fs = require("node:fs")
@@ -195,7 +189,7 @@ const path = require("node:path")
 fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8", (error, data) => {})
 ```
 
-异步读取文件 (Promise)，推荐
+异步读取文件 (Promise)，推荐。
 
 ```js
 const fs = require("node:fs/promises")
@@ -206,7 +200,7 @@ fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8")
   .catch(error => {})
 ```
 
-异步读取文件 (async)，推荐
+异步读取文件 (async)，推荐。
 
 ```js
 const fs = require("node:fs/promises")
@@ -224,7 +218,7 @@ const path = require("node:path")
 
 ### fs.writeFileSync
 
-同步写入文件
+同步写入文件。
 
 ```js
 const fs = require("node:fs")
@@ -240,7 +234,7 @@ catch {
 
 ### fs.writeFile
 
-异步写入文件
+异步写入文件。
 
 ```js
 const fs = require("node:fs/promises")
@@ -252,7 +246,7 @@ fs.writeFile(path.resolve(__dirname, "./file.txt"), "hello world")
 
 ### fs.appendFileSync
 
-同步追加内容，若文件不存在，则创建该文件
+同步追加内容，若文件不存在，则创建该文件。
 
 ```js
 const fs = require("node:fs")
@@ -268,7 +262,7 @@ catch {
 
 ### fs.appendFile
 
-异步追加内容，若文件不存在，则创建该文件
+异步追加内容，若文件不存在，则创建该文件。
 
 ```js
 const fs = require("node:fs/promises")
@@ -280,7 +274,7 @@ fs.appendFile(path.resolve(__dirname, "./file.txt"), "hello world")
 
 ### fs.unlinkSync
 
-同步删除文件
+同步删除文件。
 
 ```js
 const fs = require("node:fs")
@@ -296,7 +290,7 @@ catch {
 
 ### fs.unlink
 
-异步删除文件
+异步删除文件。
 
 ```js
 const fs = require("node:fs/promises")
@@ -308,7 +302,7 @@ fs.unlink(path.resolve(__dirname, "./file.txt"))
 
 ### fs.copyFileSync
 
-同步复制文件
+同步复制文件。
 
 ```js
 const fs = require("node:fs")
@@ -327,7 +321,7 @@ catch {
 
 ### fs.copyFile
 
-异步复制文件
+异步复制文件。
 
 ```js
 const fs = require("node:fs/promises")
@@ -341,7 +335,7 @@ fs.copyFile(
 
 ### fs.readdirSync
 
-同步读取目录
+同步读取目录。
 
 ```js
 const fs = require("node:fs")
@@ -357,7 +351,7 @@ catch {
 
 ### fs.readdir
 
-异步读取目录
+异步读取目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -370,7 +364,7 @@ fs.readdir(path.resolve(__dirname, "./dir"))
 
 ### fs.mkdirSync
 
-同步创建目录
+同步创建目录。
 
 ```js
 const fs = require("node:fs")
@@ -388,7 +382,7 @@ catch {
 
 ### fs.mkdir
 
-异步创建目录
+异步创建目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -401,7 +395,7 @@ fs.mkdir(path.resolve(__dirname, "./dir/src"), {
 
 ### fs.rmdirSync
 
-同步删除目录
+同步删除目录。
 
 ```js
 const fs = require("node:fs")
@@ -417,7 +411,7 @@ catch {
 
 ### fs.rmdir
 
-异步删除目录
+异步删除目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -429,7 +423,7 @@ fs.rmdir(path.resolve(__dirname, "./dir"))
 
 ### fs.rmSync
 
-同步删除文件/目录
+同步删除文件/目录。
 
 ```js
 const fs = require("node:fs")
@@ -448,7 +442,7 @@ catch {
 
 ### fs.rm
 
-异步删除文件/目录
+异步删除文件/目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -462,7 +456,7 @@ fs.rm(path.resolve(__dirname, "./dir"), {
 
 ### fs.renameSync
 
-同步重命名文件/目录
+同步重命名文件/目录。
 
 ```js
 const fs = require("node:fs")
@@ -481,7 +475,7 @@ catch {
 
 ### fs.rename
 
-异步重命名文件/目录
+异步重命名文件/目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -495,7 +489,7 @@ fs.rename(
 
 ### fs.statSync
 
-同步判断是否为文件/目录
+同步判断是否为文件/目录。
 
 ```js
 const fs = require("node:fs")
@@ -512,7 +506,7 @@ catch {
 
 ### fs.stat
 
-异步判断是否为文件/目录
+异步判断是否为文件/目录。
 
 ```js
 const fs = require("node:fs/promises")
@@ -525,7 +519,7 @@ fs.stat(path.resolve(__dirname, "./dir"))
 
 ### fs.existsSync
 
-同步判断文件/目录是否存在
+同步判断文件/目录是否存在。
 
 ```js
 const fs = require("node:fs")
@@ -541,7 +535,7 @@ catch {
 
 ### fs.exists
 
-异步判断文件/目录是否存在，**已弃用**
+异步判断文件/目录是否存在，**已弃用**。
 
 > "fs/promises" 模块中没有 exists 方法
 
@@ -549,7 +543,7 @@ catch {
 
 ### Buffer.alloc
 
-创建一个 buffer
+创建一个 buffer。
 
 ```js
 const { Buffer } = require("node:buffer")
@@ -557,7 +551,7 @@ const { Buffer } = require("node:buffer")
 const buf = Buffer.alloc(5) // <Buffer 00 00 00 00 00>
 ```
 
-创建一个 64k 文件
+创建一个 64k 文件。
 
 ```js
 const fs = require("node:fs")
@@ -569,7 +563,7 @@ fs.writeFileSync("file", buf)
 
 ### Buffer.allocUnsafe
 
-创建一个 buffer，可以快速创建，但是不安全
+创建一个 buffer，可以快速创建，但是不安全。
 
 ```js
 const { Buffer } = require("node:buffer")
@@ -579,7 +573,7 @@ const buf = Buffer.allocUnsafe(5) // <Buffer 00 00 00 00 00>
 
 ### Buffer.from
 
-将字符串转换为 buffer
+将字符串转换为 buffer。
 
 ```js
 const { Buffer } = require("node:buffer")
@@ -587,7 +581,7 @@ const { Buffer } = require("node:buffer")
 const buf = Buffer.from("hello") // <Buffer 68 65 6c 6c 6f>
 ```
 
-将 buffer 转换为字符串
+将 buffer 转换为字符串。
 
 ```js
 const { Buffer } = require("node:buffer")
@@ -600,7 +594,7 @@ buf.toString() // "hello"
 
 ### stream.on("data")
 
-当数据块 (chunk) 被读取时，触发事件
+当数据块 (chunk) 被读取时，触发事件。
 
 ```js
 const fs = require("node:fs")
@@ -611,7 +605,7 @@ stream.on("data", chunk => {})
 
 ### stream.on("end")
 
-当数据块 (chunk) 读取完成时，触发事件
+当数据块 (chunk) 读取完成时，触发事件。
 
 ```js
 const fs = require("node:fs")
@@ -624,7 +618,7 @@ stream.on("end", () => {})
 
 ### emitter.on
 
-监听自定义事件
+监听自定义事件。
 
 ```js
 const EventEmitter = require("node:events")
@@ -635,7 +629,7 @@ emitter.on("myEvent", args => {})
 
 ### emitter.once
 
-监听自定义事件，触发一次后移除监听器
+监听自定义事件，触发一次后移除监听器。
 
 ```js
 const EventEmitter = require("node:events")
@@ -644,13 +638,9 @@ const emitter = new EventEmitter()
 emitter.once("myEvent", args => {})
 ```
 
-### emitter.addListener
-
-监听自定义事件，`emitter.on()` 的别名
-
 ### emitter.emit
 
-触发事件监听器，并将附加参数传递给监听器回调
+触发事件监听器，并将附加参数传递给监听器回调。
 
 ```js
 const EventEmitter = require("node:events")
@@ -661,7 +651,7 @@ emitter.emit("myEvent", [...args])
 
 ### emitter.off
 
-移除事件监听器
+移除事件监听器。
 
 ```js
 const EventEmitter = require("node:events")
@@ -676,27 +666,9 @@ emitter.on("myEvent", bListener)
 emitter.off("myEvent", bListener) // myEvent [aListener]
 ```
 
-### emitter.removeListener
-
-移除事件监听器，`emitter.off()` 的别名
-
-### emitter.removeAllListeners
-
-移除所有事件监听器
-
-```js
-const EventEmitter = require("node:events")
-const emitter = new EventEmitter()
-
-emitter.on("myEvent", () => {})
-emitter.on("myEvent", () => {})
-
-emitter.removeAllListeners() // myEvent []
-```
-
 ### emitter.listeners
 
-获取监听器队列
+获取监听器队列。
 
 ```js
 const EventEmitter = require("node:events")
@@ -713,7 +685,7 @@ emitter.listeners("myEvent") // myEvent [aListener, bListener]
 
 ### emitter.listenerCount
 
-获取监听器数量
+获取监听器数量。
 
 ```js
 const EventEmitter = require("node:events")
@@ -725,9 +697,23 @@ emitter.on("myEvent", () => {})
 emitter.listenerCount("myEvent") // 2
 ```
 
+### emitter.removeAllListeners
+
+移除所有事件监听器。
+
+```js
+const EventEmitter = require("node:events")
+const emitter = new EventEmitter()
+
+emitter.on("myEvent", () => {})
+emitter.on("myEvent", () => {})
+
+emitter.removeAllListeners() // myEvent []
+```
+
 ### emitter.eventNames
 
-获取自定义事件队列
+获取自定义事件队列。
 
 ```js
 const EventEmitter = require("node:events")
@@ -744,7 +730,7 @@ emitter.eventNames() // ['aEvent', 'bEvent', 'cEvent']
 
 ### http.createServer
 
-创建服务器
+创建服务器。
 
 ```js
 const http = require("node:http")
@@ -758,7 +744,7 @@ server.listen(1118)
 
 ### req.method
 
-获取请求方法
+获取请求方法。
 
 ```js
 const server = http.createServer((req, res) => {
@@ -768,7 +754,7 @@ const server = http.createServer((req, res) => {
 
 ### res.setHeader
 
-设置响应头
+设置响应头。
 
 ```js
 const server = http.createServer((req, res) => {
@@ -778,7 +764,7 @@ const server = http.createServer((req, res) => {
 
 ### res.write
 
-发送一块响应体，可以连续发送响应体数据块(chunk)
+发送一块响应体，可以连续发送响应体数据块（chunk）。
 
 ```js
 const server = http.createServer((req, res) => {
@@ -788,7 +774,7 @@ const server = http.createServer((req, res) => {
 
 ### res.end
 
-结束响应进程
+结束响应进程。
 
 ```js
 const server = http.createServer((req, res) => {
@@ -824,7 +810,7 @@ app.listen(1118)
 
 ### req.path
 
-获取请求路径 (不含查询参数)
+获取请求路径（不含查询参数）。
 
 ```js
 app.get("/user", (req, res) => {
@@ -834,7 +820,7 @@ app.get("/user", (req, res) => {
 
 ### req.url
 
-获取请求路径 (含查询参数)
+获取请求路径（含查询参数）。
 
 ```js
 app.get("/user", (req, res) => {
@@ -844,7 +830,7 @@ app.get("/user", (req, res) => {
 
 ### req.query
 
-获取 query 参数(对象)
+获取 query 参数（对象）。
 
 ```js
 app.get("/user", (req, res) => {
@@ -854,7 +840,7 @@ app.get("/user", (req, res) => {
 
 ### req.params
 
-获取 params 参数(对象)
+获取 params 参数（对象）。
 
 ```js
 app.get("/user/:name", (req, res) => {
@@ -864,7 +850,7 @@ app.get("/user/:name", (req, res) => {
 
 ### req.get
 
-获取请求头中的数据
+获取请求头中的数据。
 
 ```js
 app.get("/user", (req, res) => {
@@ -875,7 +861,7 @@ app.get("/user", (req, res) => {
 
 ### req.cookies
 
-获取请求头中的 Cookie，需要使用 "cookie-parser"
+获取请求头中的 Cookie，需要使用 `cookie-parser`。
 
 ```js
 const cookieParser = require("cookie-parser")
@@ -889,7 +875,7 @@ app.get("/get-cookie", (req, res) => {
 
 ### req.body
 
-获取请求体中的数据，需要使用 "body-parser"
+获取请求体中的数据，需要使用 `body-parser`。
 
 ```js
 const bodyParser = require("body-parser")
@@ -904,7 +890,7 @@ app.post("/post", (req, res) => {
 
 ### req.route
 
-获取路由相关信息
+获取路由相关信息。
 
 ```js
 app.get("/user", (req, res) => {
@@ -930,7 +916,7 @@ app.get("/user", (req, res) => {
 
 ### res.end
 
-结束响应进程。用于不发送任何数据的情况下，快速结束响应
+结束响应进程。用于不发送任何数据的情况下，快速结束响应。
 
 ```js
 app.get("/", (req, res) => {
@@ -940,7 +926,7 @@ app.get("/", (req, res) => {
 
 ### res.send
 
-发送响应体，并结束响应进程
+发送响应体，并结束响应进程。
 
 > `res.write` + `res.end`
 
@@ -952,7 +938,7 @@ app.get("/", (req, res) => {
 
 ### res.sendFile
 
-发送文件(绝对路径)，并结束响应进程
+发送文件（绝对路径），并结束响应进程。
 
 > `fs.readFile` + `res.send`
 
@@ -966,7 +952,7 @@ app.get("/", (req, res) => {
 
 ### res.json
 
-发送 JSON 数据，并结束响应进程
+发送 JSON 数据，并结束响应进程。
 
 > `JSON.stringify` + `res.send`
 
@@ -978,7 +964,7 @@ app.get("/", (req, res) => {
 
 ### res.redirect
 
-重定向请求(跳转路径)
+重定向请求（跳转路径）。
 
 ```js
 app.get("/", (req, res) => {
@@ -988,7 +974,7 @@ app.get("/", (req, res) => {
 
 ### res.cookie
 
-设置 Cookie，并将其携带在响应头中
+设置 Cookie，并将其携带在响应头中。
 
 ```js
 app.get("set-cookie", (req, res) => {
@@ -998,7 +984,7 @@ app.get("set-cookie", (req, res) => {
 
 ### res.clearCookie
 
-清除 Cookie
+清除 Cookie。
 
 ```js
 app.get("/del-cookie", (req, res) => {
@@ -1008,7 +994,7 @@ app.get("/del-cookie", (req, res) => {
 
 ### res.status
 
-设置响应状态码
+设置响应状态码。
 
 ```js
 app.get("/", (req, res) => {
@@ -1018,7 +1004,7 @@ app.get("/", (req, res) => {
 
 ### res.sendStatus
 
-发送响应状态码，并结束响应进程
+发送响应状态码，并结束响应进程。
 
 > `res.status` + `res.send`
 
@@ -1032,7 +1018,7 @@ app.get("/", (req, res) => {
 
 ### 错误处理中间件
 
-错误处理中间件需要提供四个参数，否则为常规中间件
+错误处理中间件需要提供四个参数，否则为常规中间件。
 
 ```js
 app.use((err, req, res, next) => {
@@ -1066,7 +1052,7 @@ app.use(middleware({ option1: "one", option2: "two" }))
 
 #### express.static
 
-加载静态资源
+加载静态资源。
 
 ```js
 const static = express.static
@@ -1120,7 +1106,7 @@ app.use("/admin" /* 路由前缀 */, adminRouter)
 
 #### body-parser
 
-解析请求体中的数据，并转换为对象
+解析请求体中的数据，并转换为对象。
 
 ```js
 const bodyParser = require("body-parser")
@@ -1134,7 +1120,7 @@ app.post("/post", (req, res) => {
 
 #### cookie-parser
 
-解析请求头中的 Cookie
+解析请求头中的 Cookie。
 
 ```js
 const cookieParser = require("cookie-parser")
@@ -1148,7 +1134,7 @@ app.get("/get-cookie", (req, res) => {
 
 #### express-session
 
-处理 Session
+处理 Session。
 
 ```js
 const session = require("express-session")
@@ -1211,21 +1197,11 @@ app.get("/", (req, res) => {
 
 ## Cookie & Session
 
-### Cookie 简介
+### Cookie
 
-HTTP 是无状态协议，服务器无法区分请求是否从同一个客户端发送的
+#### 设置 Cookie
 
-使用 Cookie 来标记网络状态，可以解决 HTTP 协议无状态的问题
-
-1. 服务器设置 Cookie，向客户端返回响应时，将其携带在响应头中发送给客户端
-
-2. 客户端存储 Cookie，向服务器发送请求时，将其携带在请求头中发送给服务器
-
-3. 服务器收到 Cookie，就可以识别客户端
-
-### Cookie 设置
-
-会话期 Cookie：在会话结束之后被清除，关闭浏览器时结束会话
+会话期 Cookie：在会话结束之后被清除，关闭浏览器时结束会话。
 
 ```js
 // 客户端
@@ -1237,7 +1213,7 @@ app.get("set-cookie", (req, res) => {
 })
 ```
 
-持久性 Cookie：使用 expires 设置过期时间，不推荐
+持久性 Cookie：使用 expires 设置过期时间，不推荐。
 
 ```js
 // 客户端
@@ -1249,7 +1225,7 @@ app.get("set-cookie", (req, res) => {
 })
 ```
 
-持久性 Cookie：使用 Max-Age 设置有效期 (s)
+持久性 Cookie：使用 Max-Age 设置有效期（s）。
 
 ```js
 // 客户端
@@ -1261,11 +1237,11 @@ app.get("set-cookie", (req, res) => {
 })
 ```
 
-### Cookie 获取
+#### 获取 Cookie
 
-客户端：通过字符串和数组方法将 `document.cookie` 解析成对象
+客户端：通过字符串和数组方法将 `document.cookie` 解析成对象。
 
-服务器：需要使用 "cookie-parser"
+服务器：需要使用 `cookie-parser`。
 
 > 只能在设置 Cookie 的路由或子路由中获取
 
@@ -1285,11 +1261,11 @@ app.get("/get-cookie", (req, res) => {
 })
 ```
 
-### Cookie 删除
+#### 删除 Cookie
 
-客户端：将 Cookie 设置为已过期，浏览器会清除过期的 Cookie
+客户端：将 Cookie 设置为已过期，浏览器会清除过期的 Cookie。
 
-服务器：使用 express 的 `res.clearCookie` 方法
+服务器：使用 express 的 `res.clearCookie` 方法。
 
 ```js
 // 客户端
@@ -1301,29 +1277,28 @@ app.get("/del-cookie", (req, res) => {
 })
 ```
 
-### Session 简介
+### Session
 
-我们发现当客户端向服务器发送请求时，总会携带 Cookie，这就导致我们不能在 Cookie 中存储较多数据，并且 Cookie 是存储在客户端的，安全性较低
+我们发现当客户端向服务器发送请求时，总会携带 Cookie，这就导致我们不能在 Cookie 中存储较多数据，并且 Cookie 是存储在客户端的，安全性较低。
 
-所以我们希望可以将数据存储在服务器中，并且这些数据都有唯一的 ID，客户端向服务器发送请求时，只需要携带这个 ID，服务器对其进行识别，就能访问对应的数据
+所以我们希望可以将数据存储在服务器中，并且这些数据都有唯一的 ID，客户端向服务器发送请求时，只需要携带这个 ID，服务器对其进行识别，就能访问对应的数据。
 
-Session 是服务器中的一个对象，用于存储数据。每个 Session 都有一个 ID，我们将这个 Session ID 作为一个 Cookie name，服务器会将这个 Cookie 携带在响应头中发送给客户端，客户端收到后将其存储，之后每次向服务器发送请求时，只需要携带这个 Cookie，服务器就可以根据 ID 找到对应的 Session
+Session 是服务器中的一个对象，用于存储数据。每个 Session 都有一个 ID，我们将这个 Session ID 作为一个 Cookie name，服务器会将这个 Cookie 携带在响应头中发送给客户端，客户端收到后将其存储，之后每次向服务器发送请求时，只需要携带这个 Cookie，服务器就可以根据 ID 找到对应的 Session。
 
-### Session 配置
+#### 配置 Session
 
-- `name`: 以 Session ID 命名的 Cookie, 默认值为 "connect.sid"
+- `name`：以 Session ID 命名的 Cookie, 默认值为 "connect.sid"
 
-- `secret`: 用于对 Session ID Cookie 进行加密的字符串, 也可以是包含多个加密字符串的数组
+- `secret`：用于对 Session ID Cookie 进行加密的字符串, 也可以是包含多个加密字符串的数组
 
-- `resave`: 是否重新保存 Session
+- `resave`：是否重新保存 Session
 
-- `saveUninitialized`: 是否保存未初始化的 Session
+- `saveUninitialized`：是否保存未初始化的 Session
 
-- `cookie`: Session ID Cookie 的配置对象
-
-  - `maxAge`: 有效期
-
-  - `httpOnly`: 是否只能由服务器访问
+- `cookie`：Session ID Cookie 的配置对象
+- `maxAge`：有效期
+  
+- `httpOnly`：是否只能由服务器访问
 
 ```js
 const session = require("express-session")
@@ -1342,9 +1317,9 @@ app.use(
 )
 ```
 
-### Session 设置
+#### 设置 Session
 
-Session 默认存储在内存中，服务器重启后会重置
+Session 默认存储在内存中，服务器重启后会重置。
 
 ```js
 app.get("/set-session", (req, res) => {
@@ -1352,9 +1327,9 @@ app.get("/set-session", (req, res) => {
 })
 ```
 
-### Session 获取
+#### 获取 Session
 
-Session 存储在服务器，只能由服务器访问
+Session 存储在服务器，只能由服务器访问。
 
 ```js
 app.get("/get-session", (req, res) => {
@@ -1362,7 +1337,7 @@ app.get("/get-session", (req, res) => {
 })
 ```
 
-### Session 删除
+#### 删除 Session
 
 ```js
 app.get("/del-session", (req, res) => {
@@ -1390,11 +1365,11 @@ const token = jwt.sign(data, "secret", {
 const decoded = jwt.verify(token, "secret")
 ```
 
-**参考**：https://www.npmjs.com/package/jsonwebtoken
+**参考**：[jsonwebtoken - npm (npmjs.com)](https://www.npmjs.com/package/jsonwebtoken)
 
 ### 服务器签发
 
-用户首次登录时，验证用户名密码，如果验证成功，由服务器签发 token，并返回给客户端
+用户首次登录时，验证用户名密码，如果验证成功，由服务器签发 token，并返回给客户端。
 
 ```js
 app.post("/login", (req, res) => {
@@ -1408,7 +1383,7 @@ app.post("/login", (req, res) => {
 
 ### 客户端携带
 
-客户端接收到 token 后在本地存储，并在下次请求（登录或路由跳转）时携带
+客户端接收到 token 后在本地存储，并在下次请求（登录或路由跳转）时携带。
 
 ```js
 fetch("http://127.0.0.1:8000/user", {
@@ -1435,49 +1410,39 @@ app.get("/user", (req, res) => {
 })
 ```
 
-## Csrf
-
-### 处理 Csrf 攻击
-
-- 通过 Referer 请求头来检查请求的来源
-
-- 使用验证码
-
-- 使用 token 校验
-
 ## MongoDB
 
 ### 基本操作
 
-- 进入 MongoDB 环境: `mongo`
+- 进入 MongoDB 环境：`mongo`
 
-- 查看所有数据库: `show dbs`
+- 查看所有数据库：`show dbs`
 
-- 切换数据库: `use [db]`，如果数据库不存在，则创建该数据库
+- 切换数据库：`use [db]`，如果数据库不存在，则创建该数据库
 
-  > 创建的空数据库不会出现在数据库列表中，需要添加一些数据才会显示
+  > 创建的空数据库不会出现在数据库列表中，需要添加一些数据才会显示。
   
-- 查看当前数据库: `db`
+- 查看当前数据库：`db`
 
-- 删除当前数据库: `db.dropDatabase()`
-
-
-
-- 查看集合: `show collections`
-
-- 创建集合: `db.createCollection(["col"])`
-
-- 删除集合: `db.[col].drop()`
+- 删除当前数据库：`db.dropDatabase()`
 
 
 
-- 添加数据: `db.[col].insert({ [key]: [value] })`，如果集合不存在，则创建该集合
+- 查看集合：`show collections`
 
-- 删除数据: `db.[col].remove({ [key]: [value] })`
+- 创建集合：`db.createCollection(["col"])`
 
-- 更新数据: `db.[col].update({ [key]: [value] }, { $set: { [key]: [value] } })`
+- 删除集合：`db.[col].drop()`
 
-- 查询数据: `db.[col].find({ [key]: [value] })`
+
+
+- 添加数据：`db.[col].insert({ [key]: [value] })`，如果集合不存在，则创建该集合
+
+- 删除数据：`db.[col].remove({ [key]: [value] })`
+
+- 更新数据：`db.[col].update({ [key]: [value] }, { $set: { [key]: [value] } })`
+
+- 查询数据：`db.[col].find({ [key]: [value] })`
 
 ### 更新操作
 
@@ -1533,7 +1498,7 @@ app.get("/user", (req, res) => {
 
 - `db.[col].find().skip((n - 1) * perpage).limit(perpage)` 查询第 n 页数据
 
-### mongoose
+### 代码示例
 
 ```js
 const mongoose = require("mongoose")

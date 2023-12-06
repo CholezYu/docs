@@ -143,7 +143,7 @@ module.exports = {
 
 `npm i mini-css-extract-plugin -D`
 
-将 CSS 打包成单独的文件，通过 link 标签加载。而不是创建一个 style 标签来生成样式
+将 CSS 打包成单独的文件，通过 link 标签加载。而不是创建一个 style 标签来生成样式。
 
 ```js
 /* webpack.prod.js */

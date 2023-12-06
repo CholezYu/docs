@@ -5,7 +5,7 @@ icon: javascript
 
 ## 强制转换原理
 
-### Number
+### Number()
 
 参数为基本类型，按基本转换规则转换。
 
@@ -62,7 +62,7 @@ Number({
 }) // valueOf 和 toString 都返回对象，报错
 ```
 
-### String
+### String()
 
 参数为基本类型，按基本转换规则转换。
 
@@ -331,17 +331,17 @@ fun.bind({}).name // "bound fun"
 
 ### descriptor
 
-- value: 属性值。
+- value：属性值。
 
-- writable: 是否可修改。
+- writable：是否可修改。
 
-- enumerable: 是否可枚举。
+- enumerable：是否可枚举。
 
-- configurable: 是否可配置。
+- configurable：是否可配置。
 
-- get: getter 函数。
+- get：getter 函数。
 
-- set: setter 函数。
+- set：setter 函数。
 
 ### Object.create
 
@@ -1276,19 +1276,19 @@ set.size // 2
 
 Set 结构的实例有以下属性
 
-- Set.prototype.constructor: 构造函数，默认就是 Set 函数
+- Set.prototype.constructor：构造函数，默认就是 Set 函数
 
-- Set.prototype.size: 返回 Set 实例的成员总数
+- Set.prototype.size：返回 Set 实例的成员总数
 
 Set 实例的方法分为两大类：操作方法(用于操作数据) 和 遍历方法(用于遍历成员)。下面介绍 4 个操作方法
 
-- add(value): 添加某个值，返回 Set 结构本身
+- add(value)：添加某个值，返回 Set 结构本身
 
-- delete(value): 删除某个值，返回一个布尔值，表示删除是否成功
+- delete(value)：删除某个值，返回一个布尔值，表示删除是否成功
 
-- has(value): 返回一个布尔值，表示参数是否为 Set 的成员
+- has(value)：返回一个布尔值，表示参数是否为 Set 的成员
 
-- clear(): 清除所有成员，没有返回值
+- clear()：清除所有成员，没有返回值
 
 上面这些属性和方法的实例如下
 
@@ -1351,13 +1351,13 @@ dedupe([1, 2, 2, 3]) // [1, 2, 3]
 
 Set 结构的实例有 4 个遍历方法，可用于遍历成员
 
-- keys: 返回键名的遍历器
+- keys：返回键名的遍历器
 
-- values: 返回键值的遍历器
+- values：返回键值的遍历器
 
-- entries: 返回键值对的遍历器
+- entries：返回键值对的遍历器
 
-- forEach: 使用回调函数遍历每个成员
+- forEach：使用回调函数遍历每个成员
 
 Set 的遍历顺序就是插入顺序。使用 Set 保存一个回调函数列表，调用时就能保证按照添加顺序调用
 
@@ -1735,7 +1735,7 @@ console.log(4)
 
 ### async 函数
 
-async 函数是 Promise 的语法糖
+async 函数是 Promise 的语法糖。
 
 ```js
 const fn = async () => 5
@@ -1771,11 +1771,11 @@ const fn = () => {
 
 
 
-async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定
+async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定。
 
 ### await 表达式
 
-在 async 声明的异步函数中可以使用 await 关键字来调用异步函数
+在 async 声明的异步函数中可以使用 await 关键字来调用异步函数。
 
 ```js
 const fn = async () => {
@@ -1783,7 +1783,7 @@ const fn = async () => {
 }
 ```
 
-当我们使用 await 调用函数后，await 语句（函数）下面的所有代码会在 await 语句执行完之后放入微任务队列
+当我们使用 await 调用函数后，await 语句后面的所有代码会在 await 语句执行完之后放入微任务队列。
 
 ```js
 ;(async () => {
@@ -1820,7 +1820,7 @@ console.log(4)
 
 ## DOM
 
-https://wangdoc.com/javascript/dom
+[DOM - JavaScript 教程 - 网道 (wangdoc.com)](https://wangdoc.com/javascript/dom/)
 
 ### 节点
 
@@ -2015,31 +2015,31 @@ https://wangdoc.com/javascript/dom
 
 ### 事件传播
 
-- 捕获阶段: 
+- 捕获阶段：
 
-  - 事件从祖先元素向目标元素传播
+  - 事件从祖先元素向目标元素传播；
 
-  - 捕获阶段触发事件: 先触发祖先元素，再触发目标元素
+  - 捕获阶段触发事件：先触发祖先元素，再触发目标元素；
 
-  - IE8 没有捕获阶段
+  - IE8 没有捕获阶段。
 
-- 冒泡阶段: 
+- 冒泡阶段：
 
-  - 事件从目标元素向祖先元素传播
+  - 事件从目标元素向祖先元素传播；
 
-  - 冒泡阶段触发事件: 先触发目标元素，再触发祖先元素
+  - 冒泡阶段触发事件：先触发目标元素，再触发祖先元素；
 
-  - `addEventListener()` 默认在冒泡阶段触发事件，可设置参数在捕获阶段触发事件
+  - `addEventListener()` 默认在冒泡阶段触发事件，可设置参数在捕获阶段触发事件；
 
-  - `attachEvent()` 默认在冒泡阶段触发事件
+  - `attachEvent()` 默认在冒泡阶段触发事件。
 
-- 阻止事件冒泡:
+- 阻止事件冒泡
 
   - `event.stopPropagation()`
 
   - `event.cancelBubble = true` IE8
 
-- 阻止默认事件: 
+- 阻止默认事件：
 
   - `event.preventDefault()`
 
@@ -2049,12 +2049,12 @@ https://wangdoc.com/javascript/dom
 
 ### 事件委派
 
-将多个元素的事件监听委托给祖先元素处理，当该元素中的事件被触发时，会一直冒泡到祖先元素
+将多个元素的事件监听委托给祖先元素处理，当该元素中的事件被触发时，会一直冒泡到祖先元素。
 
-祖先元素不会直接处理事件，而是通过 `event.target` 得到触发事件的元素，调用回调函数
+祖先元素不会直接处理事件，而是通过 `event.target` 得到触发事件的元素，调用回调函数。
 
-应用场景: 
+应用场景：
 
-- 通过委派可以减少事件绑定的次数，提高了程序的性能
+- 通过委派可以减少事件绑定的次数，提高了程序的性能；
 
-- 添加新的子元素，会自动响应事件处理函数
+- 添加新的子元素，会自动响应事件处理函数。

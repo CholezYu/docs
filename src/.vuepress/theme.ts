@@ -34,6 +34,7 @@ export default hopeTheme({
   
   // page meta
   metaLocales: {
+    date: "更新时间",
     editLink: "在 GitHub 上编辑此页"
   },
   

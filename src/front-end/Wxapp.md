@@ -21,7 +21,7 @@ icon: wechat
 
 ## 全局配置
 
-https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html
+[小程序配置 / 全局配置 (qq.com)](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)
 
 ```json
 /* app.json */
@@ -63,9 +63,9 @@ https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.htm
 
 ## 页面配置
 
-https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html
+[小程序配置 / 页面配置 (qq.com)](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html)
 
-会覆盖 `app.json` 中相同的配置项
+会覆盖 `app.json` 中相同的配置项。
 
 ## 页面生命周期
 

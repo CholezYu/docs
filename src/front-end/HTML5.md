@@ -89,25 +89,25 @@ icon: html
 
 ### 表单属性
 
-- autocomplete: 显示历史输入（必须设置 name 属性才会生效）
+- autocomplete：显示历史输入（必须设置 name 属性才会生效）
 
-  - on: 开启（默认）
+  - on：开启（默认）
 
-  - off: 关闭
+  - off：关闭
 
-- autofocus: 自动获取输入框的焦点（无属性值）
+- autofocus：自动获取输入框的焦点（无属性值）
 
-- required: 输入框不能为空（无属性值）
+- required：输入框不能为空（无属性值）
 
-- readonly: 输入框中的值是只读的，不能被修改（无属性值）
+- readonly：输入框中的值是只读的，不能被修改（无属性值）
 
-- multiple: 可以选择多个 option（无属性值）
+- multiple：可以选择多个 option（无属性值）
 
-- `<input type="file" accept="image/*">`: 接受的图片格式
+- `<input type="file" accept="image/*">`：接受的图片格式
 
-- `<input type="file" capture="camera">`: 调用相机权限
+- `<input type="file" capture="camera">`：调用相机权限
 
-- `<input type="file" capture="photo">`: 调用相册权限
+- `<input type="file" capture="photo">`：调用相册权限
 
 ## 媒体标签
 
@@ -118,15 +118,15 @@ icon: html
 <audio src=""></audio>
 ```
 
-- src: 音频路径（必要）
+- src：音频路径（必要）
 
-- controls: 允许用户控制播放（无属性值）
+- controls：允许用户控制播放（无属性值）
 
-- autoplay: 自动播放（无属性值）
+- autoplay：自动播放（无属性值）
 
-- muted: 静音（无属性值）
+- muted：静音（无属性值）
 
-- loop: 循环播放（无属性值）
+- loop：循环播放（无属性值）
 
 ### 视频标签
 
@@ -135,22 +135,22 @@ icon: html
 <video src=""></video>
 ```
 
-- src: 视频路径（必要）
+- src：视频路径（必要）
 
-- controls: 允许用户控制播放进度条（无属性值）
+- controls：允许用户控制播放进度条（无属性值）
 
-- autoplay: 自动播放（无属性值，必须静音）
+- autoplay：自动播放（无属性值，必须静音）
 
-- muted: 静音（无属性值）
+- muted：静音（无属性值）
 
-- loop: 循环播放（无属性值）
+- loop：循环播放（无属性值）
 
-- poster: 海报帧的路径，显示视频封面（值为图片地址）
+- poster：海报帧的路径，显示视频封面（值为图片地址）
 
-- preload: 视频预加载模式
+- preload：视频预加载模式
 
-  - none: 不进行预加载
+  - none：不进行预加载
 
-  - metadata: 加载部分视频信息
+  - metadata：加载部分视频信息
 
-  - auto: 预加载
+  - auto：预加载
