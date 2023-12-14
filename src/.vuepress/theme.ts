@@ -15,7 +15,7 @@ export default hopeTheme({
   iconAssets: "iconfont",
   // iconAssets: "iconify",
   
-  logo: "https://theme-hope-assets.vuejs.press/logo.svg",
+  logo: "https://cholez.gitee.io/docs/icon.svg",
   
   // 仓库配置，用于在导航栏中显示仓库链接
   repo: "choIez/docs",

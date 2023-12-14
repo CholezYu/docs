@@ -1,24 +1,14 @@
 ---
 title: Java
 icon: java
-date: 2023-12-06
+date: 2023-12-07
 ---
-
-## JDK
-
-JDK = JRE + 开发工具集
-
-JRE = JVM + JavaSE 标准类库
 
 ## 类型转换
 
 ### 自动类型提升
 
 容量小的类型与容量大的类型运算时，会提升为容量大的类型。
-
-byte < short < int < long < float < double
-
-byte, short, char 相互运算时（包括同种类型，如 byte + byte），至少转为 int 类型。
 
 ```java
 public class Main {
@@ -40,8 +30,6 @@ public class Main {
 ### 强制类型转换
 
 如果需要将容量大的类型转换为容量小的类型，需要使用强制类型转换。
-
-强制类型转换可能会导致精度丢失。	
 
 ```java
 public static void main(String[] args) {
@@ -145,6 +133,8 @@ if (!flag) {
 }
 ```
 
+> Java 提供了 `Arrays.binarySearch(array, index)` 方法进行二分查找。
+
 ### 冒泡排序
 
 ```java
@@ -169,58 +159,16 @@ for (int i = 0; i < arr.length - 1; i++) {
 }
 ```
 
-### Arrays.equals
+## 面向对象
 
-判断两个数组的元素是否依次相等。
+### 封装性
 
-```java
-int[] a = { 1, 2, 3, 4, 5 };
-int[] b = { 1, 2, 3, 4, 5 };
-int[] c = { 1, 2, 3, 4, 6 };
+使用权限修饰符来修饰类及类的内部成员。
 
-Arrays.equals(a, b); // true
-Arrays.equals(a, c); // false
-```
+- private：私有
 
-### Arrays.toString
+- default：缺省
 
-将数组转为字符串。
+- protected：受保护
 
-```java
-int[] arr = { 1, 2, 3, 4, 5 };
-
-Arrays.toString(arr); // [1, 2, 3, 4, 5]
-```
-
-### Arrays.fill
-
-填充数组。
-
-```java
-int[] arr = { 1, 2, 3, 4, 5 };
-
-Arrays.fill(arr, 10); // [10, 10, 10, 10, 10]
-```
-
-### Arrays.sort
-
-快速排序。
-
-```java
-int[] arr = { 34, 54, 3, 2, 84, 65, 7, 19, 5, 76, 67 };
-
-Arrays.sort(arr); // [2, 3, 5, 7, 19, 34, 54, 65, 67, 76, 84]
-```
-
-### Arrays.binarySearch
-
-二分查找。
-
-```java
-int[] arr = { 54, 3, 84, 65, 7, 5, 76, 67 };
-
-Arrays.binarySearch(arr, 3); // 1
-```
-
-## 类和对象
-
+- public：公开
