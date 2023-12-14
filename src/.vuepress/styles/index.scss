@@ -1,8 +1,8 @@
 // place your custom styles here
 .vp-hero-info-wrapper {
-  min-height: 94vh;
+  height: calc(100vh - 114px); /* header 60px, footer 54px */
 }
 
-.vp-feature-wrapper {
+/* .vp-feature-wrapper {
   background: linear-gradient(to left bottom, hsl(251, 100%, 85%) 0%, hsl(12, 100%, 85%) 100%);
-}
+} */

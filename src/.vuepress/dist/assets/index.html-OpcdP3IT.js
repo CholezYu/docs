@@ -1,1 +1,0 @@
-import{_ as e}from"./plugin-vue_export-helper-x3n3nnut.js";import{o,c as t,a as s}from"./app-mJH2tz0N.js";const c={},n=s("p",null,"该文档基于 VuePress Theme Hope 构建。",-1),_=[n];function r(a,l){return o(),t("div",null,_)}const m=e(c,[["render",r],["__file","index.html.vue"]]);export{m as default};
