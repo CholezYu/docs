@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2023-12-07
+date: 2023-12-14
 ---
 
 ## 类型转换
@@ -172,3 +172,19 @@ for (int i = 0; i < arr.length - 1; i++) {
 - protected：受保护
 
 - public：公开
+
+将内部成员设为私有，对外暴露 getter 和 setter 方法。这样，在其他类中只能通过这些方法来操作成员。
+
+```java
+public class Person {
+  private String name;
+  
+  public String getName() {
+    return name;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
+  }
+}
+```
