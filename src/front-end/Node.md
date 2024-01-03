@@ -1,7 +1,7 @@
 ---
 title: Node
 icon: nodeJS
-date: 2023-12-06
+date: 2023-12-19
 ---
 
 ## packages
@@ -27,6 +27,12 @@ date: 2023-12-06
 - 发布包：`npm publish`
 
 - 删除包：`npm unpublish --force`
+
+
+
+- 查看 npm 包的全局安装路径：`npm prefix -g `
+
+- 查看 npm 包的全局缓存路径：`npm config get cache`
 
 ### yarn
 

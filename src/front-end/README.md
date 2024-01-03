@@ -19,7 +19,7 @@ icon: network
 
 - [JavaScript](JavaScript.md)
 
-- [JavaScript 算法](JavaScript-算法.md)
+- [JavaScript-Algo](JavaScript-Algo.md)
 
 - [TypeScript](TypeScript.md)
 

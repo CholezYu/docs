@@ -188,3 +188,5 @@ public class Person {
   }
 }
 ```
+
+### 继承性

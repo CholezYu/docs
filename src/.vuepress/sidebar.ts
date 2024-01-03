@@ -42,9 +42,9 @@ export default sidebar({
           link: "JavaScript"
         },
         {
-          text: "JavaScript 算法",
+          text: "JavaScript-Algo",
           icon: "javascript",
-          link: "JavaScript-算法"
+          link: "JavaScript-Algo"
         },
         {
           text: "TypeScript",
@@ -120,9 +120,9 @@ export default sidebar({
           link: "Java"
         },
         {
-          text: "Java 算法",
+          text: "Java-Algo",
           icon: "java",
-          link: "Java-算法"
+          link: "Java-Algo"
         },
         {
           text: "MySQL",
@@ -153,19 +153,19 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "解决问题",
-          icon: "question",
-          link: "解决问题"
-        },
-        {
-          text: "项目细节",
+          text: "Prettier",
           icon: "write",
-          link: "项目细节"
+          link: "Prettier"
         },
         {
-          text: "面试经验",
-          icon: "storage",
-          link: "面试经验"
+          text: "Debug",
+          icon: "debug",
+          link: "Debug"
+        },
+        {
+          text: "Update",
+          icon: "update",
+          link: "Update"
         }
       ]
     },

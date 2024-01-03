@@ -5,8 +5,8 @@ icon: more
 
 ## 详细
 
-- [解决问题](解决问题.md)
+- [Prettier](Prettier.md)
 
-- [经验分享](项目细节.md)
+- [Debug](Debug.md)
 
-- [面试宝典](面试经验.md)
+- [Update](Update.md)

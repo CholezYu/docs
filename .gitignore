@@ -9,6 +9,8 @@ Desktop.ini
 # Vuepress Temp
 **/.vuepress/.temp/**
 
+node_modules
+
 .pnp.cjs
 .pnp.loader.mjs
 

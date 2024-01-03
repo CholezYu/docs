@@ -847,7 +847,7 @@ routes: [
 <router-link to="/user/even">User</router-link>
 
 <!-- 对象写法, params 参数只支持 name -->
-<router-link :to="{ name: 'User', params: { name: even } }">User</router-link>
+<router-link :to="{ name: 'User', params: { name: 'even' } }">User</router-link>
 ```
 
 #### route.query

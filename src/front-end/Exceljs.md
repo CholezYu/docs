@@ -1,6 +1,7 @@
 ---
 title: Exceljs
 icon: javascript
+date: 2024-01-03
 ---
 
 ## 单元格样式
@@ -188,7 +189,7 @@ interface FillGradientPath {
 ```js
 import { Workbook } from "exceljs"
 import { saveAs } from "file-saver/dist/FileSaver"
-import { urlToBase64 } from "@/utils/urlToBase64" // 百度搜
+import { urlToBase64 } from "@/utils/urlToBase64"
 
 
 export function excelExport(data, headers, title) {

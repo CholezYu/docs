@@ -11,7 +11,7 @@ icon: back-stage
 
 - [Java](Java.md)
 
-- [Java 算法](Java-算法.md)
+- [Java-Algo](Java-Algo.md)
 
 - [MySQL](MySQL.md)
 

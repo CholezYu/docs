@@ -1,0 +1,1 @@
+import{_ as t}from"./plugin-vue_export-helper-x3n3nnut.js";import{o as r,c as a,a as e}from"./app-6YBn8GoV.js";const o={},c=e("h2",{id:"",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#","aria-hidden":"true"},"#")],-1),s=[c];function n(_,i){return r(),a("div",null,s)}const l=t(o,[["render",n],["__file","Prettier.html.vue"]]);export{l as default};

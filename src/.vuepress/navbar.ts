@@ -17,7 +17,7 @@ export default navbar([
           "Less",
           "Bootstrap",
           "JavaScript",
-          "JavaScript-算法",
+          "JavaScript-Algo",
           "TypeScript",
           "Ajax",
           "Node",
@@ -37,7 +37,7 @@ export default navbar([
         prefix: "after-end/",
         children: [
           "Java",
-          "Java-算法",
+          "Java-Algo",
           "MySQL",
           "JDBC",
           "JavaWeb",
