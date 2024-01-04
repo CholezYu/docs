@@ -5,8 +5,10 @@ icon: more
 
 ## 详细
 
-- [Prettier](Prettier.md)
+- [代码规范](代码规范.md)
 
-- [Debug](Debug.md)
+- [报错处理](报错处理.md)
 
-- [Update](Update.md)
+- [面试题](面试题.md)
+
+- [心得体会](心得体会.md)

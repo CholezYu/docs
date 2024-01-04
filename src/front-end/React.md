@@ -3,10 +3,6 @@ title: React
 icon: react
 ---
 
-## Prettier
-
-
-
 ## 基本使用
 
 ### 引入 React

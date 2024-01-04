@@ -153,20 +153,25 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "Prettier",
+          text: "代码规范",
           icon: "write",
-          link: "Prettier"
+          link: "代码规范"
         },
         {
-          text: "Debug",
-          icon: "debug",
-          link: "Debug"
+          text: "报错处理",
+          icon: "light",
+          link: "报错处理"
         },
         {
-          text: "Update",
-          icon: "update",
-          link: "Update"
-        }
+          text: "心得体会",
+          icon: "hot",
+          link: "心得体会"
+        },
+        {
+          text: "面试题",
+          icon: "note",
+          link: "面试题"
+        },
       ]
     },
     {
