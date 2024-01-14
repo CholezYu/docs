@@ -161,22 +161,22 @@ export default sidebar({
       children: [
         {
           text: "代码规范",
-          icon: "write",
+          icon: "markdown",
           link: "代码规范"
         },
         {
           text: "报错处理",
-          icon: "light",
+          icon: "markdown",
           link: "报错处理"
         },
         {
           text: "心得体会",
-          icon: "hot",
+          icon: "markdown",
           link: "心得体会"
         },
         {
           text: "面试题",
-          icon: "note",
+          icon: "markdown",
           link: "面试题"
         }
       ]
