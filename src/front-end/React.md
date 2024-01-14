@@ -1,172 +1,8 @@
 ---
 title: React
 icon: react
+date: 2024-01-14
 ---
-
-## 基本使用
-
-### 引入 React
-
-```html
-<!-- React 核心模块, 提供 React 核心语法 -->
-<script src="./react.development.js"></script>
-
-<!-- 操作 DOM 模块, 提供 DOM 相关的语法 -->
-<script src="./react-dom.development.js"></script>
-```
-
-### 基本使用
-
-- `React.createElement()`
-  - 创建虚拟 DOM；
-  
-  - 参数分别是：标签名；标签属性；子节点...
-  
-- `ReactDOM.createRoot()`
-
-  - 创建根容器对象，让 React 组件或虚拟 DOM 在这个容器中展示。
-  
-- `render()`
-  - 将 React 组件或虚拟 DOM 渲染成真实 DOM，并挂载到根容器上；
-
-  - 首次调用 render 方法：所有虚拟 DOM 都会渲染成真实 DOM，挂载到根容器上；
-
-  - 之后调用 render 方法：使用 diffing 算法将新的虚拟 DOM 与之前的进行比较，只渲染更新的部分。
-
-
-```js
-// 创建虚拟 DOM
-const v = React.createElement("h1", { className: "outer" }, "Hello React")
-
-// 创建 React 根容器节点
-const root = ReactDOM.createRoot(app)
-
-// 在根容器节点中渲染虚拟 DOM
-root.render(v)
-```
-
-### JSX 创建虚拟 DOM
-
-```jsx
-const v = (
-  <div>
-    <h2>React</h2>
-    <p>Hello JSX</p>
-  </div>
-)
-
-const root = ReactDOM.createRoot(app)
-
-root.render(v)
-```
-
-> 虚拟 DOM 不能写成字符串
-
-### JSX 注意事项
-
-- 使用插值语法混入 JS 表达式
-
-- 插值表达式返回的类型:
-
-  - string, number => string
-
-  - boolean, null, undefined, symbol => ""
-
-  - array => ...[] => string
-
-  - object !=> *
-
-- 元素类名须使用 className
-
-- 行内样式须写成 `style={{}}`，并使用驼峰命名
-
-- 有且只有一个根标签
-
-- 关标签必须闭合
-
-```jsx
-const message = "Hello JSX"
-
-const v = (
-  <div>
-    <p className="" style={{ color: "red", backgroundColor: "yellow" }}>
-      {message}
-    </p>
-  </div>
-)
-```
-
-## 条件渲染
-
-```jsx
-const v = (
-  <div>
-    { flag ? <h2>React</h2> : <h2>Vue</h2> }
-  </div>
-)
-```
-
-## 列表渲染
-
-```jsx
-const v = (
-  <ul>
-    { arr.map(item => <li>{ item }</li>) }
-  </ul>
-)
-
-ReactDOM.createRoot(app).render(v)
-```
-
-## Diffing
-
-### 简单介绍
-
-- 当数据发生变化时，React 会生成新的虚拟 DOM，然后对新生成的虚拟 DOM 与当前虚拟 DOM 进行比较；
-
-- React 通过比较这两棵虚拟 DOM 树的差异，决定如何修改 DOM 结构。这种算法称为 diffing 算法；
-
-- diffing 算法可以提升 React 的渲染性能，计算出虚拟 DOM 中变化的部分，针对该部分进行 DOM 操作。
-
-### 算法策略
-
-> **策略一**
-
-- 两棵树只对同一层级的节点进行比较，若该节点不存在了，那么该节点及所有子节点将被删除，不再进行比较；
-
-- React diffing 只考虑同层级的节点的位置变换，若为跨层级的位置变换，则为删除节点和创建节点的操作；
-
-- React 官方建议不要进行 DOM 节点的跨层级操作。
-
->**策略二**
-
-- 同一类型的组件（元素），按照原策略（tree diff）进行深层次比较；
-
-- 不同类型的组件（元素），diffing 算法会将当前组件(元素)及其所有子节点全部删除，添加新的组件（元素）。
-
-> **策略三**
-
-- 对于同一层级的节点，React diffing 提供了四种节点操作：插入，删除，移动，更新；
-
-- 插入：新的元素不在当前虚拟 DOM 中，而是全新的节点，则进行插入操作；
-
-- 删除：元素已经在当前 DOM 中，但虚拟 DOM 更新后没有了，则进行删除操作；
-
-- 移动：元素已经在当前 DOM 中，并且虚拟 DOM 更新时，元素没有变化，只是位置改变，则进行移动操作；
-
-- 更新：元素只是属性发生了改变，则进行更新操作。
-
-### key
-
-- 当某个节点添加了同级节点中唯一的 key 属性，当它在当前层级的位置发生变化后，diffing 算法通过比较之后，如果发现了 key 值相同的新旧节点，就会执行移动操作，而不会执行删除旧节点与创建新节点的操作；
-
-- React 建议不要用遍历时的 index 作为节点的 key 值，因为每个元素的 index 会随结构的改变而发生变化。
-
-- key 的注意事项：
-
-  - key 必须在当前列表具有唯一性；
-
-  - key 必须具有稳定性。
 
 ## 类式组件
 
@@ -192,9 +28,7 @@ class App extends React.Component {
 ReactDOM.createRoot(app).render(<App />)
 ```
 
-### 三大属性
-
-#### state
+### state
 
 在 state 中定义的数据都具有响应式特性。
 
@@ -205,30 +39,28 @@ class App extends React.Component {
   state = {
     count: 0
   }
-
+  
   render() {
     const { count } = this.state
     return (
       <div>
-        <p>{count}</p>
-        <button onClick={this.increment(2)}>+2</button>
-        <button onClick={this.increment(5)}>+5</button>
+        <p>{ count }</p>
+        <button onClick={ this.increment(2) }>+2</button>
+        <button onClick={ this.increment(5) }>+5</button>
       </div>
     )
   }
-
+  
   increment = n => {
     return event => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
       const { count } = this.state
-      this.setState({
-        count: count + n
-      })
+      this.setState({ count: count + n })
     }
   }
 }
 ```
 
-#### props
+### props
 
 在子组件中可以通过 props 接收父组件传递的数据。
 
@@ -240,18 +72,18 @@ class App extends React.Component {
     title: "Hello React",
     count: 0
   }
-
+  
   render() {
     const { title, count } = this.state
     return (
       <div>
-        {/* 将 title 属性和 increment 方法传递给子组件 */}
-        <Item title={title} increment={this.increment} />
-        <p>{count}</p>
+        {/* 将 title 属性和 increment 方法传递给子组件 */ }
+        <Item title={ title } increment={ this.increment } />
+        <p>{ count }</p>
       </div>
     )
   }
-
+  
   increment = () => {
     const { count } = this.state
     this.setState({
@@ -265,8 +97,8 @@ class Item extends React.Component {
     const { title, increment } = this.props
     return (
       <div>
-        <h2>{title}</h2>
-        <button onClick={increment}>count++</button>
+        <h2>{ title }</h2>
+        <button onClick={ increment }>count++</button>
       </div>
     )
   }
@@ -282,11 +114,11 @@ state = {
 
 render() {
   const { user } = this.state
-  return <Item {...user} /> // => <Item name={user.name} age={user.age} />
+  return <Item { ... user} /> // => <Item name={ user.name } age={ user.age } />
 }
 ```
 
-#### refs
+### refs
 
 为虚拟 DOM 元素注册一个 ref 属性，就可以通过 refs 获取这个原生 DOM 元素。
 
@@ -298,11 +130,11 @@ class App extends React.Component {
     return (
       <div>
         <input type="text" ref="inputRef" />
-        <button onClick={this.getItem}>点击</button>
+        <button onClick={ this.getItem }>点击</button>
       </div>
     )
   }
-
+  
   getItem = () => {
     const { inputRef } = this.refs
   }
@@ -318,16 +150,17 @@ class App extends React.Component {
 ```jsx
 class App extends React.Component {
   state = { username: "", password: "" }
+  
   render() {
     const { username, password } = this.state
     return (
       <div>
-        <input type="text" value={username} onChange={this.changeForm("username")} />
-        <input type="password" value={password} onChange={this.changeForm("password")} />
+        <input type="text" value={ username } onChange={ this.changeForm("username") } />
+        <input type="password" value={ password } onChange={ this.changeForm("password") } />
       </div>
     )
   }
-
+  
   changeForm = type => {
     return event => {
       this.setState({
@@ -418,49 +251,26 @@ class App extends React.Component {
 }
 ```
 
-## 函数组件
-
-```jsx
-function Header(props) {
-  const {count, setCount} = props
-  
-  return <h2 onClick={() => setCount(item => item + 1)}>{count}</h2>
-}
-
-function App() {
-  const [count, setCount] = useState(0)
-  
-  return <Header count={count} setCount={setCount} />
-}
-
-ReactDOM.createRoot(app).render(<App />)
-```
-
 ## Hooks
 
 ### useState
 
-`const [state, setState] = useState(initialState)`
-
-- state：响应式数据
-
-- setState：修改响应式数据的方法
-
-  > setState 是异步执行的，所以只能在渲染完成之后才能获取更新的响应式数据的值。
-
-- initialState：响应式数据初始值
+> setState 是异步执行的，所以只能在渲染完成之后才能获取更新的响应式数据的值。
 
 ```jsx
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from "react"
 
-  /* 事件函数 */
-  const addCount = () => {
-    setCount(count + 1)
-    // or
-    setCount(count => count + 1)
-  }
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <>
+      <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
+    </>
+  )
 }
+
+export default App
 ```
 
 ### useEffect
@@ -482,7 +292,7 @@ function App() {
 ```jsx
 function App() {
   const [count, setCount] = useState(0)
-
+  
   useEffect(() => /* setup */ {
     const timer = setTimeout(() => {
       console.log(count)
@@ -492,8 +302,8 @@ function App() {
       clearTimeout(timer)
     }
   }, [count])
-
-  return <button onClick={() => {setCount(count => count + 1)}}>{count}</button>
+  
+  return <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
 }
 ```
 
@@ -506,14 +316,16 @@ function App() {
 ```jsx
 function App() {
   const [count, setCount] = useState(0)
-
-  return <MyComponent count={count} setCount={setCount} />
+  
+  return <MyComponent count={ count } setCount={ setCount } />
 }
 
 function MyComponent({ count, setCount }) {
   const inputRef = useRef()
   
-  return <input type="text" ref={inputRef} onChange={() => {console.log(inputRef.current)}} />
+  return (
+    <input type="text" ref={ inputRef } onChange={ () => console.log(inputRef.current) } />
+  )
 }
 ```
 
@@ -534,9 +346,9 @@ function App() {
   const [value, setValue] = useState("Hello React")
   return (
     <div>
-      <p>{value}</p>
-
-      <AppContext.Provider value={{ value, setValue }}>
+      <p>{ value }</p>
+      
+      <AppContext.Provider value={ { value, setValue } }>
         <MyComponent />
       </AppContext.Provider>
     </div>
@@ -545,14 +357,64 @@ function App() {
 
 function MyComponent() {
   const { value, setValue } = useContext(AppContext)
-
+  
   const changeValue = event => {
     setValue(event.target.value)
   }
-
-  return <input type="text" value={value} onChange={changeValue} />
+  
+  return <input type="text" value={ value } onChange={ changeValue } />
 }
 ```
+
+## Diffing
+
+### 简单介绍
+
+- 当数据发生变化时，React 会生成新的虚拟 DOM，然后对新生成的虚拟 DOM 与当前虚拟 DOM 进行比较；
+
+- React 通过比较这两棵虚拟 DOM 树的差异，决定如何修改 DOM 结构。这种算法称为 diffing 算法；
+
+- diffing 算法可以提升 React 的渲染性能，计算出虚拟 DOM 中变化的部分，针对该部分进行 DOM 操作。
+
+### 算法策略
+
+> **策略一**
+
+- 两棵树只对同一层级的节点进行比较，若该节点不存在了，那么该节点及所有子节点将被删除，不再进行比较；
+
+- React diffing 只考虑同层级的节点的位置变换，若为跨层级的位置变换，则为删除节点和创建节点的操作；
+
+- React 官方建议不要进行 DOM 节点的跨层级操作。
+
+>**策略二**
+
+- 同一类型的组件（元素），按照原策略（tree diff）进行深层次比较；
+
+- 不同类型的组件（元素），diffing 算法会将当前组件(元素)及其所有子节点全部删除，添加新的组件（元素）。
+
+> **策略三**
+
+- 对于同一层级的节点，React diffing 提供了四种节点操作：插入，删除，移动，更新；
+
+- 插入：新的元素不在当前虚拟 DOM 中，而是全新的节点，则进行插入操作；
+
+- 删除：元素已经在当前 DOM 中，但虚拟 DOM 更新后没有了，则进行删除操作；
+
+- 移动：元素已经在当前 DOM 中，并且虚拟 DOM 更新时，元素没有变化，只是位置改变，则进行移动操作；
+
+- 更新：元素只是属性发生了改变，则进行更新操作。
+
+### key
+
+- 当某个节点添加了同级节点中唯一的 key 属性，当它在当前层级的位置发生变化后，diffing 算法通过比较之后，如果发现了 key 值相同的新旧节点，就会执行移动操作，而不会执行删除旧节点与创建新节点的操作；
+
+- React 建议不要用遍历时的 index 作为节点的 key 值，因为每个元素的 index 会随结构的改变而发生变化。
+
+- key 的注意事项：
+
+  - key 必须在当前列表具有唯一性；
+
+  - key 必须具有稳定性。
 
 ## Router
 
@@ -595,8 +457,8 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route path="/home" element={<Home />}></Route>
-        <Route path="/user" element={<User />}></Route>
+        <Route path="/home" element={ <Home /> }></Route>
+        <Route path="/user" element={ <User /> }></Route>
       </Routes>
     </div>
   )
@@ -614,7 +476,7 @@ import { useRoutes } from "react-router-dom"
 import router from "@/router"
 
 export default function App() {
-  return <div>{useRoutes(router)}</div>
+  return <div>{ useRoutes(router) }</div>
 }
 ```
 
@@ -775,13 +637,13 @@ export default function Home() {
   return (
     <div>
       <div>
-        <button onClick={() => { navigate("/home/news") }}>新闻链接</button>
-        <button onClick={() => { navigate("/home/game") }}>游戏链接</button>
+        <button onClick={ () => navigate("/home/news") }>新闻链接</button>
+        <button onClick={ () => navigate("/home/game") }>游戏链接</button>
       </div>
       
       <div>
-        <button onClick={() => { navigate(-1) }}>回退一个历史记录</button>
-        <button onClick={() => { navigate(+1) }}>前进一个历史记录</button>
+        <button onClick={ () => navigate(-1) }>回退一个历史记录</button>
+        <button onClick={ () => navigate(+1) }>前进一个历史记录</button>
       </div>
       
       <Outlet />
@@ -802,12 +664,12 @@ export default function Home() {
 import { Link, Outlet } from "react-router-dom"
 
 export default function Game() {
-
+  
   return (
     <div>
       <Link to="/home/game/item?id=1&name=手机">手机游戏</Link>
       <Link to="/home/game/item?id=2&name=电脑">电脑游戏</Link>
-
+      
       <Outlet />
     </div>
   )
@@ -854,12 +716,12 @@ export default function Item() {
 import { Link, Outlet } from "react-router-dom"
 
 export default function Game() {
-
+  
   return (
     <div>
       <Link to="/home/game/item/1/手机">手机游戏</Link>
       <Link to="/home/game/item/2/电脑">电脑游戏</Link>
-
+      
       <Outlet />
     </div>
   )
@@ -894,10 +756,10 @@ export default function Game() {
   
   return (
     <div>
-      <button onClick={navigate(url, { state: { id: 1, name: "手机" } })}>手机游戏</button>
-      <button onClick={navigate(url, { state: { id: 2, name: "电脑" } })}>电脑游戏</button>
+      <button onClick={ navigate(url, { state: { id: 1, name: "手机" } }) }>手机游戏</button>
+      <button onClick={ navigate(url, { state: { id: 2, name: "电脑" } }) }>电脑游戏</button>
       
-      <Outlet/>
+      <Outlet />
     </div>
   )
 }
@@ -1085,7 +947,7 @@ import store from "@/store"
 
 ReactDOM.createRoot(app).render(
   <Provider store={ store }>
-    <App/>
+    <App />
   </Provider>
 )
 ```

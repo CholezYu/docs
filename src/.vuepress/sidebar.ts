@@ -1,4 +1,3 @@
-// @ts-ignore
 import { sidebar } from "vuepress-theme-hope"
 
 export default sidebar({
@@ -85,26 +84,6 @@ export default sidebar({
           text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
-        },
-        {
-          text: "ECharts",
-          icon: "javascript",
-          link: "ECharts"
-        },
-        {
-          text: "WebGL",
-          icon: "javascript",
-          link: "WebGL"
-        },
-        {
-          text: "Threejs",
-          icon: "javascript",
-          link: "Threejs"
-        },
-        {
-          text: "Exceljs",
-          icon: "javascript",
-          link: "Exceljs"
         }
       ]
     },
@@ -147,9 +126,37 @@ export default sidebar({
       ]
     },
     {
-      text: "更多",
-      icon: "more",
-      prefix: "more/",
+      text: "高级",
+      icon: "launch",
+      prefix: "high-end/",
+      collapsible: true,
+      children: [
+        {
+          text: "ECharts",
+          icon: "javascript",
+          link: "ECharts"
+        },
+        {
+          text: "WebGL",
+          icon: "javascript",
+          link: "WebGL"
+        },
+        {
+          text: "Threejs",
+          icon: "javascript",
+          link: "Threejs"
+        },
+        {
+          text: "Exceljs",
+          icon: "javascript",
+          link: "Exceljs"
+        }
+      ]
+    },
+    {
+      text: "便笺",
+      icon: "align",
+      prefix: "notes/",
       collapsible: true,
       children: [
         {
@@ -171,7 +178,7 @@ export default sidebar({
           text: "面试题",
           icon: "note",
           link: "面试题"
-        },
+        }
       ]
     },
     {

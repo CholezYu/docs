@@ -3,11 +3,7 @@ title: 后端
 icon: back-stage
 ---
 
-## 介绍
-
-我们支持 Java 功能，...
-
-## 详细
+## 目录
 
 - [Java](Java.md)
 

@@ -25,11 +25,7 @@ export default navbar([
           "Webpack",
           "React",
           "Vue",
-          "Wxapp",
-          "ECharts",
-          "WebGL",
-          "Threejs",
-          "Exceljs"
+          "Wxapp"
         ]
       },
       {

@@ -3,10 +3,6 @@ title: 前端
 icon: network
 ---
 
-## 介绍
-
-我们支持 HTML5 功能，...
-
 ## 目录
 
 - [HTML5](HTML5.md)
@@ -36,11 +32,3 @@ icon: network
 - [Vue](Vue.md)
 
 - [Wxapp](Wxapp.md)
-
-- [ECharts](ECharts.md)
-
-- [WebGL](WebGL.md)
-
-- [Threejs](Threejs.md)
-
-- [Exceljs](Exceljs.md)
