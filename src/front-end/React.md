@@ -1,61 +1,187 @@
 ---
 title: React
 icon: react
-date: 2024-01-14
+date: 2024-01-15
 ---
+
+## Hooks
+
+### useState
+
+> useState 会触发组件的更新，并且 setState 是异步的，只能在组件更新之后才能获取最新的 state。
+
+```tsx
+import { useState } from "react"
+
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <>
+      <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
+      { /* or */ }
+      <button onClick={ () => setCount(count + 1) }>{ count }</button>
+    </>
+  )
+}
+```
+
+当 setState 的值为普通值时，执行多次相同的 setState 会被合并。
+
+如下，由于 setCount 是异步的，执行多次 setCount 时 count 的值都为 0，所以最终结果仍为 1。且三次 setCount 会被合并成一次来执行。
+
+```tsx
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  const increment = () => {
+    setCount(count + 1) // 1
+    setCount(count + 1) // 1
+    setCount(count + 1) // 1
+  }
+  
+  return <button onClick={ increment }>{ count }</button>
+}
+```
+
+而当 setState 的值为函数时，执行多次相同的 setState 不会被合并。
+
+> 因为函数的返回值是未知的，只有执行才能确定结果，所以不会被合并；
+>
+> 而普通值是已知的，所以会被合并。
+
+```tsx
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  const increment = () => {
+    setCount(count =>  count + 1) // 1
+    setCount(count =>  count + 1) // 2
+    setCount(count =>  count + 1) // 3
+  }
+  
+  return <button onClick={ increment }>{ count }</button>
+}
+```
+
+### useEffect
+
+当组件渲染完成或销毁时，setup 就会执行，并在下一次执行 useEffect 前执行 cleanup。
+
+无论是否有依赖项，useEffect 都会在初始渲染完成后执行一次。
+
+- 依赖数组有值：当依赖项发生更新的时候，useEffect 才会再次执行；
+
+- 依赖数组为空：useEffect 只在初始渲染后执行；
+
+- 没有依赖数组：组件每次重新渲染的时候，useEffect 都会再次执行。
+
+```tsx
+import { useState, useEffect } from "react"
+
+const App = () => {
+  const [count, setCount] = useState(0)
+  
+  useEffect(() => /* setup */ {
+    const timer = setTimeout(() => {
+      console.log(count)
+    }, 3000)
+    
+    return () => /* cleanup */ {
+      clearTimeout(timer)
+    }
+  }, [count])
+  
+  return <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
+}
+```
+
+> 生产环境下，useEffect 执行两次：
+>
+> 为了模拟组件创建、销毁、再创建的完整流程，及早暴露问题。
+
+### useRef
+
+用于操作 DOM 元素。为组件注册 ref，就可以通过 `ref.current` 获取这个元素。
+
+```tsx
+import { useRef } from "react"
+
+const App = () => {
+  const inputRef = useRef()
+  
+  return <input type="text" ref={ inputRef } onChange={ () => console.log(inputRef.current) } />
+}
+```
+
+### useContext
+
+`const { value, setValue } = useContext(SomeContext)`
+
+使用 createContext 创建共享对象，将需要获取共享数据的组件放入 `<WhatContext.Provider>` 组件中。
+
+> 在 `<WhatContext.Provider>` 组件注册 value 属性用于传递共享数据。
+>
+> 子组件中通过 useContext 接收共享数据。
+
+```tsx
+const AppContext = createContext()
+
+function App() {
+  const [value, setValue] = useState("Hello React")
+  return (
+    <div>
+      <p>{ value }</p>
+      
+      <AppContext.Provider value={{ value, setValue }}>
+        <MyComponent />
+      </AppContext.Provider>
+    </div>
+  )
+}
+
+function MyComponent() {
+  const { value, setValue } = useContext(AppContext)
+  
+  const changeValue = event => {
+    setValue(event.target.value)
+  }
+  
+  return <input type="text" value={ value } onChange={ changeValue } />
+}
+```
 
 ## 类式组件
 
-### 基本使用
-
-```jsx
-class Header extends React.Component {
-  render() {
-    return <h2>Header</h2>
-  }
-}
-
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <Header />
-      </div>
-    )
-  }
-}
-
-ReactDOM.createRoot(app).render(<App />)
-```
-
 ### state
 
-在 state 中定义的数据都具有响应式特性。
+在 state 中定义的数据都具有响应式。
 
 > 如果要修改 state 中的数据，必须使用 setState，否则修改的数据将不具有响应式。
 
-```jsx
+```tsx
 class App extends React.Component {
   state = {
     count: 0
   }
   
-  render() {
-    const { count } = this.state
-    return (
-      <div>
-        <p>{ count }</p>
-        <button onClick={ this.increment(2) }>+2</button>
-        <button onClick={ this.increment(5) }>+5</button>
-      </div>
-    )
-  }
-  
-  increment = n => {
-    return event => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
+  increment = (n: number) => {
+    return (event: Event) => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
       const { count } = this.state
       this.setState({ count: count + n })
     }
+  }
+  
+  render() {
+    const { count } = this.state
+    
+    return (
+      <>
+        <p>{ count }</p>
+        <button onClick={ this.increment(2) }>+2</button>
+        <button onClick={ this.increment(5) }>+5</button>
+      </>
+    )
   }
 }
 ```
@@ -66,40 +192,43 @@ class App extends React.Component {
 
 > props 中的数据不能修改，否则将违背单向数据流。
 
-```jsx
+```tsx
 class App extends React.Component {
   state = {
     title: "Hello React",
     count: 0
   }
   
-  render() {
-    const { title, count } = this.state
-    return (
-      <div>
-        {/* 将 title 属性和 increment 方法传递给子组件 */ }
-        <Item title={ title } increment={ this.increment } />
-        <p>{ count }</p>
-      </div>
-    )
-  }
-  
   increment = () => {
     const { count } = this.state
+    
     this.setState({
       count: count + 1
     })
+  }
+  
+  render() {
+    const { title, count } = this.state
+    
+    return (
+      <>
+        {/* 将 title 属性和 increment 方法传递给子组件 */}
+        <Item title={ title } increment={ this.increment } />
+        <p>{ count }</p>
+      </>
+    )
   }
 }
 
 class Item extends React.Component {
   render() {
     const { title, increment } = this.props
+    
     return (
-      <div>
+      <>
         <h2>{ title }</h2>
         <button onClick={ increment }>count++</button>
-      </div>
+      </>
     )
   }
 }
@@ -114,6 +243,7 @@ state = {
 
 render() {
   const { user } = this.state
+  
   return <Item { ... user} /> // => <Item name={ user.name } age={ user.age } />
 }
 ```
@@ -124,19 +254,19 @@ render() {
 
 > React 不建议频繁使用 ref。
 
-```jsx
+```tsx
 class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <input type="text" ref="inputRef" />
-        <button onClick={ this.getItem }>点击</button>
-      </div>
-    )
-  }
-  
   getItem = () => {
     const { inputRef } = this.refs
+  }
+  
+  render() {
+    return (
+      <>
+        <input type="text" ref="inputRef" />
+        <button onClick={ this.getItem }>点击</button>
+      </>
+    )
   }
 }
 ```
@@ -147,26 +277,27 @@ class App extends React.Component {
 
 通过事件函数设置（setState）响应式数据，值为表单元素的 value，实现表单元素对响应式数据的绑定。
 
-```jsx
+```tsx
 class App extends React.Component {
   state = { username: "", password: "" }
   
+  changeForm = (key: string) => {
+    return (event: Event) => {
+      this.setState({
+        [key]: event.target.value
+      })
+    }
+  }
+  
   render() {
     const { username, password } = this.state
+    
     return (
       <div>
         <input type="text" value={ username } onChange={ this.changeForm("username") } />
         <input type="password" value={ password } onChange={ this.changeForm("password") } />
       </div>
     )
-  }
-  
-  changeForm = type => {
-    return event => {
-      this.setState({
-        [type]: event.target.value
-      })
-    }
   }
 }
 ```
@@ -179,7 +310,7 @@ class App extends React.Component {
 
 原生 class 的构造器函数。
 
-```jsx
+```tsx
 class App extends React.Component {
   constructor() {
     super() /* !!! */
@@ -195,7 +326,7 @@ class App extends React.Component {
 
 组件挂载完成，初始化结束。通常进行 **开启定时器、发送网络请求、订阅消息、监听自定义事件** 等操作。
 
-```jsx
+```tsx
 class App extends React.Component {
   componentDidMount() {
     const timer = setInterval()
@@ -217,7 +348,7 @@ class App extends React.Component {
 
 控制是否执行更新。一般当子组件不需要随着父组件更新的时候，控制子组件不执行更新。
 
-```jsx
+```tsx
 class App extends React.Component {
   shouldComponentUpdate() {
     return false /* 不执行更新, 默认为 true */
@@ -243,126 +374,11 @@ class App extends React.Component {
 
 组件即将被卸载。通常进行 **关闭定时器、取消订阅、移除自定义事件** 等操作。
 
-```jsx
+```tsx
 class App extends React.Component {
   componentWillUnmount() {
     clearInterval(timer)
   }
-}
-```
-
-## Hooks
-
-### useState
-
-> setState 是异步执行的，所以只能在渲染完成之后才能获取更新的响应式数据的值。
-
-```jsx
-import { useState } from "react"
-
-const App = () => {
-  const [count, setCount] = useState(0)
-  
-  return (
-    <>
-      <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
-    </>
-  )
-}
-
-export default App
-```
-
-### useEffect
-
-`useEffect(setup, [dependencies])`
-
-- setup：异步回调函数。当组件内的同步代码执行完成之后，setup 就会执行。
-
-  > `return cleanup`：在下一次执行 useEffect 前执行 cleanup。
-
-- dependencies：依赖项数组。无论是否有依赖项，useEffect 都会在初始渲染完成后执行一次。
-
-  > 依赖数组有值：当依赖项发生更新的时候，useEffect 就会再次执行；
-  >
-  > 依赖数组为空：useEffect 只在初始渲染后执行；
-  >
-  > 没有依赖数组：组件每次重新渲染的时候，useEffect 都会再次执行。
-
-```jsx
-function App() {
-  const [count, setCount] = useState(0)
-  
-  useEffect(() => /* setup */ {
-    const timer = setTimeout(() => {
-      console.log(count)
-    }, 3000)
-    
-    return () => /* cleanup */ {
-      clearTimeout(timer)
-    }
-  }, [count])
-  
-  return <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
-}
-```
-
-### useRef
-
-`const ref = useRef()`
-
-声明一个 ref 对象，并将其作为属性传递给要操作的 DOM 元素，就可以通过 `ref.current` 获取这个元素。
-
-```jsx
-function App() {
-  const [count, setCount] = useState(0)
-  
-  return <MyComponent count={ count } setCount={ setCount } />
-}
-
-function MyComponent({ count, setCount }) {
-  const inputRef = useRef()
-  
-  return (
-    <input type="text" ref={ inputRef } onChange={ () => console.log(inputRef.current) } />
-  )
-}
-```
-
-### useContext
-
-`const { value, setValue } = useContext(SomeContext)`
-
-使用 createContext 创建共享对象，将需要获取共享数据的组件放入 `<WhatContext.Provider>` 组件中。
-
-> 在 `<WhatContext.Provider>` 组件注册 value 属性用于传递共享数据。
->
-> 子组件中通过 useContext 接收共享数据。
-
-```jsx
-const AppContext = createContext()
-
-function App() {
-  const [value, setValue] = useState("Hello React")
-  return (
-    <div>
-      <p>{ value }</p>
-      
-      <AppContext.Provider value={ { value, setValue } }>
-        <MyComponent />
-      </AppContext.Provider>
-    </div>
-  )
-}
-
-function MyComponent() {
-  const { value, setValue } = useContext(AppContext)
-  
-  const changeValue = event => {
-    setValue(event.target.value)
-  }
-  
-  return <input type="text" value={ value } onChange={ changeValue } />
 }
 ```
 
@@ -436,7 +452,7 @@ function MyComponent() {
 
 `<BrowserRouter>` 中的组件可以使用 React 路由。
 
-```jsx
+```tsx
 /* main.jsx */
 
 import { BrowserRouter } from "react-router-dom"
@@ -448,7 +464,7 @@ ReactDOM.createRoot(app).render(
 )
 ```
 
-```jsx
+```tsx
 /* App.jsx */
 
 import { Routes, Route } from "react-router-dom"
@@ -469,7 +485,7 @@ export default function App() {
 
 使用 `useRoutes` 将路由配置解析成虚拟 DOM。
 
-```jsx
+```tsx
 /* App.jsx */
 
 import { useRoutes } from "react-router-dom"
@@ -482,7 +498,7 @@ export default function App() {
 
 路由表，将嵌套的 `<Routes>` 与 `<Route>` 配置为对应的路由规则。
 
-```jsx
+```tsx
 /* router/index.jsx */
 
 const routes = [
@@ -501,7 +517,7 @@ const routes = [
 
 > 以 "/" 开头的嵌套路径会被当作根路径，所以子路由的路径不加 "/"。
 
-```jsx
+```tsx
 /* router/index.jsx */
 
 const routes = [
@@ -524,7 +540,7 @@ const routes = [
 
 `<Outlet>` 渲染处于活跃状态的路由组件。
 
-```jsx
+```tsx
 /* Home/index.jsx */
 
 import { Outlet } from "react-router-dom"
@@ -544,7 +560,7 @@ export default function Home() {
 
 `<Navigate>` 可以设置默认路由路径（重定向）。
 
-```jsx
+```tsx
 /* router/index.jsx */
 
 import { Navigate } from "react-router-dom"
@@ -569,7 +585,7 @@ const routes = [
 
 "*" 可以匹配所有未配置的路由，用来处理错误页面。
 
-```jsx
+```tsx
 /* router/index.jsx */
 
 const routes = [
@@ -590,7 +606,7 @@ const routes = [
 
 ### 声明式导航
 
-```jsx
+```tsx
 /* Home/index.jsx */
 
 import { Outlet, Link, NavLink } from "react-router-dom"
@@ -626,7 +642,7 @@ export default function Home() {
 
 编程式导航相对于声明式更加灵活，可以对跳转限制一些条件，或者跳转前进行一些其他操作。
 
-```jsx
+```tsx
 /* Home/index.jsx */
 
 import { Outlet, useNavigate } from "react-router-dom"
@@ -658,7 +674,7 @@ export default function Home() {
 
 使用 query 传递参数。
 
-```jsx
+```tsx
 /* Game/index.jsx */
 
 import { Link, Outlet } from "react-router-dom"
@@ -678,7 +694,7 @@ export default function Game() {
 
 获取查询参数（query）对应的值。
 
-```jsx
+```tsx
 /* Game/GameItem/index.jsx */
 
 import { useSearchParams } from "react-router-dom"
@@ -693,7 +709,7 @@ export default function Item() {
 
 需要将查询参数（query）解析为对象。
 
-```jsx
+```tsx
 /* Game/GameItem/index.jsx */
 
 import { useLocation } from "react-router-dom"
@@ -710,7 +726,7 @@ export default function Item() {
 
 使用 params 传递参数。需要在路由表中配置路径时，使用 ":" 占位。
 
-```jsx
+```tsx
 /* Game/index.jsx */
 
 import { Link, Outlet } from "react-router-dom"
@@ -730,7 +746,7 @@ export default function Game() {
 
 获取查询参数（params）对象。
 
-```jsx
+```tsx
 /* Game/GameItem/index.jsx */
 
 import { useParams } from "react-router-dom"
@@ -744,7 +760,7 @@ export default function Item() {
 
 使用 state 传递参数。`navigate()` 第二个参数可以传入 `state` 对象。
 
-```jsx
+```tsx
 /* Game/index.jsx */
 
 import { Link, Outlet, useNavigate } from "react-router-dom"
@@ -767,7 +783,7 @@ export default function Game() {
 
 获取查询参数（state）对象。
 
-```jsx
+```tsx
 /* Game/GameItem/index.jsx */
 
 import { useLocation } from "react-router-dom"
@@ -781,7 +797,7 @@ export default function Item() {
 
 `<Suspense>` 用于在加载过程中作为替换的临时组件。`fallback` 属性可以指定临时替换的组件。
 
-```jsx
+```tsx
 /* router/index.jsx */
 
 import { lazy, Suspense } from "react"
@@ -817,7 +833,7 @@ export default [
 
 ### 基本使用
 
-```jsx
+```tsx
 import { createStore, combineReducers } from "redux"
 
 // 1. 创建 reducer 整合函数, 根据指令操作数据
@@ -851,7 +867,7 @@ store.dispatch({ type: "count/decrement", payload: 1 })
 
 > [pcw-api.iqiyi.com/search/recommend/list?channel_id=1&data_type=1&mode=11&page_id=2&ret_num=48&session=b9fd987164f6aa47fad266f57dffaa6a](https://pcw-api.iqiyi.com/search/recommend/list?channel_id=1&data_type=1&mode=11&page_id=2&ret_num=48&session=b9fd987164f6aa47fad266f57dffaa6a)
 
-```jsx
+```tsx
 import { createStore, combineReducers, applyMiddleware } from "redux"
 import thunk from "redux-thunk" // 检测如果 dispatch(action) 返回的是一个函数, 直接调用
 
@@ -906,7 +922,7 @@ store.dispatch(getMovieList())
 
 管理 Redux 中的数据及操作。
 
-```jsx
+```tsx
 /* store/index.jsx */
 
 import { createSlice, configureStore } from "@reduxjs/toolkit"
@@ -939,7 +955,7 @@ export default store
 
 `<Provider>` 可以绑定 store，使内部的组件都能使用该 store 中的数据。
 
-```jsx
+```tsx
 /* main.jsx */
 
 import { Provider } from "react-redux"
@@ -954,7 +970,7 @@ ReactDOM.createRoot(app).render(
 
 在组件中，使用 `useSelector` 获取 store 中的数据，使用 `useDispatch` 获取派发器，从而操作数据。
 
-```jsx
+```tsx
 /* components/Home/index.jsx */
 
 import { useSelector, useDispatch } from "react-redux"
@@ -995,7 +1011,7 @@ store
 
 slice 文件夹管理切片（用于生成 actions 和 reducer）。
 
-```jsx
+```tsx
 /* store/slice/countSlice.jsx */
 
 import { createSlice } from "@reduxjs/toolkit"
@@ -1022,7 +1038,7 @@ export const countReducer = countSlice.reducer
 
 index 文件就是 store 的主文件，管理所有数据。
 
-```jsx
+```tsx
 /* store/index.jsx */
 
 import { configureStore } from "@reduxjs/toolkit"
@@ -1053,7 +1069,7 @@ export default store
         └── movieSlice.jsx
 ```
 
-```jsx
+```tsx
 /* store/slice/movieSlice.jsx */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
@@ -1089,7 +1105,7 @@ export { getMovie }
 export const movieReducer = movieSlice.reducer
 ```
 
-```jsx
+```tsx
 /* store/index.jsx */
 
 import { configureStore } from "@reduxjs/toolkit"
@@ -1104,7 +1120,7 @@ const store = configureStore({
 export default store
 ```
 
-```jsx
+```tsx
 /* components/Home/index.jsx */
 
 import { useSelector, useDispatch } from "react-redux"

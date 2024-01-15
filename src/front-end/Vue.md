@@ -1,6 +1,7 @@
 ---
 title: Vue
 icon: vue
+date: 2024-01-14
 ---
 
 ## 生命周期
@@ -1588,16 +1589,10 @@ const pinia = createPinia()
 ```ts
 import { defineStore } from "pinia"
 
-interface counterStateType {
-  count: number
-}
-
 const useCounterStore = defineStore("counter", {
-  state: (): counterStateType => {
-    return { count: 0 }
-  },
+  state: () => ({ count: 0 }),
   getters: {
-    doubleCount: (state: counterStateType) => state.count * 2
+    doubleCount: state => state.count * 2
   },
   actions: {
     increment() {
@@ -1613,7 +1608,7 @@ const useCounterStore = defineStore("counter", {
 import { defineStore } from "pinia"
 
 const useCounterStore = defineStore("counter", () => {
-  const count = ref<number>(0)
+  const count = ref(0)
   
   const doubleCount = computed(() => count.value * 2)
   
@@ -1621,7 +1616,7 @@ const useCounterStore = defineStore("counter", () => {
     count.value++
   }
   
-  return { count, increment }
+  return { count, doubleCount, increment }
 })
 ```
 
