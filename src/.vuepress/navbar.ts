@@ -14,8 +14,6 @@ export default navbar([
         children: [
           "HTML5",
           "CSS",
-          "Less",
-          "Bootstrap",
           "JavaScript",
           "JavaScript-Algo",
           "TypeScript",

@@ -1,7 +1,7 @@
 ---
 title: React
 icon: react
-date: 2024-01-15
+date: 2024-01-20
 ---
 
 ## Hooks
@@ -27,8 +27,6 @@ const App = () => {
 ```
 
 当 setState 的值为普通值时，执行多次相同的 setState 会被合并。
-
-如下，由于 setCount 是异步的，执行多次 setCount 时 count 的值都为 0，所以最终结果仍为 1。且三次 setCount 会被合并成一次来执行。
 
 ```tsx
 const App = () => {
@@ -108,46 +106,115 @@ const App = () => {
 import { useRef } from "react"
 
 const App = () => {
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
   
-  return <input type="text" ref={ inputRef } onChange={ () => console.log(inputRef.current) } />
+  const showInput = () => console.log(inputRef.current)
+  
+  return <input type="text" ref={ inputRef } onChange={ showInput } />
+}
+```
+
+闭包陷阱：当异步函数获取 state 时，可能获取的不是最新的 state，需要使用 useRef 来解决。
+
+如下，先点击一次打印按钮，再迅速点击五次累加按钮，最终结果为 `count: 5` `countRef.current: 10`。
+
+> 因为 count 是一个值，而 countRef 是一个引用类型。
+
+```tsx
+import { useState, useRef, useEffect } from "react"
+
+const App = () => {
+  const [count, setCount] = useState(5)
+  const countRef = useRef(5)
+  
+  useEffect(() => {
+    countRef.current = count
+  }, [count])
+  
+  const delayConsole = () => {
+    setTimeout(() => {
+      console.log(count) // 5
+      console.log(countRef.current) // 10
+    }, 3000)
+  }
+  
+  return (
+    <>
+      {/* click 5 */}
+      <button onClick={ () => setCount(count => count + 1) }>累加</button>
+      <button onClick={ delayConsole }>打印</button>
+    </>
+  )
 }
 ```
 
 ### useContext
 
-`const { value, setValue } = useContext(SomeContext)`
-
-使用 createContext 创建共享对象，将需要获取共享数据的组件放入 `<WhatContext.Provider>` 组件中。
-
-> 在 `<WhatContext.Provider>` 组件注册 value 属性用于传递共享数据。
->
-> 子组件中通过 useContext 接收共享数据。
+使用 createContext 创建共享对象，将需要接收共享数据的组件放入 `<WhatContext.Provider>` 组件中，并向其 value 属性中注册共享数据。子组件可以通过 useContext 接收共享数据。
 
 ```tsx
 const AppContext = createContext()
 
-function App() {
-  const [value, setValue] = useState("Hello React")
+const App = () => {
+  const [val, setVal] = useState("Hello React")
+  
   return (
-    <div>
-      <p>{ value }</p>
-      
-      <AppContext.Provider value={{ value, setValue }}>
-        <MyComponent />
-      </AppContext.Provider>
-    </div>
+    <AppContext.Provider value={{ val, setVal }}>
+      <MyComponent />
+    </AppContext.Provider>
   )
 }
 
-function MyComponent() {
-  const { value, setValue } = useContext(AppContext)
+const MyComponent = () => {
+  const { val, setVal } = useContext(AppContext)
   
-  const changeValue = event => {
-    setValue(event.target.value)
-  }
+  return <input type="text" value={ val } onChange={ event => setVal(event.target.value) } />
+}
+```
+
+### useMemo
+
+useMemo 类似于 computed，用于缓存 state，只有当依赖项发生改变时，才会重新计算。
+
+```tsx
+import { useState, useMemo } from "react"
+
+const App = () => {
+  const [count, setCount] = useState(10)
+  const [text, setText] = useState("")
   
-  return <input type="text" value={ value } onChange={ changeValue } />
+  const double = useMemo(() => count * 2, [count]) // 只有当 count 改变时，才会重新计算
+  
+  return (
+    <>
+      <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
+      <input onChange={ event => setText(event.target.value) } value={ text } />
+    </>
+  )
+}
+```
+
+### useCallback
+
+useCallback 与 useMemo 用法相似，useMemo 用于缓存一个计算结果，useCallback 用于缓存一个函数。
+
+```tsx
+import { useState, useCallback } from "react"
+
+const App = () => {
+  const [count, setCount] = useState(10)
+  const [text, setText] = useState("")
+  
+  const showCount = useCallback(() => {
+    console.log(count)
+  }, [count]) // 只有当 count 改变时，才会重新创建函数
+  
+  return (
+    <>
+      <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
+      <input onChange={ event => setText(event.target.value) } value={ text } />
+    </>
+  )
 }
 ```
 
@@ -166,7 +233,7 @@ class App extends React.Component {
   }
   
   increment = (n: number) => {
-    return (event: Event) => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
+    return event => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
       const { count } = this.state
       this.setState({ count: count + n })
     }
@@ -282,7 +349,7 @@ class App extends React.Component {
   state = { username: "", password: "" }
   
   changeForm = (key: string) => {
-    return (event: Event) => {
+    return event => {
       this.setState({
         [key]: event.target.value
       })
@@ -436,24 +503,24 @@ class App extends React.Component {
 
 ### Router Hooks
 
- React Router 中用到的 Hooks：
+React Router 中用到的 Hooks：
 
-- `useRoutes`：将路由配置解析成虚拟 DOM
+- `useRoutes`：将路由配置解析成虚拟 DOM。
 
-- `useNavigate`：用于编程式导航，重定向跳转
+- `useNavigate`：用于编程式导航，重定向跳转。
 
-- `useSearchParams`：动态路由传参，在子组件中获取查询参数（query）对应的值
+- `useSearchParams`：动态路由传参，获取 query 参数。
 
-- `useLocation`：动态路由传参，在子组件中获取查询参数（query）字符串或查询参数（state）对象
+- `useLocation`：动态路由传参，获取 query 参数（字符串）或 state 参数（对象）。
 
-- `useParams`：动态路由传参，在子组件中获取查询参数（params）对象
+- `useParams`：动态路由传参，获取 params 参数（对象）。
 
 ### 基本使用
 
-`<BrowserRouter>` 中的组件可以使用 React 路由。
+`<BrowserRouter>` 组件中使用 React 路由。
 
 ```tsx
-/* main.jsx */
+/* main.tsx */
 
 import { BrowserRouter } from "react-router-dom"
 
@@ -465,138 +532,86 @@ ReactDOM.createRoot(app).render(
 ```
 
 ```tsx
-/* App.jsx */
+/* App.tsx */
 
 import { Routes, Route } from "react-router-dom"
 
-export default function App() {
+const App = () => {
   return (
-    <div>
+    <>
       <Routes>
         <Route path="/home" element={ <Home /> }></Route>
         <Route path="/user" element={ <User /> }></Route>
       </Routes>
-    </div>
+    </>
   )
 }
 ```
 
-### 路由配置
-
-使用 `useRoutes` 将路由配置解析成虚拟 DOM。
+`<Outlet>` 渲染处于活跃状态的路由。
 
 ```tsx
-/* App.jsx */
+/* Layout.tsx */
 
-import { useRoutes } from "react-router-dom"
-import router from "@/router"
+import { Outlet, NavLink } from "react-router-dom"
 
-export default function App() {
-  return <div>{ useRoutes(router) }</div>
+const Layout = () => {
+  return (
+    <>
+      <div>
+        <NavLink to="/home">Home</NavLink>
+        <NavLink to="/user">User</NavLink>
+      </div>
+      
+      <Outlet />
+    </>
+  )
 }
-```
-
-路由表，将嵌套的 `<Routes>` 与 `<Route>` 配置为对应的路由规则。
-
-```tsx
-/* router/index.jsx */
-
-const routes = [
-  {
-    path: "/home",
-    element: <Home />
-  },
-  {
-    path: "/user",
-    element: <User />
-  }
-]
 ```
 
 ### 嵌套路由
 
-> 以 "/" 开头的嵌套路径会被当作根路径，所以子路由的路径不加 "/"。
+使用 `useRoutes` 解析路由配置。
 
 ```tsx
-/* router/index.jsx */
+/* App.tsx */
 
-const routes = [
-  {
-    path: "/home",
-    element: <Home />,
-    children: [
-      {
-        path: "game",
-        element: <Game />
-      }
-    ]
-  },
-  {
-    path: "/user",
-    element: <User />
-  }
-]
-```
+import { useRoutes } from "react-router-dom"
+import router from "@/router"
 
-`<Outlet>` 渲染处于活跃状态的路由组件。
-
-```tsx
-/* Home/index.jsx */
-
-import { Outlet } from "react-router-dom"
-
-export default function Home() {
-  return (
-    <div>
-      <h2>Home</h2>
-      
-      <Outlet />
-    </div>
-  )
+const App = () => {
+  return <>{ useRoutes(router) }</>
 }
 ```
 
-### 默认路由
-
-`<Navigate>` 可以设置默认路由路径（重定向）。
+路由配置，将嵌套的 `<Routes>` 与 `<Route>` 配置为对应的路由规则。
 
 ```tsx
-/* router/index.jsx */
+/* router.tsx */
 
 import { Navigate } from "react-router-dom"
 
 const routes = [
   {
     path: "/",
-    element: <Navigate to="/home" />
+    element: <Layout />,
+    children: [
+      // 默认路由
+      {
+        path: "/",
+        element: <Navigate to="/home" />
+      },
+      {
+        path: "/home",
+        element: <Home />
+      },
+      {
+        path: "/user",
+        element: <User />
+      }
+    ]
   },
-  {
-    path: "/home",
-    element: <Home />
-  },
-  {
-    path: "/user",
-    element: <User />
-  }
-]
-```
-
-### 任意路由
-
-"*" 可以匹配所有未配置的路由，用来处理错误页面。
-
-```tsx
-/* router/index.jsx */
-
-const routes = [
-  {
-    path: "/home",
-    element: <Home />
-  },
-  {
-    path: "/user",
-    element: <User />
-  },
+  // 任意路由
   {
     path: "/*",
     element: <NotFound />
@@ -606,22 +621,28 @@ const routes = [
 
 ### 声明式导航
 
+当路由匹配成功时，`<NavLink>` 会提供处于激活状态的类名，`<Link>` 则不会。
+
 ```tsx
 /* Home/index.jsx */
 
 import { Outlet, Link, NavLink } from "react-router-dom"
 
-export default function Home() {
+const Layout = () => {
   return (
     <div>
       <div>
-        <Link to="/home/news"></Link>
-        <Link to="/home/game"></Link>
+        <Link to="/home">Home</Link>
+        <Link to="/user">User</Link>
       </div>
       
       <div>
-        <NavLink to="/home/game" activeclassname="active"></NavLink>
-        <NavLink to="/home/news" activeclassname="active"></NavLink>
+        <NavLink to="/home" className={ ({ isActive }) => isActive ? "active" : "" }>
+          Home
+        </NavLink>
+        <NavLink to="/user" className={ ({ isActive }) => isActive ? "active" : "" }>
+          User
+        </NavLink>
       </div>
       
       <Outlet />
@@ -630,31 +651,21 @@ export default function Home() {
 }
 ```
 
-> `<Link>` 与 `<NavLink>` 的区别：
->
-> `<NavLink>` 可以设置 "activeclassname" 属性，当路由匹配成功时，会自动设置 "active" 类名。
-
 ### 编程式导航
 
-| 声明式                   | 编程式                   |
-| ------------------------ | ------------------------ |
-| `<Link to="/home/news">` | `navigate("/home/news")` |
-
-编程式导航相对于声明式更加灵活，可以对跳转限制一些条件，或者跳转前进行一些其他操作。
-
 ```tsx
-/* Home/index.jsx */
+/* Home/index.tsx */
 
 import { Outlet, useNavigate } from "react-router-dom"
 
-export default function Home() {
+const Home = () => {
   const navigate = useNavigate()
   
   return (
     <div>
       <div>
-        <button onClick={ () => navigate("/home/news") }>新闻链接</button>
-        <button onClick={ () => navigate("/home/game") }>游戏链接</button>
+        <button onClick={ () => navigate("/home") }>Home</button>
+        <button onClick={ () => navigate("/user") }>User</button>
       </div>
       
       <div>
@@ -668,23 +679,20 @@ export default function Home() {
 }
 ```
 
-### 动态路由
+### 动态路由 - search
 
-#### search(query)
-
-使用 query 传递参数。
+通过 query 传参。
 
 ```tsx
-/* Game/index.jsx */
+/* User/index.tsx */
 
-import { Link, Outlet } from "react-router-dom"
+import { Outlet, Link } from "react-router-dom"
 
-export default function Game() {
-  
+const User = () => {
   return (
     <div>
-      <Link to="/home/game/item?id=1&name=手机">手机游戏</Link>
-      <Link to="/home/game/item?id=2&name=电脑">电脑游戏</Link>
+      <Link to="/user/details?id=1">用户详情</Link>
+      <Link to="/user/details?id=2">用户详情</Link>
       
       <Outlet />
     </div>
@@ -692,51 +700,49 @@ export default function Game() {
 }
 ```
 
-获取查询参数（query）对应的值。
+获取 query 参数。
 
 ```tsx
-/* Game/GameItem/index.jsx */
+/* User/Details/index.tsx */
 
 import { useSearchParams } from "react-router-dom"
 
-export default function Item() {
+const Details = () => {
   const [search] = useSearchParams()
   
   const id = search.get("id")
-  const name = search.get("name")
 }
 ```
 
-需要将查询参数（query）解析为对象。
+将 query 参数解析为对象。
 
 ```tsx
-/* Game/GameItem/index.jsx */
+/* User/Details/index.tsx */
 
 import { useLocation } from "react-router-dom"
 import qs from "qs"
 
-export default function Item() {
+const Details = () => {
   const { search } = useLocation()
   
-  const { id, name } = qs.parse(search.slice(1)) // "?" => ""
+  const { id } = qs.parse(search.slice(1)) // "?" => ""
 }
 ```
 
-#### params
+### 动态路由 - params
 
-使用 params 传递参数。需要在路由表中配置路径时，使用 ":" 占位。
+通过 params 传参。需要使用 ":" 占位。
 
 ```tsx
-/* Game/index.jsx */
+/* User/index.tsx */
 
-import { Link, Outlet } from "react-router-dom"
+import { Outlet, Link } from "react-router-dom"
 
-export default function Game() {
-  
+const User = () => {
   return (
     <div>
-      <Link to="/home/game/item/1/手机">手机游戏</Link>
-      <Link to="/home/game/item/2/电脑">电脑游戏</Link>
+      <Link to="/user/details/1">用户详情</Link>
+      <Link to="/user/details/2">用户详情</Link>
       
       <Outlet />
     </div>
@@ -744,36 +750,34 @@ export default function Game() {
 }
 ```
 
-获取查询参数（params）对象。
+获取 params 参数。
 
 ```tsx
-/* Game/GameItem/index.jsx */
+/* User/Details/index.tsx */
 
 import { useParams } from "react-router-dom"
 
-export default function Item() {
-  const { id, name } = useParams()
+const Details = () => {
+  const { id } = useParams()
 }
 ```
 
-#### state
+### 动态路由 - state
 
-使用 state 传递参数。`navigate()` 第二个参数可以传入 `state` 对象。
+通过 state 传参。`navigate()` 第二个参数可以传入 state 对象。
 
 ```tsx
-/* Game/index.jsx */
+/* User/index.tsx */
 
-import { Link, Outlet, useNavigate } from "react-router-dom"
+import { Outlet, Link, useNavigate } from "react-router-dom"
 
-export default function Game() {
+const User = () => {
   const navigate = useNavigate()
-  
-  const url = "/home/game/item"
   
   return (
     <div>
-      <button onClick={ navigate(url, { state: { id: 1, name: "手机" } }) }>手机游戏</button>
-      <button onClick={ navigate(url, { state: { id: 2, name: "电脑" } }) }>电脑游戏</button>
+      <button onClick={ navigate("/user/details", { state: { id: 1 } }) }>用户详情</button>
+      <button onClick={ navigate("/user/details", { state: { id: 2 } }) }>用户详情</button>
       
       <Outlet />
     </div>
@@ -781,15 +785,15 @@ export default function Game() {
 }
 ```
 
-获取查询参数（state）对象。
+获取 state 参数。
 
 ```tsx
-/* Game/GameItem/index.jsx */
+/* User/Details/index.tsx */
 
 import { useLocation } from "react-router-dom"
 
-export default function Item() {
-  const { id, name } = useLocation().state
+const Details = () => {
+  const { id } = useLocation().state
 }
 ```
 
@@ -798,7 +802,7 @@ export default function Item() {
 `<Suspense>` 用于在加载过程中作为替换的临时组件。`fallback` 属性可以指定临时替换的组件。
 
 ```tsx
-/* router/index.jsx */
+/* router.tsx */
 
 import { lazy, Suspense } from "react"
 import Loading from "@/components/Loading"
@@ -806,12 +810,12 @@ import Loading from "@/components/Loading"
 function load(Component) {
   return (
     <Suspense fallback={ <Loading /> }>
-      <Component></Component>
+      <Component />
     </Suspense>
   )
 }
 
-export default [
+const routes = [
   {
     path: "/home",
     element: load(lazy(() => import("@/views/Home")))

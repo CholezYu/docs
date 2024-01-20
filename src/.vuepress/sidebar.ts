@@ -26,16 +26,6 @@ export default sidebar({
           link: "CSS"
         },
         {
-          text: "Less",
-          icon: "css",
-          link: "Less"
-        },
-        {
-          text: "Bootstrap",
-          icon: "css",
-          link: "Bootstrap"
-        },
-        {
           text: "JavaScript",
           icon: "javascript",
           link: "JavaScript"
