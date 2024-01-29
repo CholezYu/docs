@@ -1,7 +1,7 @@
 ---
 title: React
 icon: react
-date: 2024-01-20
+date: 2024-01-26
 ---
 
 ## Hooks
@@ -108,9 +108,11 @@ import { useRef } from "react"
 const App = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   
-  const showInput = () => console.log(inputRef.current)
+  const showInput = () => {
+    console.log(inputRef.current)
+  }
   
-  return <input type="text" ref={ inputRef } onChange={ showInput } />
+  return <input ref={ inputRef } onChange={ showInput } />
 }
 ```
 
@@ -140,7 +142,7 @@ const App = () => {
   
   return (
     <>
-      {/* click 5 */}
+      { /* click 5 */ }
       <button onClick={ () => setCount(count => count + 1) }>累加</button>
       <button onClick={ delayConsole }>打印</button>
     </>
@@ -150,25 +152,72 @@ const App = () => {
 
 ### useContext
 
-使用 createContext 创建共享对象，将需要接收共享数据的组件放入 `<WhatContext.Provider>` 组件中，并向其 value 属性中注册共享数据。子组件可以通过 useContext 接收共享数据。
+创建共享对象，将需要使用共享数据的组件放入 `<WhatContext>` 组件中，并将共享数据注册到 value 属性中。
+
+类似于 provide。
 
 ```tsx
-const AppContext = createContext()
+/* App.tsx */
+
+import { createContext } from "react"
+
+const AppContext = createContext("Hello React")
 
 const App = () => {
-  const [val, setVal] = useState("Hello React")
+  const [text, setText] = useState("Hello React")
   
   return (
-    <AppContext.Provider value={{ val, setVal }}>
+    <AppContext.Provider value={{ text, setText }}>
       <MyComponent />
     </AppContext.Provider>
   )
 }
+```
+
+useContext 类似于 inject。子组件可以通过 useContext 接收共享数据。
+
+```tsx
+/* MyComponent/index.tsx */
+
+import { useContext } from "react"
+import { AppContext } from "@/App.tsx"
 
 const MyComponent = () => {
-  const { val, setVal } = useContext(AppContext)
+  const { text, setText } = useContext(AppContext)
   
-  return <input type="text" value={ val } onChange={ event => setVal(event.target.value) } />
+  return <input value={ text } onChange={ event => setText(event.target.value) } />
+}
+```
+
+### useReducer
+
+简化版的 Redux。
+
+```tsx
+import { useReducer } from "redux"
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case "increment":
+      return { ...state, count: state.count + payload.count }
+    case "decrement":
+      return { ...state, count: state.count - payload.count }
+    default:
+      return state
+  }
+}
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, { count: 1 })
+  
+  return (
+    <>
+      <p>{ state.count }</p>
+    
+      <button onClick={ () => dispatch({ type: "increment", payload: { count: 1 } }) }> +1 </button>
+      <button onClick={ () => dispatch({ type: "decrement", payload: { count: 1 } }) }> -1 </button>
+    </>
+  )
 }
 ```
 
@@ -188,7 +237,7 @@ const App = () => {
   return (
     <>
       <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
-      <input onChange={ event => setText(event.target.value) } value={ text } />
+      <input value={ text } onChange={ event => setText(event.target.value) } />
     </>
   )
 }
@@ -212,240 +261,9 @@ const App = () => {
   return (
     <>
       <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
-      <input onChange={ event => setText(event.target.value) } value={ text } />
+      <input value={ text } onChange={ event => setText(event.target.value) } />
     </>
   )
-}
-```
-
-## 类式组件
-
-### state
-
-在 state 中定义的数据都具有响应式。
-
-> 如果要修改 state 中的数据，必须使用 setState，否则修改的数据将不具有响应式。
-
-```tsx
-class App extends React.Component {
-  state = {
-    count: 0
-  }
-  
-  increment = (n: number) => {
-    return event => /* 返回一个真正的事件函数, 接收事件对象作为参数 */ {
-      const { count } = this.state
-      this.setState({ count: count + n })
-    }
-  }
-  
-  render() {
-    const { count } = this.state
-    
-    return (
-      <>
-        <p>{ count }</p>
-        <button onClick={ this.increment(2) }>+2</button>
-        <button onClick={ this.increment(5) }>+5</button>
-      </>
-    )
-  }
-}
-```
-
-### props
-
-在子组件中可以通过 props 接收父组件传递的数据。
-
-> props 中的数据不能修改，否则将违背单向数据流。
-
-```tsx
-class App extends React.Component {
-  state = {
-    title: "Hello React",
-    count: 0
-  }
-  
-  increment = () => {
-    const { count } = this.state
-    
-    this.setState({
-      count: count + 1
-    })
-  }
-  
-  render() {
-    const { title, count } = this.state
-    
-    return (
-      <>
-        {/* 将 title 属性和 increment 方法传递给子组件 */}
-        <Item title={ title } increment={ this.increment } />
-        <p>{ count }</p>
-      </>
-    )
-  }
-}
-
-class Item extends React.Component {
-  render() {
-    const { title, increment } = this.props
-    
-    return (
-      <>
-        <h2>{ title }</h2>
-        <button onClick={ increment }>count++</button>
-      </>
-    )
-  }
-}
-```
-
-如果传递的数据是一个对象或数组，可以使用批量传递：将对象或数组展开传递。
-
-```jsx
-state = {
-  user: { name: "Paul", age: 18 }
-}
-
-render() {
-  const { user } = this.state
-  
-  return <Item { ... user} /> // => <Item name={ user.name } age={ user.age } />
-}
-```
-
-### refs
-
-为虚拟 DOM 元素注册一个 ref 属性，就可以通过 refs 获取这个原生 DOM 元素。
-
-> React 不建议频繁使用 ref。
-
-```tsx
-class App extends React.Component {
-  getItem = () => {
-    const { inputRef } = this.refs
-  }
-  
-  render() {
-    return (
-      <>
-        <input type="text" ref="inputRef" />
-        <button onClick={ this.getItem }>点击</button>
-      </>
-    )
-  }
-}
-```
-
-### 双向绑定
-
-将响应式数据设置给表单元素的 value 属性，实现响应式数据对表单元素的绑定。
-
-通过事件函数设置（setState）响应式数据，值为表单元素的 value，实现表单元素对响应式数据的绑定。
-
-```tsx
-class App extends React.Component {
-  state = { username: "", password: "" }
-  
-  changeForm = (key: string) => {
-    return event => {
-      this.setState({
-        [key]: event.target.value
-      })
-    }
-  }
-  
-  render() {
-    const { username, password } = this.state
-    
-    return (
-      <div>
-        <input type="text" value={ username } onChange={ this.changeForm("username") } />
-        <input type="password" value={ password } onChange={ this.changeForm("password") } />
-      </div>
-    )
-  }
-}
-```
-
-## 生命周期
-
-### 挂载阶段
-
-#### constructor
-
-原生 class 的构造器函数。
-
-```tsx
-class App extends React.Component {
-  constructor() {
-    super() /* !!! */
-  }
-}
-```
-
-#### render
-
-解析模板，渲染虚拟 DOM。
-
-#### componentDidMount★
-
-组件挂载完成，初始化结束。通常进行 **开启定时器、发送网络请求、订阅消息、监听自定义事件** 等操作。
-
-```tsx
-class App extends React.Component {
-  componentDidMount() {
-    const timer = setInterval()
-  }
-}
-```
-
-### 更新阶段
-
-#### 进入更新阶段
-
-- 父组件传递的 props 被修改；
-
-- 当前组件的 state 发生变化；
-
-- 使用 `forceUpdate()` 强制更新。
-
-#### shouldComponentUpdate
-
-控制是否执行更新。一般当子组件不需要随着父组件更新的时候，控制子组件不执行更新。
-
-```tsx
-class App extends React.Component {
-  shouldComponentUpdate() {
-    return false /* 不执行更新, 默认为 true */
-  }
-}
-```
-
-#### componentDidUpdate
-
-组件更新完成，更新阶段结束。
-
-### 卸载阶段
-
-#### 进入卸载阶段
-
-- 条件渲染卸载；
-
-- 路由切换卸载；
-
-- 使用 `root.unmount()` 卸载根容器。
-
-#### componentWillUnmount★
-
-组件即将被卸载。通常进行 **关闭定时器、取消订阅、移除自定义事件** 等操作。
-
-```tsx
-class App extends React.Component {
-  componentWillUnmount() {
-    clearInterval(timer)
-  }
 }
 ```
 
@@ -501,23 +319,9 @@ class App extends React.Component {
 
 ## Router
 
-### Router Hooks
-
-React Router 中用到的 Hooks：
-
-- `useRoutes`：将路由配置解析成虚拟 DOM。
-
-- `useNavigate`：用于编程式导航，重定向跳转。
-
-- `useSearchParams`：动态路由传参，获取 query 参数。
-
-- `useLocation`：动态路由传参，获取 query 参数（字符串）或 state 参数（对象）。
-
-- `useParams`：动态路由传参，获取 params 参数（对象）。
-
 ### 基本使用
 
-`<BrowserRouter>` 组件中使用 React 路由。
+在 `<BrowserRouter>` 组件中使用 React 路由。
 
 ```tsx
 /* main.tsx */
@@ -553,14 +357,14 @@ const App = () => {
 ```tsx
 /* Layout.tsx */
 
-import { Outlet, NavLink } from "react-router-dom"
+import { Outlet, Link } from "react-router-dom"
 
 const Layout = () => {
   return (
     <>
       <div>
-        <NavLink to="/home">Home</NavLink>
-        <NavLink to="/user">User</NavLink>
+        <Link to="/home">Home</Link>
+        <Link to="/user">User</Link>
       </div>
       
       <Outlet />
@@ -580,7 +384,7 @@ import { useRoutes } from "react-router-dom"
 import router from "@/router"
 
 const App = () => {
-  return <>{ useRoutes(router) }</>
+  return <div>{ useRoutes(router) }</div>
 }
 ```
 
@@ -624,8 +428,6 @@ const routes = [
 当路由匹配成功时，`<NavLink>` 会提供处于激活状态的类名，`<Link>` 则不会。
 
 ```tsx
-/* Home/index.jsx */
-
 import { Outlet, Link, NavLink } from "react-router-dom"
 
 const Layout = () => {
@@ -654,8 +456,6 @@ const Layout = () => {
 ### 编程式导航
 
 ```tsx
-/* Home/index.tsx */
-
 import { Outlet, useNavigate } from "react-router-dom"
 
 const Home = () => {
@@ -669,8 +469,8 @@ const Home = () => {
       </div>
       
       <div>
-        <button onClick={ () => navigate(-1) }>回退一个历史记录</button>
-        <button onClick={ () => navigate(+1) }>前进一个历史记录</button>
+        <button onClick={ () => navigate(-1) }>返回</button>
+        <button onClick={ () => navigate(+1) }>前进</button>
       </div>
       
       <Outlet />
@@ -681,18 +481,23 @@ const Home = () => {
 
 ### 动态路由 - search
 
-通过 query 传参。
+通过 search 传参。
 
 ```tsx
 /* User/index.tsx */
 
-import { Outlet, Link } from "react-router-dom"
+import { Outlet, Link, useNavigate } from "react-router-dom"
 
 const User = () => {
+  const navigate = useNavigate()
+  
   return (
     <div>
-      <Link to="/user/details?id=1">用户详情</Link>
-      <Link to="/user/details?id=2">用户详情</Link>
+      <Link to="/user/profile?id=1">用户信息</Link>
+      { /* or */ }
+      <button onClick={ () => navigate({ pathname: "/user/profile", search: "id=2" }) }>
+        用户信息
+      </button>
       
       <Outlet />
     </div>
@@ -700,31 +505,21 @@ const User = () => {
 }
 ```
 
-获取 query 参数。
+获取 search 参数，或将 search 参数解析为对象。
 
 ```tsx
-/* User/Details/index.tsx */
+/* User/Profile/index.tsx */
 
-import { useSearchParams } from "react-router-dom"
-
-const Details = () => {
-  const [search] = useSearchParams()
-  
-  const id = search.get("id")
-}
-```
-
-将 query 参数解析为对象。
-
-```tsx
-/* User/Details/index.tsx */
-
-import { useLocation } from "react-router-dom"
+import { useSearchParams, useLocation } from "react-router-dom"
 import qs from "qs"
 
-const Details = () => {
-  const { search } = useLocation()
+const Profile = () => {
+  const [search] = useSearchParams()
+  const id = search.get("id")
   
+  // or
+  
+  const { search } = useLocation()
   const { id } = qs.parse(search.slice(1)) // "?" => ""
 }
 ```
@@ -741,8 +536,8 @@ import { Outlet, Link } from "react-router-dom"
 const User = () => {
   return (
     <div>
-      <Link to="/user/details/1">用户详情</Link>
-      <Link to="/user/details/2">用户详情</Link>
+      <Link to="/user/profile/1">用户信息</Link>
+      <Link to="/user/profile/2">用户信息</Link>
       
       <Outlet />
     </div>
@@ -753,11 +548,11 @@ const User = () => {
 获取 params 参数。
 
 ```tsx
-/* User/Details/index.tsx */
+/* User/Profile/index.tsx */
 
 import { useParams } from "react-router-dom"
 
-const Details = () => {
+const Profile = () => {
   const { id } = useParams()
 }
 ```
@@ -776,8 +571,8 @@ const User = () => {
   
   return (
     <div>
-      <button onClick={ navigate("/user/details", { state: { id: 1 } }) }>用户详情</button>
-      <button onClick={ navigate("/user/details", { state: { id: 2 } }) }>用户详情</button>
+      <button onClick={ navigate("/user/profile", { state: { id: 1 } }) }>用户信息</button>
+      <button onClick={ navigate("/user/profile", { state: { id: 2 } }) }>用户信息</button>
       
       <Outlet />
     </div>
@@ -788,11 +583,11 @@ const User = () => {
 获取 state 参数。
 
 ```tsx
-/* User/Details/index.tsx */
+/* User/Profile/index.tsx */
 
 import { useLocation } from "react-router-dom"
 
-const Details = () => {
+const Profile = () => {
   const { id } = useLocation().state
 }
 ```
@@ -831,8 +626,6 @@ const routes = [
 
 ### 工作流程
 
-![](https://s4.ax1x.com/2021/12/28/TsDeK0.jpg)
-
 `dispatch(action)` => Store == `(state, action)` => Reducers == `return state` => Store
 
 ### 基本使用
@@ -840,8 +633,8 @@ const routes = [
 ```tsx
 import { createStore, combineReducers } from "redux"
 
-// 1. 创建 reducer 整合函数, 根据指令操作数据
-function countReducer(state = { value: 0 } /* initState or updateState */, action) {
+// 1. 创建 reducer 整合函数，根据指令操作数据
+const countReducer = (state = { value: 0 } /* init or update */, action) => {
   switch (action.type) {
     case "count/increment":
       return { ...state, value: state.value + action.payload }
@@ -903,64 +696,66 @@ store.dispatch(getMovieList())
 
 ## Redux Toolkit
 
-### Redux Hooks
-
- Redux Toolkit 中用到的 Hooks：
-
-- `useSelector`：获取 state 中的数据
-- `useDispatch`：生成 dispatch，用于派发 action 命令
-
 ### 基本使用
 
-项目目录
-
-```
-├── App.jsx
-├── components
-│   └── Home
-│       └── index.jsx
-├── main.jsx
-└── store
-    └── index.jsx
-```
-
-管理 Redux 中的数据及操作。
+slice 文件用于创建 actions 和生成 reducer。
 
 ```tsx
-/* store/index.jsx */
+/* store/slice/counter.tsx */
 
-import { createSlice, configureStore } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
+
+export interface StateType {
+  count: number
+}
+
+const initialState: StateType = {
+  count: 0
+}
 
 const countSlice = createSlice({
-  name: "count",
-  initialState: {
-    value: 0
-  },
+  name: "counter",
+  initialState,
   reducers: {
     increment(state, { payload }) {
-      state.value += payload
+      state.count += payload.count
     },
     decrement(state, { payload }) {
-      state.value -= payload
+      state.count -= payload.count
     }
   }
 })
 
 export const { increment, decrement } = countSlice.actions
 
+export const countReducer = countSlice.reducer
+```
+
+一个 store 中可能会有多个 slice。所以需要整合所有 slice，集中管理数据。
+
+```tsx
+/* store/index.tsx */
+
+import { configureStore } from "@reduxjs/toolkit"
+import { countReducer } from "./slice/count.tsx"
+
 const store = configureStore({
   reducer: {
-    count: countSlice.reducer
+    counter: countReducer
   }
 })
+
+export type RootState = ReturnType<typeof store.getState>
+
+export type AppDispatch = typeof store.dispatch
 
 export default store
 ```
 
-`<Provider>` 可以绑定 store，使内部的组件都能使用该 store 中的数据。
+使用 `<Provider>` 组件注册 store，在其内部的组件都能访问 store 中的数据。
 
 ```tsx
-/* main.jsx */
+/* main.tsx */
 
 import { Provider } from "react-redux"
 import store from "@/store"
@@ -972,109 +767,42 @@ ReactDOM.createRoot(app).render(
 )
 ```
 
-在组件中，使用 `useSelector` 获取 store 中的数据，使用 `useDispatch` 获取派发器，从而操作数据。
+在组件中，使用 useSelector 获取 store 中的数据，使用 useDispatch 生成 dispatch 方法。
 
 ```tsx
-/* components/Home/index.jsx */
+/* Home/index.tsx */
 
 import { useSelector, useDispatch } from "react-redux"
-import { increment, decrement } from "@/store"
+import { increment, decrement } from "@/store/slice/counter.tsx"
+import type { RootState, AppDispatch } from "@/store"
 
-export default function Home() {
-  const count = useSelector(state => state.count.value)
-
-  const dispatch = useDispatch()
-
-  const addCount = () => {
-    dispatch(increment(1)) // actionCreator => dispatch({ type: "increment", payload: 1 })
-  }
-
-  const subCount = () => {
-    dispatch(decrement(1)) // actionCreator => dispatch({ type: "decrement", payload: 1 })
-  }
-
+const Home = () => {
+  const counter = useSelector((state: RootState) => state.counter)
+  
+  const dispatch: AppDispatch = useDispatch()
+  
+  const payload = { count: 1 }
+  
   return (
-    <div>
-      <button onClick={ addCount }></button>
-      <button onClick={ subCount }></button>
-    </div>
+    <>
+      <p>{ counter.count }</p>
+      
+      <button onClick={ () => dispatch({ type: "counter/increment", payload }) }> +1 </button>
+      <button onClick={ () => dispatch({ type: "counter/decrement", payload }) }> -1 </button>
+              
+      { /* or */ }
+      
+      <button onClick={ () => dispatch(increment(payload)) }> +1 </button>
+      <button onClick={ () => dispatch(decrement(payload)) }> -1 </button>
+    </>
   )
 }
 ```
 
-### 拆分模块
-
-项目目录
-
-```
-store
-├── index.jsx
-└── slice
-    └── countSlice.jsx
-```
-
-slice 文件夹管理切片（用于生成 actions 和 reducer）。
-
-```tsx
-/* store/slice/countSlice.jsx */
-
-import { createSlice } from "@reduxjs/toolkit"
-
-const countSlice = createSlice({
-  name: "count",
-  initialState: {
-    value: 0
-  },
-  reducers: {
-    increment(state, { payload }) {
-      state.value += payload
-    },
-    decrement(state, { payload }) {
-      state.value -= payload
-    }
-  }
-})
-
-export const { increment, decrement } = countSlice.actions
-
-export const countReducer = countSlice.reducer
-```
-
-index 文件就是 store 的主文件，管理所有数据。
-
-```tsx
-/* store/index.jsx */
-
-import { configureStore } from "@reduxjs/toolkit"
-import { countReducer } from "./slice/countSlice.jsx"
-
-const store = configureStore({
-  reducer: {
-    count: countReducer
-  }
-})
-
-export default store
-```
-
 ### 异步操作
 
-项目目录
-
-```
-├── App.jsx 
-├── components
-│   └── Home
-│       └── index.jsx
-├── main.jsx
-└── store
-    ├── index.jsx
-    └── slice
-        └── movieSlice.jsx
-```
-
 ```tsx
-/* store/slice/movieSlice.jsx */
+/* store/slice/movieSlice.tsx */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import axios from "axios"
@@ -1110,10 +838,10 @@ export const movieReducer = movieSlice.reducer
 ```
 
 ```tsx
-/* store/index.jsx */
+/* store/index.tsx */
 
 import { configureStore } from "@reduxjs/toolkit"
-import { movieReducer } from "./slice/movieSlice.jsx"
+import { movieReducer } from "./slice/movieSlice.tsx"
 
 const store = configureStore({
   reducer: {
@@ -1125,10 +853,10 @@ export default store
 ```
 
 ```tsx
-/* components/Home/index.jsx */
+/* components/Home/index.tsx */
 
 import { useSelector, useDispatch } from "react-redux"
-import { getMovie } from "@/store/slice/movieSlice.jsx"
+import { getMovie } from "@/store/slice/movieSlice.tsx"
 
 export default function Home() {
   const movie = useSelector(state => state.movie.movieList)

@@ -141,7 +141,8 @@ interface FillPattern {
 	pattern: 
     | 'none' | 'solid'
 	  | 'darkVertical' | 'darkHorizontal' | 'darkGrid' | 'darkTrellis' | 'darkDown' | 'darkUp'
-	  | 'lightVertical' | 'lightHorizontal' | 'lightGrid' | 'lightTrellis' | 'lightDown' | 'lightUp'
+	  | 'lightVertical' | 'lightHorizontal' | 'lightGrid' | 'lightTrellis' | 'lightDown'
+    | 'lightUp'
 	  | 'darkGray' | 'mediumGray' | 'lightGray' | 'gray125' | 'gray0625'
   
   // 图案前景色

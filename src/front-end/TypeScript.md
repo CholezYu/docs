@@ -1,53 +1,59 @@
 ---
 title: TypeScript
 icon: typescript
+date: 2024-01-29
 ---
 
 ## 常用类型
 
-### 类型别名
+### Interface
 
-定义一个 Type。
+**继承性**。Interface 可以继承，并扩展一些属性。
 
 ```ts
-type Person = {
+interface PersonType {
   name: string
   age: number
 }
 
-const person: Person = {
-  name: "xiaoming",
-  age: 18
-}
-```
-
-### 接口
-
-定义一个 Interface。
-
-```ts
-interface Person {
-  name: string
-  age: number
-}
-
-const person: Person = {
-  name: "xiaoming",
-  age: 18
-}
-```
-
-继承一个 Interface，并扩展一些属性。
-
-```ts
-interface Student extends Person {
+interface StudentType extends PersonType {
   subject: string
 }
 
-const student: Student = {
-  name: "xiaoming",
+const student: StudentType = {
+  name: "Minji",
   age: 18,
   subject: "TypeScript"
+}
+```
+
+**索引签名**。如果后端返回的字段太多了，而我们只需要其中几个，那么就可以使用索引签名。
+
+如下，ResponseType 类型中 name 和 age 字段是必需的，其他字段就不再强校验了。
+
+```ts
+interface ResponseType {
+  name: string
+  age: number
+  [prop: string]: any // prop 可以为任意名称
+}
+
+const response: ResponseType = {
+  name: "Minji",
+  age: 18,
+  sex: "female",
+  subject: "TypeScript"
+}
+```
+
+**只读属性**。常用于函数类型。
+
+```ts
+interface PersonType {
+  name: string
+  age: number
+  readonly id: number
+  readonly format: () => string
 }
 ```
 

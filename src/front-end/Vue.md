@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-01-14
+date: 2024-01-21
 ---
 
 ## 生命周期
@@ -59,52 +59,6 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 - 实例销毁之后，`destroyed` 触发
 
 ## 组件通信
-
-### Props
-
-数组类型
-
-```js
-props: ["name", "age"]
-```
-
-对象类型
-
-- type：数据类型
-
-- default：默认值
-
-- required：是否必须传值
-
-- validator：自定义验证函数
-
-```js
-props: {
-  name: String,
-  age: {
-    type: Number,
-    default: 18
-  }
-}
-```
-
-传递方式
-
-```vue
-<!-- 批量传递 -->
-<Comp v-bind="person" />
-
-<!-- 分别传递 -->
-<Comp :name="person.name" :age="person.age" />
-```
-
-### 自定义事件
-
-监听当前实例的自定义事件，回调函数会接收所有传入事件触发函数的额外参数。
-
-- `v-on`：用在普通元素上，可以监听原生事件；用在组件上，可以监听子组件触发的自定义事件。
-
-- `vm.$on`：监听实例自身的自定义事件，一般在 App 组件的 mounted 阶段监听所有组件的自定义事件。
 
 ### 事件总线
 
@@ -414,46 +368,6 @@ const Home = () => import("@/components/Home")
 const User = () => import("@/components/User")
 ```
 
-## 过滤器
-
-### 全局注册 Vue.filter
-
-```js
-Vue.filter("capitalize", value => value.toUpperCase())
-```
-
-### 局部注册 filters
-
-> 当全局过滤器和局部过滤器命名冲突时，优先使用局部过滤器。
-
-```js
-filters: {
-  capitalize(value) {
-    return value.toUpperCase
-  }
-}
-```
-
-### 基本使用
-
-过滤器用于插值语法和 v-bind，可以处理一些常见的文本格式化。
-
-- 管道符 "|" 左边的数据将作为过滤器的第一个参数；
-
-- 过滤器函数的参数 "arg" 将作为过滤器的第二个参数；
-
-- capitalize 的返回值将作为参数传递给 other 函数。
-
-```vue
-<!-- 插值语法 -->
-{{ message | capitalize }}
-{{ message | capitalize(arg) }}
-{{ message | capitalize | other }}
-
-<!-- v-bind -->
-<div :id="message | capitalize"></div>
-```
-
 ## 自定义指令
 
 ### 全局注册 Vue.directive
@@ -748,42 +662,6 @@ const router = new VueRouter({
 })
 ```
 
-### 声明式导航
-
-VueRouter 提供了 `<router-link>` 组件，可以实现路由的跳转，`<router-link>` 组件可以设置一些属性：
-
-- to：指定跳转路径
-
-- replace：不会留下历史记录
-
-- active-class：设置一个类名，当对应的路由匹配成功时，会自动给当前元素设置这个类名
-
-```vue
-<router-link to="/home" replace>
-  <button>Home</button>
-</router-link>
-```
-
-### 编程式导航
-
-`$router.push`：参数可以是一个字符串路径，或者一个描述路径的对象。
-
-`$router.replace`：与 `$router.push` 唯一的不同就是，它不会生成新的历史记录，而是替换当前的历史记录。
-
-```js
-// 路径(字符串)
-$router.push("/home")
-$router.replace("/home")
-
-// 路径(对象)
-$router.push({ path: "/home" })
-$router.replace({ path: "/home" })
-
-// 别名(对象)
-$router.push({ name: "home" })
-$router.replace({ name: "home" })
-```
-
 ### 解决重复跳转的报错
 
 重写 push 方法，replace 同理。
@@ -835,9 +713,7 @@ routes: [
 ]
 ```
 
-### 动态路由
-
-#### route.params
+### 动态路由 - params
 
 在路由配置中使用 ":" 占位。当匹配到路由时，参数值会被设置到 `$route.params` 中。
 
@@ -845,13 +721,13 @@ routes: [
 
 ```vue
 <!-- 字符串写法 -->
-<router-link to="/user/even">User</router-link>
+<router-link to="/user/1">User</router-link>
 
 <!-- 对象写法, params 参数只支持 name -->
-<router-link :to="{ name: 'User', params: { name: 'even' } }">User</router-link>
+<router-link :to="{ name: 'User', params: { id: 1 } }">User</router-link>
 ```
 
-#### route.query
+### 动态路由 - query
 
 如果 URL 中有查询参数，参数值会被设置到 `$router.query` 中。
 
@@ -859,11 +735,11 @@ routes: [
 
 ```vue
 <!-- 字符串写法 -->
-<router-link to="/user?id=007">User</router-link>
+<router-link to="/user?id=1">User</router-link>
 
 <!-- 对象写法 -->
-<router-link :to="{ path: '/user', query: { id: 7 } }">User</router-link>
-<router-link :to="{ name: 'User', query: { id: 7 } }">User</router-link>
+<router-link :to="{ path: '/user', query: { id: 1 } }">User</router-link>
+<router-link :to="{ name: 'User', query: { id: 1 } }">User</router-link>
 ```
 
 ### 路由组件传参
@@ -912,23 +788,6 @@ routes: [
     path: "/user/:name",
     component: () => import("@/views/User"),
     props: $route => ({ ...$route.params, ...$route.query })
-  }
-]
-```
-
-### 路由元信息
-
-定义路由的时候可以配置 "meta" 字段。在组件中可以通过 `$route.meta` 访问。
-
-```js
-routes: [
-  {
-    path: "/user",
-    component: () => import("@/views/User"),
-    meta: {
-      title: "",
-      icon: ""
-    }
   }
 ]
 ```
@@ -1519,7 +1378,7 @@ defineExpose({
 
 ### provide & inject
 
-在 Vue3中，provide 提供的数据不需要写成函数返回值形式，因为提供的是 ref 对象，数据是具有响应式的。
+在 Vue3 中，provide 提供的数据不需要写成函数返回值形式，因为提供的是 ref 对象，数据是具有响应式的。
 
 ```ts
 import { provide } from "vue"
@@ -1527,7 +1386,7 @@ import { provide } from "vue"
 provide("count", count)
 ```
 
-`inject()` 会返回需要注入的数据对应的值。
+inject 会返回需要注入的数据对应的值。
 
 ```ts
 import { inject } from "vue"

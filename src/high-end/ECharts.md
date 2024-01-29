@@ -91,16 +91,15 @@ export default echarts
 <!-- Chart/index.vue -->
 
 <script setup lang="ts">
+  import { ref, watch } from "vue"
   import echarts, { type ECOption } from "@/utils/echarts.ts"
   import { merge, cloneDeep } from "lodash"
   
-  const chartRef = ref<HTMLDivElement>()
-  
   const props = withDefaults(
     defineProps<{
+      option: ECOption
       width?: string
       height?: string
-      option: ECOption
     }>(),
     {
       width: "100%",
@@ -108,7 +107,7 @@ export default echarts
     }
   )
   
-  const option: ECOption = {
+  const initOption: ECOption = {
     title: {},
     xAxis: {},
     yAxis: {
@@ -128,17 +127,25 @@ export default echarts
     }
   }
   
-  onMounted(() => {
-    // 初始化 echarts 实例
-    const chart = echarts.init(chartRef.value)
-    
-    // 渲染图表
-    chart.setOption(merge(cloneDeep(option), props.option))
-  })
+  const chartRef = ref<HTMLDivElement>()
+  
+  const chart = ref()
+  
+  watch(
+    () => props.option,
+    (option: ECOption) => {
+      // 初始化 charts 实例
+      chart.value = charts.init(chartRef.value)
+      
+      // 渲染图表
+      chart.value.setOption(merge(cloneDeep(initOption), option))
+    },
+    { deep: true }
+  )
 </script>
 
 <template>
-  <div ref="chartRef" :style="{ width, height }"></div>
+  <div ref="chartRef" :style="{ width, height }" />
 </template>
 ```
 
