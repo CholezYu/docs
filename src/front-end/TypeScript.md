@@ -1,26 +1,26 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-01-29
+date: 2024-01-30
 ---
 
 ## 常用类型
 
-### Interface
+### 接口 Interface
 
-**继承性**。Interface 可以继承，并扩展一些属性。
+**继承**。interface 可以继承，并可以扩展一些属性。
 
 ```ts
-interface PersonType {
+interface SomeType {
   name: string
   age: number
 }
 
-interface StudentType extends PersonType {
+interface AType extends SomeType {
   subject: string
 }
 
-const student: StudentType = {
+const student: AType = {
   name: "Minji",
   age: 18,
   subject: "TypeScript"
@@ -29,7 +29,7 @@ const student: StudentType = {
 
 **索引签名**。如果后端返回的字段太多了，而我们只需要其中几个，那么就可以使用索引签名。
 
-如下，ResponseType 类型中 name 和 age 字段是必需的，其他字段就不再强校验了。
+如下，ResponseType 类型中只有 name 和 age 字段是必需的，其他字段就不再强校验了。
 
 ```ts
 interface ResponseType {
@@ -49,15 +49,112 @@ const response: ResponseType = {
 **只读属性**。常用于函数类型。
 
 ```ts
-interface PersonType {
+interface SomeType {
   name: string
   age: number
   readonly id: number
-  readonly format: () => string
+  readonly fn: () => string
 }
 ```
 
-### 元组类型
+### 函数 Function
+
+**函数重载**。根据参数的类型执行不同的函数。
+
+```ts
+const nums: string = [1, 2, 3]
+
+// 重载
+function fn(param: number): number[]
+function fn(param: number[]): number[]
+function fn(): number[]
+
+// 实现
+function fn(param?: number | number[]) {
+  if (typeof param === "number") {
+    return nums.filter(n => n === param)
+  }
+  else if (Array.isArray(param)) {
+    nums.push(...param)
+    return nums
+  }
+  else {
+    return nums
+  }
+}
+```
+
+**定义 this 的类型**。必须在第一个参数定义 this 的类型，调用时忽略该参数。
+
+```ts
+interface OType {
+  nums: number[]
+  add: (this: OType, num: number) => void
+}
+
+const o = {
+  nums: [1, 2, 3],
+  add(this: OType, num: number) {
+    this.nums.push(num)
+  }
+}
+```
+
+### 类 Class
+
+**类型约束**。对类进行约束，使该类的实例对象满足这个外部类型。implements 后面可以是 interface，也可以是一个类。
+
+> super 原理：调用父类的 prototype.constructor.call()
+
+```ts
+interface OptionsType {
+  el: string | HTMLElement
+}
+
+interface VueType {
+  options: OptionsType
+  init: () => void
+}
+
+// implements 约束 Class
+class Vue implements VueType {
+  options: OptionsType
+  
+  constructor(options: OptionsType) {
+    super()
+    this.options = options
+    this.init()
+  }
+  
+  init(): void {
+    // 初始化 ...
+  }
+}
+```
+
+**抽象类**。通过 abstract 定义的类称为抽象类，抽象类不能被实例化。通过 abstract 定义的方法只能描述，不能实现。
+
+继承抽象类的类，称为派生类，派生类可以被实例化。在派生类中需要对 abstract 定义的方法进行实现。
+
+```ts
+abstract class Vue {
+  name: string
+  
+  constructor(name: string) {
+    this.name = name
+  }
+  
+  abstract init(name: string): void
+}
+
+class React extends Vue {
+  init(name: string) {
+    // ...
+  }
+}
+```
+
+### 元组 Tuple
 
 元组类似于数组类型，并且它可以确切地知道包含多少个元素，以及这些元素的类型。
 
@@ -67,7 +164,7 @@ const tup: [number, string] = [1, "a"]
 const tup: [string, number] = [1, "a"] // error
 ```
 
-### 枚举类型
+### 枚举 Enum
 
 ```ts
 enum ResponseCode {
@@ -83,93 +180,6 @@ ResponseCode[PASSWORD_ERROR] // 10001
 ResponseCode[100] // OK
 ResponseCode[404] // NOT_FOUND
 ResponseCode[10001] // PASSWORD_ERROR
-```
-
-### 联合类型
-
-由多个类型组成的一个组合类型。
-
-```ts
-let timer: number | null = null
-timer = 1
-
-const arr: (number | string)[] = [1, 2, "3"]
-
-const arr: Array<number | boolean> = [true, 1]
-```
-
-### 交叉类型
-
-合并两个类型，得到一个新类型。
-
-```ts
-type Person = {
-  name: string
-  age: number
-}
-
-type Student = Person & { 
-  subject: string
-}
-```
-
-## Type vs Interface
-
-### 合并或继承
-
-通过交叉类型合并一个 Type。
-
-```ts
-type Person = {
-  name: string
-  age: number
-}
-
-type Student = Person & { 
-  subject: string
-}
-```
-
-通过接口继承一个 Interface。
-
-```ts
-interface Person {
-  name: string
-  age: number
-}
-
-interface Student extends Person {
-  subject: string
-}
-```
-
-### 可扩展性
-
-Type 定义后不能更改。
-
-```ts
-type Person = {
-  name: string
-  age: number
-}
-
-// Error: Duplicate identifier 'Person'
-type Person = {
-  subject: string
-}
-```
-
-Interface 可以扩展新字段（并不是覆盖）。
-
-```ts
-interface Person {
-  name: string
-  age: number
-}
-
-interface Person {
-  subject: string
-}
 ```
 
 ## 泛型
