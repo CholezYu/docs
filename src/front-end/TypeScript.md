@@ -17,13 +17,13 @@ interface SomeType {
 }
 
 interface AType extends SomeType {
-  subject: string
+  sex: string
 }
 
 const student: AType = {
   name: "Minji",
   age: 18,
-  subject: "TypeScript"
+  sex: "female"
 }
 ```
 
@@ -89,12 +89,12 @@ function fn(param?: number | number[]) {
 ```ts
 interface OType {
   nums: number[]
-  add: (this: OType, num: number) => void
+  append: (this: OType, num: number) => void
 }
 
 const o = {
   nums: [1, 2, 3],
-  add(this: OType, num: number) {
+  append(this: OType, num: number) {
     this.nums.push(num)
   }
 }
@@ -102,7 +102,9 @@ const o = {
 
 ### 类 Class
 
-**类型约束**。对类进行约束，使该类的实例对象满足这个外部类型。implements 后面可以是 interface，也可以是一个类。
+**类型约束**。对类进行约束，使该类的实例对象满足这个外部类型。
+
+implements 后面可以是 interface，也可以是一个类。
 
 > super 原理：调用父类的 prototype.constructor.call()
 
@@ -119,67 +121,29 @@ interface VueType {
 // implements 约束 Class
 class Vue implements VueType {
   options: OptionsType
-  
-  constructor(options: OptionsType) {
-    super()
-    this.options = options
-    this.init()
-  }
-  
   init(): void {
     // 初始化 ...
   }
 }
 ```
 
-**抽象类**。通过 abstract 定义的类称为抽象类，抽象类不能被实例化。通过 abstract 定义的方法只能描述，不能实现。
+**抽象类**。通过 abstract 定义的类称为抽象类，抽象类不能被实例化，只能被继承。
 
-继承抽象类的类，称为派生类，派生类可以被实例化。在派生类中需要对 abstract 定义的方法进行实现。
+通过 abstract 定义的方法称为抽象方法，抽象方法只能进行描述，不能实现。
+
+继承抽象类的类，称为派生类，派生类可以被实例化。在派生类中必须对抽象方法进行实现。
 
 ```ts
 abstract class Vue {
   name: string
-  
-  constructor(name: string) {
-    this.name = name
-  }
-  
   abstract init(name: string): void
 }
 
-class React extends Vue {
+class VueComponent extends Vue {
   init(name: string) {
     // ...
   }
 }
-```
-
-### 元组 Tuple
-
-元组类似于数组类型，并且它可以确切地知道包含多少个元素，以及这些元素的类型。
-
-```ts
-const tup: [number, string] = [1, "a"]
-
-const tup: [string, number] = [1, "a"] // error
-```
-
-### 枚举 Enum
-
-```ts
-enum ResponseCode {
-  OK = 100,
-  NOT_FOUND = 404,
-  PASSWORD_ERROR = 10001,
-}
-
-ResponseCode[OK] // 100
-ResponseCode[NOT_FOUND] // 404
-ResponseCode[PASSWORD_ERROR] // 10001
-
-ResponseCode[100] // OK
-ResponseCode[404] // NOT_FOUND
-ResponseCode[10001] // PASSWORD_ERROR
 ```
 
 ## 泛型

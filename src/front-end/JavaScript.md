@@ -1,9 +1,10 @@
 ---
 title: JavaScript
 icon: javascript
+date: 2024-01-31
 ---
 
-## 强制转换原理
+## 强制转换
 
 ### Number()
 
@@ -345,12 +346,10 @@ fun.bind({}).name // "bound fun"
 
 ### Object.create
 
-`Object.create(proto, [descriptor])`
-
 创建一个对象，并指定它的原型对象。
 
 ```js
-const obj = Object.create(null, {
+const o = Object.create(null, {
 	name: {
 		value: "Bob",
 		enumerable: true
@@ -360,36 +359,32 @@ const obj = Object.create(null, {
 	}
 })
 
-obj // { name: "Bob", sex: "男" }
+o // { name: "Bob", sex: "男" }
 ```
 
 ### Object.defineProperty
 
-`Object.defineProperty(obj, prop, descriptor)`
-
 劫持对象的某个属性。
 
 ```js
-const obj = { name: "Bob" }
+const o = { name: "Bob" }
 
-Object.defineProperty(obj, "age", {
+Object.defineProperty(o, "age", {
   value: 15,
   enumerable: true
 })
 
-obj // { name: "Bob", age: 15 }
+o // { name: "Bob", age: 15 }
 ```
 
 ### Object.defineProperties
 
-`Object.defineProperties(obj, props: descriptor)`
-
 劫持对象的多个属性。
 
 ```js
-const obj = { name: "Bob" }
+const o = { name: "Bob" }
 
-Object.defineProperties(obj, {
+Object.defineProperties(o, {
   "age": {
     value: 15,
     enumerable: true
@@ -400,7 +395,7 @@ Object.defineProperties(obj, {
   }
 })
 
-obj // { name: "Bob", age: 15, sex: "男" }
+o // { name: "Bob", age: 15, sex: "男" }
 ```
 
 ### 继承
@@ -456,8 +451,6 @@ class Student extends Person {
 
 ### Object.keys
 
-`Object.keys(obj)`
-
 遍历对象，返回对象属性名组成的数组。
 
 ```js
@@ -469,8 +462,6 @@ Object.keys({
 ```
 
 ### Object.values
-
-`Object.values(obj)`
 
 遍历对象，返回对象属性值组成的数组。
 
@@ -484,8 +475,6 @@ Object.values({
 
 ### Object.entries
 
-`Object.entries(obj)`
-
 遍历对象，返回对象属性名与属性值组成的二维数组。
 
 ```js
@@ -498,23 +487,18 @@ Object.entries({
 
 ### Object.assign
 
-`Object.assign(target, ...sources)`
-
 合并对象，并返回。可用于浅拷贝。
 
 ```js
-const obj = { a: 1 }
+const o = { a: 1 }
 
-Object.assign({}, obj)
+Object.assign({}, o)
 
-/* 等价于 */
-
-{ ...obj }
+// 等同于
+{ ...o }
 ```
 
 ### Object.freeze
-
-`Object.freeze(obj)`
 
 冻结对象属性。如果属性是对象或数组，可以改变其内部结构，必要时需要深冻结。
 
@@ -532,8 +516,6 @@ person // { name: 'xiaoming', age: 18 }
 
 ### Object.is
 
-`Object.is(value1, value2)`
-
 判断两个值是否相等，解决了 "==" 会自动转换数据类型、`NaN === NaN => false` 等问题。
 
 ```js
@@ -546,9 +528,7 @@ Object.is(NaN, NaN) // true
 
 ### Object.hasOwn
 
-`Object.hasOwn(obj, prop)`
-
-判断一个属性是否是对象自身的属性，与 `obj.hasOwnProperty(prop)` 相同。
+判断一个属性是否是对象自身的属性，与 `.hasOwnProperty(prop)` 相同。
 
 ```js
 const person = {
@@ -566,21 +546,17 @@ Object.hasOwn(person, "foo") // false
 
 ### arr.push
 
-`arr.push(value...)`
-
 向数组尾部添加元素，返回新数组的长度。
 
 ```js
 const arr = [2, 3, 4]
 
-arr.push(5)
+arr.push(5, 6)
 
-arr // [2, 3, 4, 5]
+arr // [2, 3, 4, 5, 6]
 ```
 
 ### arr.pop
-
-`arr.pop()`
 
 删除数组最后一个元素，返回被删除的元素。
 
@@ -594,8 +570,6 @@ arr // [1, 2, 3, 4]
 
 ### arr.unshift
 
-`arr.unshift(value...)`
-
 向数组首部添加元素，返回新数组的长度。
 
 ```js
@@ -608,8 +582,6 @@ arr // [1, 2, 3, 4]
 
 ### arr.shift
 
-`arr.shift()`
-
 删除数组第一个元素，返回被删除的元素。
 
 ```js
@@ -621,8 +593,6 @@ arr // [2, 3, 4, 5]
 ```
 
 ### arr.splice
-
-`arr.splice(startIndex, [count], [value...])`
 
 删除元素 | 添加元素，返回被删除的元素。
 
@@ -658,8 +628,6 @@ arr // [2, 7, 8, 9, 3, 4, 5, 6]
 
 ### arr.sort
 
-`arr.sort()`
-
 将元素按 UTF-16 升序排列。可以传入比较函数进行排序。
 
 ```js
@@ -676,8 +644,6 @@ arr // [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李�
 
 ### arr.reverse
 
-`arr.reverse()`
-
 反转数组中的元素。
 
 ```js
@@ -689,8 +655,6 @@ arr // [5, 4, 3, 2, 1]
 ```
 
 ### arr.slice
-
-`arr.slice([startIndex], [endIndex])`
 
 截取数组，返回被截取的部分。
 
@@ -704,8 +668,6 @@ arr.slice() // [2, 3, 4, 5, 6]
 
 ### arr.concat
 
-`arr.concat(arr1, [arr2])`
-
 合并数组，并返回。
 
 ```js
@@ -715,8 +677,6 @@ arr.concat([5, 6]) // [2, 3, 4, 5, 6]
 ```
 
 ### arr.join
-
-`arr.join([separator])`
 
 拆分数组，将被拆分的部分组成字符串，并返回。
 
@@ -730,8 +690,6 @@ arr.join("") === "" // false, 判断 arr 是否为空数组
 
 ### arr.indexOf
 
-`arr.indexOf(item, [startIndex])`
-
 查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
@@ -743,8 +701,6 @@ arr.indexOf('g') // -1
 ```
 
 ### arr.lastIndexOf
-
-`arr.lastIndexOf(item, [start])`
 
 查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -758,8 +714,6 @@ arr.lastIndexOf('g') // -1
 
 ### arr.forEach
 
-`arr.forEach(callback(item, [index], [arr]))`
-
 遍历数组。
 
 ```js
@@ -769,8 +723,6 @@ arr.forEach(item => console.log(item)) // 4 9 16 25
 ```
 
 ### arr.filter
-
-`arr.filter(callback(item, [index], [arr]))`
 
 遍历数组，过滤出一个新数组。
 
@@ -784,8 +736,6 @@ newArr // [16, 25]
 
 ### arr.map
 
-`arr.map(callback(item, [index], [arr]))`
-
 遍历数组，映射出一个新数组。
 
 ```js
@@ -797,8 +747,6 @@ newArr // [2, 3, 4, 5]
 ```
 
 ### arr.reduce
-
-`arr.reduce(callback(prev, item, [index], [arr]), [initial])`
 
 遍历数组，得到一个值。
 
@@ -814,8 +762,6 @@ total // 55 (1 + 4 + 9 + 16 + 25)
 
 ### Array.of
 
-`Array.of(value...)`
-
 创建数组，相比于 `new Array()`，`Array.of()` 可以创建一个元素的数组。
 
 ```js
@@ -825,8 +771,6 @@ Array.of(3) // [3]
 ```
 
 ### Array.from
-
-`Array.from(arrLike, [mapFn(item)])`
 
 将伪数组或可迭代对象转换为数组。
 
@@ -844,8 +788,6 @@ Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3,
 
 ### arr.includes
 
-`arr.includes(item, [index])`
-
 判断数组中是否含有某元素。
 
 ```js
@@ -856,8 +798,6 @@ arr.includes(9) // false
 ```
 
 ### arr.fill
-
-`arr.fill(item, [startIndex], [endIndex])`
 
 填充数组。
 
@@ -871,8 +811,6 @@ arr // ["*", "*", "*"]
 
 ### arr.flat
 
-`arr.flat([count])`
-
 降维数组。
 
 ```js
@@ -883,8 +821,6 @@ arr.flat(2) // [1, 2, 3, 4, 5, 6]
 
 ### arr.find
 
-`arr.find(callback(item, [index, [arr]])`
-
 遍历数组，返回符合条件的第一个元素。
 
 ```js
@@ -894,8 +830,6 @@ arr.find(item => item > 3) // 5
 ```
 
 ### arr.findIndex
-
-`arr.findIndex(callback(item, [index], [array])`
 
 遍历数组，返回符合条件的第一个元素的索引。
 
@@ -909,8 +843,6 @@ arr.findIndex(item => item > 3) // 2
 
 ### str.indexOf
 
-`str.indexOf(item, [startIndex])`
-
 查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
@@ -923,8 +855,6 @@ str.indexOf("woood") // -1
 
 ### str.lastIndexOf
 
-`str.lastIndexOf(item, [startIndex])`
-
 查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
 ```js
@@ -936,8 +866,6 @@ str.indexOf("woood") // -1
 ```
 
 ### str.slice
-
-`str.slice([startIndex, [endIndex]])`
 
 截取字符串，返回被截取的部分。
 
@@ -952,8 +880,6 @@ str.slice(3, -1) // "lo worl"
 
 ### str.substring
 
-`str.substring(startIndex, [endIndex])`
-
 截取字符串，返回被截取的部分。若 startIndex 大于 endIndex，则交换顺序。
 
 ```js
@@ -965,8 +891,6 @@ str.substring(-10, -5) // ""
 ```
 
 ### str.substr
-
-`str.substr(startIndex, [count])`
 
 截取字符串，返回被截取的部分。
 
@@ -981,8 +905,6 @@ str.substr(3) // "lo world"
 
 ### str.toUpperCase
 
-`str.toUpperCase()`
-
 将字符串转为大写，并返回。
 
 ```js
@@ -992,8 +914,6 @@ str.toUpperCase() // "I LOVE JAVASCRIPT"
 ```
 
 ### str.toLowerCase
-
-`str.toLowerCase()`
 
 将字符串转为小写，并返回。
 
@@ -1005,8 +925,6 @@ str.toLowerCase() // "i love javascript"
 
 ### str.trim
 
-`str.trim()`
-
 去除字符串两边的空格。
 
 ```js
@@ -1016,8 +934,6 @@ str.trim() // "hello world"
 ```
 
 ### str.split
-
-`str.split([separator|regexp, [count]])`
 
 拆分字符串，将被拆分的部分组成数组，并返回。
 
@@ -1037,8 +953,6 @@ str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 
 ### str.search
 
-`str.search(item|regexp)`
-
 查找元素，返回元素（正则）首次出现（匹配）的索引。若不存在，则返回 -1。
 
 ```js
@@ -1049,8 +963,6 @@ str.search(/[0-9]+/g) // 12
 
 ### str.match
 
-`str.match(regexp)`
-
 返回匹配项组成的数组。若匹配不到，则返回 -1。
 
 ```js
@@ -1060,8 +972,6 @@ str.match(/[0-9]+/g) // [1, 2, 666]
 ```
 
 ### str.replace
-
-`str.replace(item|regexp, newItem|function)`
 
 替换匹配到的元素。
 
@@ -1084,8 +994,6 @@ str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 
 ### str.includes
 
-`str.includes(item)`
-
 判断字符串中是否含有某元素。
 
 ```js
@@ -1097,8 +1005,6 @@ str.includes("yeah") // false
 
 ### str.startsWith
 
-`str.startsWith(item, [index])`
-
 判断字符串是否以某元素开始。
 
 ```js
@@ -1108,8 +1014,6 @@ str.startsWith("ab") // true
 ```
 
 ### str.endsWith
-
-`str.endsWith(item, [index])`
 
 判断字符串是否以某元素结束。
 
@@ -1121,8 +1025,6 @@ str.endsWith("ef") // false
 
 ### str.repeat
 
-`str.repeat(count)`
-
 重复字符串，并返回。
 
 ```js
@@ -1132,8 +1034,6 @@ str.repeat(3) // "abcabcabc"
 ```
 
 ### str.padStart
-
-`str.padStart(length, [item])`
 
 当字符串不足某长度时，在首部填充元素，并返回。
 
@@ -1145,8 +1045,6 @@ str.padStart(10, "*") // "*******abc"
 
 ### str.padEnd
 
-`str.padEnd(length, [item])`
-
 当字符串不足某长度时，在尾部填充元素，并返回。
 
 ```js
@@ -1157,8 +1055,6 @@ str.padEnd(10, "*") // "abc*******"
 
 ### str.trimStart
 
-`str.trimStart()`
-
 去除字符串首部的空格。
 
 ```js
@@ -1168,8 +1064,6 @@ str.trimStart() // "hello world   "
 ```
 
 ### str.trimEnd
-
-`str.trimEnd()`
 
 去除字符串尾部的空格。
 
@@ -1447,63 +1341,12 @@ for (let item of set) {
 
 ## Promise
 
-### Promise 介绍
-
-```js
-new Promise((resolve, reject) => {
-  if (true /* success */) {
-    resolve(value)
-  }
-  else /* error */ {
-    reject(error)
-  }
-}).then(
-  value => { /* 成功的回调 */ },
-  error => { /* 失败的回调 */ }
-)
-```
-
-### Promise.prototype.then
-
-`promise.then(value => {}, error => {})`
-
-```js
-promise.then(
-  value => { /* 成功的回调 */ },
-  error => { /* 失败的回调 */ }
-)
-```
-
-### Promise.prototype.catch
-
-`promise.catch(error => {})`
-
-> 等同于 `promise.then(null, error => {})`
-
-```js
-promise.catch(
-  error => { /* 失败的回调 */ }
-)
-```
-
-### Promise.prototype.finally
-
-`promise.finally(() => {})`
-
-在 promise 结束时，无论结果是 fulfilled 或者是 rejected，都会执行回调函数。
-
-```js
-promise.finally(
-  () => { /* promise 结束的回调 */ }
-)
-```
-
 ### Promise.resolve
 
-`Promise.resolve(value)`
-
 ```js
-/* 等同于 */
+Promise.resolve(value)
+
+// 等同于
 new Promise((resolve, reject) => {
   resolve(value)
 })
@@ -1511,10 +1354,10 @@ new Promise((resolve, reject) => {
 
 ### Promise.reject
 
-`Promise.reject(error)`
-
 ```js
-/* 等同于 */
+Promise.reject(error)
+
+// 等同于
 new Promise((resolve, reject) => {
   reject(error)
 })
@@ -1522,13 +1365,9 @@ new Promise((resolve, reject) => {
 
 ### Promise.all
 
-`Promise.all([p1, p2, p3])`
-
 只有 p1, p2, p3 都成功时，p 才会成功，
 
 如果 p 成功，p 返回的 Promise 结果为 p1, p2, p3 返回的 Promise 的值组成的数组；
-
-
 
 只要 p1, p2, p3 有一个失败，p 就会失败，
 
@@ -1552,8 +1391,6 @@ Promise.all([p1, p2, p3]).then(
 
 ### Promise.allSettled
 
-`Promise.allSettled([p1, p2, p3])`
-
 无论 p1, p2, p3 成功还是失败，p 都会成功，
 
 p 返回的 Promise 结果为包含 [p1, p2, p3 返回的 Promise 的状态和值] 的对象组成的数组。
@@ -1575,15 +1412,11 @@ Promise.all([p1, p2, p3]).then(
 
 ### Promise.any
 
-`Promise.any([p1, p2, p3])`
-
 只有 p1, p2, p3 都失败时，p 才会失败；
 
 只要 p1, p2, p3 有一个成功，p 就会成功。
 
 ### Promise.race
-
-`Promise.race([p1, p2, p3])`
 
 只要 p1, p2, p3 中有一个状态发生改变，p 的状态就随之改变，
 
@@ -1689,7 +1522,6 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    console.log(error)
     return new Promise(() => {}) // 中断 Promise 链
   }
 ).then(
@@ -1725,11 +1557,121 @@ console.log(4)
 
 ## Iterator
 
+### 基本使用
 
+迭代器可以遍历可迭代对象。
+
+> 可迭代对象：Array  Set  Map  String  NodeList  arguments
+
+```ts
+const set = new Set([1, 1, 2, 3])
+
+const iterator = set[Symbol.iterator]()
+
+iterator.next() // { value: 1, done: false }
+iterator.next() // { value: 2, done: false }
+iterator.next() // { value: 3, done: false }
+iterator.next() // { value: undefined, done: true }
+```
+
+### 底层实现
+
+实现一个遍历可迭代对象的函数。
+
+> **数组**的解构和展开，底层原理就是通过迭代器实现的。
+
+```ts
+function iterate(iterable: any, callback: (current: any) => void) {
+  const iterator = iterable[Symbol.iterator]()
+  let current = { done: false }
+  
+  while (!current.done) {
+    current = iterator.next()
+    
+    if (!current.done) {
+      callback(current)
+    }
+  }
+}
+
+const set = new Set([1, 1, 2, 3])
+
+iterate(set, current => {
+  current // { value: 1, done: false }  { value: 2, done: false }  { value: 3, done: false }
+  current.value // 1  2  3
+})
+```
+
+### for...of
+
+ES6 提供了 for...of 语法糖，不需要我们去实现迭代器的遍历函数。注意：只能用于可迭代对象。
+
+```ts
+const set = new Set([1, 1, 2, 3])
+
+for (const value of set) {
+  value // 1  2  3
+}
+```
+
+### 自定义可迭代对象
+
+对象本身是不可迭代的，可以给它添加一个 `[Symbol.iterator]` 属性，让它变成可迭代对象。
+
+```ts
+const iterative = {
+  max: 5,
+  current: 0,
+  [Symbol.iterator]() {
+    return {
+      max: this.max,
+      current: this.current,
+      next() {
+        return this.current === this.max
+          // iterate done
+          ? {
+            value: undefined,
+            done: true
+          }
+          // iterating
+          : {
+            value: this.current++,
+            done: false
+          }
+      }
+    }
+  }
+}
+
+for (const value of iterative) {
+  value // 0  1  2  3  4
+}
+
+[...iterative] // [ 0, 1, 2, 3, 4 ]
+```
 
 ## Generator
 
+### 基本使用
 
+生成器其实就是 Iterator 的语法糖，它可以简化对迭代器的操作。
+
+```ts
+function* fn() {
+  yield Promise.resolve("first")
+  yield "Generator"
+  yield 123
+  yield true
+}
+
+const f = fn()
+
+f.next() // { value: Promise { 'first' }, done: false }
+f.next() // { value: 'Generator', done: false }
+f.next() // { value: 123, done: false }
+f.next() // { value: true, done: false }
+f.next() // { value: undefined, done: true }
+```
 
 ## async & await
 
@@ -1740,7 +1682,7 @@ async 函数是 Promise 的语法糖。
 ```js
 const fn = async () => 5
 
-/* 等价于 */
+// 等价于
 
 const fn = () => Promise.resolve(5)
 ```
@@ -1753,7 +1695,7 @@ const fn = async () => {
   console.log(2)
 }
 
-/* 等价于 */
+// 等价于
 
 const fn = () => {
   return new Promise(resolve => {
@@ -1822,7 +1764,7 @@ console.log(4)
 
 [DOM - JavaScript 教程 - 网道 (wangdoc.com)](https://wangdoc.com/javascript/dom/)
 
-### 节点
+### 元素节点
 
 |      | 节点类型（nodeType） | 节点名（nodeName） | 节点值（nodeValue） |
 | :--: | :------------------: | :----------------: | :-----------------: |
@@ -1831,7 +1773,7 @@ console.log(4)
 | 文本 |          3           |       #text        |      文本内容       |
 | 注释 |          8           |      #comment      |      注释内容       |
 
-### 查询元素节点树
+### 查询元素节点
 
 | API                              | 用法               |
 | -------------------------------- | ------------------ |
@@ -1849,7 +1791,7 @@ console.log(4)
 | `element.nextElementSilbing`     | 获取下一个兄弟元素 |
 | `element.nextSibling`            | 获取下一个兄弟节点 |
 
-### 操作元素节点树
+### 操作元素节点
 
 | API                                        | 用法                         |
 | ------------------------------------------ | ---------------------------- |
@@ -1863,7 +1805,7 @@ console.log(4)
 | `element.cloneNode()`                      | 克隆一个元素                 |
 | `element.cloneNode(true)`                  | 克隆一个元素及其内容         |
 
-### 操作元素的样式
+### 操作元素样式
 
 | API                                 | 用法                           |
 | ----------------------------------- | ------------------------------ |
@@ -1872,7 +1814,7 @@ console.log(4)
 | `getComputedStyle(element)["attr"]` | 获取元素实时样式，*不兼容 IE8* |
 | `element.currentStyle["attr"]`      | 获取元素实时样式，*仅支持 IE8* |
 
-### 操作元素的类名
+### 操作元素类名
 
 | API                                   | 用法                 |
 | ------------------------------------- | -------------------- |
@@ -1883,7 +1825,7 @@ console.log(4)
 | `element.classList.contains("value")` | 判断元素是否有该类名 |
 | `element.classList.toggle("value")`   | 切换元素类名         |
 
-### 操作元素的属性
+### 操作元素属性
 
 | API                                     | 用法                 |
 | --------------------------------------- | -------------------- |
