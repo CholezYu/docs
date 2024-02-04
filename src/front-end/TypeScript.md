@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-01-30
+date: 2024-02-04
 ---
 
 ## 常用类型
@@ -11,16 +11,16 @@ date: 2024-01-30
 **继承**。interface 可以继承，并可以扩展一些属性。
 
 ```ts
-interface SomeType {
+interface Person {
   name: string
   age: number
 }
 
-interface AType extends SomeType {
+interface Student extends Person {
   sex: string
 }
 
-const student: AType = {
+const student: Student = {
   name: "Minji",
   age: 18,
   sex: "female"
@@ -29,16 +29,16 @@ const student: AType = {
 
 **索引签名**。如果后端返回的字段太多了，而我们只需要其中几个，那么就可以使用索引签名。
 
-如下，ResponseType 类型中只有 name 和 age 字段是必需的，其他字段就不再强校验了。
+如下，Response 类型中只有 name 和 age 字段是必需的，其他字段就不再强校验了。
 
 ```ts
-interface ResponseType {
+interface Response {
   name: string
   age: number
   [prop: string]: any // prop 可以为任意名称
 }
 
-const response: ResponseType = {
+const response: Response = {
   name: "Minji",
   age: 18,
   sex: "female",
@@ -49,7 +49,7 @@ const response: ResponseType = {
 **只读属性**。常用于函数类型。
 
 ```ts
-interface SomeType {
+interface Info {
   name: string
   age: number
   readonly id: number
@@ -87,14 +87,14 @@ function fn(param?: number | number[]) {
 **定义 this 的类型**。必须在第一个参数定义 this 的类型，调用时忽略该参数。
 
 ```ts
-interface OType {
+interface This {
   nums: number[]
-  append: (this: OType, num: number) => void
+  append: (this: This, num: number) => void
 }
 
-const o = {
+const ob = {
   nums: [1, 2, 3],
-  append(this: OType, num: number) {
+  append(this: This, num: number) {
     this.nums.push(num)
   }
 }
@@ -106,21 +106,21 @@ const o = {
 
 implements 后面可以是 interface，也可以是一个类。
 
-> super 原理：调用父类的 prototype.constructor.call()
+> super 原理：调用父类的 prototype.constructor.call()。
 
 ```ts
-interface OptionsType {
+interface Options {
   el: string | HTMLElement
 }
 
-interface VueType {
-  options: OptionsType
+interface VueCls {
+  options: Options
   init: () => void
 }
 
 // implements 约束 Class
-class Vue implements VueType {
-  options: OptionsType
+class Vue implements VueCls {
+  options: Options
   init(): void {
     // 初始化 ...
   }
@@ -150,75 +150,206 @@ class VueComponent extends Vue {
 
 ### 函数泛型
 
-我们希望一个函数可以支持多种类型的数据，但是又不想使用 any，那么我们可以使用泛型来创建这样可复用的函数。
+我们希望一个函数可以支持多种类型的数据，但是又不想使用 any，那么可以使用泛型来定义函数。
 
 ```ts
-function fn<T, K>(a: T, b: K): void { }
+function request<T>(url: string, data: T) { }
 
-fn<number, number>(1, 2)
-fn<number, string>(1, "2")
-```
-
-封装一个 axios 函数
-```ts
-function axios<T>(url: string, data: T) { }
-
-interface Data {
+interface Params {
   name: string
   age: number
 }
 
-axios<Data>("127.0.0.1:8888", {
-  name: "xiaoming",
+request<Params>("127.0.0.1:8000", {
+  name: "Minji",
   age: 18
 })
 ```
 
 ### 接口泛型
 
-如果类型需要在使用接口的时候传递，可以定义接口泛型
+如果类型需要在调用接口的时候传递，可以定义接口泛型。
 
 ```ts
-interface ResponseResult<T = any> {
+interface Response<T = any> {
   code: number
   data: T
   message: string
 }
 
-interface Info {
+interface User {
   id: number
   nickname: string
 }
 
-const response: ResponseResult<Info> = {
+const response: Response<User> = {
   code: 200,
   data: {
     id: 10000,
-    nickname: "cholez"
+    nickname: "Minji"
   },
   message: "success"
 }
 
-const response: ResponseResult<any> = {
+const error: Response<null> = {
   code: 5001,
   data: null,
-  message: "权限错误"
+  message: "Invalid token"
 }
 ```
 
 ### 泛型约束
 
-约束传递的泛型必须是数组
+对泛型参数进行约束。
 
 ```ts
-interface Person<T extends any[]> { }
+function fn<T extends object, K extends keyof T> { }
 ```
 
-## 工具类型
+### keyof & in
+
+keyof：返回对象的 key 组成的联合类型。
+
+in：（只能）遍历联合类型。
+
+```ts
+type User = { name: string, age: number }
+
+type UserKey = keyof User // => "name" | "age"
+
+type Custom<T extends object> = { readonly [Key in keyof T]: T[Key] }
+
+type CustomUser = Custom<User> // => { readonly name: string, readonly age: number }
+```
+
+### infer
+
+
+
+## 配置文件 
+
+### tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+    
+    /* Projects */
+    "incremental": true,                  /* TS 在初次编译时会创建缓存文件, 再次编译会读取这个缓存文件 */
+    "tsBuildInfoFile": "./.tsbuildinfo",  /* 缓存文件的存储位置 */
+    "diagnostics": true,                  /* 打印诊断信息 */
+    
+    /* Language and Environment */
+    "target": "es2016",                   /* 目标语言的版本 */
+    "lib": [],                            /* TS 需要引用的声明文件, ES5 默认引用 DOM、ES5、ScriptHost */
+    "jsx": "preserve",                    /* JSX 解析器 */
+    "jsxFactory": "",                     /* JSX 语法的解析器 'React.createElement' or 'h' */
+    
+    /* Modules */
+    "module": "commonjs",                 /* 生成代码的模板标准 */
+    "rootDir": "./",                      /* 根目录 */
+    "moduleResolution": "node",           /* 模块解析策略, TS 默认使用 node 解析策略, 即相对的方式导入 */
+    "baseUrl": "./",                      /* 基本路径, 默认为当前目录 */
+    "typeRoots": [],                      /* node_modules 的声明文件, 默认为 '/node_modules/@types' */
+    "types": [],                          /* 加载的声明文件包 */
+    "paths": {                            /* 路径映射 */
+      "@/*": ["./src/*"]
+    },
+    
+    /* JavaScript Support */
+    "allowJs": false,                     /* 允许编译 JS, JSX 文件 */
+    "checkJs": false,                     /* 允许在 JS 文件中报错, 通常与 allowJs 一起使用 */
+    
+    /* Emit */
+    "declaration": true,                  /* 自动生成声明文件 */
+    "declarationDir": "./",               /* 声明文件存放目录 */
+    "declarationMap": true,               /* 为声明文件生成 sourceMap */
+    "emitDeclarationOnly": true,          /* 只生成声明文件, 不生成 JS 文件 */
+    "sourceMap": true,                    /* 生成目标文件的 sourceMap 文件 */
+    "inlineSourceMap": true,              /* 生成目标文件的 inline sourceMap */
+    "outDir": "./",                       /* 输出目录 */
+    "removeComments": true,               /* 删除注释 */
+    "noEmit": true,                       /* 编译后不生成任何 JS 文件 */
+    "noEmitOnError": true,                /* 发生错误时不输出任何文件 */
+    "downlevelIteration": true,           /* 如果目标源是 ES3/ES5, 那么遍历器会有降级的实现 */
+    
+    /* Type Checking */
+    "strict": true,                       /* 开启所有严格的类型检查 */
+    "alwaysStrict": true,                 /* 在代码中注入 'use strict' */
+    "noImplicitAny": true,                /* 不允许隐式的 'any' 类型 */
+    "strictNullChecks": true,             /* 不允许把 'null' 和 'undefined' 赋值给其他类型的变量 */
+    "strictFunctionTypes": true,          /* 不允许函数参数双向协变 */
+    "strictBindCallApply": true,          /* 严格的 'bind', 'call', 'apply' 检查 */
+    "strictPropertyInitialization": true, /* 类的实例属性必须初始化 */
+    "noImplicitThis": true,               /* 不允许 'this' 有隐式的 'any' 类型 */
+    "noUnusedLocals": true,               /* 检查声明了但未使用的局部变量（只提示不报错） */
+    "noUnusedParameters": true,           /* 检查未使用的函数参数（只提示不报错） */
+    "noFallthroughCasesInSwitch": true,   /* 防止 switch 语句贯穿（如果没有 break 语句后面不会执行） */
+  },
+  
+  "include": [],                          /* 指定包含的编译列表 */
+  "exclude": [],                          /* 指定排除的编译列表 */
+  "files": [],                            /* 指定使用该配置的文件 */
+}
+```
+
+## 声明文件 
+
+### d.ts
+
+```ts
+```
+
+## 泛型工具
+
+### Partial
+
+将对象中的**所有**属性变成可选的。
+
+```ts
+interface User {
+  name: string
+  age: number
+  address: string
+}
+
+type PartialUser = Partial<User> // => { name?: string, age?: number, address?: string }
+```
+
+实现原理。
+
+```ts
+type CustomPartial<T> = {
+  [P in keyof T]?: T[P]
+}
+```
+
+### Required
+
+将对象中的**所有**属性变成必选的。
+
+```ts
+interface User {
+  name?: string
+  age?: number
+  address?: string
+}
+
+type RequiredUser = Required<User> // => { name: string, age: number, address: string }
+```
+
+实现原理。
+
+```ts
+type CustomRequired<T> = {
+  [R in keyof T]-?: T[R]
+}
+```
 
 ### Record
 
-定义对象类型时，指定其 key 和 value 的类型。
+指定对象的 key 和 value 的类型。
 
 ```ts
 interface Status {
@@ -228,7 +359,7 @@ interface Status {
 
 const STATUS: Record<string, Status> = {
   inReview: {
-    type: "info",
+    type: "warning",
     value: "待审核"
   },
   onShelf: {
@@ -240,58 +371,103 @@ const STATUS: Record<string, Status> = {
     value: "已拒绝"
   },
   rejected: {
-    type: "danger",
+    type: "info",
     value: "已下架"
   }
 }
 ```
 
+### Pick
+
+提取对象中的部分属性。与 Omit 相反。
+
+```ts
+interface User {
+  name: string
+  age: number
+  address?: string
+}
+
+type PickUser = Pick<User, "name" | "age"> // => { name: string, age: number }
+```
+
+实现原理。
+
+```ts
+type CustomPick<T, K extends keyof T> = {
+  [P in K]: T[P]
+}
+```
+
 ### Omit
 
-根据原有类型，生成一个新的类型，并删除某些字段。
+排除对象中的部分属性。与 Pick 相反。
 
 ```ts
-interface Todo {
-  title: string
-  description: string
-  completed: boolean
-  createdAt: number
+interface User {
+  name: string
+  age: number
+  address?: string
 }
 
-type TodoPreview = Omit<Todo, "description">
-
-const todo: TodoPreview = {
-  title: "Clean room",
-  completed: false,
-  createdAt: 1615544252770
-}
+type OmitUser = Omit<User, "name"> // => { age: number, address?: string }
 ```
 
-继承父类型，并修改某字段。
+实现原理。先用 Exclude 排除不需要的属性，再用 Pick 提取剩下的属性。
 
 ```ts
-interface GoodsInfoItem {
-  // ...
-  identity: number
-  contacts: string
-  skuList: null
-}
-
-// Interface GoodsInfoDetails incorrectly extends interface GoodsInfoItem.
-// Types of property skuList are incompatible.
-// Type object is not assignable to type null.
-// error: skuList 类型不兼容
-interface GoodsInfoDetails extends GoodsInfoItem {
-  skuList: object
-}
-
-// 使用 Omit 工具类型删除并重新声明 skuList 类型，然后继承
-interface GoodsInfoDetails extends Omit<GoodsInfoItem, "skuList"> {
-  skuList: {
-    skuId: number
-    skuPrice: number
-    skuStock: number
-    specification: string
-  }
-}
+type CustomOmit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 ```
+
+### Exclude
+
+排除联合类型中的部分属性。
+
+```ts
+type E = Exclude<"a" | "b" | "c", "b"> // => "a" | "c"
+```
+
+实现原理。
+
+> never 在联合类型中会被排除。
+
+```ts
+type CustomExclude<T, K> = T extends K ? never : T
+
+type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never => "b"
+```
+
+### ReturnType
+
+
+
+## 类型守卫
+
+
+
+## 混入
+
+### 对象混入
+
+
+
+### 类的混入
+
+
+
+## 装饰器
+
+
+
+## 协变 & 逆变
+
+### 协变
+
+
+
+### 逆变
+
+
+
+### 双向协变
+

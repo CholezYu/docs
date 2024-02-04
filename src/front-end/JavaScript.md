@@ -1574,7 +1574,7 @@ iterator.next() // { value: 3, done: false }
 iterator.next() // { value: undefined, done: true }
 ```
 
-### 底层实现
+### 实现原理
 
 实现一个遍历可迭代对象的函数。
 
