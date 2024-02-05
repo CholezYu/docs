@@ -1,23 +1,36 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "useDefineForClassFields": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "baseUrl": ".",
-    "types": ["webpack-env", "node"],
-    "paths": {
+    /* Projects */
+
+    /* Language and Environment */
+    "target": "esnext",                                      /* 目标语言的版本 */
+    "jsx": "preserve",                                       /* JSX 解析器 */
+    "useDefineForClassFields": true,                         /* Emit ECMAScript-standard-compliant class fields. */
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],  /* TS 需要引用的声明文件, ES5 默认引用 DOM、ES5、ScriptHost */
+
+    /* Modules */
+    "module": "esnext",                                      /* 生成代码的模板标准 */
+    "moduleResolution": "node",                              /* 模块解析策略, TS 默认使用 node 解析策略, 即相对的方式导入 */
+    "resolveJsonModule": true,                               /* Enable importing .json files. */
+    "baseUrl": ".",                                          /* 基本路径, 默认为当前目录 */
+    "types": ["webpack-env", "node"],                        /* 加载的声明文件包 */
+    "paths": {                                               /* 路径映射 */
       "@/*": ["src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+
+    /* Emit */
+    "sourceMap": true,                                       /* 生成目标文件的 sourceMap 文件 */
+
+    /* Interop Constraints */
+    "esModuleInterop": true,                                 /* Emit additional JavaScript to ease support for importing CommonJS modules. */
+    "allowSyntheticDefaultImports": true,                    /* Allow 'import x from y' when a module doesn't have a default export. */
+    "forceConsistentCasingInFileNames": true,                /* Ensure that casing is correct in imports. */
+
+    /* Type Checking */
+    "strict": true,                                          /* 开启所有严格的类型检查 */
+
+    /* Completeness */
+    "skipLibCheck": true,                                    /* Skip type checking all .d.ts files. */
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue", "tests/**/*.ts", "tests/**/*.tsx"],
   "exclude": ["node_modules", ".yarn"]
