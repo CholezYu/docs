@@ -1,6 +1,7 @@
 ---
 title: Webpack
 icon: javascript
+date: 2024-02-19
 ---
 
 ## 基本配置
@@ -13,32 +14,32 @@ icon: javascript
 const path = require("node:path")
 
 module.exports = {
+  // 模式
+  mode: "development" // or "production",
+  
   // 入口
   entry: "./src/main.js",
   
   // 出口
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "static/js/main.js",
+    filename: "main.js",
     clean: true // 自动清空上次打包资源
   },
   
-  // 加载器
+  // Loader
   module: {
     rules: []
   },
   
-  // 插件
-  plugins: [],
-  
-  // 模式
-  mode: "development" // or "production"
+  // Plugins
+  plugins: []
 }
 ```
 
 ## Loader
 
-### 处理样式资源
+### 处理 CSS
 
 `npm i style-loader css-loader -D`
 
@@ -50,7 +51,6 @@ module.exports = {
 /* webpack.config.js */
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
@@ -70,7 +70,7 @@ module.exports = {
 }
 ```
 
-### 处理图片资源
+### 处理 Image
 
 在 Webpack4 中，我们通过 `url-loader` 和 `file-loader` 对图片资源进行处理，
 
@@ -80,7 +80,6 @@ module.exports = {
 /* webpack.config.js */
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
@@ -126,7 +125,6 @@ module.exports = {
 /* webpack.config.js */
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
@@ -151,7 +149,6 @@ module.exports = {
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
@@ -195,7 +192,6 @@ const getStyleLoaders = (preProcessor) => {
 }
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
@@ -233,7 +229,6 @@ module.exports = {
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 
 module.exports = {
-  // ...
   plugins: [
     new CssMinimizerPlugin()
   ]
@@ -252,11 +247,10 @@ module.exports = {
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
-  // ...
   module: {
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "public/index.html") // 指定源文件，打包生成一个 html 文件
+        template: path.resolve(__dirname, "./index.html") // 指定源文件，打包生成一个 html 文件
       })
     ]
   }
@@ -300,7 +294,6 @@ module.exports = {
 const ESLintWebpackPlugin = require("eslint-webpack-plugin")
 
 module.exports = {
-  // ...
   plugins: [
     new ESLintWebpackPlugin({
       context: path.resolve(__dirname, "src") // 出口
@@ -312,18 +305,13 @@ module.exports = {
 ### 添加版权
 
 ```js
-// webpack.config.js
-const path = require('path')
-const webpack = require('webpack')
+/* webpack.config.js */
+
+const webpack = require("webpack")
 
 module.exports = {
-  entry: './src/main.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
-  },
   plugins: [
-    new webpack.BannerPlugin('最终版权归 ** 所有')
+    new webpack.BannerPlugin("最终版权归 ** 所有")
   ]
 }
 ```
@@ -333,16 +321,11 @@ module.exports = {
 `npm i terser-webpack-plugin -D`
 
 ```js
-// webpack.congfig.js
-const path = require('path')
+/* webpack.config.js */
+
 const TerserWebpackPlugin = require("terser-webpack-plugin")
 
 module.exports = {
-  entry: './src/main.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
-  },
   optimization: {
     minimize: true,
     minimizer: [new TerserWebpackPlugin()]
@@ -354,7 +337,13 @@ module.exports = {
 
 ### 提升开发体验
 
+本地开发时，终端控制台可能出现大量打包相关的信息，我们不太关注，可以配置这个选项，只输出错误信息。
 
+```js
+module.exports = {
+  stats: "errors-only" // 终端控制台只输出 error 信息
+}
+```
 
 ### 提升打包速度
 
@@ -366,6 +355,8 @@ module.exports = {
 
 ### 优化代码性能
 
+
+
 ## 项目配置
 
 ### React
@@ -374,37 +365,92 @@ module.exports = {
 
 ### Vue
 
-`npm install vue-loader@15 vue-template-compiler --save-dev` 指定 15 版本的 vue-loader
+`npm i webpack -D`
 
-`npm install @vue/compiler-sfc --save-dev`
+`npm i webpack-dev-server -D`
 
-> `vue-loader` 解析 vue 文件
->
-> `vue-template-compiler` 解析 `<template>` 模板
->
-> `vue-compiler-sfc` 解析 `<template>` `<script>` `<style>` 模板
+`npm i webpack-cli -D`
+
+配置打包命令和启动服务器命令。
+
+```json
+{
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server"
+  }
+}
+```
+
+`npm i ts-loader -D`
+
+`npm i typescript -D`
+
+支持 TypeScript。
 
 ```js
-const { VueLoaderPlugin } = require('vue-loader')
+/* webpack.config.js */
+
+const path = require("node:path")
 
 module.exports = {
-  // ...
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        use: ["vue-loader"]
+        test: /\.ts$/,
+        use: "ts-loader"
       }
     ]
-  },
-  plugins: [
-    new VueLoaderPlugin()
-  ],
-  resolve: {
-    alias: {
-      'vue$': 'vue/dist/vue.js'
-    }
   }
+}
+```
+
+`npm i vue-loader -D`
+
+`npm i html-webpack-plugin -D`
+
+支持 Vue。
+
+```js
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const { VueLoaderPlugin } = require("vue-loader")
+
+module.exports = {
+  plugins: [
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./index.html"
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: {
+          loader: "ts-loader",
+          options: {
+            appendTsSuffixTo: [/\.vue$/] // 支持 <script lang="ts">
+          }
+        }
+      },
+      {
+        test: /\.vue$/,
+        use: "vue-loader"
+      }
+    ]
+  }
+}
+```
+
+声明 shim.d.ts 文件，让 TS 识别 .vue 后缀。
+
+```ts
+/* shim.d.ts */
+
+declare module "*.vue" {
+  import { DefineComponent } from "vue"
+  const component: DefineComponent<{}, {}, any>
+  export default component
 }
 ```
 

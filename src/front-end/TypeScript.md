@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-02-04
+date: 2024-02-19
 ---
 
 ## 常用类型
@@ -366,9 +366,7 @@ type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never =>
 
 
 
-## 配置文件 
-
-### tsconfig.json
+## 配置文件 tsconfig
 
 ```json
 {
@@ -402,8 +400,8 @@ type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never =>
     "checkJs": false,                     /* 允许在 JS 文件中报错, 通常与 allowJs 一起使用 */
     
     /* Emit */
-    "declaration": true,                  /* 自动生成声明文件 */
-    "declarationDir": "./",               /* 声明文件存放目录 */
+    "declaration": false,                 /* 自动生成声明文件 */
+    "declarationDir": "./types",          /* 声明文件存放目录 */
     "declarationMap": true,               /* 为声明文件生成 sourceMap */
     "emitDeclarationOnly": false,         /* 只生成声明文件, 不生成 JS 文件 */
     "sourceMap": true,                    /* 生成目标文件的 sourceMap 文件 */
@@ -434,29 +432,73 @@ type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never =>
 }
 ```
 
-## 声明文件 
+## 声明文件 d.ts
 
-### d.ts
+在使用第三方库时，我们需要引用它的声明文件，才能获取对应的代码补全、接口提示等功能。
+
+下面是一个 declare express 的声明文件的例子。
 
 ```ts
+declare module "express" {
+  interface App {
+    get(path: string, callback: (req: any, res: any) => void): void
+    
+    listen(port: number, callback?: () => void)
+  }
+  
+  interface Express {
+    (): App
+  }
+  
+  const express: Express
+  
+  export default express
+}
+```
 
+## Webpack 构建 Vue3 + TS
+
+```js
+/* webpack.config.js */
+
+const path = require("node:path")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const { VueLoaderPlugin } = require("vue-loader")
+
+module.exports = {
+  mode: "development",
+  entry: "./src/main.ts",
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js"
+  },
+  plugins: [
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./index.html"
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: {
+          loader: "ts-loader",
+          options: {
+            appendTsSuffixTo: [/\.vue$/] // 支持 <script lang="ts">
+          }
+        }
+      },
+      {
+        test: /\.vue$/,
+        use: "vue-loader"
+      }
+    ]
+  }
+}
 ```
 
 ## 类型守卫
-
-
-
-## 混入
-
-### 对象混入
-
-
-
-### 类的混入
-
-
-
-## 装饰器
 
 
 
