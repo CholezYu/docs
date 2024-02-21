@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-02-19
+date: 2024-02-21
 ---
 
 ## 常用类型
@@ -92,7 +92,7 @@ interface This {
   append: (this: This, num: number) => void
 }
 
-const ob = {
+const ctz = {
   nums: [1, 2, 3],
   append(this: This, num: number) {
     this.nums.push(num)
@@ -436,7 +436,7 @@ type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never =>
 
 在使用第三方库时，我们需要引用它的声明文件，才能获取对应的代码补全、接口提示等功能。
 
-下面是一个 declare express 的声明文件的例子。
+下面是一个 declare express 声明文件的例子。
 
 ```ts
 declare module "express" {
@@ -453,48 +453,6 @@ declare module "express" {
   const express: Express
   
   export default express
-}
-```
-
-## Webpack 构建 Vue3 + TS
-
-```js
-/* webpack.config.js */
-
-const path = require("node:path")
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-const { VueLoaderPlugin } = require("vue-loader")
-
-module.exports = {
-  mode: "development",
-  entry: "./src/main.ts",
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js"
-  },
-  plugins: [
-    new VueLoaderPlugin(),
-    new HtmlWebpackPlugin({
-      template: "./index.html"
-    })
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: {
-          loader: "ts-loader",
-          options: {
-            appendTsSuffixTo: [/\.vue$/] // 支持 <script lang="ts">
-          }
-        }
-      },
-      {
-        test: /\.vue$/,
-        use: "vue-loader"
-      }
-    ]
-  }
 }
 ```
 

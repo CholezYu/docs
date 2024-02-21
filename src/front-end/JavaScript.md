@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-01-31
+date: 2024-02-21
 ---
 
 ## 强制转换
@@ -1075,261 +1075,152 @@ str.trimEnd() // "   hello world"
 
 ## 正则
 
+
+
 ## 正则（ES6）
+
+
 
 ## Set & Map
 
 ### Set
 
-#### 基本用法
+set 常用于数组去重。
 
-Set 本身是一个构造函数，用来生成 Set 数据结构，它类似于数组，但是成员的值都是唯一的，没有重复
+```js
+const arr = [1, 2, 3, 4, 5, 5, 5, 5]
 
-下面的代码通过 add 方法向 Set 结构加入成员，结果表明 Set 结构不会添加重复的值
+[...new Set(arr)] // [1, 2, 3, 4, 5]
+Array.from(new Set(arr)) // [1, 2, 3, 4, 5]
+```
+
+向 set 中添加一个元素。
 
 ```js
 const set = new Set()
 
-const arr = [2, 3, 5, 4, 5, 2, 2]
-arr.forEach(x => set.add(x))
-
-set // Set(4) { 2, 3, 5, 4 }
-
-for (let item of set) {
-  console.log(item) // 2 3 5 4
-}
+set.add(1).add(2).add(2) // Set(2) {1, 2}
 ```
 
-Set 函数可以接受一个数组 (或具有 iterable 接口的其他数据结构) 作为参数，用来初始化
-
-下面的代码中，例一和例二是 Set 函数接受数组作为参数，例三是接受类似数组的对象作为参数
+删除 set 中的某个元素。
 
 ```js
-// 例一
-const set = new Set([1, 2, 3, 4, 4])
-[...set] // [1, 2, 3, 4]
+const set = new Set([1, 2])
+
+set.delete(1) // true, 表示删除成功
+set // Set(1) {2}
 ```
 
-```js
-// 例二
-const items = new Set([1, 2, 3, 4, 5, 5, 5, 5])
-items.size // 5
-```
+判断 set 中是否存在某个元素。
 
 ```js
-// 例三
-function divs() {
-  return [...document.querySelectorAll("div")]
-}
-
-typeof divs() // object
-
-const set = new Set(divs())
-set.size // 2
-
-// 类似于
-divs().forEach(div => set.add(div))
-set.size // 2
-```
-
-下面的代码展示了一种去除数组重复成员的方法
-
-```js
-// 去除数组的重复成员
-[...new Set(array)]
-```
-
-向 Set 加入值时不会发生类型转换，所以 5 和 "5" 是两个不同的值。Set 内部判断两个值是否相同时使用的算法为 "Same-value equality"，它类似于严格相等运算符 "==="，主要的区别是 NaN 等于自身，而严格相等运算符认为 NaN 不等于自身
-
-下面的代码向 Set 实例添加了两个 NaN，但实际上只能添加一个，这表明在 Set 内部，两个 NaN 是相等的
-
-```js
-let set = new Set()
-let a = NaN
-let b = NaN
-set.add(a)
-set.add(b)
-set // Set { NaN }
-```
-
-但是在 Set 内部，两个对象是不相等的
-
-下面的代码表示，由于两个空对象不是严格相等，所以它们被视为两个值
-
-```js
-let set = new Set()
-
-set.add({})
-set.size // 1
-
-set.add({})
-set.size // 2
-```
-
-#### Set 实例的属性和操作方法
-
-Set 结构的实例有以下属性
-
-- Set.prototype.constructor：构造函数，默认就是 Set 函数
-
-- Set.prototype.size：返回 Set 实例的成员总数
-
-Set 实例的方法分为两大类：操作方法(用于操作数据) 和 遍历方法(用于遍历成员)。下面介绍 4 个操作方法
-
-- add(value)：添加某个值，返回 Set 结构本身
-
-- delete(value)：删除某个值，返回一个布尔值，表示删除是否成功
-
-- has(value)：返回一个布尔值，表示参数是否为 Set 的成员
-
-- clear()：清除所有成员，没有返回值
-
-上面这些属性和方法的实例如下
-
-```js
-const set = new Set()
-
-set.add(1).add(2).add(2)
-
-set.size // 2
+const set = new Set([1, 2])
 
 set.has(1) // true
 set.has(2) // true
 set.has(3) // false
-
-set.delete(1)
-set // Set { 2 }
 ```
 
-下面是一个对比，判断是否包含一个键，对象和 Set 结构的不同写法
+清除所有元素。
 
 ```js
-// 对象的写法
-const properties = {
-  'width': 1,
-  'height': 1
-}
+const set = new Set([1, 2])
 
-if (properties['width']) {
-  // ...
-}
+set.clear()
+set // Set(0) {size: 0}
 ```
-
-```js
-// Set 的写法
-const properties = new Set(['width', 'height'])
-
-if (properties.has('height')) {
-  // ...
-}
-```
-
-Array.from 方法可以将 Set 结构转为数组
-
-```js
-const items = new Set([1, 2, 3, 4, 5])
-const array = Array.from(items)
-```
-
-这样就可以提供一种去除数组重复元素的方法
-
-```js
-function dedupe(array) {
-  return Array.from(new Set(array))
-}
-
-dedupe([1, 2, 2, 3]) // [1, 2, 3]
-```
-
-#### Set 实例的遍历方法
-
-Set 结构的实例有 4 个遍历方法，可用于遍历成员
-
-- keys：返回键名的遍历器
-
-- values：返回键值的遍历器
-
-- entries：返回键值对的遍历器
-
-- forEach：使用回调函数遍历每个成员
-
-Set 的遍历顺序就是插入顺序。使用 Set 保存一个回调函数列表，调用时就能保证按照添加顺序调用
-
-##### keys、values、entries
-
-keys、values、entries 返回的都是遍历器对象 (详见 Iterator)
-
-由于 Set 结构没有键名，只有键值 (或者说键名和键值是同一个值)，所以 keys 和 values 的行为完全一致
-
-```js
-let set = new Set(['red', 'green', 'blue'])
-
-for (let item of set.keys()) {
-  console.log(item)
-}
-
-// 'red'
-// 'green'
-// 'blue'
-
-for (let item of set.values()) {
-  console.log(item)
-}
-
-// 'red'
-// 'green'
-// 'blue'
-```
-
-下面的代码中，entries 返回的遍历器同时包括键名和键值，所以每次输出一个数组，其中为两个完全相同的元素
-
-```js
-let set = new Set(['red', 'green', 'blue'])
-
-for (let item of set.entries()) {
-  console.log(item)
-}
-
-// ["red", "red"]
-// ["green", "green"]
-// ["blue", "blue"]
-```
-
-Set 结构的实例默认可遍历，其默认遍历器生成函数就是它的 values 方法
-
-```js
-Set.prototype[Symbol.iterator] === Set.prototype.values // true
-```
-
-这意味着，可以省略 values()，直接用 for...of 循环遍历 Set
-
-```js
-let set = new Set(['red', 'green', 'blue'])
-
-for (let item of set) {
-  console.log(item)
-}
-
-// 'red'
-// 'green'
-// 'blue'
-```
-
-##### forEach()
-
-
-
-### WeakSet
-
-
 
 ### Map
 
+map 与对象的区别就是，map 的 key 可以是任意类型（含引用类型）。
 
+向 map 中添加一个元素。
+
+```js
+const map = new Map()
+
+map.set([1, 2 ,3 ], "abc")
+```
+
+获取 map 中的值。
+
+```js
+const map = new Map()
+
+const fnKey = () => {}
+map.set(fnKey, 1)
+
+map.get(fnKey) // 1
+```
+
+删除 map 中的某个元素。
+
+```js
+const map = new Map()
+
+const objKey = { a: 1 }
+const arrKey = [2]
+map.set(objKey, "f")
+map.set(arrKey, "b")
+
+map // Map(2) { { a: 1 } => "f", [2] => "b" }
+
+map.delete(arrKey) // true, 表示删除成功
+map // Map(1) { { a: 1 } => "f" }
+```
+
+判断 map 中是否存在某个元素。
+
+```js
+const map = new Map()
+
+map.set(true, "a")
+map.set(null, "b")
+
+map.has(true) // true
+map.has(null) // true
+map.has("fz") // false
+```
+
+清除所有元素。
+
+```js
+const map = new Map()
+
+map.set({ a: 1 }, "f")
+map.set([1, 2], "b")
+
+map.clear()
+map // Map(0) {size: 0}
+```
 
 ### WeakMap
 
+WeakMap 是弱引用，不会被计入垃圾回收策略，也不能进行遍历。并且，WeakMap 的 key 只能是引用类型。
 
+当一个对象的引用次数降为 0，就会被垃圾回收机制回收。
+
+```js
+let ctz = { a: 1 } // 引用次数：1
+
+let dpt = ctz // 引用次数：2
+
+const map = new Map()
+map.set(ctz, "f") // 引用次数：3
+
+const weakmap = new WeakMap()
+weakmap.set(ctz, "b") // 引用次数：3, 弱引用不会增加引用次数
+
+ctz = null // 引用次数 -1
+dpt = null // 引用次数 -1
+map.clear() // 引用次数 - 1
+
+weakmap // WeakMap {}
+```
+
+### WeakSet
+
+与 WeakMap 一样，WeakSet 也是弱引用，也不能进行遍历。同样，WeakSet 的元素也只能是引用类型。
 
 ## Proxy
 
