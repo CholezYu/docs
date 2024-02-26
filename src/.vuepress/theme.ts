@@ -17,6 +17,8 @@ export default hopeTheme({
   
   logo: "https://cholez.gitee.io/docs/icon.svg",
   
+  favicon: "favicon.ico",
+  
   // 仓库配置，用于在导航栏中显示仓库链接
   repo: "choIez/docs",
   
@@ -131,11 +133,11 @@ export default hopeTheme({
     //   appendBase: true,
     //   apple: {
     //     icon: "/assets/icon/apple-icon-152.png",
-    //     statusBarColor: "black",
+    //     statusBarColor: "black"
     //   },
     //   msTile: {
     //     image: "/assets/icon/ms-icon-144.png",
-    //     color: "#ffffff",
+    //     color: "#ffffff"
     //   },
     //   manifest: {
     //     icons: [
@@ -143,24 +145,24 @@ export default hopeTheme({
     //         src: "/assets/icon/chrome-mask-512.png",
     //         sizes: "512x512",
     //         purpose: "maskable",
-    //         type: "image/png",
+    //         type: "image/png"
     //       },
     //       {
     //         src: "/assets/icon/chrome-mask-192.png",
     //         sizes: "192x192",
     //         purpose: "maskable",
-    //         type: "image/png",
+    //         type: "image/png"
     //       },
     //       {
     //         src: "/assets/icon/chrome-512.png",
     //         sizes: "512x512",
-    //         type: "image/png",
+    //         type: "image/png"
     //       },
     //       {
     //         src: "/assets/icon/chrome-192.png",
     //         sizes: "192x192",
-    //         type: "image/png",
-    //       },
+    //         type: "image/png"
+    //       }
     //     ],
     //     shortcuts: [
     //       {
@@ -172,12 +174,12 @@ export default hopeTheme({
     //             src: "/assets/icon/guide-maskable.png",
     //             sizes: "192x192",
     //             purpose: "maskable",
-    //             type: "image/png",
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // },
+    //             type: "image/png"
+    //           }
+    //         ]
+    //       }
+    //     ]
+    //   }
+    // }
   }
 })
