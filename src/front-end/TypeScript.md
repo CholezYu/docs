@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-02-21
+date: 2024-02-26
 ---
 
 ## 常用类型
@@ -203,7 +203,7 @@ const error: Response<null> = {
 对泛型参数进行约束。
 
 ```ts
-function fn<T extends object, K extends keyof T> { }
+function fn<T extends object, K extends keyof T>() { }
 ```
 
 ### keyof & in
@@ -217,14 +217,17 @@ type User = { name: string, age: number }
 
 type UserKey = keyof User // => "name" | "age"
 
-type Custom<T extends object> = { readonly [Key in keyof T]: T[Key] }
+
+type Custom<T extends object> = { readonly [K in keyof T]: T[K] }
 
 type CustomUser = Custom<User> // => { readonly name: string, readonly age: number }
 ```
 
 ### infer
 
+infer 就是推导泛型参数。并且 infer 声明只能出现在 extends 子语句中。
 
+> 暂时没看懂。
 
 ## 泛型工具
 
@@ -274,7 +277,7 @@ type CustomRequired<T> = {
 
 ### Record
 
-指定对象的 key 和 value 的类型。
+约束对象的 key 和 value。
 
 ```ts
 interface Status {
@@ -299,6 +302,16 @@ const STATUS: Record<string, Status> = {
     type: "info",
     value: "已下架"
   }
+}
+```
+
+实现原理。
+
+> keyof any => string | number | symbol
+
+```ts
+type CustomRecord<K extends keyof any, T> = {
+  [P in K]: T
 }
 ```
 
@@ -357,14 +370,26 @@ type E = Exclude<"a" | "b" | "c", "b"> // => "a" | "c"
 > never 在联合类型中会被排除。
 
 ```ts
-type CustomExclude<T, K> = T extends K ? never : T
+type CustomExclude<T, U> = T extends U ? never : T
 
-type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | "b" | never => "b"
+type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | 'b' | never => 'b'
 ```
 
 ### ReturnType
 
+获取函数类型的返回值。
 
+```ts
+const fn = () => [1, 2, 3, true]
+
+type ReturnFn = ReturnType<typeof fn> // (number | boolean)[]
+```
+
+实现原理。
+
+```ts
+type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer Res ? Res : never
+```
 
 ## 配置文件 tsconfig
 
@@ -455,20 +480,3 @@ declare module "express" {
   export default express
 }
 ```
-
-## 类型守卫
-
-
-
-## 协变 & 逆变
-
-### 协变
-
-
-
-### 逆变
-
-
-
-### 双向协变
-

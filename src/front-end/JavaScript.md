@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-02-21
+date: 2024-02-22
 ---
 
 ## 强制转换
@@ -130,15 +130,15 @@ String({ a: 1 }.toString()) // [object Object]
 通过 var 声明的变量会提升到所在作用域的顶部，但是变量的赋值还在原来的位置。
 
 ```js
-console.log(a) // undefined
+a // undefined
 var a = 100
-console.log(a) // 100
+a // 100
 
 // 等同于
 var a
-console.log(a) // undefined
+a // undefined
 a = 100
-console.log(a) // 100
+a // 100
 ```
 
 通过 function 声明的函数（包括函数体）会提升到所在作用域的顶部，在此之后都可以调用。
@@ -349,17 +349,17 @@ fun.bind({}).name // "bound fun"
 创建一个对象，并指定它的原型对象。
 
 ```js
-const o = Object.create(null, {
+const ctz = Object.create(null, {
 	name: {
-		value: "Bob",
+		value: "Minji",
 		enumerable: true
 	},
 	sex: {
-		value: "男"
+		value: "female"
 	}
 })
 
-o // { name: "Bob", sex: "男" }
+ctz // { name: "Minji", sex: "female" }
 ```
 
 ### Object.defineProperty
@@ -367,14 +367,14 @@ o // { name: "Bob", sex: "男" }
 劫持对象的某个属性。
 
 ```js
-const o = { name: "Bob" }
+const ctz = { name: "Minji" }
 
-Object.defineProperty(o, "age", {
+Object.defineProperty(ctz, "age", {
   value: 15,
   enumerable: true
 })
 
-o // { name: "Bob", age: 15 }
+ctz // { name: "Minji", age: 15 }
 ```
 
 ### Object.defineProperties
@@ -382,20 +382,20 @@ o // { name: "Bob", age: 15 }
 劫持对象的多个属性。
 
 ```js
-const o = { name: "Bob" }
+const ctz = { name: "Minji" }
 
-Object.defineProperties(o, {
+Object.defineProperties(ctz, {
   "age": {
     value: 15,
     enumerable: true
   },
   "sex": {
-    value: "男",
+    value: "female",
     enumerable: true
   }
 })
 
-o // { name: "Bob", age: 15, sex: "男" }
+ctz // { name: "Minji", age: 15, sex: "female" }
 ```
 
 ### 继承
@@ -455,7 +455,7 @@ class Student extends Person {
 
 ```js
 Object.keys({
-  name: "xiaoming",
+  name: "Minji",
   age: 18
 })
 // ['name', 'age']
@@ -467,10 +467,10 @@ Object.keys({
 
 ```js
 Object.values({
-  name: "xiaoming",
+  name: "Minji",
   age: 18
 })
-// ['xiaoming', 18]
+// ['Minji', 18]
 ```
 
 ### Object.entries
@@ -479,10 +479,10 @@ Object.values({
 
 ```js
 Object.entries({
-  name: "xiaoming",
+  name: "Minji",
   age: 18
 })
-// [['name', 'xiaoming'], ['age', 18]]
+// [['name', 'Minji'], ['age', 18]]
 ```
 
 ### Object.assign
@@ -490,12 +490,12 @@ Object.entries({
 合并对象，并返回。可用于浅拷贝。
 
 ```js
-const o = { a: 1 }
+const ctz = { a: 1 }
 
-Object.assign({}, o)
+Object.assign({}, ctz)
 
 // 等同于
-{ ...o }
+{ ...ctz }
 ```
 
 ### Object.freeze
@@ -504,14 +504,14 @@ Object.assign({}, o)
 
 ```js
 const person = {
-  name: "xiaoming",
+  name: "Minji",
   age: 18
 }
 
 Object.freeze(person)
 
 person.age = 30
-person // { name: 'xiaoming', age: 18 }
+person // { name: 'Minji', age: 18 }
 ```
 
 ### Object.is
@@ -532,7 +532,7 @@ Object.is(NaN, NaN) // true
 
 ```js
 const person = {
-  name: "xiaoming",
+  name: "Minji",
   age: 18
 }
 
@@ -719,7 +719,7 @@ arr.lastIndexOf('g') // -1
 ```js
 const arr = [4, 9, 16, 25]
 
-arr.forEach(item => console.log(item)) // 4 9 16 25
+arr.forEach(item => item) // 4 9 16 25
 ```
 
 ### arr.filter
@@ -1118,16 +1118,7 @@ const set = new Set([1, 2])
 
 set.has(1) // true
 set.has(2) // true
-set.has(3) // false
-```
-
-清除所有元素。
-
-```js
-const set = new Set([1, 2])
-
-set.clear()
-set // Set(0) {size: 0}
+set.has(3) // alse
 ```
 
 ### Map
@@ -1142,15 +1133,15 @@ const map = new Map()
 map.set([1, 2 ,3 ], "abc")
 ```
 
-获取 map 中的值。
+获取 map 中的元素。
 
 ```js
 const map = new Map()
 
-const fnKey = () => {}
-map.set(fnKey, 1)
+const fKey = () => {}
+map.set(fKey, 1)
 
-map.get(fnKey) // 1
+map.get(fKey) // 1
 ```
 
 删除 map 中的某个元素。
@@ -1158,14 +1149,14 @@ map.get(fnKey) // 1
 ```js
 const map = new Map()
 
-const objKey = { a: 1 }
-const arrKey = [2]
-map.set(objKey, "f")
-map.set(arrKey, "b")
+const oKey = { a: 1 }
+const aKey = [2]
+map.set(oKey, "f")
+map.set(aKey, "b")
 
 map // Map(2) { { a: 1 } => "f", [2] => "b" }
 
-map.delete(arrKey) // true, 表示删除成功
+map.delete(aKey) // true, 表示删除成功
 map // Map(1) { { a: 1 } => "f" }
 ```
 
@@ -1180,18 +1171,6 @@ map.set(null, "b")
 map.has(true) // true
 map.has(null) // true
 map.has("fz") // false
-```
-
-清除所有元素。
-
-```js
-const map = new Map()
-
-map.set({ a: 1 }, "f")
-map.set([1, 2], "b")
-
-map.clear()
-map // Map(0) {size: 0}
 ```
 
 ### WeakMap
@@ -1224,11 +1203,62 @@ weakmap // WeakMap {}
 
 ## Proxy
 
+对引用类型的操作（属性查找、赋值、枚举、函数调用）进行拦截和自定义，返回一个代理对象。
 
+```js
+const ctz = { a: 1, b: 2 }
+
+const ctzProxy = new Proxy(ctz, {
+  // 拦截取值操作
+  get(target, p, receiver) {
+  
+  },
+  
+  // 拦截赋值操作
+  set(target, p, value, receiver) {
+  
+  },
+  
+  // 拦截函数的调用
+  apply(target, thisArg, argArray) {
+  
+  },
+  
+  // 拦截 in 操作符
+  has(target, p) {
+  
+  },
+  
+  // 拦截 for...in
+  ownKeys(target) {
+  
+  },
+  
+  // 拦截 new 操作符
+  construct(target, argArray, newTarget) {
+  
+  },
+  
+  // 拦截 delete 操作符
+  deleteProperty(target, p) {
+  
+  }
+})
+```
 
 ## Reflect
 
+Reflect 是 ES6 推荐的操作对象的方法。
 
+```js
+const ctz = { a: 1, b: 2 }
+
+ctz.a // 1
+Reflect.get(ctz, "a") // 1
+
+Reflect.set(ctz, "b", 3) // true, 表示修改成功
+ctz // { a: 1, b: 3 }
+```
 
 ## Promise
 
@@ -1270,13 +1300,13 @@ const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
 Promise.all([p1, p2]).then(
-  value => console.log(value), // [1, 2]
-  error => console.log(error)
+  value => value, // [1, 2]
+  error => error
 )
 
 Promise.all([p1, p2, p3]).then(
-  value => console.log(value),
-  error => console.log(error) // 3
+  value => value,
+  error => error // 3
 )
 ```
 
@@ -1292,7 +1322,7 @@ const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
 Promise.all([p1, p2, p3]).then(
-  value => console.log(value)
+  value => value
   /* [
     { status: "fulfilled", value: 1 },
     { status: "fulfilled", value: 2 },
@@ -1324,8 +1354,8 @@ const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
 Promise.race([p1, p2, p3]).then(
-  value => console.log(value), // 2
-  error => console.log(error)
+  value => value, // 2
+  error => error
 )
 ```
 
@@ -1338,11 +1368,11 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    console.log(error)  // 1
+    error  // 1
     return 2
   }
 ).then(
-  value => console.log(value)  // 2
+  value => value  // 2
 )
 ```
 
@@ -1353,11 +1383,11 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    console.log(error) // 1
+    error // 1
     return Promise.reject(2)
   }
 ).catch(
-  error => console.log(error) // 2
+  error => error // 2
 )
 ```
 
@@ -1368,11 +1398,11 @@ new Promise((resolve, reject) => {
   resolve(1)
 }).then(
   value => {
-    console.log(value)  // 1
+    value  // 1
     throw 2
   }
 ).catch(
-  error => console.log(error)  // 2
+  error => error  // 2
 )
 ```
 
@@ -1384,22 +1414,14 @@ new Promise((resolve, reject) => {
 new Promise((resolve, reject) => {
   reject(1)
 }).then(
-  value => { // 穿透
-    console.log(value)
-    return 2
-  }
+  () => 2 // 穿透
 ).then(
-  value => { // 穿透
-    console.log(value)
-    return 3
-  }
+  () => 3 // 穿透
 ).then(
-  value => { // 穿透
-    console.log(value)
-  }
+  () => {} // 穿透
 ).catch(
   error => { // 捕获
-    console.log(error) // 1
+    error // 1
   }
 )
 ```
@@ -1416,8 +1438,8 @@ new Promise((resolve, reject) => {
     return new Promise(() => {}) // 中断 Promise 链
   }
 ).then(
-  value => { // 不执行
-    console.log(value)
+  value => {
+    // 不执行
   }
 )
 ```
