@@ -170,29 +170,6 @@ export default sidebar({
           link: "面试题"
         }
       ]
-    },
-    {
-      text: "尚博",
-      icon: "computer",
-      prefix: "shang-bo/",
-      collapsible: true,
-      children: [
-        {
-          text: "渠道-抖音",
-          icon: "navigation",
-          link: "渠道-抖音"
-        },
-        {
-          text: "渠道-快手",
-          icon: "navigation",
-          link: "渠道-快手"
-        },
-        {
-          text: "总后台管理系统",
-          icon: "navigation",
-          link: "总后台管理系统"
-        }
-      ]
     }
   ]
 })
