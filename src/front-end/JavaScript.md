@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-02-22
+date: 2024-03-14
 ---
 
 ## 强制转换
@@ -1570,20 +1570,54 @@ for (const value of iterative) {
 生成器其实就是 Iterator 的语法糖，它可以简化对迭代器的操作。
 
 ```ts
-function* fn() {
+function* generator() {
   yield Promise.resolve("first")
   yield "Generator"
   yield 123
   yield true
 }
 
-const f = fn()
+const iterator = generator()
 
-f.next() // { value: Promise { 'first' }, done: false }
-f.next() // { value: 'Generator', done: false }
-f.next() // { value: 123, done: false }
-f.next() // { value: true, done: false }
-f.next() // { value: undefined, done: true }
+iterator.next() // { value: Promise { 'first' }, done: false }
+iterator.next() // { value: 'Generator', done: false }
+iterator.next() // { value: 123, done: false }
+iterator.next() // { value: true, done: false }
+iterator.next() // { value: undefined, done: true }
+```
+
+### 解决回调地狱
+
+Generator 是早期解决回调地狱的方案，现在我们一般使用 async & await。
+
+```ts
+function f1() {
+  setTimeout(() => {
+    iterator.next("data1")
+  }, 1000)
+}
+
+function f2() {
+  setTimeout(() => {
+    iterator.next("data2")
+  }, 1000)
+}
+
+function f3() {
+  setTimeout(() => {
+    iterator.next("data3")
+  }, 1000)
+}
+
+function* generator() {
+  const r1 = yield f1() // data1
+  const r2 = yield f2() // data2
+  const r3 = yield f3() // data3
+}
+
+const iterator = generator()
+
+iterator.next()
 ```
 
 ## async & await
@@ -1600,7 +1634,7 @@ const fn = async () => 5
 const fn = () => Promise.resolve(5)
 ```
 
-
+async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定。
 
 ```js
 const fn = async () => {
@@ -1620,21 +1654,13 @@ const fn = () => {
 }
 ```
 
-
-
-
-
-
-
-async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定。
-
 ### await 表达式
 
 在 async 声明的异步函数中可以使用 await 关键字来调用异步函数。
 
 ```js
 const fn = async () => {
-  const result = await axios.get()
+  const result = await axios()
 }
 ```
 

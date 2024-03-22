@@ -1,10 +1,245 @@
 ---
 title: Vue
 icon: vue
-date: 2024-01-21
+date: 2024-03-22
 ---
 
-## 生命周期
+## 响应式
+
+### Ref
+
+接收任意值（基本类型、引用类型）作为参数，返回一个响应式的 ref 对象。通过 `.value` 可以访问这个数据。
+
+在模板中 ref 会自动解包，不需要通过 `.value` 访问。
+
+```ts
+import { ref } from "vue"
+
+const count = ref(0)
+
+count // { value: 0 }
+count.value // 0
+count.value++
+count.value // 1
+```
+
+**源码解析**。调用 `ref()` 时，Vue 会先通过 `createRef()` 创建一个 RefImpl 对象。在 RefImpl 类的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
+
+```ts
+/* reactivity/src/ref.ts */
+
+function ref(value?: unknown) {
+  return createRef(value, false)
+}
+
+function shallowRef(value?: unknown) {
+  return createRef(value, true)
+}
+
+function createRef(rawValue: unknown, shallow: boolean) {
+  // 如果传入的值是一个 ref, 直接返回
+  if (isRef(rawValue)) {
+    return rawValue
+  }
+  // 否则创建一个 RefImpl 对象
+  return new RefImpl(rawValue, shallow)
+}
+
+class RefImpl<T> {
+  private _value: T // 真正读取的值
+  private _rawValue: T
+  
+  public dep?: Dep = undefined
+  public readonly __v_isRef = true
+  
+  constructor(
+    value: T,
+    public readonly __v_isShallow: boolean,
+  ) {
+    this._rawValue = __v_isShallow ? value : toRaw(value)
+    // 如果是 shallowRef, 直接返回 .value 的值, 如果 value 是引用类型, 不会做进一步的响应式
+    // 如果是 ref, 会调用 toReactive, 进行深层次的响应式
+    // const toReactive = (value: T): T => isObject(value) ? reactive(value) : value
+    // toReactive => 如果 value 是引用类型, 就会调用 reactive(value), 否则直接返回 value
+    this._value = __v_isShallow ? value : toReactive(value)
+  }
+  
+  get value() {
+    trackRefValue(this) // 进行依赖的收集
+    return this._value
+  }
+  
+  set value(newVal) {
+    const useDirectValue =
+      this.__v_isShallow || isShallow(newVal) || isReadonly(newVal)
+    newVal = useDirectValue ? newVal : toRaw(newVal)
+    if (hasChanged(newVal, this._rawValue)) {
+      this._rawValue = newVal
+      this._value = useDirectValue ? newVal : toReactive(newVal)
+      triggerRefValue(this, DirtyLevels.Dirty, newVal) // 进行依赖的更新
+    }
+  }
+}
+```
+
+### Reactive
+
+只能接收**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
+
+```ts
+import { reactive } from "vue"
+
+const state = reactive({ count: 0 })
+
+state // Proxy(Object) { count: 0 }
+state.count // 0
+```
+
+**源码解析**。调用 `reactive()` 时，Vue 会通过 `createReactiveObject()` 创建一个 reactive 代理对象，在这个函数中，先进行一系列的判断：1. 传入的值是否是基本类型，是的话报出警告；2. 传入的值是否被代理过；3. 代理对象是否被缓存；4. 代理对象是否在白名单中。如果以上条件都不满足，则将传入的值进行 Proxy 代理，然后通过 WeakMap 进行缓存。
+
+```ts
+/* reactivity/src/reactive.ts */
+
+function reactive(target: object) {
+  // 如果传入的值是一个只读对象, 直接返回
+  if (isReadonly(target)) {
+    return target
+  }
+  return createReactiveObject(
+    target,
+    false,
+    mutableHandlers,
+    mutableCollectionHandlers,
+    reactiveMap,
+  )
+}
+
+function shallowReactive<T extends object>(target: T): ShallowReactive<T> {
+  return createReactiveObject(
+    target,
+    false,
+    shallowReactiveHandlers,
+    shallowCollectionHandlers,
+    shallowReactiveMap,
+  )
+}
+
+function createReactiveObject(
+  target: Target,
+  isReadonly: boolean,
+  baseHandlers: ProxyHandler<any>,
+  collectionHandlers: ProxyHandler<any>,
+  proxyMap: WeakMap<Target, any>,
+) {
+  // 如果传入的值是基本类型, 报一个警告
+  if (!isObject(target)) {
+    if (__DEV__) {
+      warn(`value cannot be made reactive: ${String(target)}`)
+    }
+    return target
+  }
+  // 如果传入的值已经被代理过了, 直接返回
+  // 有一个例外: 将代理对象变为只读属性
+  if (
+    target[ReactiveFlags.RAW] &&
+    !(isReadonly && target[ReactiveFlags.IS_REACTIVE])
+  ) {
+    return target
+  }
+  // 从缓存中获取代理对象, 如果存在的话直接返回
+  const existingProxy = proxyMap.get(target)
+  if (existingProxy) {
+    return existingProxy
+  }
+  // 如果代理对象在白名单中, 直接返回
+  const targetType = getTargetType(target)
+  if (targetType === TargetType.INVALID) {
+    return target
+  }
+  // 进行 Proxy 代理
+  const proxy = new Proxy(
+    target,
+    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers,
+  )
+  // 缓存代理对象
+  proxyMap.set(target, proxy)
+  return proxy
+}
+```
+
+### toRef
+
+```ts
+```
+
+### toReactive
+
+```ts
+```
+
+### Computed
+
+使用函数式写法，默认为 get 函数，返回一个只读的 ref 对象。
+
+```ts
+const count = ref(1)
+
+const doubleCount = computed(() => count.value * 2)
+```
+
+接收 get 和 set 函数作为参数，返回一个可写的 ref 对象。
+
+```ts
+const firstName = ref("Even")
+const lastName = ref("You")
+
+const fullName = computed({
+  get: () => firstName.value + " " + lastName.value,
+  set: (value) => {
+    const [first, last] = value.split(" ")
+    firstName.value = first
+    lastName.value = last
+  }
+})
+```
+
+### Watch
+
+监听 ref 对象（基本数据类型），实际上是监听 value 属性的改变。
+
+```ts
+watch(count, () => {})
+```
+
+监听 ref 对象（对象类型），可以监听对象本身的改变。如果需要监听对象内部结构的改变，需要开启深度监听。
+
+```ts
+watch(person, () => {}, {
+  deep: true
+})
+```
+
+监听 ref 对象的 value 属性（基本数据类型）。需要将监听的数据写成函数式写法。
+
+```ts
+watch(() => count.value, () => {})
+```
+
+监听 ref 对象的 value 属性（对象类型）。不需要写成函数式写法，并且默认深度监听。
+
+```ts
+watch(count.value, () => {})
+```
+
+监听 ref 对象中 proxy 代理对象的属性。
+
+```ts
+watch(() => person.value.skills, () => {}, {
+  deep: true
+})
+```
+
+## 生命周期 v2
 
 ### 初始化流程
 
@@ -368,99 +603,15 @@ const Home = () => import("@/components/Home")
 const User = () => import("@/components/User")
 ```
 
-## 自定义指令
+## 虚拟 DOM
 
-### 全局注册 Vue.directive
+虚拟 DOM 就是通过 JS 来生成一个 AST 节点数。
 
-```js
-Vue.directive("red", el => { /* 默认为 bind 钩子函数 */
-  el.style.backgroundColor = "red"
-})
+为什么要有虚拟 DOM？为什么不直接去操作 DOM，而是使用 JS 去描述 DOM 对象？
 
-Vue.directive("color", (el, binding) => {
-  el.style.backgroundColor = binding.value
-})
-```
+因为在一个 DOM 身上，它的属性是非常多的，所以直接操作 DOM 是非常浪费性能的。
 
-在组件中使用。
-
-```vue
-<p v-red></p>
-<p v-color="'red'"></p>
-```
-
-### 局部注册 directives
-
-```js
-directives: {
-  red(el) {
-    el.style.backgroundColor = "red"
-  }
-}
-```
-
-### 钩子函数
-
-```js
-Vue.directive("color", {
-  bind(el, binding) {
-    // 只调用一次, 指令第一次绑定到元素时调用, 在这里可以进行一次性的初始化设置
-  },
-  inserted(el, binding) {
-    // 被绑定元素插入父节点时调用 (仅保证父节点存在, 但不一定已被插入文档中)
-  },
-  update(el, binding) {
-    // 所在组件的 VNode 更新时调用，但是可能发生在其子 VNode 更新之前
-  },
-  componentUpdated(el, binding) {
-    // 指令所在组件的 VNode 及其子 VNode 全部更新后调用
-  },
-  unbind(el, binding) {
-    // 只调用一次, 指令与元素解绑时调用
-  }
-})
-```
-
-## 插件
-
-### 安装插件
-
-如果参数是对象，需要提供 install 方法，当插件被使用时，默认调用 install 方法；
-
-如果参数是函数，该函数会作为 install 方法被调用。
-
-```js
-Vue.use(MyPlugin)
-```
-
-### 开发插件
-
-需要暴露一个 install 方法：
-
-- 第一个参数：Vue 构造器
-
-- 第二个参数：配置对象（可选）
-
-```js
-MyPlugin.install = function(Vue, options) {
-  // 全局注册自定义指令
-  Vue.directive("color", (el, binding) => {
-    el.style.background = "red"
-  })
-  
-  // 全局注册过滤器
-  Vue.filter("capitalize", value => {
-    return value.toUpperCase()
-  })
-  
-  // 添加实例方法
-  Vue.prototype.$myMethod = () => {
-    console.log("hello world")
-  }
-}
-```
-
-## diff 算法
+## diff 算法 v2
 
 ### 什么是 diff 算法?
 
@@ -479,14 +630,15 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 ### patch 比较过程
 
 - `patch` 函数首先使用 `sameVnode` 方法比较两个节点的**标签类型**和 **key** 以及表单元素的 **type** 是否相同；
+
 - 如果相同，则进入更新流程：
-  
+
   - 把旧节点的真实 DOM 拿到新节点的位置复用；
-  
+
   - 对比新旧节点的（标签）属性是否相同，如果不同则更新；
-  
+
   - 比较子节点。
-  
+
 - 如果不相同，直接根据新节点创建元素，删除旧元素。
 
 ### patch 比较子节点
@@ -524,6 +676,352 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 - key 可以使 Vue 更高效地渲染虚拟 DOM；
 
 - key 必须满足稳定性和唯一性。
+
+## diff 算法 v3
+
+### 无 key diff 算法
+
+> 无 key 的情况下，旧节点是不会进行复用的，非常浪费性能。
+
+1. 通过 for 循环对每个新节点进行 patch，并重新渲染元素。无 key 的情况下，新节点会直接把旧节点替换掉。
+
+2. 删除操作。如果旧节点有剩余，进行删除操作。
+
+3. 新增操作。如果新节点有剩余，进行新增操作。
+
+```ts
+/* runtime-core/src/renderer.ts */
+
+const patchUnkeyedChildren = (
+  c1: VNode[],            // 旧节点
+  c2: VNodeArrayChildren, // 新节点
+  container: RendererElement,
+  anchor: RendererNode | null,
+  parentComponent: ComponentInternalInstance | null,
+  parentSuspense: SuspenseBoundary | null,
+  namespace: ElementNamespace,
+  slotScopeIds: string[] | null,
+  optimized: boolean,
+) => {
+  c1 = c1 || EMPTY_ARR
+  c2 = c2 || EMPTY_ARR
+  const oldLength = c1.length
+  const newLength = c2.length
+  const commonLength = Math.min(oldLength, newLength)
+  let i
+  // 1. 通过 for 循环对每个新节点进行 patch, 并重新渲染元素
+  for (i = 0; i < commonLength; i++) {
+    const nextChild = (c2[i] = optimized
+      ? cloneIfMounted(c2[i] as VNode)
+      : normalizeVNode(c2[i]))
+    // 无 key 的情况下, 新节点会直接把旧节点替换掉
+    patch(
+      c1[i],
+      nextChild,
+      container,
+      null,
+      parentComponent,
+      parentSuspense,
+      namespace,
+      slotScopeIds,
+      optimized,
+    )
+  }
+  // 2. 如果旧节点有剩余, 进行删除操作
+  if (oldLength > newLength) {
+    // 删除旧节点
+    unmountChildren(
+      c1,
+      parentComponent,
+      parentSuspense,
+      true,
+      false,
+      commonLength,
+    )
+  }
+  // 3. 如果新节点有剩余, 进行新增操作
+  else {
+    // 增加新节点
+    mountChildren(
+      c2,
+      container,
+      anchor,
+      parentComponent,
+      parentSuspense,
+      namespace,
+      slotScopeIds,
+      optimized,
+      commonLength,
+    )
+  }
+}
+```
+
+### 有 key diff 算法
+
+1. 前序对比算法。
+
+2. 尾序对比算法。
+
+3. 如果新节点有剩余，就需要挂载新节点。
+
+4. 如果旧节点有剩余，就需要卸载旧节点。
+
+5. 乱序 或 无序，需要求最长递增子序列。
+
+
+```ts
+/* runtime-core/src/renderer.ts */
+
+const patchKeyedChildren = (
+  c1: VNode[],
+  c2: VNodeArrayChildren,
+  container: RendererElement,
+  parentAnchor: RendererNode | null,
+  parentComponent: ComponentInternalInstance | null,
+  parentSuspense: SuspenseBoundary | null,
+  namespace: ElementNamespace,
+  slotScopeIds: string[] | null,
+  optimized: boolean,
+) => {
+  let i = 0
+  const l2 = c2.length
+  let e1 = c1.length - 1 // prev ending index
+  let e2 = l2 - 1 // next ending index
+  
+  // 1. 前序对比算法
+  // (a b) c
+  // (a b) d e
+  while (i <= e1 && i <= e2) {
+    const n1 = c1[i]
+    const n2 = (c2[i] = optimized
+      ? cloneIfMounted(c2[i] as VNode)
+      : normalizeVNode(c2[i]))
+    if (isSameVNodeType(n1, n2)) {
+      patch(
+        n1,
+        n2,
+        container,
+        null,
+        parentComponent,
+        parentSuspense,
+        namespace,
+        slotScopeIds,
+        optimized,
+      )
+    } else {
+      break
+    }
+    i++
+  }
+  
+  // 2. 尾序对比算法
+  // a (b c)
+  // d e (b c)
+  while (i <= e1 && i <= e2) {
+    const n1 = c1[e1]
+    const n2 = (c2[e2] = optimized
+      ? cloneIfMounted(c2[e2] as VNode)
+      : normalizeVNode(c2[e2]))
+    if (isSameVNodeType(n1, n2)) {
+      patch(
+        n1,
+        n2,
+        container,
+        null,
+        parentComponent,
+        parentSuspense,
+        namespace,
+        slotScopeIds,
+        optimized,
+      )
+    } else {
+      break
+    }
+    e1--
+    e2--
+  }
+  
+  // 3. 如果新节点有剩余, 就需要挂载新节点
+  // (a b)
+  // (a b) c
+  // i = 2, e1 = 1, e2 = 2
+  // (a b)
+  // c (a b)
+  // i = 0, e1 = -1, e2 = 0
+  if (i > e1) {
+    if (i <= e2) {
+      const nextPos = e2 + 1
+      const anchor = nextPos < l2 ? (c2[nextPos] as VNode).el : parentAnchor
+      while (i <= e2) {
+        patch(
+          null,
+          (c2[i] = optimized
+            ? cloneIfMounted(c2[i] as VNode)
+            : normalizeVNode(c2[i])),
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          namespace,
+          slotScopeIds,
+          optimized,
+        )
+        i++
+      }
+    }
+  }
+  
+  // 4. 如果旧节点有剩余, 就需要卸载旧节点
+  // (a b) c
+  // (a b)
+  // i = 2, e1 = 2, e2 = 1
+  // a (b c)
+  // (b c)
+  // i = 0, e1 = 0, e2 = -1
+  else if (i > e2) {
+    while (i <= e1) {
+      unmount(c1[i], parentComponent, parentSuspense, true)
+      i++
+    }
+  }
+  
+  // 5. 乱序/无序
+  // [i ... e1 + 1]: a b [c d e] f g
+  // [i ... e2 + 1]: a b [e d c h] f g
+  // i = 2, e1 = 4, e2 = 5
+  else {
+    const s1 = i // prev starting index
+    const s2 = i // next starting index
+    
+    // 5.1 构建新节点的映射关系
+    // key: [1, 2, 3, 4, 5]
+    // index: [0, 1, 2, 3, 4]
+    // key: [5, 4, 3, 2, 1]
+    // index: [0, 1, 2, 3, 4]
+    // 5=>0  4=>1  3=>2  2=>3  1=>5
+    const keyToNewIndexMap: Map<string | number | symbol, number> = new Map()
+    for (i = s2; i <= e2; i++) {
+      const nextChild = (c2[i] = optimized
+        ? cloneIfMounted(c2[i] as VNode)
+        : normalizeVNode(c2[i]))
+      if (nextChild.key != null) {
+        if (__DEV__ && keyToNewIndexMap.has(nextChild.key)) {
+          warn(
+            `Duplicate keys found during update:`,
+            JSON.stringify(nextChild.key),
+            `Make sure keys are unique.`,
+          )
+        }
+        keyToNewIndexMap.set(nextChild.key, i)
+      }
+    }
+    
+    // 5.2 遍历旧节点, 并对其进行 patch 比较
+    // 匹配节点并删除不存在的节点
+    let j
+    let patched = 0
+    const toBePatched = e2 - s2 + 1
+    let moved = false
+    // used to track whether any node has moved
+    let maxNewIndexSoFar = 0
+    // works as Map<newIndex, oldIndex>
+    // Note that oldIndex is offset by +1
+    // and oldIndex = 0 is a special value indicating the new node has
+    // no corresponding old node.
+    // used for determining longest stable subsequence
+    const newIndexToOldIndexMap = new Array(toBePatched)
+    for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
+    
+    for (i = s1; i <= e1; i++) {
+      const prevChild = c1[i]
+      // 如果有多余的旧节点, 就将其删除
+      if (patched >= toBePatched) {
+        unmount(prevChild, parentComponent, parentSuspense, true)
+        continue
+      }
+      let newIndex
+      if (prevChild.key != null) {
+        newIndex = keyToNewIndexMap.get(prevChild.key)
+      } else {
+        // key-less node, try to locate a key-less node of the same type
+        for (j = s2; j <= e2; j++) {
+          if (
+            newIndexToOldIndexMap[j - s2] === 0 &&
+            isSameVNodeType(prevChild, c2[j] as VNode)
+          ) {
+            newIndex = j
+            break
+          }
+        }
+      }
+      // 如果新节点不包含旧节点, 也将其删除
+      if (newIndex === undefined) {
+        unmount(prevChild, parentComponent, parentSuspense, true)
+      } else {
+        newIndexToOldIndexMap[newIndex - s2] = i + 1
+        if (newIndex >= maxNewIndexSoFar) {
+          maxNewIndexSoFar = newIndex
+        }
+        // 如果节点出现交叉, 说明是要移动去求最长递增子序列
+        else {
+          moved = true
+        }
+        patch(
+          prevChild,
+          c2[newIndex] as VNode,
+          container,
+          null,
+          parentComponent,
+          parentSuspense,
+          namespace,
+          slotScopeIds,
+          optimized,
+        )
+        patched++
+      }
+    }
+    
+    // 5.3 move and mount
+    // generate longest stable subsequence only when nodes have moved
+    const increasingNewIndexSequence = moved
+    // 贪心 + 二分查找, 求最长递增子序列
+      ? getSequence(newIndexToOldIndexMap)
+      : EMPTY_ARR
+    j = increasingNewIndexSequence.length - 1
+    // looping backwards so that we can use last patched node as anchor
+    for (i = toBePatched - 1; i >= 0; i--) {
+      const nextIndex = s2 + i
+      const nextChild = c2[nextIndex] as VNode
+      const anchor =
+        nextIndex + 1 < l2 ? (c2[nextIndex + 1] as VNode).el : parentAnchor
+      if (newIndexToOldIndexMap[i] === 0) {
+        // mount new
+        patch(
+          null,
+          nextChild,
+          container,
+          anchor,
+          parentComponent,
+          parentSuspense,
+          namespace,
+          slotScopeIds,
+          optimized,
+        )
+      } else if (moved) {
+        // 如果当前遍历的这个节点不在子序列, 就要进行移动
+        if (j < 0 || i !== increasingNewIndexSequence[j]) {
+          move(nextChild, container, anchor, MoveType.REORDER)
+        }
+        // 否则直接跳过
+        else {
+          j--
+        }
+      }
+    }
+  }
+}
+```
 
 ## 响应式原理
 
@@ -1167,124 +1665,6 @@ methods: {
   ...mapMutations("countModule", ["increment"]),
   ...mapMutations("movieModule", ["getmovies"])
 }
-```
-
-## Vue3 响应式
-
-### ref
-
-接收一个值作为参数，返回一个响应式的 ref 对象。
-
-通过该对象上 value 属性可以操作响应式数据；在模板中访问 ref 对象默认就是访问其 value 属性。
-
-```ts
-import { ref } from "vue"
-
-const count = ref<number>(1)
-```
-
-### reactive
-
-接收一个对象作为参数，返回该响应式对象的代理。
-
-```ts
-import { reactive } from "vue"
-
-interface personType {
-  name: string
-  age: number
-  physical: {
-    height: number
-    weight: number
-  }
-  skills: string[]
-}
-
-const person = reactive<personType>({
-  name: "xiaoming",
-  age: 18,
-  physical: {
-    height: 175,
-    weight: 120
-  },
-  skills: ["react", "vue"]
-})
-```
-
-### ref vs reactive
-
-- ref 创建的响应式数据可以是基本数据类型或对象；reactive 创建的响应式数据只能是对象；
-
-- reactive 创建的响应式对象如果被替换，将不具有响应式；
-
-- ref 创建的响应式数据保存在 value 属性中，改变 value 的值，仍具有响应式；
-
-- reactive 的作用：
-
-  - ref 对象只能监听 value 属性本身；
-
-  - 如果 value 是一个对象，要监听其内部属性，需使用 reactive 创建并返回该对象的代理。
-
-### watch
-
-监听 ref 对象（基本数据类型），实际上是监听 value 属性的改变。
-
-```ts
-watch(count, () => {})
-```
-
-监听 ref 对象（对象类型），可以监听对象本身的改变。如果需要监听对象内部结构的改变，需要开启深度监听。
-
-```ts
-watch(person, () => {}, {
-  deep: true
-})
-```
-
-监听 ref 对象的 value 属性（基本数据类型）。需要将监听的数据写成函数式写法。
-
-```ts
-watch(() => count.value, () => {})
-```
-
-监听 ref 对象的 value 属性（对象类型）。不需要写成函数式写法，并且默认深度监听。
-
-```ts
-watch(count.value, () => {})
-```
-
-监听 ref 对象中 proxy 代理对象的属性。
-
-```ts
-watch(() => person.value.skills, () => {}, {
-  deep: true
-})
-```
-
-### computed
-
-使用函数式写法，默认为 get 函数，返回一个只读的 ref 对象。
-
-```ts
-const count = ref(1)
-
-const doubleCount = computed(() => count.value * 2)
-```
-
-接收 get 和 set 函数作为参数，返回一个可写的 ref 对象。
-
-```ts
-const firstName = ref("Even")
-const lastName = ref("You")
-
-const fullName = computed({
-  get: () => firstName.value + " " + lastName.value,
-  set: (value) => {
-    const [first, last] = value.split(" ")
-    firstName.value = first
-    lastName.value = last
-  }
-})
 ```
 
 ## Vue3 组件通信

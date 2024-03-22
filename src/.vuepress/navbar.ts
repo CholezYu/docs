@@ -18,7 +18,7 @@ export default navbar([
           "JavaScript-Algo",
           "TypeScript",
           "Ajax",
-          "Node",
+          "Nodejs",
           "Git",
           "Webpack",
           "React",

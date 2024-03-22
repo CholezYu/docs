@@ -46,9 +46,9 @@ export default sidebar({
           link: "Ajax"
         },
         {
-          text: "Node",
+          text: "Nodejs",
           icon: "nodeJS",
-          link: "Node"
+          link: "Nodejs"
         },
         {
           text: "Git",

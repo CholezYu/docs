@@ -13,10 +13,10 @@ import * as echarts from "echarts/core"
 
 // 引入图表
 import {
-  BarChart,
-  LineChart,
-  PieChart,
-  MapChart,
+  BarChart,  // 柱状图
+  LineChart, // 折线图
+  PieChart,  // 扇形图
+  MapChart,  // 地图
   EffectScatterChart
 } from "echarts/charts"
 

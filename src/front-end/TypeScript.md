@@ -35,7 +35,7 @@ const student: Student = {
 interface Response {
   name: string
   age: number
-  [prop: string]: any // prop 可以为任意名称
+  [key: string]: any // key 可以为任意名称
 }
 
 const response: Response = {
@@ -194,7 +194,7 @@ const response: Response<User> = {
 const error: Response<null> = {
   code: 5001,
   data: null,
-  message: "Invalid token"
+  message: "Invalid Token"
 }
 ```
 
@@ -285,7 +285,7 @@ interface Status {
   value: "待审核" | "已上架" | "已拒绝" | "已下架"
 }
 
-const STATUS: Record<string, Status> = {
+const tabs: Record<string, Status> = {
   inReview: {
     type: "warning",
     value: "待审核"
