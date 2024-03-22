@@ -259,14 +259,14 @@ for key, value in enumerate(ls,1):
 如果没有为某些形参传递对应的实参,则这些形参会使用默认参数值
 
 ```python
-def Clearlove(name,country='中国'):
-  print('姓名:%s,国家:%s'%(name,country))
-  Clearlove('明凯')
-  Clearlove('朴到贤','韩国')
+def Person(name,country='China'):
+  print('name:%s,country:%s'%(name,country))
+  Person('Shadow')
+  Person('Minji','Korea')
   
 """
-  输出结果: 姓名: 明凯, 国家: 中国
-  输出结果: 姓名: 朴到贤, 国家: 韩国
+  输出结果: name: Shadow, country: China
+  输出结果: name: Minji, country: Korea
 """
 ```
 
@@ -275,7 +275,7 @@ def Clearlove(name,country='中国'):
 形式为 "形参=实参"
 
 ```python
-Clearlove(name='朴到贤',country='韩国')
+Person(name='Minji',country='Korea')
 ```
 
 位置参数和关键字参数可以混合使用,但位置参数必须在关键字参数之前
