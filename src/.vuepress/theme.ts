@@ -52,6 +52,9 @@ export default hopeTheme({
     
     // All features are enabled for demo, only preserve features you need here
     mdEnhance: {
+      // 启用 GFM 警告
+      alert: true,
+      
       align: true,
       attrs: true,
       

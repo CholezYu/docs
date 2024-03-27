@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-03-22
+date: 2024-03-27
 ---
 
 ## 响应式
@@ -17,7 +17,7 @@ import { ref } from "vue"
 
 const count = ref(0)
 
-count // { value: 0 }
+count // Ref<0>
 count.value // 0
 count.value++
 count.value // 1
@@ -91,7 +91,7 @@ import { reactive } from "vue"
 
 const state = reactive({ count: 0 })
 
-state // Proxy(Object) { count: 0 }
+state // Reactive<{ count: 0 }>
 state.count // 0
 ```
 
@@ -169,12 +169,86 @@ function createReactiveObject(
 
 ### toRef
 
+**对象属性签名**。基于响应式对象的一个属性，创建一个对应的 ref，它与源属性保持同步。
+
+> [!caution]
+>
+> `toRef()` 传入的值必须本身是响应式的！
+
 ```ts
+import { reactive, toRef } from "vue"
+
+const state = reactive({ foo: 1, bar: 2 })
+
+// 双向 ref, 会与源属性同步
+const fooRef = toRef(state, "foo")
+
+// 更改该 ref 会更新源属性
+fooRef.value++
+state.foo // 2
+
+// 更改源属性也会更新该 ref
+state.foo++
+fooRef.value // 3
 ```
 
-### toReactive
+**规范化签名（3.3+）**。
+
+> [!warning]
+>
+> 官网写的，没看懂。
 
 ```ts
+// 按原样返回现有的 ref
+toRef(existingRef)
+
+// 创建一个只读的 ref, 当访问 .value 时会调用此 getter 函数
+toRef(() => props.foo)
+
+// 从非函数的值中创建普通的 ref
+// 等同于 ref(1)
+toRef(1)
+```
+
+### toRefs
+
+将一个响应式对象转换为普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。
+
+> [!tip]
+>
+> 每个单独的 ref 都是使用 `toRef()` 创建的。可以看作是多个 `toRef()` 的语法糖。
+
+> [!note]
+>
+> 常用于 ref，reactive 对象的解构。
+
+```ts
+import { ref, toRefs } from "vue"
+
+const state = ref({ foo: 1, bar: 2 })
+
+const { foo, bar } = toRefs(state.value)
+foo // Ref<1>
+bar // Ref<2>
+```
+
+### toRaw
+
+返回 Proxy 的原始对象。
+
+> [!note]
+>
+> 用于让 reactive 对象退出响应式，可以减少代理访问或跟踪开销。
+
+```ts
+import { reactive, toRaw } from "vue"
+
+const origin = { foo: 1, bar: 2 }
+const state = reactive(origin)
+
+state // Reactive<{ foo: 1, bar: 2 }>
+toRaw(state) // { foo: 1, bar: 2 }
+toRaw(state) === origin // true
 ```
 
 ### Computed
@@ -239,371 +313,89 @@ watch(() => person.value.skills, () => {}, {
 })
 ```
 
-## 生命周期 v2
+## 响应式原理 v3
 
-### 初始化流程
+### 自定义实现
 
-Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
-- 初始化事件和生命周期；
 
-- `beforeCreate` 触发，此时还无法访问实例上的数据；
+## 响应式原理 v2
 
-- 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据；
+### 数据代理
 
-- `created` 触发，此时可以通过实例访问数据。
+- Vue 实例中的 data 数据，默认在 _data 属性中，如果想要操作这个数据，需要通过 _data 访问。
 
-### 编译流程
+- 为了更方便地操作数据，可以将 _data 中的数据拷贝到实例上。访问实例上的数据，就是访问 _data 的数据。
 
-判断 Vue 是否配置 el 选项：
+- 过程：
 
-- 没有 el 选项，则等待使用 `$mount` 提供 el 选项；
+  1. 遍历 _data 中的数据；
 
-- 存在 el 选项，再判断是否配置 template 选项：
+  2. 使用 `Object.defineProperty` 给实例扩展一个同名属性；
 
-  - 如果有 template 选项，则编译模板得到 render 函数，返回虚拟 DOM；
+  3. 通过 getter 和 setter 监听这些属性；
 
-  - 如果没有 template 选项，则将 el 挂载容器的 outerHTML 作为模板进行编译。
+  4. 读取属性时，使用 `getter` 返回在 `_data` 中同名属性的值；
 
-### 挂载流程
+  5. 修改属性时，使用 `setter` 设置为 `_data` 中同名属性的值。
 
-- 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效；
+### 数据劫持
 
-- 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器；
+- 目的：监听数据（收集获取当前数据的模板信息，通知收集的所有模板进行更新数据）。
 
-- 挂载之后，`mounted` 触发，视图呈现真实 DOM。一般在这个阶段发送请求、监听自定义事件、开启定时器。
+- 原理：`Object.defineProperty`
 
-### 更新流程
+- 过程：
 
-当响应式数据发生改变的时候，进入更新阶段：
+  1. 遍历并重写 `_data` 中的数据，通过添加存取器监听；
 
-- `beforeUpdate` 触发，此时数据已更新，视图还未更新；
+  2. 读取属性时，收集当前的模板信息；
 
-- 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM；
+  3. 修改属性时，通知所有模板重新获取最新的值。
 
-- `updated` 触发，此时数据和视图都完成更新。
+### 观察者模式
 
-### 销毁流程
+- 观察者模式：当一个对象中的数据被多个对象所依赖，并且当被依赖的对象发生改变时会通知所有依赖项。
 
-当 `$destroy` 被调用，或条件渲染组件或路由时，进入销毁阶段：
+- 被依赖的对象称为目标对象，依赖项称为观察者。
 
-- 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段移除自定义事件、关闭定时器，防止内存泄漏；
+### 发布与订阅者模式
 
-- 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，解绑所有指令；
+- 发布与订阅者模式其实是属于观察者模式中的一个细分；
 
-- 实例销毁之后，`destroyed` 触发
+- 观察者模式中的观察者被称为 "订阅者"，目标对象被称为 "发布者"；
 
-## 组件通信
+- 发布者和订阅者由订阅中心来实现数据的通信，并且发布者和订阅者都不知道对方的存在；
 
-### 事件总线
+- 当订阅者订阅数据的时候，来到订阅中心，订阅中心收集所有的订阅者；
 
-> 任意组件间通信
+- 当发布者发布信息的时候，先传到订阅中心，再由订阅中心统一传给订阅者。
 
-```js
-beforeCreate() {
-  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线, 所有组件都能访问
-}
-```
+### Vue 数据响应式原理
 
-```js
-// A.vue
-mounted() {
-  this.$bus.$on("my-event", value => { /* 监听事件 */ })
-},
-beforeDestroy() {
-  this.$bus.$off("my-event") // 移除事件
-}
-```
+- 当 data 中的数据发生变化的时候，视图也会随之更新。
 
-```js
-// B.vue
-this.$bus.$emit("my-event", [...this.args]) // 触发事件
-```
+- 主要由三个部分构成：
 
-### 发布订阅
+  - 数据代理
 
-> 任意组件间通信。
+  - 数据劫持
 
-```js
-// A.vue
-import Pubsub from "pubsub-js"
+  - 发布与订阅者模式
 
-mounted() {
-  this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
-},
-beforeDestroy() {
-  Pubsub.unsubscribe(this.pubsubId) // 取消订阅
-}
-```
+- 详细过程：
 
-```js
-// B.vue
-import Pubsub from "pubsub-js"
+  1. 使用 `Object.defineProperty` 完成数据代理，将 _data 中的数据拷贝到实例上，我们访问实例上的数据，其实就是访问 _data 中的数据。
 
-Pubsub.publish("my-message", [...this.args]) // 发布消息
-```
+  2. 在 Observer 类（发布者）中，主要通过 `Object.defineProperty` 对 _data 中的所有属性进行重写，并添加 getter 和 setter：1. 在 getter 中建立 dep（订阅中心的实例化对象）和 watcher（订阅者的实例化对象）的关系，让 dep 收集依赖（访问当前数据的 watcher）；2. 在 setter 中让 dep 通知所有依赖（watcher）更新数据。
 
-### 双向绑定
+  3. 在 Dep 类（订阅中心）中，有收集所有 watcher 的方法，和通知所有 watcher 更新数据的方法。当 _data 中每一个属性被劫持的时候，都会创建一个 dep（Dep 的实例化对象），在 getter 中调用 dep 的 depend 方法收集依赖，在 setter 中调用 dep 的 notify 方法通知更新。
 
-#### v-model
+  4. 在 Watcher 类（订阅者）中，有获取数据的 get 方法和更新视图的 update 方法，每一个组件都对应一个 Wathcer。watcher 会在第一次获取数据时被 dep 收集，当收到更新要求的时候，dep 就会通知所有的 watcher（Wacther 的实例化对象）调用 update 方法重新获取数据并更新视图。
 
-> 父子组件间通信，只能传递一个数据与事件。
+## diff 算法 v3
 
-当使用 `:value` + `@input` 模式时, 可以替换为 `v-model` 模式。
-
-子组件为 input。
-
-```vue
-<!-- Parent.vue -->
-<Comp :value="message" @input="message = $event" />
-
-<Comp v-model="message" />
-```
-
-```vue
-<!-- Comp.vue -->
-<input :value="value" @input="$emit('input', $event.target.value)" />
-```
-
-子组件为非 input。
-
-```vue
-<!-- Parent.vue -->
-<Comp :value="count" @input="count = $event" />
-
-<Comp v-model="count" />
-```
-
-```vue
-<!-- Comp.vue -->
-<button @click="$emit('input', value + 1)"></button>
-```
-
-#### v-bind.sync
-
-> 父子组件间通信，可以传递多个数据与事件。
-
-当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `:prop.sync` 模式。
-
-```vue
-<!-- Parent.vue -->
-<Comp :count="count" @update:count="count = $event" />
-
-<Comp :count.sync="count" />
-```
-
-```vue
-<!-- Comp.vue -->
-<button @click="$emit('update:count', count + 1)"></button>
-```
-
-### 透传
-
-> 祖孙组件间通信。
-
-`$attrs` 包含了父组件传递的数据（不包含被 props 接收的数据）。可以通过 `v-bind` 批量传递给内部组件。
-
-```vue
-<Comp v-bind="$attrs" />
-```
-
-`$listeners` 包含了父组件传递的事件。可以通过 `v-on` 批量传递给内部组件。
-
-```vue
-<Comp v-on="$listeners" />
-```
-
-### 依赖注入
-
-> 祖孙组件间通信。
-
-provide 选项可以给后代组件提供数据和方法。
-
-注意：
-
-- provide 如果是一个对象，将无法访问 this，就不能将实例上的数据提供给后代，所以推荐写成函数。
-
-- 提供的数据需要写成函数返回值形式，否则不具备响应式。
-
-```js
-provide() {
-  return {
-    count: () => this.count,
-    increment: this.increment
-  }
-}
-```
-
-在任何后代组件里，我们都可以使用 inject 选项来接收 provide 提供的数据和方法。
-
-```js
-inject: ["count", "increment"]
-```
-
-## 深入组件
-
-### 插槽
-
-#### 默认插槽
-
-子组件：使用 `<slot>` 定义插槽。
-
-父组件：向子组件中插入 HTML，当组件渲染时，`<slot>` 将会被替换为子组件标签内的内容。
-
-> 可以在 `<slot>` 标签内设置默认内容，当子组件标签中没有插入内容时，`<slot>` 会被替换为默认内容。
-
-```vue
-<!-- Parent.vue -->
-<Comp title="音乐">
-  <ul>
-    <li v-for="item in music">{{ item }}</li>
-  </ul>
-</Comp>
-
-<Comp title="电影">
-  <ul>
-    <li v-for="item in movie">{{ item }}</li>
-  </ul>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
-<div>
-  <h2>{{ title }}</h2>
-  <slot />
-</div>
-```
-
-#### 具名插槽
-
-子组件：在 `<slot>` 中注册一个 name 属性。
-
-> 未注册 name 属性的 `<slot>` 默认值为 default，即默认插槽。
-
-父组件：用 `<template v-slot:name>` 包裹指定元素, 可以替换对应 name 属性的 `<slot>`。
-
-> 最终的渲染结果不包含 `<template>`。
->
-> 任何没有被包裹在带有 v-slot 的 `<template>` 中的内容都会被视为默认插槽的内容。
->
-> v-slot 只能用于 `<template>` 或组件。
-
-```vue
-<!-- Parent.vue -->
-<Comp>
-  <template v-slot:music>
-    <ul>
-      <li v-for="item in music">{{ item }}</li>
-    </ul>
-  </template>
-  
-  <template #movie>
-    <ul>
-      <li v-for="item in movie">{{ item }}</li>
-    </ul>
-  </template>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
-<div>
-  <slot name="music" />
-  <slot name="movie" />
-</div>
-```
-
-#### 作用域插槽
-
-> 通过插槽访问子组件的数据。
-
-子组件：通过 `<slot :prop="data">` 传递数据。
-
-父组件：使用 `<template v-slot="slotProps">` 来接收子组件传递的数据。
-
-> 结合具名插槽使用，`<template #prop="slotProps">`。
-
-```vue
-<!-- Parent.vue -->
-<Comp title="音乐">
-  <template v-slot:music="slotProps">
-    <ul>
-      <li v-for="item in slotProps.music">{{ item }}</li>
-    </ul>
-  </template>
-</Comp>
-
-<Comp title="电影">
-  <template #movie="{ movie }">
-    <ul>
-      <li v-for="item in movie">{{ item }}</li>
-    </ul>
-  </template>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
-<div>
-  <h2>{{ title }}</h2>
-  <slot name="music" :music="music" />
-  <slot name="movie" :movie="movie" />
-</div>
-```
-
-### 动态组件
-
-#### 动态组件
-
-我们可以在内置标签 `<component>` 中使用 "is" 属性来切换不同的组件。
-
-```vue
-<component :is="Current" />
-```
-
-#### 缓存组件
-
-我们在切换动态组件的时候，组件默认会在进入时被创建，离开时被销毁。频繁切换会导致重新渲染影响性能。
-
-如果希望动态组件能够在第一次被创建的时候缓存，可以使用 `<keep-alive>` 将其包裹起来。
-
-我们可以给 `<keep-alive>` 设置一些属性，根据条件缓存内部组件：
-
-- 默认所有匹配的动态组件都会被缓存；
-
-- include：匹配的动态组件会被缓存；
-
-- exclude：匹配的动态组件不会被缓存；
-
-- max：最大缓存数。
-
-```vue
-<keep-alive>
-  <component :is="Current" />
-</keep-alive>
-```
-
-### 异步组件
-
-如果我们直接使用 import 模块化引入组件，那么 webpack 在打包构建的过程中，会把所有的 js 都打包到了一起，但是里面包含了很多我们暂时没有使用的模块，这样导致包的体积过大，就会造成进入首页的时候需要加载的内容过多，出现长时间的白屏现象。
-
-我们可以使用异步组件，让 webpack 将组件分开进行打包，需要的时候再去加载这个组件：
-
-1. Vue 允许我们以函数的方式定义组件，函数内部使用 import 方法引入模块，并把结果返回；
-
-2. wabpack 在打包的时候，如果遇到 import 动态引入，会把 import 动态引入的资源单独进行打包；
-
-3. Vue 只有在这个组件需要被渲染的时候才会触发该函数，且会把结果缓存起来用于下次重新渲染；
-
-4. import 方法会返回一个 promise 实例，引入成功时 promise 变为成功状态，然后就可以渲染当前组件了。
-
-```js
-const Home = () => import("@/components/Home")
-const User = () => import("@/components/User")
-```
-
-## 虚拟 DOM
+### 虚拟 DOM
 
 虚拟 DOM 就是通过 JS 来生成一个 AST 节点数。
 
@@ -611,76 +403,10 @@ const User = () => import("@/components/User")
 
 因为在一个 DOM 身上，它的属性是非常多的，所以直接操作 DOM 是非常浪费性能的。
 
-## diff 算法 v2
-
-### 什么是 diff 算法?
-
-diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通过 `patch` 函数实现，所以也称为 patch 算法。
-
-### diff 算法比较思路
-
-深度优先，同级比较。
-
-### diff 算法执行过程
-
-- 当组件内部的响应式数据发生更新的时候，就会执行 Vue 内部的 `updateComponent` 函数，在函数内部先执行 `_render` 函数生成新的虚拟 DOM，将其作为参数传递给 `_update` 函数，并执行 `_update` 函数。
-
-- 在 `_update` 函数中，先定义一个变量保存旧的虚拟 DOM (`vm._vnode`)，然后将新的虚拟 DOM 赋值给 `vm._vnode`，此时 `_update` 函数中存在新旧虚拟 DOM，最后使用 `patch` 函数对新旧虚拟 DOM 进行比较。
-
-### patch 比较过程
-
-- `patch` 函数首先使用 `sameVnode` 方法比较两个节点的**标签类型**和 **key** 以及表单元素的 **type** 是否相同；
-
-- 如果相同，则进入更新流程：
-
-  - 把旧节点的真实 DOM 拿到新节点的位置复用；
-
-  - 对比新旧节点的（标签）属性是否相同，如果不同则更新；
-
-  - 比较子节点。
-
-- 如果不相同，直接根据新节点创建元素，删除旧元素。
-
-### patch 比较子节点
-
-- Vue 使用四个指针分别指向新旧子节点列表的首尾节点；
-
-- 首先比较新旧树中头指针指向的节点：
-
-  - 如果相同则进入更新流程。头指针向后位移，继续比较。
-
-- 如果不同，则比较新旧树中尾指针指向的节点：
-
-  - 如果相同则进入更新流程...
-
-- 如果不同，则交叉比较新旧树中头指针和尾指针指向的节点：
-
-  - 如果相同则进入更新流程...
-
-- 如果以上比较都不相同，则以新树中头指针指向的节点为基础，循环旧虚拟 DOM 节点，查找是否存在相同节点：
-
-  - 如果存在则复用，进入更新流程；
-
-  - 如果不存在，说明该节点为新创建的，将该节点转为真实 DOM。
-
-- 当新树的头指针超过尾指针的时候，比较结束，删除旧树中的剩余节点。
-
-### key 的作用
-
-- 在新旧虚拟 DOM 对比更新的时候，diff 算法默认采用 "就地更新" 原则；
-
-- 多个子节点比较的时候，如果没有 key 属性，默认都是 undefined，所以每个新旧虚拟 DOM 的 key 都相同，就会简单地按照节点的顺序依次比较。如果新旧节点是顺序的不同，那么 diff 算法将达不到最高效；
-
-- 使用 v-for 时，我们可以为每个元素提供唯一的 key，使它可以跟踪每个节点，重新排序时可以复用现有元素；
-
-- key 可以使 Vue 更高效地渲染虚拟 DOM；
-
-- key 必须满足稳定性和唯一性。
-
-## diff 算法 v3
-
 ### 无 key diff 算法
 
+> [!important]
+>
 > 无 key 的情况下，旧节点是不会进行复用的，非常浪费性能。
 
 1. 通过 for 循环对每个新节点进行 patch，并重新渲染元素。无 key 的情况下，新节点会直接把旧节点替换掉。
@@ -1023,79 +749,457 @@ const patchKeyedChildren = (
 }
 ```
 
-## 响应式原理
+## diff 算法 v2
 
-### 数据代理
+### 什么是 diff 算法?
 
-- Vue 实例中的 data 数据，默认在 _data 属性中，如果想要操作这个数据，需要通过 _data 访问。
+diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通过 `patch` 函数实现，所以也称为 patch 算法。
 
-- 为了更方便地操作数据，可以将 _data 中的数据拷贝到实例上。访问实例上的数据，就是访问 _data 的数据。
+### diff 算法比较思路
 
-- 过程：
+深度优先，同级比较。
 
-  1. 遍历 _data 中的数据；
+### diff 算法执行过程
 
-  2. 使用 `Object.defineProperty` 给实例扩展一个同名属性；
+- 当组件内部的响应式数据发生更新的时候，就会执行 Vue 内部的 `updateComponent` 函数，在函数内部先执行 `_render` 函数生成新的虚拟 DOM，将其作为参数传递给 `_update` 函数，并执行 `_update` 函数。
 
-  3. 通过 getter 和 setter 监听这些属性；
+- 在 `_update` 函数中，先定义一个变量保存旧的虚拟 DOM (`vm._vnode`)，然后将新的虚拟 DOM 赋值给 `vm._vnode`，此时 `_update` 函数中存在新旧虚拟 DOM，最后使用 `patch` 函数对新旧虚拟 DOM 进行比较。
 
-  4. 读取属性时，使用 `getter` 返回为 `_data` 中同名属性的值；
+### patch 比较过程
 
-  5. 修改属性时，使用 `setter` 设置为 `_data` 中同名属性的值。
+- `patch` 函数首先使用 `sameVnode` 方法比较两个节点的**标签类型**和 **key** 以及表单元素的 **type** 是否相同；
 
-### 数据劫持
+- 如果相同，则进入更新流程：
 
-- 目的：监听数据（收集获取当前数据的模板信息，通知收集的所有模板进行更新数据）。
+  - 把旧节点的真实 DOM 拿到新节点的位置复用；
 
-- 原理：`Object.defineProperty`
+  - 对比新旧节点的（标签）属性是否相同，如果不同则更新；
 
-- 过程：
+  - 比较子节点。
 
-  1. 遍历并重写 `_data` 中的数据，通过添加存取器监听；
+- 如果不相同，直接根据新节点创建元素，删除旧元素。
 
-  2. 读取属性时，收集当前的模板信息；
+### patch 比较子节点
 
-  3. 修改属性时，通知所有模板重新获取最新的值。
+- Vue 使用四个指针分别指向新旧子节点列表的首尾节点；
 
-### 观察者模式
+- 首先比较新旧树中头指针指向的节点：
 
-- 观察者模式：当一个对象中的数据被多个对象所依赖，并且当被依赖的对象发生改变时会通知所有依赖项。
+  - 如果相同则进入更新流程。头指针向后位移，继续比较。
 
-- 被依赖的对象称为目标对象，依赖项称为观察者。
+- 如果不同，则比较新旧树中尾指针指向的节点：
 
-### 发布与订阅者模式
+  - 如果相同则进入更新流程...
 
-- 发布与订阅者模式其实是属于观察者模式中的一个细分；
+- 如果不同，则交叉比较新旧树中头指针和尾指针指向的节点：
 
-- 观察者模式中的观察者被称为 "订阅者"，目标对象被称为 "发布者"；
+  - 如果相同则进入更新流程...
 
-- 发布者和订阅者由订阅中心来实现数据的通信，并且发布者和订阅者都不知道对方的存在；
+- 如果以上比较都不相同，则以新树中头指针指向的节点为基础，循环旧虚拟 DOM 节点，查找是否存在相同节点：
 
-- 当订阅者订阅数据的时候，来到订阅中心，订阅中心收集所有的订阅者；
+  - 如果存在则复用，进入更新流程；
 
-- 当发布者发布信息的时候，先传到订阅中心，再由订阅中心统一传给订阅者。
+  - 如果不存在，说明该节点为新创建的，将该节点转为真实 DOM。
 
-### Vue 数据响应式原理
+- 当新树的头指针超过尾指针的时候，比较结束，删除旧树中的剩余节点。
 
-- 当 data 中的数据发生变化的时候，视图也会随之更新。
+### key 的作用
 
-- 主要由三个部分构成：
+- 在新旧虚拟 DOM 对比更新的时候，diff 算法默认采用 "就地更新" 原则；
 
-  - 数据代理
+- 多个子节点比较的时候，如果没有 key 属性，默认都是 undefined，所以每个新旧虚拟 DOM 的 key 都相同，就会简单地按照节点的顺序依次比较。如果新旧节点是顺序的不同，那么 diff 算法将达不到最高效；
 
-  - 数据劫持
+- 使用 v-for 时，我们可以为每个元素提供唯一的 key，使它可以跟踪每个节点，重新排序时可以复用现有元素；
 
-  - 发布与订阅者模式
+- key 可以使 Vue 更高效地渲染虚拟 DOM；
 
-- 详细过程：
+- key 必须满足稳定性和唯一性。
 
-  1. 使用 `Object.defineProperty` 完成数据代理，将 _data 中的数据拷贝到实例上，我们访问实例上的数据，其实就是访问 _data 中的数据。
+## 生命周期 v2
 
-  2. 在 Observer 类（发布者）中，主要通过 `Object.defineProperty` 对 _data 中的所有属性进行重写，并添加 getter 和 setter：1. 在 getter 中建立 dep（订阅中心的实例化对象）和 watcher（订阅者的实例化对象）的关系，让 dep 收集依赖（访问当前数据的 watcher）；2. 在 setter 中让 dep 通知所有依赖（watcher）更新数据。
+### 初始化流程
 
-  3. 在 Dep 类（订阅中心）中，有收集所有 watcher 的方法，和通知所有 watcher 更新数据的方法。当 _data 中每一个属性被劫持的时候，都会创建一个 dep（Dep 的实例化对象），在 getter 中调用 dep 的 depend 方法收集依赖，在 setter 中调用 dep 的 notify 方法通知更新。
+Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
-  4. 在 Watcher 类（订阅者）中，有获取数据的 get 方法和更新视图的 update 方法，每一个组件都对应一个 Wathcer。watcher 会在第一次获取数据时被 dep 收集，当收到更新要求的时候，dep 就会通知所有的 watcher（Wacther 的实例化对象）调用 update 方法重新获取数据并更新视图。
+- 初始化事件和生命周期；
+
+- `beforeCreate` 触发，此时还无法访问实例上的数据；
+
+- 初始化数据注入和数据劫持，同时初始化 data methods computed watch 等数据；
+
+- `created` 触发，此时可以通过实例访问数据。
+
+### 编译流程
+
+判断 Vue 是否配置 el 选项：
+
+- 没有 el 选项，则等待使用 `$mount` 提供 el 选项；
+
+- 存在 el 选项，再判断是否配置 template 选项：
+
+  - 如果有 template 选项，则编译模板得到 render 函数，返回虚拟 DOM；
+
+  - 如果没有 template 选项，则将 el 挂载容器的 outerHTML 作为模板进行编译。
+
+### 挂载流程
+
+- 挂载之前，`beforeMount` 触发，此时视图呈现的是未被解析的模板。DOM 操作无效；
+
+- 将 Vue 实例挂载到 el 容器上，根据 render 函数返回的虚拟 DOM 生成真实 DOM，并替换 el 容器；
+
+- 挂载之后，`mounted` 触发，视图呈现真实 DOM。一般在这个阶段发送请求、监听自定义事件、开启定时器。
+
+### 更新流程
+
+当响应式数据发生改变的时候，进入更新阶段：
+
+- `beforeUpdate` 触发，此时数据已更新，视图还未更新；
+
+- 得到新的虚拟 DOM 并使用 patch 函数比较新旧虚拟 DOM 并更新真实 DOM；
+
+- `updated` 触发，此时数据和视图都完成更新。
+
+### 销毁流程
+
+当 `$destroy` 被调用，或条件渲染组件或路由时，进入销毁阶段：
+
+- 实例销毁之前，`beforeDestroy` 触发，一般在这个阶段移除自定义事件、关闭定时器，防止内存泄漏；
+
+- 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，解绑所有指令；
+
+- 实例销毁之后，`destroyed` 触发
+
+## 组件通信
+
+### 事件总线
+
+> [!note]
+>
+> 任意组件间通信
+
+```js
+beforeCreate() {
+  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线, 所有组件都能访问
+}
+```
+
+```js
+// A.vue
+mounted() {
+  this.$bus.$on("my-event", value => { /* 监听事件 */ })
+},
+beforeDestroy() {
+  this.$bus.$off("my-event") // 移除事件
+}
+```
+
+```js
+// B.vue
+this.$bus.$emit("my-event", [...this.args]) // 触发事件
+```
+
+### 发布订阅
+
+> [!note]
+>
+> 任意组件间通信。
+
+```js
+// A.vue
+import Pubsub from "pubsub-js"
+
+mounted() {
+  this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
+},
+beforeDestroy() {
+  Pubsub.unsubscribe(this.pubsubId) // 取消订阅
+}
+```
+
+```js
+// B.vue
+import Pubsub from "pubsub-js"
+
+Pubsub.publish("my-message", [...this.args]) // 发布消息
+```
+
+### 双向绑定
+
+#### v-model
+
+> [!note]
+>
+> 父子组件间通信，只能传递一个数据与事件。
+
+当使用 `:value` + `@input` 模式时, 可以替换为 `v-model` 模式。
+
+子组件为 input。
+
+```vue
+<!-- Parent.vue -->
+<Comp :value="message" @input="message = $event" />
+
+<Comp v-model="message" />
+```
+
+```vue
+<!-- Comp.vue -->
+<input :value="value" @input="$emit('input', $event.target.value)" />
+```
+
+子组件为非 input。
+
+```vue
+<!-- Parent.vue -->
+<Comp :value="count" @input="count = $event" />
+
+<Comp v-model="count" />
+```
+
+```vue
+<!-- Comp.vue -->
+<button @click="$emit('input', value + 1)"></button>
+```
+
+#### v-bind.sync
+
+> [!note]
+>
+> 父子组件间通信，可以传递多个数据与事件。
+
+当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `:prop.sync` 模式。
+
+```vue
+<!-- Parent.vue -->
+<Comp :count="count" @update:count="count = $event" />
+
+<Comp :count.sync="count" />
+```
+
+```vue
+<!-- Comp.vue -->
+<button @click="$emit('update:count', count + 1)"></button>
+```
+
+### 透传
+
+> [!note]
+>
+> 祖孙组件间通信。
+
+`$attrs` 包含了父组件传递的数据（不包含被 props 接收的数据）。可以通过 `v-bind` 批量传递给内部组件。
+
+```vue
+<Comp v-bind="$attrs" />
+```
+
+`$listeners` 包含了父组件传递的事件。可以通过 `v-on` 批量传递给内部组件。
+
+```vue
+<Comp v-on="$listeners" />
+```
+
+### 依赖注入
+
+> [!note]
+>
+> 祖孙组件间通信。
+
+provide 选项可以给后代组件提供数据和方法。
+
+注意：
+
+- provide 如果是一个对象，将无法访问 this，就不能将实例上的数据提供给后代，所以推荐写成函数。
+
+- 提供的数据需要写成函数返回值形式，否则不具备响应式。
+
+```js
+provide() {
+  return {
+    count: () => this.count,
+    increment: this.increment
+  }
+}
+```
+
+在任何后代组件里，我们都可以使用 inject 选项来接收 provide 提供的数据和方法。
+
+```js
+inject: ["count", "increment"]
+```
+
+## 深入组件
+
+### 插槽
+
+#### 默认插槽
+
+子组件：使用 `<slot>` 定义插槽。
+
+父组件：向子组件中插入 HTML，当组件渲染时，`<slot>` 将会被替换为子组件标签内的内容。
+
+> [!note]
+>
+> 可以在 `<slot>` 标签内设置默认内容，当子组件标签中没有插入内容时，`<slot>` 会被替换为默认内容。
+
+```vue
+<!-- Parent.vue -->
+<Comp title="音乐">
+  <ul>
+    <li v-for="item in music">{{ item }}</li>
+  </ul>
+</Comp>
+
+<Comp title="电影">
+  <ul>
+    <li v-for="item in movie">{{ item }}</li>
+  </ul>
+</Comp>
+```
+
+```vue
+<!-- Comp.vue -->
+<div>
+  <h2>{{ title }}</h2>
+  <slot />
+</div>
+```
+
+#### 具名插槽
+
+子组件：在 `<slot>` 中注册一个 name 属性。
+
+> [!tip]
+>
+> 未注册 name 属性的 `<slot>` 默认值为 default，即默认插槽。
+
+父组件：用 `<template v-slot:name>` 包裹指定元素, 可以替换对应 name 属性的 `<slot>`。
+
+> [!warning]
+>
+> 最终的渲染结果不包含 `<template>`。
+>
+> 任何没有被包裹在带有 v-slot 的 `<template>` 中的内容都会被视为默认插槽的内容。
+>
+> v-slot 只能用于 `<template>` 或组件。
+
+```vue
+<!-- Parent.vue -->
+<Comp>
+  <template v-slot:music>
+    <ul>
+      <li v-for="item in music">{{ item }}</li>
+    </ul>
+  </template>
+  
+  <template #movie>
+    <ul>
+      <li v-for="item in movie">{{ item }}</li>
+    </ul>
+  </template>
+</Comp>
+```
+
+```vue
+<!-- Comp.vue -->
+<div>
+  <slot name="music" />
+  <slot name="movie" />
+</div>
+```
+
+#### 作用域插槽
+
+> [!note]
+>
+> 通过插槽访问子组件的数据。
+
+子组件：通过 `<slot :prop="data">` 传递数据。
+
+父组件：使用 `<template v-slot="slotProps">` 来接收子组件传递的数据。
+
+> [!note]
+>
+> 结合具名插槽使用，`<template #prop="slotProps">`。
+
+```vue
+<!-- Parent.vue -->
+<Comp title="音乐">
+  <template v-slot:music="slotProps">
+    <ul>
+      <li v-for="item in slotProps.music">{{ item }}</li>
+    </ul>
+  </template>
+</Comp>
+
+<Comp title="电影">
+  <template #movie="{ movie }">
+    <ul>
+      <li v-for="item in movie">{{ item }}</li>
+    </ul>
+  </template>
+</Comp>
+```
+
+```vue
+<!-- Comp.vue -->
+<div>
+  <h2>{{ title }}</h2>
+  <slot name="music" :music="music" />
+  <slot name="movie" :movie="movie" />
+</div>
+```
+
+### 动态组件
+
+#### 动态组件
+
+我们可以在内置标签 `<component>` 中使用 "is" 属性来切换不同的组件。
+
+```vue
+<component :is="Current" />
+```
+
+#### 缓存组件
+
+我们在切换动态组件的时候，组件默认会在进入时被创建，离开时被销毁。频繁切换会导致重新渲染影响性能。
+
+如果希望动态组件能够在第一次被创建的时候缓存，可以使用 `<keep-alive>` 将其包裹起来。
+
+我们可以给 `<keep-alive>` 设置一些属性，根据条件缓存内部组件：
+
+- 默认所有匹配的动态组件都会被缓存；
+
+- include：匹配的动态组件会被缓存；
+
+- exclude：匹配的动态组件不会被缓存；
+
+- max：最大缓存数。
+
+```vue
+<keep-alive>
+  <component :is="Current" />
+</keep-alive>
+```
+
+### 异步组件
+
+如果我们直接使用 import 模块化引入组件，那么 webpack 在打包构建的过程中，会把所有的 js 都打包到了一起，但是里面包含了很多我们暂时没有使用的模块，这样导致包的体积过大，就会造成进入首页的时候需要加载的内容过多，出现长时间的白屏现象。
+
+我们可以使用异步组件，让 webpack 将组件分开进行打包，需要的时候再去加载这个组件：
+
+1. Vue 允许我们以函数的方式定义组件，函数内部使用 import 方法引入模块，并把结果返回；
+
+2. wabpack 在打包的时候，如果遇到 import 动态引入，会把 import 动态引入的资源单独进行打包；
+
+3. Vue 只有在这个组件需要被渲染的时候才会触发该函数，且会把结果缓存起来用于下次重新渲染；
+
+4. import 方法会返回一个 promise 实例，引入成功时 promise 变为成功状态，然后就可以渲染当前组件了。
+
+```js
+const Home = () => import("@/components/Home")
+const User = () => import("@/components/User")
+```
 
 ## Router3
 
@@ -1725,6 +1829,8 @@ emits("update", "ts")
 
 attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
 
+> [!warning]
+>
 > 不包含被 defineProps 接收的数据和被 defineEmits 接收的事件。
 
 ```vue
