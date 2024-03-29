@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-03-27
+date: 2024-03-29
 ---
 
 ## 响应式
@@ -238,7 +238,7 @@ bar // Ref<2>
 
 > [!note]
 >
-> 用于让 reactive 对象退出响应式，可以减少代理访问或跟踪开销。
+> 用于让 reactive 对象退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
 
 ```ts
 import { reactive, toRaw } from "vue"
@@ -315,9 +315,115 @@ watch(() => person.value.skills, () => {}, {
 
 ## 响应式原理 v3
 
-### 自定义实现
+> [!warning]
+>
+> 以下函数全部为自定义实现（简化版）。
 
+### effect
 
+用于触发视图更新。首先在全局环境下创建一个 weakMap 容器，用于存储并建立 target 与 depsMap 之间的关系。
+
+```ts
+/* effect.ts */
+
+let activeEffect: Function
+
+const effect = (fn: Function) => {
+  const _effect = function () {
+    activeEffect = _effect
+    fn()
+  }
+  
+  _effect()
+}
+
+type Deps = Set<Function>
+type DepsMap = Map<any, Deps>
+
+const targetMap = new WeakMap<object, DepsMap>()
+```
+
+### track
+
+用于收集依赖，触发时将副作用函数存到 deps 中，等待将来触发依赖更新时执行。
+
+```ts
+const track = (target: object, key: unknown) => {
+  let depsMap = targetMap.get(target)
+  if (!depsMap) {
+    depsMap = new Map()
+    targetMap.set(target, depsMap)
+  }
+  
+  let deps = depsMap.get(key)
+  if (!deps) {
+    deps = new Set()
+    depsMap.set(key, deps)
+  }
+  
+  deps.add(activeEffect)
+}
+```
+
+### trigger
+
+用于更新依赖，将 deps 中的副作用函数取出执行。
+
+```ts
+const trigger = (target: object, key: unknown) => {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
+  
+  const deps = depsMap.get(key)
+  if (!deps) return
+  
+  deps.forEach(effect => effect())
+}
+```
+
+### reactive
+
+**数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 函数收集依赖，修改数据时执行 trigger 更新依赖。
+
+```ts
+/* reactive.ts */
+
+import { track, trigger } from "./effect.js"
+
+const isObject = (target: any) => Object.prototype.toString.call(target) === "[object Object]"
+
+const reactive = <T extends object>(target: T): T => {
+  return new Proxy(target, {
+    get(target: T, p: string | symbol, receiver: any) {
+      const result = Reflect.get(target, p, receiver) as object
+      track(target, p)
+      if (isObject(result)) {
+        return reactive(result)
+      }
+      return result
+    },
+    
+    set(target: T, p: string | symbol, value: any, receiver: any) {
+      const result = Reflect.set(target, p, value, receiver)
+      trigger(target, p)
+      return result
+    }
+  })
+}
+```
+
+```ts
+import { reactive } from "./reactive.js"
+import { effect } from "./effect.js"
+
+const app: HTMLDivElement = document.querySelector("#app")!
+
+const state = reactive({ count: 0 })
+
+effect(() => {
+  app.innerText = `${ state.count }`
+})
+```
 
 ## 响应式原理 v2
 
@@ -815,7 +921,7 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 
 - key 必须满足稳定性和唯一性。
 
-## 生命周期 v2
+## 生命周期
 
 ### 初始化流程
 
@@ -869,59 +975,116 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
 - 实例销毁之后，`destroyed` 触发
 
-## 组件通信
+## 组件通信 v3
 
-### 事件总线
+### defineProps
 
-> [!note]
+接收父组件传递的属性。
+
+```ts
+const props = defineProps<{
+  count: number
+}>()
+
+props.count // count: 1
+```
+
+### defineEmits
+
+接收父组件传递的事件（可以传递原生事件）。
+
+```ts
+const emits = defineEmits<{
+  (event: "changeCount", n: number): void
+  (event: "update", value: string): void
+}>()
+
+// 3.3+ 更简洁的语法
+const emits = defineEmits<{
+  changeCount: [id: number] // 具名元组语法
+  update: [value: string]
+}>()
+
+emits("changeCount", 1) // count: 1 => 2
+emits("update", "ts")
+```
+
+### v-model:prop
+
+父子组件多个数据的双向绑定。
+
+当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `v-model:prop` 模式。
+
+```vue
+<!-- Parent.vue -->
+<Comp :count="count" @update:count="count = $event" />
+
+<Pagination v-model:count="count" />
+```
+
+```vue
+<!-- Comp.vue -->
+<button @click="emits('update:count', count + 1)"></button>
+```
+
+### useAttrs
+
+使用 `useAttrs()` 可以返回一个 attrs 代理对象。
+
+attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
+
+> [!warning]
 >
-> 任意组件间通信
+> 不包含被 defineProps 接收的数据和被 defineEmits 接收的事件。
 
-```js
-beforeCreate() {
-  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线, 所有组件都能访问
-}
+```vue
+<Comp v-bind="attrs" />
 ```
 
-```js
-// A.vue
-mounted() {
-  this.$bus.$on("my-event", value => { /* 监听事件 */ })
-},
-beforeDestroy() {
-  this.$bus.$off("my-event") // 移除事件
-}
+```ts
+import { useAttrs } from "vue"
+
+const attrs = useAttrs()
 ```
 
-```js
-// B.vue
-this.$bus.$emit("my-event", [...this.args]) // 触发事件
+### defineExpose
+
+在 Vue3 中，不能使用 `$parent` 直接访问父组件，需要在父组件使用 defineExpose 暴露一些数据。
+
+```ts
+/* Parent.vue */
+defineExpose({
+  count,
+  message: "hello vue"
+})
 ```
 
-### 发布订阅
+这样我们就可以在子组件中通过 $parent 获取到一个代理对象，它包含了 defineExpose 暴露的数据。
 
-> [!note]
->
-> 任意组件间通信。
-
-```js
-// A.vue
-import Pubsub from "pubsub-js"
-
-mounted() {
-  this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
-},
-beforeDestroy() {
-  Pubsub.unsubscribe(this.pubsubId) // 取消订阅
-}
+```vue
+<!-- Comp.vue -->
+<button @click="console.log($parent)"></button>
 ```
 
-```js
-// B.vue
-import Pubsub from "pubsub-js"
+### provide & inject
 
-Pubsub.publish("my-message", [...this.args]) // 发布消息
+在 Vue3 中，provide 提供的数据不需要写成函数返回值形式，因为提供的是 ref 对象，数据是具有响应式的。
+
+```ts
+import { provide } from "vue"
+
+provide("count", count)
 ```
+
+inject 会返回需要注入的数据对应的值。
+
+```ts
+import { inject } from "vue"
+
+const count = inject("count")
+```
+
+## 组件通信 v2
 
 ### 双向绑定
 
@@ -979,6 +1142,58 @@ Pubsub.publish("my-message", [...this.args]) // 发布消息
 ```vue
 <!-- Comp.vue -->
 <button @click="$emit('update:count', count + 1)"></button>
+```
+
+### 事件总线
+
+> [!note]
+>
+> 任意组件间通信
+
+```js
+beforeCreate() {
+  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线, 所有组件都能访问
+}
+```
+
+```js
+// A.vue
+mounted() {
+  this.$bus.$on("my-event", value => { /* 监听事件 */ })
+},
+beforeDestroy() {
+  this.$bus.$off("my-event") // 移除事件
+}
+```
+
+```js
+// B.vue
+this.$bus.$emit("my-event", [...this.args]) // 触发事件
+```
+
+### 发布订阅
+
+> [!note]
+>
+> 任意组件间通信。
+
+```js
+// A.vue
+import Pubsub from "pubsub-js"
+
+mounted() {
+  this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
+},
+beforeDestroy() {
+  Pubsub.unsubscribe(this.pubsubId) // 取消订阅
+}
+```
+
+```js
+// B.vue
+import Pubsub from "pubsub-js"
+
+Pubsub.publish("my-message", [...this.args]) // 发布消息
 ```
 
 ### 透传
@@ -1201,7 +1416,46 @@ const Home = () => import("@/components/Home")
 const User = () => import("@/components/User")
 ```
 
-## Router3
+## Router v4
+
+### 基本配置
+
+```ts
+import { createRouter, createWebHistory } from "vue-router"
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    {
+      path: "/",
+      redirect: "/home"
+    },
+    {
+      path: "/home",
+      component: () => import("@/views/Home.vue"),
+      name: "Home"
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: () => import("@/views/NotFound.vue")
+    }
+  ]
+})
+```
+
+### 缓存路由
+
+固定写法
+
+```vue
+<router-view v-slot="{ Component }">
+  <keep-alive>
+    <component :is="Component"></component>
+  </keep-alive>
+</router-view>
+```
+
+## Router v3
 
 ### 历史记录模式
 
@@ -1450,6 +1704,71 @@ beforeRouteEnter(to, from, next) {
 #### beforeRouteLeave
 
 导航离开组件对应的路由时触发。
+
+## Pinia
+
+### 全局注入
+
+```ts
+import { createPinia } from "pinia"
+
+const pinia = createPinia()
+```
+
+### 选项式 Store
+
+```ts
+import { defineStore } from "pinia"
+
+const useCounterStore = defineStore("counter", {
+  state: () => ({ count: 0 }),
+  getters: {
+    doubleCount: state => state.count * 2
+  },
+  actions: {
+    increment() {
+      this.count++
+    }
+  }
+})
+```
+
+### 组合式 Store
+
+```ts
+import { defineStore } from "pinia"
+
+const useCounterStore = defineStore("counter", () => {
+  const count = ref(0)
+  
+  const doubleCount = computed(() => count.value * 2)
+  
+  const increment = () => {
+    count.value++
+  }
+  
+  return { count, doubleCount, increment }
+})
+```
+
+### 在组件中使用
+
+```ts
+// 用于将 store 中的数据转为 ref 对象
+import { storeToRefs } from "pinia"
+
+// 从 store modules 引入 hooks 函数
+import { useCounterStore } from "@/stores/counter.ts"
+
+// 调用 hooks 函数返回 store
+const counterStore = useCounterStore()
+
+// 从 store 获取数据 (state, getters)
+const { count, doubleCount } = storeToRefs(counterStore)
+
+// 从 store 获取方法 (actions)
+const { increment } = counterStore
+```
 
 ## Vuex
 
@@ -1769,217 +2088,4 @@ methods: {
   ...mapMutations("countModule", ["increment"]),
   ...mapMutations("movieModule", ["getmovies"])
 }
-```
-
-## Vue3 组件通信
-
-### defineProps
-
-接收父组件传递的属性。
-
-```ts
-const props = defineProps<{
-  count: number
-}>()
-
-props.count // count: 1
-```
-
-### defineEmits
-
-接收父组件传递的事件（可以传递原生事件）。
-
-```ts
-const emits = defineEmits<{
-  (event: "changeCount", n: number): void
-  (event: "update", value: string): void
-}>()
-
-// 3.3+ 更简洁的语法
-const emits = defineEmits<{
-  changeCount: [id: number] // 具名元组语法
-  update: [value: string]
-}>()
-
-emits("changeCount", 1) // count: 1 => 2
-emits("update", "ts")
-```
-
-### v-model:prop
-
-父子组件多个数据的双向绑定。
-
-当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `v-model:prop` 模式。
-
-```vue
-<!-- Parent.vue -->
-<Comp :count="count" @update:count="count = $event" />
-
-<Pagination v-model:count="count" />
-```
-
-```vue
-<!-- Comp.vue -->
-<button @click="emits('update:count', count + 1)"></button>
-```
-
-### useAttrs
-
-使用 `useAttrs()` 可以返回一个 attrs 代理对象。
-
-attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
-
-> [!warning]
->
-> 不包含被 defineProps 接收的数据和被 defineEmits 接收的事件。
-
-```vue
-<Comp v-bind="attrs" />
-```
-
-```ts
-import { useAttrs } from "vue"
-
-const attrs = useAttrs()
-```
-
-### defineExpose
-
-在 Vue3 中，不能使用 `$parent` 直接访问父组件，需要在父组件使用 defineExpose 暴露一些数据。
-
-```ts
-/* Parent.vue */
-defineExpose({
-  count,
-  message: "hello vue"
-})
-```
-
-这样我们就可以在子组件中通过 $parent 获取到一个代理对象，它包含了 defineExpose 暴露的数据。
-
-```vue
-<!-- Comp.vue -->
-<button @click="console.log($parent)"></button>
-```
-
-### provide & inject
-
-在 Vue3 中，provide 提供的数据不需要写成函数返回值形式，因为提供的是 ref 对象，数据是具有响应式的。
-
-```ts
-import { provide } from "vue"
-
-provide("count", count)
-```
-
-inject 会返回需要注入的数据对应的值。
-
-```ts
-import { inject } from "vue"
-
-const count = inject("count")
-```
-
-## Router4
-
-### 基本配置
-
-```ts
-import { createRouter, createWebHistory } from "vue-router"
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    {
-      path: "/",
-      redirect: "/home"
-    },
-    {
-      path: "/home",
-      component: () => import("@/views/Home.vue"),
-      name: "Home"
-    },
-    {
-      path: "/:pathMatch(.*)*",
-      component: () => import("@/views/NotFound.vue")
-    }
-  ]
-})
-```
-
-### 缓存路由
-
-固定写法
-
-```vue
-<router-view v-slot="{ Component }">
-  <keep-alive>
-    <component :is="Component"></component>
-  </keep-alive>
-</router-view>
-```
-
-## Pinia
-
-### 全局注入
-
-```ts
-import { createPinia } from "pinia"
-
-const pinia = createPinia()
-```
-
-### 选项式 Store
-
-```ts
-import { defineStore } from "pinia"
-
-const useCounterStore = defineStore("counter", {
-  state: () => ({ count: 0 }),
-  getters: {
-    doubleCount: state => state.count * 2
-  },
-  actions: {
-    increment() {
-      this.count++
-    }
-  }
-})
-```
-
-### 组合式 Store
-
-```ts
-import { defineStore } from "pinia"
-
-const useCounterStore = defineStore("counter", () => {
-  const count = ref(0)
-  
-  const doubleCount = computed(() => count.value * 2)
-  
-  const increment = () => {
-    count.value++
-  }
-  
-  return { count, doubleCount, increment }
-})
-```
-
-### 在组件中使用
-
-```ts
-// 用于将 store 中的数据转为 ref 对象
-import { storeToRefs } from "pinia"
-
-// 从 store modules 引入 hooks 函数
-import { useCounterStore } from "@/stores/counter.ts"
-
-// 调用 hooks 函数返回 store
-const counterStore = useCounterStore()
-
-// 从 store 获取数据 (state, getters)
-const { count, doubleCount } = storeToRefs(counterStore)
-
-// 从 store 获取方法 (actions)
-const { increment } = counterStore
 ```

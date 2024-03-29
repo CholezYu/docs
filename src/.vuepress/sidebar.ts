@@ -165,9 +165,9 @@ export default sidebar({
           link: "心得体会"
         },
         {
-          text: "面试题",
+          text: "面试集锦",
           icon: "markdown",
-          link: "面试题"
+          link: "面试集锦"
         }
       ]
     }

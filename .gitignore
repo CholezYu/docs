@@ -6,9 +6,6 @@ Desktop.ini
 # Vuepress Temp
 **/.vuepress/.temp/**
 
-.pnp.cjs
-.pnp.loader.mjs
-
 # Logs
 logs
 *.log
