@@ -1,14 +1,14 @@
 ---
 title: Vue
 icon: vue
-date: 2024-03-29
+date: 2024-04-01
 ---
 
-## 响应式
+## 响应式：核心
 
-### Ref
+### ref
 
-接收任意值（基本类型、引用类型）作为参数，返回一个响应式的 ref 对象。通过 `.value` 可以访问这个数据。
+接受任意值（基本类型、引用类型）作为参数，返回一个响应式的 ref 对象。通过 `.value` 可以访问这个数据。
 
 在模板中 ref 会自动解包，不需要通过 `.value` 访问。
 
@@ -23,7 +23,7 @@ count.value++
 count.value // 1
 ```
 
-**源码解析**。调用 `ref()` 时，Vue 会先通过 `createRef()` 创建一个 RefImpl 对象。在 RefImpl 类的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
+**源码解析**。调用 `ref()` 时，会通过 `createRef()` 创建一个 RefImpl 实例。在 RefImpl 类的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
 
 ```ts
 /* reactivity/src/ref.ts */
@@ -37,11 +37,11 @@ function shallowRef(value?: unknown) {
 }
 
 function createRef(rawValue: unknown, shallow: boolean) {
-  // 如果传入的值是一个 ref, 直接返回
+  // 如果传入的值是一个 ref，直接返回
   if (isRef(rawValue)) {
     return rawValue
   }
-  // 否则创建一个 RefImpl 对象
+  // 否则创建一个 RefImpl 实例
   return new RefImpl(rawValue, shallow)
 }
 
@@ -54,13 +54,13 @@ class RefImpl<T> {
   
   constructor(
     value: T,
-    public readonly __v_isShallow: boolean,
+    public readonly __v_isShallow: boolean
   ) {
     this._rawValue = __v_isShallow ? value : toRaw(value)
-    // 如果是 shallowRef, 直接返回 .value 的值, 如果 value 是引用类型, 不会做进一步的响应式
-    // 如果是 ref, 会调用 toReactive, 进行深层次的响应式
+    // 如果是 shallowRef，直接返回 .value 的值，如果 value 是引用类型，不会做进一步的响应式
+    // 如果是 ref，会调用 toReactive，进行深层次的响应式
     // const toReactive = (value: T): T => isObject(value) ? reactive(value) : value
-    // toReactive => 如果 value 是引用类型, 就会调用 reactive(value), 否则直接返回 value
+    // toReactive：如果 value 是引用类型，就会调用 reactive(value)，否则直接返回 value
     this._value = __v_isShallow ? value : toReactive(value)
   }
   
@@ -70,8 +70,7 @@ class RefImpl<T> {
   }
   
   set value(newVal) {
-    const useDirectValue =
-      this.__v_isShallow || isShallow(newVal) || isReadonly(newVal)
+    const useDirectValue = this.__v_isShallow || isShallow(newVal) || isReadonly(newVal)
     newVal = useDirectValue ? newVal : toRaw(newVal)
     if (hasChanged(newVal, this._rawValue)) {
       this._rawValue = newVal
@@ -82,9 +81,9 @@ class RefImpl<T> {
 }
 ```
 
-### Reactive
+### reactive
 
-只能接收**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
+只能接受**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
 
 ```ts
 import { reactive } from "vue"
@@ -95,13 +94,13 @@ state // Reactive<{ count: 0 }>
 state.count // 0
 ```
 
-**源码解析**。调用 `reactive()` 时，Vue 会通过 `createReactiveObject()` 创建一个 reactive 代理对象，在这个函数中，先进行一系列的判断：1. 传入的值是否是基本类型，是的话报出警告；2. 传入的值是否被代理过；3. 代理对象是否被缓存；4. 代理对象是否在白名单中。如果以上条件都不满足，则将传入的值进行 Proxy 代理，然后通过 WeakMap 进行缓存。
+**源码解析**。调用 `reactive()` 时，会通过 `createReactiveObject()` 创建一个 reactive 代理对象，在这个函数中，会进行一系列的判断：1. 传入的值是否是基本类型，是的话报出警告；2. 传入的值是否被代理过；3. 代理对象是否被缓存；4. 代理对象是否在白名单中。如果以上条件都不满足，则将传入的值进行 Proxy 代理，然后通过 WeakMap 进行缓存。
 
 ```ts
 /* reactivity/src/reactive.ts */
 
 function reactive(target: object) {
-  // 如果传入的值是一个只读对象, 直接返回
+  // 如果传入的值是一个只读对象，直接返回
   if (isReadonly(target)) {
     return target
   }
@@ -110,7 +109,7 @@ function reactive(target: object) {
     false,
     mutableHandlers,
     mutableCollectionHandlers,
-    reactiveMap,
+    reactiveMap
   )
 }
 
@@ -120,7 +119,7 @@ function shallowReactive<T extends object>(target: T): ShallowReactive<T> {
     false,
     shallowReactiveHandlers,
     shallowCollectionHandlers,
-    shallowReactiveMap,
+    shallowReactiveMap
   )
 }
 
@@ -129,16 +128,16 @@ function createReactiveObject(
   isReadonly: boolean,
   baseHandlers: ProxyHandler<any>,
   collectionHandlers: ProxyHandler<any>,
-  proxyMap: WeakMap<Target, any>,
+  proxyMap: WeakMap<Target, any>
 ) {
-  // 如果传入的值是基本类型, 报一个警告
+  // 如果传入的值是基本类型，报一个警告
   if (!isObject(target)) {
     if (__DEV__) {
       warn(`value cannot be made reactive: ${String(target)}`)
     }
     return target
   }
-  // 如果传入的值已经被代理过了, 直接返回
+  // 如果传入的值已经被代理过了，直接返回
   // 有一个例外: 将代理对象变为只读属性
   if (
     target[ReactiveFlags.RAW] &&
@@ -146,12 +145,12 @@ function createReactiveObject(
   ) {
     return target
   }
-  // 从缓存中获取代理对象, 如果存在的话直接返回
+  // 从缓存中获取代理对象，如果存在的话直接返回
   const existingProxy = proxyMap.get(target)
   if (existingProxy) {
     return existingProxy
   }
-  // 如果代理对象在白名单中, 直接返回
+  // 如果代理对象在白名单中，直接返回
   const targetType = getTargetType(target)
   if (targetType === TargetType.INVALID) {
     return target
@@ -159,7 +158,7 @@ function createReactiveObject(
   // 进行 Proxy 代理
   const proxy = new Proxy(
     target,
-    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers,
+    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers
   )
   // 缓存代理对象
   proxyMap.set(target, proxy)
@@ -167,117 +166,151 @@ function createReactiveObject(
 }
 ```
 
-### toRef
+### computed
 
-**对象属性签名**。基于响应式对象的一个属性，创建一个对应的 ref，它与源属性保持同步。
-
-> [!caution]
->
-> `toRef()` 传入的值必须本身是响应式的！
+函数式写法。接受一个 getter 函数，返回一个只读的 ref 对象。
 
 ```ts
-import { reactive, toRef } from "vue"
+import { ref, computed } from "vue"
 
-const state = reactive({ foo: 1, bar: 2 })
-
-// 双向 ref, 会与源属性同步
-const fooRef = toRef(state, "foo")
-
-// 更改该 ref 会更新源属性
-fooRef.value++
-state.foo // 2
-
-// 更改源属性也会更新该 ref
-state.foo++
-fooRef.value // 3
-```
-
-**规范化签名（3.3+）**。
-
-> [!warning]
->
-> 官网写的，没看懂。
-
-```ts
-// 按原样返回现有的 ref
-toRef(existingRef)
-
-// 创建一个只读的 ref, 当访问 .value 时会调用此 getter 函数
-toRef(() => props.foo)
-
-// 从非函数的值中创建普通的 ref
-// 等同于 ref(1)
-toRef(1)
-```
-
-### toRefs
-
-将一个响应式对象转换为普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。
-
-> [!tip]
->
-> 每个单独的 ref 都是使用 `toRef()` 创建的。可以看作是多个 `toRef()` 的语法糖。
-
-> [!note]
->
-> 常用于 ref，reactive 对象的解构。
-
-```ts
-import { ref, toRefs } from "vue"
-
-const state = ref({ foo: 1, bar: 2 })
-
-const { foo, bar } = toRefs(state.value)
-foo // Ref<1>
-bar // Ref<2>
-```
-
-### toRaw
-
-返回 Proxy 的原始对象。
-
-> [!note]
->
-> 用于让 reactive 对象退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
-
-```ts
-import { reactive, toRaw } from "vue"
-
-const origin = { foo: 1, bar: 2 }
-const state = reactive(origin)
-
-state // Reactive<{ foo: 1, bar: 2 }>
-toRaw(state) // { foo: 1, bar: 2 }
-toRaw(state) === origin // true
-```
-
-### Computed
-
-使用函数式写法，默认为 get 函数，返回一个只读的 ref 对象。
-
-```ts
 const count = ref(1)
 
-const doubleCount = computed(() => count.value * 2)
+const double = computed(() => count.value * 2)
 ```
 
-接收 get 和 set 函数作为参数，返回一个可写的 ref 对象。
+选项式写法。接受一个带有 `get` 和 `set` 函数的对象，返回一个可写的 ref 对象。
 
 ```ts
-const firstName = ref("Even")
-const lastName = ref("You")
+import { ref, computed } from "vue"
 
-const fullName = computed({
-  get: () => firstName.value + " " + lastName.value,
+const first = ref("Even")
+const last = ref("You")
+
+const full = computed({
+  get: () => first.value + " " + last.value,
   set: (value) => {
-    const [first, last] = value.split(" ")
-    firstName.value = first
-    lastName.value = last
+    [first.value, last.value] = value.split(" ")
   }
 })
 ```
 
-### Watch
+**源码解析**。调用 `computed()` 时，会根据传入的参数判断是否使用 setter，然后将 getter 和 setter 传入 ComputedRefImpl 类。在这个类中，
+
+```ts
+/* reactivity/src/computed.ts */
+
+function computed<T>(
+  getterOrOptions: ComputedGetter<T> | WritableComputedOptions<T>,
+  debugOptions?: DebuggerOptions,
+  isSSR = false
+) {
+  let getter: ComputedGetter<T>
+  let setter: ComputedSetter<T>
+  
+  const onlyGetter = isFunction(getterOrOptions)
+  
+  // 如果传入一个函数，为函数式用法
+  if (onlyGetter) {
+    // 将传入的函数赋值给 getter
+    getter = getterOrOptions
+    // 不允许设置 setter
+    setter = __DEV__
+      ? () => {
+          warn('Write operation failed: computed value is readonly')
+        }
+      : NOOP
+  }
+  // 如果传入的不是函数，为选项式用法
+  else {
+    // 将 get 选项赋值给 getter
+    getter = getterOrOptions.get
+    // 将 set 选项赋值给 setter
+    setter = getterOrOptions.set
+  }
+  
+  const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter, isSSR)
+  
+  if (__DEV__ && debugOptions && !isSSR) {
+    cRef.effect.onTrack = debugOptions.onTrack
+    cRef.effect.onTrigger = debugOptions.onTrigger
+  }
+  
+  return cRef as any
+}
+
+class ComputedRefImpl<T> {
+  public dep?: Dep = undefined
+  
+  private _value!: T
+  public readonly effect: ReactiveEffect<T>
+  
+  public readonly __v_isRef = true
+  public readonly [ReactiveFlags.IS_READONLY]: boolean = false
+  
+  public _cacheable: boolean
+  
+  /**
+   * Dev only
+   */
+  _warnRecursive?: boolean
+  
+  constructor(
+    private getter: ComputedGetter<T>,
+    private readonly _setter: ComputedSetter<T>,
+    isReadonly: boolean,
+    isSSR: boolean
+  ) {
+    this.effect = new ReactiveEffect(
+      () => getter(this._value),
+      () =>
+        triggerRefValue(
+          this,
+          this.effect._dirtyLevel === DirtyLevels.MaybeDirty_ComputedSideEffect
+            ? DirtyLevels.MaybeDirty_ComputedSideEffect
+            : DirtyLevels.MaybeDirty
+        )
+    )
+    this.effect.computed = this
+    this.effect.active = this._cacheable = !isSSR
+    this[ReactiveFlags.IS_READONLY] = isReadonly
+  }
+  
+  get value() {
+    // the computed ref may get wrapped by other proxies e.g. readonly() #3376
+    const self = toRaw(this)
+    if (
+      (!self._cacheable || self.effect.dirty) &&
+      hasChanged(self._value, (self._value = self.effect.run()!))
+    ) {
+      triggerRefValue(self, DirtyLevels.Dirty)
+    }
+    trackRefValue(self)
+    if (self.effect._dirtyLevel >= DirtyLevels.MaybeDirty_ComputedSideEffect) {
+      if (__DEV__ && (__TEST__ || this._warnRecursive)) {
+        warn(COMPUTED_SIDE_EFFECT_WARN, `\n\ngetter: `, this.getter)
+      }
+      triggerRefValue(self, DirtyLevels.MaybeDirty_ComputedSideEffect)
+    }
+    return self._value
+  }
+  
+  set value(newValue: T) {
+    this._setter(newValue)
+  }
+  
+  // #region polyfill _dirty for backward compatibility third party code for Vue <= 3.3.x
+  get _dirty() {
+    return this.effect.dirty
+  }
+  
+  set _dirty(v) {
+    this.effect.dirty = v
+  }
+  // #endregion
+}
+```
+
+### watch
 
 监听 ref 对象（基本数据类型），实际上是监听 value 属性的改变。
 
@@ -313,6 +346,88 @@ watch(() => person.value.skills, () => {}, {
 })
 ```
 
+## 响应式：工具
+
+### toRef
+
+**对象属性签名**。基于响应式对象的一个属性，创建一个对应的 ref，它与源属性保持同步。
+
+> [!caution]
+>
+> `toRef()` 传入的值必须本身是响应式的！
+
+```ts
+import { reactive, toRef } from "vue"
+
+const state = reactive({ foo: 1, bar: 2 })
+
+// 双向 ref，会与源属性同步
+const fooRef = toRef(state, "foo")
+
+// 更改该 ref 会更新源属性
+fooRef.value++
+state.foo // 2
+
+// 更改源属性也会更新该 ref
+state.foo++
+fooRef.value // 3
+```
+
+**规范化签名（3.3+）**。
+
+> [!warning]
+>
+> 官网写的，没看懂。
+
+```ts
+// 按原样返回现有的 ref
+toRef(existingRef)
+
+// 创建一个只读的 ref，当访问 .value 时会调用此 getter 函数
+toRef(() => props.foo)
+
+// 从非函数的值中创建普通的 ref
+// 等同于 ref(1)
+toRef(1)
+```
+
+### toRefs
+
+将一个响应式对象转换为普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。
+
+常用于 ref，reactive 对象的解构。
+
+> [!tip]
+>
+> 每个单独的 ref 都是使用 `toRef()` 创建的。可以看作是多个 `toRef()` 的语法糖。
+
+```ts
+import { ref, toRefs } from "vue"
+
+const state = ref({ foo: 1, bar: 2 })
+
+const { foo, bar } = toRefs(state.value)
+foo // Ref<1>
+bar // Ref<2>
+```
+
+### toRaw
+
+返回 Proxy 的原始对象。
+
+用于让 reactive 对象退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
+
+```ts
+import { reactive, toRaw } from "vue"
+
+const origin = { foo: 1, bar: 2 }
+const state = reactive(origin)
+
+state // Reactive<{ foo: 1, bar: 2 }>
+toRaw(state) // { foo: 1, bar: 2 }
+toRaw(state) === origin // true
+```
+
 ## 响应式原理 v3
 
 > [!warning]
@@ -321,7 +436,7 @@ watch(() => person.value.skills, () => {}, {
 
 ### effect
 
-用于触发视图更新。首先在全局环境下创建一个 weakMap 容器，用于存储并建立 target 与 depsMap 之间的关系。
+用于触发视图更新。在全局环境下创建一个 weakMap 容器，用于存储并建立 target 与 depsMap 之间的关系。
 
 ```ts
 /* effect.ts */
@@ -348,6 +463,8 @@ const targetMap = new WeakMap<object, DepsMap>()
 用于收集依赖，触发时将副作用函数存到 deps 中，等待将来触发依赖更新时执行。
 
 ```ts
+/* effect.ts */
+
 const track = (target: object, key: unknown) => {
   let depsMap = targetMap.get(target)
   if (!depsMap) {
@@ -370,6 +487,8 @@ const track = (target: object, key: unknown) => {
 用于更新依赖，将 deps 中的副作用函数取出执行。
 
 ```ts
+/* effect.ts */
+
 const trigger = (target: object, key: unknown) => {
   const depsMap = targetMap.get(target)
   if (!depsMap) return
@@ -383,7 +502,7 @@ const trigger = (target: object, key: unknown) => {
 
 ### reactive
 
-**数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 函数收集依赖，修改数据时执行 trigger 更新依赖。
+**数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 函数收集依赖，修改数据时执行 trigger 函数更新依赖。
 
 ```ts
 /* reactive.ts */
@@ -394,18 +513,18 @@ const isObject = (target: any) => Object.prototype.toString.call(target) === "[o
 
 const reactive = <T extends object>(target: T): T => {
   return new Proxy(target, {
-    get(target: T, p: string | symbol, receiver: any) {
-      const result = Reflect.get(target, p, receiver) as object
-      track(target, p)
+    get(target: T, key: string | symbol, receiver: any) {
+      const result = Reflect.get(target, key, receiver) as object
+      track(target, key)
       if (isObject(result)) {
         return reactive(result)
       }
       return result
     },
     
-    set(target: T, p: string | symbol, value: any, receiver: any) {
-      const result = Reflect.set(target, p, value, receiver)
-      trigger(target, p)
+    set(target: T, key: string | symbol, value: any, receiver: any) {
+      const result = Reflect.set(target, key, value, receiver)
+      trigger(target, key)
       return result
     }
   })
@@ -413,6 +532,8 @@ const reactive = <T extends object>(target: T): T => {
 ```
 
 ```ts
+/* main.ts */
+
 import { reactive } from "./reactive.js"
 import { effect } from "./effect.js"
 
@@ -541,12 +662,12 @@ const patchUnkeyedChildren = (
   const newLength = c2.length
   const commonLength = Math.min(oldLength, newLength)
   let i
-  // 1. 通过 for 循环对每个新节点进行 patch, 并重新渲染元素
+  // 1. 通过 for 循环对每个新节点进行 patch，并重新渲染元素
   for (i = 0; i < commonLength; i++) {
     const nextChild = (c2[i] = optimized
       ? cloneIfMounted(c2[i] as VNode)
       : normalizeVNode(c2[i]))
-    // 无 key 的情况下, 新节点会直接把旧节点替换掉
+    // 无 key 的情况下，新节点会直接把旧节点替换掉
     patch(
       c1[i],
       nextChild,
@@ -559,7 +680,7 @@ const patchUnkeyedChildren = (
       optimized,
     )
   }
-  // 2. 如果旧节点有剩余, 进行删除操作
+  // 2. 如果旧节点有剩余，进行删除操作
   if (oldLength > newLength) {
     // 删除旧节点
     unmountChildren(
@@ -571,7 +692,7 @@ const patchUnkeyedChildren = (
       commonLength,
     )
   }
-  // 3. 如果新节点有剩余, 进行新增操作
+  // 3. 如果新节点有剩余，进行新增操作
   else {
     // 增加新节点
     mountChildren(
@@ -674,7 +795,7 @@ const patchKeyedChildren = (
     e2--
   }
   
-  // 3. 如果新节点有剩余, 就需要挂载新节点
+  // 3. 如果新节点有剩余，就需要挂载新节点
   // (a b)
   // (a b) c
   // i = 2, e1 = 1, e2 = 2
@@ -704,7 +825,7 @@ const patchKeyedChildren = (
     }
   }
   
-  // 4. 如果旧节点有剩余, 就需要卸载旧节点
+  // 4. 如果旧节点有剩余，就需要卸载旧节点
   // (a b) c
   // (a b)
   // i = 2, e1 = 2, e2 = 1
@@ -749,7 +870,7 @@ const patchKeyedChildren = (
       }
     }
     
-    // 5.2 遍历旧节点, 并对其进行 patch 比较
+    // 5.2 遍历旧节点，并对其进行 patch 比较
     // 匹配节点并删除不存在的节点
     let j
     let patched = 0
@@ -767,7 +888,7 @@ const patchKeyedChildren = (
     
     for (i = s1; i <= e1; i++) {
       const prevChild = c1[i]
-      // 如果有多余的旧节点, 就将其删除
+      // 如果有多余的旧节点，就将其删除
       if (patched >= toBePatched) {
         unmount(prevChild, parentComponent, parentSuspense, true)
         continue
@@ -787,7 +908,7 @@ const patchKeyedChildren = (
           }
         }
       }
-      // 如果新节点不包含旧节点, 也将其删除
+      // 如果新节点不包含旧节点，也将其删除
       if (newIndex === undefined) {
         unmount(prevChild, parentComponent, parentSuspense, true)
       } else {
@@ -795,7 +916,7 @@ const patchKeyedChildren = (
         if (newIndex >= maxNewIndexSoFar) {
           maxNewIndexSoFar = newIndex
         }
-        // 如果节点出现交叉, 说明是要移动去求最长递增子序列
+        // 如果节点出现交叉，说明是要移动去求最长递增子序列
         else {
           moved = true
         }
@@ -817,7 +938,7 @@ const patchKeyedChildren = (
     // 5.3 move and mount
     // generate longest stable subsequence only when nodes have moved
     const increasingNewIndexSequence = moved
-    // 贪心 + 二分查找, 求最长递增子序列
+    // 贪心 + 二分查找，求最长递增子序列
       ? getSequence(newIndexToOldIndexMap)
       : EMPTY_ARR
     j = increasingNewIndexSequence.length - 1
@@ -841,7 +962,7 @@ const patchKeyedChildren = (
           optimized,
         )
       } else if (moved) {
-        // 如果当前遍历的这个节点不在子序列, 就要进行移动
+        // 如果当前遍历的这个节点不在子序列，就要进行移动
         if (j < 0 || i !== increasingNewIndexSequence[j]) {
           move(nextChild, container, anchor, MoveType.REORDER)
         }
@@ -979,7 +1100,7 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
 ### defineProps
 
-接收父组件传递的属性。
+接受父组件传递的属性。
 
 ```ts
 const props = defineProps<{
@@ -991,7 +1112,7 @@ props.count // count: 1
 
 ### defineEmits
 
-接收父组件传递的事件（可以传递原生事件）。
+接受父组件传递的事件（可以传递原生事件）。
 
 ```ts
 const emits = defineEmits<{
@@ -1013,7 +1134,7 @@ emits("update", "ts")
 
 父子组件多个数据的双向绑定。
 
-当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `v-model:prop` 模式。
+当使用 `:prop` + `@update:prop="prop = $event"` 模式时，可以替换为 `v-model:prop` 模式。
 
 ```vue
 <!-- Parent.vue -->
@@ -1035,7 +1156,7 @@ attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量�
 
 > [!warning]
 >
-> 不包含被 defineProps 接收的数据和被 defineEmits 接收的事件。
+> 不包含被 defineProps 接受的数据和被 defineEmits 接受的事件。
 
 ```vue
 <Comp v-bind="attrs" />
@@ -1094,7 +1215,7 @@ const count = inject("count")
 >
 > 父子组件间通信，只能传递一个数据与事件。
 
-当使用 `:value` + `@input` 模式时, 可以替换为 `v-model` 模式。
+当使用 `:value` + `@input` 模式时，可以替换为 `v-model` 模式。
 
 子组件为 input。
 
@@ -1130,7 +1251,7 @@ const count = inject("count")
 >
 > 父子组件间通信，可以传递多个数据与事件。
 
-当使用 `:prop` + `@update:prop="prop = $event"` 模式时, 可以替换为 `:prop.sync` 模式。
+当使用 `:prop` + `@update:prop="prop = $event"` 模式时，可以替换为 `:prop.sync` 模式。
 
 ```vue
 <!-- Parent.vue -->
@@ -1152,7 +1273,7 @@ const count = inject("count")
 
 ```js
 beforeCreate() {
-  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线, 所有组件都能访问
+  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线，所有组件都能访问
 }
 ```
 
@@ -1202,7 +1323,7 @@ Pubsub.publish("my-message", [...this.args]) // 发布消息
 >
 > 祖孙组件间通信。
 
-`$attrs` 包含了父组件传递的数据（不包含被 props 接收的数据）。可以通过 `v-bind` 批量传递给内部组件。
+`$attrs` 包含了父组件传递的数据（不包含被 props 接受的数据）。可以通过 `v-bind` 批量传递给内部组件。
 
 ```vue
 <Comp v-bind="$attrs" />
@@ -1237,7 +1358,7 @@ provide() {
 }
 ```
 
-在任何后代组件里，我们都可以使用 inject 选项来接收 provide 提供的数据和方法。
+在任何后代组件里，我们都可以使用 inject 选项来接受 provide 提供的数据和方法。
 
 ```js
 inject: ["count", "increment"]
@@ -1288,7 +1409,7 @@ inject: ["count", "increment"]
 >
 > 未注册 name 属性的 `<slot>` 默认值为 default，即默认插槽。
 
-父组件：用 `<template v-slot:name>` 包裹指定元素, 可以替换对应 name 属性的 `<slot>`。
+父组件：用 `<template v-slot:name>` 包裹指定元素，可以替换对应 name 属性的 `<slot>`。
 
 > [!warning]
 >
@@ -1331,7 +1452,7 @@ inject: ["count", "increment"]
 
 子组件：通过 `<slot :prop="data">` 传递数据。
 
-父组件：使用 `<template v-slot="slotProps">` 来接收子组件传递的数据。
+父组件：使用 `<template v-slot="slotProps">` 来接受子组件传递的数据。
 
 > [!note]
 >
@@ -1579,7 +1700,7 @@ routes: [
 <!-- 字符串写法 -->
 <router-link to="/user/1">User</router-link>
 
-<!-- 对象写法, params 参数只支持 name -->
+<!-- 对象写法，params 参数只支持 name -->
 <router-link :to="{ name: 'User', params: { id: 1 } }">User</router-link>
 ```
 
@@ -1636,7 +1757,7 @@ routes: [
 
 将函数返回的对象中所有属性以 props 的形式传递给组件。
 
-**注意**：可以接收 `$route`，既能传递 params 参数，又能传递 query 参数，又能传递静态参数。
+**注意**：可以接受 `$route`，既能传递 params 参数，又能传递 query 参数，又能传递静态参数。
 
 ```js
 routes: [
@@ -1658,7 +1779,7 @@ routes: [
 router.beforeEach((to, from, next) => {
   to // 目标路由的 `$route` 对象
   from // 原路由的 `$route` 对象
-  next() // 放行, 下一步
+  next() // 放行，下一步
   next("/login") // 重定向
 })
 ```
@@ -1669,7 +1790,7 @@ router.beforeEach((to, from, next) => {
 
 #### router.afterEach
 
-在路由跳转后触发，注意：不会接收 next 参数。
+在路由跳转后触发，注意：不会接受 next 参数。
 
 #### beforeEnter
 
@@ -1858,7 +1979,7 @@ methods: {
 
 #### 处理事件
 
-事件处理函数可以接收两个参数：
+事件处理函数可以接受两个参数：
 
 - state：全局状态
 
@@ -1889,7 +2010,7 @@ methods: {
 
 #### 计算属性
 
-计算属性函数可以接收两个参数：
+计算属性函数可以接受两个参数：
 
 - state：全局状态
 
@@ -1940,7 +2061,7 @@ methods: {
 
 #### 异步处理函数
 
-异步处理函数可以接收两个参数：
+异步处理函数可以接受两个参数：
 
 - context：上下文对象，具有与 store 相同的方法
 
