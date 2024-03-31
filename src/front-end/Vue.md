@@ -52,10 +52,7 @@ class RefImpl<T> {
   public dep?: Dep = undefined
   public readonly __v_isRef = true
   
-  constructor(
-    value: T,
-    public readonly __v_isShallow: boolean
-  ) {
+  constructor(value: T, public readonly __v_isShallow: boolean) {
     this._rawValue = __v_isShallow ? value : toRaw(value)
     // 如果是 shallowRef，直接返回 .value 的值，如果 value 是引用类型，不会做进一步的响应式
     // 如果是 ref，会调用 toReactive，进行深层次的响应式
@@ -70,12 +67,11 @@ class RefImpl<T> {
   }
   
   set value(newVal) {
-    const useDirectValue = this.__v_isShallow || isShallow(newVal) || isReadonly(newVal)
-    newVal = useDirectValue ? newVal : toRaw(newVal)
+    newVal = this.__v_isShallow ? newVal : toRaw(newVal)
     if (hasChanged(newVal, this._rawValue)) {
       this._rawValue = newVal
-      this._value = useDirectValue ? newVal : toReactive(newVal)
-      triggerRefValue(this, DirtyLevels.Dirty, newVal) // 进行依赖的更新
+      this._value = this.__v_isShallow ? newVal : toReactive(newVal)
+      triggerRefValue(this, newVal) // 进行依赖的更新
     }
   }
 }
@@ -194,7 +190,11 @@ const full = computed({
 })
 ```
 
-**源码解析**。调用 `computed()` 时，会根据传入的参数判断是否使用 setter，然后将 getter 和 setter 传入 ComputedRefImpl 类。在这个类中，
+**源码解析**。调用 `computed()` 时，会根据传入的参数判断是否使用 setter，然后将 getter 和 setter 传入 ComputedRefImpl 类。在这个类中，定义了一个脏值：`_dirty`，标记是否需要重新计算。如果 `_dirty` 为 true，则进行重新计算；否则直接将 `_value` 返回，并将结果缓存，下一次访问时，如果 `_dirty` 为 false，则从缓存中取值。这种机制称为**脏值检测**。
+
+> [!important]
+>
+> 只有当依赖发生变化的时候，`_dirty` 才会被设置为 true，这时候就需要重新计算结果。
 
 ```ts
 /* reactivity/src/computed.ts */
@@ -216,7 +216,7 @@ function computed<T>(
     // 不允许设置 setter
     setter = __DEV__
       ? () => {
-          warn('Write operation failed: computed value is readonly')
+          console.warn('Write operation failed: computed value is readonly')
         }
       : NOOP
   }
@@ -241,35 +241,28 @@ function computed<T>(
 class ComputedRefImpl<T> {
   public dep?: Dep = undefined
   
-  private _value!: T
+  private _value!: T // 真正读取的值
   public readonly effect: ReactiveEffect<T>
   
   public readonly __v_isRef = true
   public readonly [ReactiveFlags.IS_READONLY]: boolean = false
   
+  public _dirty = true // 脏值，是否需要重新计算
   public _cacheable: boolean
   
-  /**
-   * Dev only
-   */
-  _warnRecursive?: boolean
-  
   constructor(
-    private getter: ComputedGetter<T>,
+    getter: ComputedGetter<T>,
     private readonly _setter: ComputedSetter<T>,
     isReadonly: boolean,
     isSSR: boolean
   ) {
-    this.effect = new ReactiveEffect(
-      () => getter(this._value),
-      () =>
-        triggerRefValue(
-          this,
-          this.effect._dirtyLevel === DirtyLevels.MaybeDirty_ComputedSideEffect
-            ? DirtyLevels.MaybeDirty_ComputedSideEffect
-            : DirtyLevels.MaybeDirty
-        )
-    )
+    // 只有依赖发生变化的时候，才会执行，并将脏值设为 true，表示需要进行重新计算了
+    this.effect = new ReactiveEffect(getter, () => {
+      if (!this._dirty) {
+        this._dirty = true
+        triggerRefValue(this)
+      }
+    })
     this.effect.computed = this
     this.effect.active = this._cacheable = !isSSR
     this[ReactiveFlags.IS_READONLY] = isReadonly
@@ -278,18 +271,11 @@ class ComputedRefImpl<T> {
   get value() {
     // the computed ref may get wrapped by other proxies e.g. readonly() #3376
     const self = toRaw(this)
-    if (
-      (!self._cacheable || self.effect.dirty) &&
-      hasChanged(self._value, (self._value = self.effect.run()!))
-    ) {
-      triggerRefValue(self, DirtyLevels.Dirty)
-    }
     trackRefValue(self)
-    if (self.effect._dirtyLevel >= DirtyLevels.MaybeDirty_ComputedSideEffect) {
-      if (__DEV__ && (__TEST__ || this._warnRecursive)) {
-        warn(COMPUTED_SIDE_EFFECT_WARN, `\n\ngetter: `, this.getter)
-      }
-      triggerRefValue(self, DirtyLevels.MaybeDirty_ComputedSideEffect)
+    // 如果 _dirty 为 true，则进行重新计算；否则直接返回
+    if (self._dirty || !self._cacheable) {
+      self._dirty = false
+      self._value = self.effect.run()! // run() 就是读取 computed() 的返回值
     }
     return self._value
   }
@@ -297,16 +283,6 @@ class ComputedRefImpl<T> {
   set value(newValue: T) {
     this._setter(newValue)
   }
-  
-  // #region polyfill _dirty for backward compatibility third party code for Vue <= 3.3.x
-  get _dirty() {
-    return this.effect.dirty
-  }
-  
-  set _dirty(v) {
-    this.effect.dirty = v
-  }
-  // #endregion
 }
 ```
 
@@ -502,7 +478,7 @@ const trigger = (target: object, key: unknown) => {
 
 ### reactive
 
-**数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 函数收集依赖，修改数据时执行 trigger 函数更新依赖。
+**数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 收集依赖，修改数据时执行 trigger 更新依赖。
 
 ```ts
 /* reactive.ts */
