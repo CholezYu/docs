@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-01
+date: 2024-04-02
 ---
 
 ## 响应式：核心
@@ -164,7 +164,7 @@ function createReactiveObject(
 
 ### computed
 
-函数式写法。接受一个 getter 函数，返回一个只读的 ref 对象。
+**函数式写法**。接受一个 getter 函数，返回一个只读的 ref 对象。
 
 ```ts
 import { ref, computed } from "vue"
@@ -174,7 +174,7 @@ const count = ref(1)
 const double = computed(() => count.value * 2)
 ```
 
-选项式写法。接受一个带有 `get` 和 `set` 函数的对象，返回一个可写的 ref 对象。
+**选项式写法**。接受一个带有 `get` 和 `set` 函数的对象，返回一个可写的 ref 对象。
 
 ```ts
 import { ref, computed } from "vue"
@@ -288,41 +288,106 @@ class ComputedRefImpl<T> {
 
 ### watch
 
-监听 ref 对象（基本数据类型），实际上是监听 value 属性的改变。
+监听 ref（基本类型）。
 
 ```ts
-watch(count, () => {})
+import { ref, watch } from "vue"
+
+const count = ref(0)
+
+watch(count, (value, oldValue) => {})
+
+const fooRef = ref()
+const barRef = ref()
+
+// 当侦听多个来源时，回调函数接受两个数组，分别对应来源数组中的新值和旧值
+watch([fooRef, barRef], ([foo, bar], [oldFoo, oldBar]) => {
+  /* ... */
+})
 ```
 
-监听 ref 对象（对象类型），可以监听对象本身的改变。如果需要监听对象内部结构的改变，需要开启深度监听。
+监听 ref（引用类型）。如果需要监听对象内部结构的改变，需要开启深度监听。
+
+> [!warning]
+>
+> 这种方式监听到的新值和旧值是一样的，不推荐使用。
 
 ```ts
-watch(person, () => {}, {
+import { ref, watch } from "vue"
+
+const state = ref({ count: 0 })
+
+watch(state, (value, oldValue) => {
+  value === oldValue // true
+}, {
   deep: true
 })
 ```
 
-监听 ref 对象的 value 属性（基本数据类型）。需要将监听的数据写成函数式写法。
+监听 `ref.value`（基本类型）。需要使用 getter 函数。
 
 ```ts
-watch(() => count.value, () => {})
-```
+import { ref, watch } from "vue"
 
-监听 ref 对象的 value 属性（对象类型）。不需要写成函数式写法，并且默认深度监听。
+const count = ref(0)
 
-```ts
-watch(count.value, () => {})
-```
-
-监听 ref 对象中 proxy 代理对象的属性。
-
-```ts
-watch(() => person.value.skills, () => {}, {
-  deep: true
+watch(() => count.value, (value, oldValue) => {
+  /* ... */
 })
 ```
 
-## 响应式：工具
+监听 `ref.value`（引用类型）。不需要使用 getter 函数，并且默认开启深度监听。
+
+```ts
+import { ref, watch } from "vue"
+
+const state = ref({ count: 0 })
+
+watch(state.value, (value, oldValue) => {
+  /* ... */
+})
+```
+
+监听 reactive，默认开启深度监听。
+
+```ts
+import { reactive, watch } from "vue"
+
+const state = reactive({ count: 0 })
+
+watch(state, (value, oldValue) => {
+  /* ... */
+})
+```
+
+**源码解析**。
+
+```ts
+/* runtime-core/src/apiWatch.ts */
+
+function watch<T = any, Immediate extends Readonly<boolean> = false>(
+  source: T | WatchSource<T>,
+  cb: any,
+  options?: WatchOptions<Immediate>
+): WatchStopHandle {
+  if (__DEV__ && !isFunction(cb)) {
+    warn(
+      `\`watch(fn, options?)\` signature has been moved to a separate API. ` +
+        `Use \`watchEffect(fn, options?)\` instead. \`watch\` now only ` +
+        `supports \`watch(source, cb, options?) signature.`
+    )
+  }
+  return doWatch(source as any, cb, options)
+}
+```
+
+### watchEffect
+
+- flush：pre（组件更新之前执行，默认）、sync（同步执行）、post（组件更新之后执行）。
+
+- onTrack / onTrigger：调试侦听器的依赖。
+
+## 响应式：进阶
 
 ### toRef
 
