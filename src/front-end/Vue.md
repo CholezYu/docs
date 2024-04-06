@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-02
+date: 2024-04-07
 ---
 
 ## 响应式：核心
@@ -23,7 +23,7 @@ count.value++
 count.value // 1
 ```
 
-**源码解析**。调用 `ref()` 时，会通过 `createRef()` 创建一个 RefImpl 实例。在 RefImpl 类的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
+**源码解析**。调用 `ref()` 时，会通过 `createRef()` 创建一个 RefImpl 实例，在 Class RefImpl 的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
 
 ```ts
 /* reactivity/src/ref.ts */
@@ -90,7 +90,7 @@ state // Reactive<{ count: 0 }>
 state.count // 0
 ```
 
-**源码解析**。调用 `reactive()` 时，会通过 `createReactiveObject()` 创建一个 reactive 代理对象，在这个函数中，会进行一系列的判断：1. 传入的值是否是基本类型，是的话报出警告；2. 传入的值是否被代理过；3. 代理对象是否被缓存；4. 代理对象是否在白名单中。如果以上条件都不满足，则将传入的值进行 Proxy 代理，然后通过 WeakMap 进行缓存。
+**源码解析**。调用 `reactive()` 时，会通过 `createReactiveObject()` 创建一个 reactive，在这个方法中，进行一些判断：1. 传入的值是否是基本类型，是的话报出警告；2. 传入的值是否被代理过；3. 代理对象是否被缓存；4. 代理对象是否在白名单中。如果以上条件都不满足，则将传入的值进行 Proxy 代理，然后通过 WeakMap 进行缓存。
 
 ```ts
 /* reactivity/src/reactive.ts */
@@ -288,6 +288,10 @@ class ComputedRefImpl<T> {
 
 ### watch
 
+> [!warning]
+>
+> 监听引用类型时，新值和旧值是一样的。下面源码解析中会讲到，watch 更新旧值的方式是，直接将之前的新值赋值给现在的旧值，如果是引用类型的话，就会共用同一个指针。所以推荐**监听具体的某个属性**。
+
 监听 ref（基本类型）。
 
 ```ts
@@ -295,22 +299,20 @@ import { ref, watch } from "vue"
 
 const count = ref(0)
 
-watch(count, (value, oldValue) => {})
+watch(count, (value, oldValue) => {
+  /* ... */
+})
 
 const fooRef = ref()
 const barRef = ref()
 
-// 当侦听多个来源时，回调函数接受两个数组，分别对应来源数组中的新值和旧值
+// 监听多个源，回调函数接受两个数组，分别对应来源数组中的新值和旧值
 watch([fooRef, barRef], ([foo, bar], [oldFoo, oldBar]) => {
   /* ... */
 })
 ```
 
 监听 ref（引用类型）。如果需要监听对象内部结构的改变，需要开启深度监听。
-
-> [!warning]
->
-> 这种方式监听到的新值和旧值是一样的，不推荐使用。
 
 ```ts
 import { ref, watch } from "vue"
@@ -344,7 +346,7 @@ import { ref, watch } from "vue"
 const state = ref({ count: 0 })
 
 watch(state.value, (value, oldValue) => {
-  /* ... */
+  value === oldValue // true
 })
 ```
 
@@ -356,11 +358,21 @@ import { reactive, watch } from "vue"
 const state = reactive({ count: 0 })
 
 watch(state, (value, oldValue) => {
-  /* ... */
+  value === oldValue // true
 })
 ```
 
-**源码解析**。
+**源码解析**。调用 `watch()` 时，其实就是调用核心函数 `doWatch()`。以下是 `doWatch()` 的黄金解析：
+
+格式化 source，先初始化一个 getter，然后对 source 进行判断：如果 source 是一个 ref，则将 `ref.value` 赋值给 getter；如果 source 是一个 reactive，那么直接将其赋值给 getter，并将 deep 设置为 true，也就是默认开启深度监听；如果 source 是一个数组，就会对它进行遍历（如果数组元素是 ref，就返回它的 value；如果是 reactive，就会调用 `traverse()`，递归地对 reactive 中的每个属性进行监听，也就是**深度监听**；如果是一个函数，则对它进行加工，这里不做研究）；如果 source 是一个函数，则进行加工，有 cb 就执行 watch，没有就执行 watchEffect，不做深入研究。
+
+判断 deep 选项，如果为 true，就调用 `traverse()` 进行深度监听。
+
+初始化 scheduler（调度器）并判断 flush 选项，如果值为 "sync"，则将任务赋值给调度器，同步执行（任务）；如果值为 "post"，则在组件更新之后执行（任务）；如果值为 "pre"，则在组件更新之前执行（任务），**它也是默认值**。然后收集依赖，等待任务的执行。
+
+判断 immediate 选项，如果为 true，则立即执行（任务）。
+
+执行任务时，先获取新值，然后判断如果 immediate 为 true，则将旧值赋值为 undefined；如果没有开启 immediate，则给旧值做初始化，也就是将 `ref(value)` 的默认值赋值给旧值。最后更新旧值，将新值直接赋值给旧值（下一次使用），如果是引用类型的话，就会共用同一个指针，所以会导致之后的新值和旧值都相同。
 
 ```ts
 /* runtime-core/src/apiWatch.ts */
@@ -370,14 +382,173 @@ function watch<T = any, Immediate extends Readonly<boolean> = false>(
   cb: any,
   options?: WatchOptions<Immediate>
 ): WatchStopHandle {
-  if (__DEV__ && !isFunction(cb)) {
-    warn(
-      `\`watch(fn, options?)\` signature has been moved to a separate API. ` +
-        `Use \`watchEffect(fn, options?)\` instead. \`watch\` now only ` +
-        `supports \`watch(source, cb, options?) signature.`
-    )
-  }
+  // ...
   return doWatch(source as any, cb, options)
+}
+
+function doWatch(
+  source: WatchSource | WatchSource[] | WatchEffect | object,
+  cb: WatchCallback | null,
+  { immediate, deep, flush, onTrack, onTrigger }: WatchOptions = EMPTY_OBJ
+): WatchStopHandle {
+  // ...
+  
+  const instance = currentInstance
+  
+  // 初始化 getter
+  let getter: () => any
+  let forceTrigger = false
+  let isMultiSource = false
+  
+  // 如果 source 是 ref，将 `() => ref.value` 赋值给 getter
+  if (isRef(source)) {
+    getter = () => source.value
+    forceTrigger = isShallow(source)
+  }
+  // 如果 source 是 reactive，将 `() => reactive` 赋值给 getter
+  else if (isReactive(source)) {
+    getter = () => source
+    deep = true
+  }
+  // 如果 source 是数组
+  else if (isArray(source)) {
+    isMultiSource = true
+    forceTrigger = source.some(isReactive)
+    getter = () =>
+      source.map(s => {
+        // 如果是 ref，返回 `ref.value`
+        if (isRef(s)) {
+          return s.value
+        }
+        // 如果是 reactive，调用 `traverse()`，递归地对 reactive 中的每个属性进行监听
+        else if (isReactive(s)) {
+          return traverse(s)
+        }
+        // 如果是一个函数，进行加工
+        else if (isFunction(s)) {
+          return callWithErrorHandling(s, instance, ErrorCodes.WATCH_GETTER)
+        }
+      })
+  }
+  // 如果 source 是一个函数，进行加工
+  else if (isFunction(source)) {
+    // 如果有 cb，执行 watch
+    if (cb) {
+      getter = () => callWithErrorHandling(source, instance, ErrorCodes.WATCH_GETTER)
+    }
+    // 如果没有 cb，执行 watchEffect
+    else {
+      getter = () => {
+        if (instance && instance.isUnmounted) {
+          return
+        }
+        if (cleanup) {
+          cleanup()
+        }
+        return callWithAsyncErrorHandling(
+          source,
+          instance,
+          ErrorCodes.WATCH_CALLBACK,
+          [onCleanup]
+        )
+      }
+    }
+  }
+  
+  // 如果 deep 选项为 true，调用 `traverse()` 进行深度监听
+  if (cb && deep) {
+    const baseGetter = getter
+    getter = () => traverse(baseGetter())
+  }
+  
+  let cleanup: () => void
+  let onCleanup: OnCleanup = (fn: () => void) => {
+    cleanup = effect.onStop = () => {
+      callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP)
+    }
+  }
+  
+  // ...
+  
+  // 初始化旧值
+  let oldValue = isMultiSource ? [] : INITIAL_WATCHER_VALUE
+  // 调度任务
+  const job: SchedulerJob = () => {
+    if (!effect.active) {
+      return
+    }
+    if (cb) {
+      // 获取新值
+      const newValue = effect.run()
+      if (deep || forceTrigger /* || ...一些条件 */) {
+        if (cleanup) {
+          cleanup()
+        }
+        // 这个就是调用 `watch(source, cb)` 时的回调函数 cb 及参数
+        callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
+          newValue,
+          // 如果 immediate 为 true，将旧值赋值为 undefined，否则将 `ref()` 的默认值赋值给旧值
+          oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
+          onCleanup
+        ])
+        // 更新旧值，将新值直接赋值给旧值，如果是引用类型的话，就会共用同一个指针
+        oldValue = newValue
+      }
+    } else {
+      // watchEffect
+      effect.run()
+    }
+  }
+  
+  job.allowRecurse = !!cb
+
+  // 初始化调度器
+  let scheduler: EffectScheduler
+  if (flush === 'sync') {
+    // 同步执行
+    scheduler = job as any
+  } else if (flush === 'post') {
+    // 在组件更新之后执行
+    scheduler = () => queuePostRenderEffect(job, instance && instance.suspense)
+  } else {
+    // default: 'pre'
+    scheduler = () => {
+      if (!instance || instance.isMounted) {
+        // 在组件更新之前执行
+        queuePreFlushCb(job)
+      } else {
+        job()
+      }
+    }
+  }
+  
+  // 收集依赖
+  const effect = new ReactiveEffect(getter, scheduler)
+  
+  if (cb) {
+    // 立即执行
+    if (immediate) {
+      job()
+    }
+    // 给旧值做初始化
+    else {
+      oldValue = effect.run()
+    }
+  } else if (flush === 'post') {
+    queuePostRenderEffect(
+      effect.run.bind(effect),
+      instance && instance.suspense
+    )
+  } else {
+    effect.run()
+  }
+  
+  return () => {
+    effect.stop()
+    if (instance && instance.scope) {
+      remove(instance.scope.effects!, effect)
+    }
+  }
 }
 ```
 
@@ -639,7 +810,7 @@ effect(() => {
 
 - 当发布者发布信息的时候，先传到订阅中心，再由订阅中心统一传给订阅者。
 
-### Vue 数据响应式原理
+### 响应式原理
 
 - 当 data 中的数据发生变化的时候，视图也会随之更新。
 

@@ -30,7 +30,7 @@ date: 2023-12-19
 
 
 
-- 查看 npm 包的全局安装路径：`npm prefix -g `
+- 查看 npm 包的全局安装路径：`npm prefix -g`
 
 - 查看 npm 包的全局缓存路径：`npm config get cache`
 
@@ -1380,7 +1380,7 @@ const decoded = jwt.verify(token, "secret")
 
 ```js
 app.post("/login", (req, res) => {
-  if (/* 用户名密码正确 */) {
+  if (true /* 用户名密码正确 */) {
     const token = jwt.sign(data, "secret", { expiresIn: "7 days" })
     
     res.send({ status: 200, data: { token } })
