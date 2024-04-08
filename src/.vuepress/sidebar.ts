@@ -118,7 +118,7 @@ export default sidebar({
         },
         {
           text: "ECharts",
-          icon: "javascript",
+          icon: "typescript",
           link: "ECharts"
         },
         {
