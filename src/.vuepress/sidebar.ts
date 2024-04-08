@@ -99,16 +99,6 @@ export default sidebar({
           link: "MySQL"
         },
         {
-          text: "JDBC",
-          icon: "java",
-          link: "JDBC"
-        },
-        {
-          text: "JavaWeb",
-          icon: "java",
-          link: "JavaWeb"
-        },
-        {
           text: "Python",
           icon: "python",
           link: "Python"
@@ -122,9 +112,19 @@ export default sidebar({
       collapsible: true,
       children: [
         {
+          text: "Lodash",
+          icon: "javascript",
+          link: "Lodash"
+        },
+        {
           text: "ECharts",
           icon: "javascript",
           link: "ECharts"
+        },
+        {
+          text: "Exceljs",
+          icon: "typescript",
+          link: "Exceljs"
         },
         {
           text: "WebGL",
@@ -135,11 +135,6 @@ export default sidebar({
           text: "Threejs",
           icon: "javascript",
           link: "Threejs"
-        },
-        {
-          text: "Exceljs",
-          icon: "javascript",
-          link: "Exceljs"
         }
       ]
     },

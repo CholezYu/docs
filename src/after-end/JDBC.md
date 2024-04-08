@@ -1,6 +1,0 @@
----
-title: JDBC
-icon: java
----
-
-## 

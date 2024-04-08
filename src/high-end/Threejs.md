@@ -1,6 +1,6 @@
 ---
 title: Threejs
-icon: javascript
+icon: /icon/threejs.svg
 ---
 
 ## 

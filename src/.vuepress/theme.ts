@@ -15,7 +15,7 @@ export default hopeTheme({
   iconAssets: "iconfont",
   // iconAssets: "iconify",
   
-  logo: "https://cholez.gitee.io/docs/icon.svg",
+  logo: "https://cholez.gitee.io/docs/icon/icon.svg",
   
   favicon: "favicon.ico",
   

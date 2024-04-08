@@ -484,7 +484,7 @@ function doWatch(
         if (cleanup) {
           cleanup()
         }
-        // 这个就是调用 `watch(source, cb)` 时的回调函数 cb 及参数
+        // 这个就是调用 `watch()` 时的回调函数 cb 以及参数 newValue, oldValue, onCleanup
         callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
           newValue,
           // 如果 immediate 为 true，将旧值赋值为 undefined，否则将 `ref()` 的默认值赋值给旧值
@@ -551,12 +551,6 @@ function doWatch(
   }
 }
 ```
-
-### watchEffect
-
-- flush：pre（组件更新之前执行，默认）、sync（同步执行）、post（组件更新之后执行）。
-
-- onTrack / onTrigger：调试侦听器的依赖。
 
 ## 响应式：进阶
 
@@ -642,9 +636,9 @@ toRaw(state) === origin // true
 
 ## 响应式原理 v3
 
-> [!warning]
+> [!note]
 >
-> 以下函数全部为自定义实现（简化版）。
+> 以下全部为自定义实现（简化版）。
 
 ### effect
 
@@ -1254,7 +1248,11 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 
 - key 必须满足稳定性和唯一性。
 
-## 生命周期
+## 生命周期 v3
+
+
+
+## 生命周期 v2
 
 ### 初始化流程
 

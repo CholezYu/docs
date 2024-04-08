@@ -1,6 +1,6 @@
 ---
 title: WebGL
-icon: javascript
+icon: /icon/webgl.svg
 ---
 
 ## 简单使用

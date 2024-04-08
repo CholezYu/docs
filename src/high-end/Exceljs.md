@@ -1,6 +1,6 @@
 ---
 title: Exceljs
-icon: javascript
+icon: typescript
 date: 2024-01-14
 ---
 

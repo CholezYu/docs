@@ -33,8 +33,6 @@ export default navbar([
           "Java",
           "Java-Algo",
           "MySQL",
-          "JDBC",
-          "JavaWeb",
           "Python"
         ]
       }
