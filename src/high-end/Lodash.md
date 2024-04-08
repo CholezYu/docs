@@ -1,6 +1,6 @@
 ---
 title: Lodash
-icon: /icon/lodash.svg
+icon: javascript
 date: 2024-04-08
 ---
 

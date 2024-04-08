@@ -1,6 +1,6 @@
 ---
 title: ECharts
-icon: /icon/echarts.svg
+icon: typescript
 ---
 
 ## 按需引入
