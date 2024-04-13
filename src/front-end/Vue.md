@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-07
+date: 2024-04-14
 ---
 
 ## 响应式：核心
@@ -501,7 +501,7 @@ function doWatch(
   }
   
   job.allowRecurse = !!cb
-
+  
   // 初始化调度器
   let scheduler: EffectScheduler
   if (flush === 'sync') {
@@ -830,7 +830,7 @@ effect(() => {
 
 ### 虚拟 DOM
 
-虚拟 DOM 就是通过 JS 来生成一个 AST 节点数。
+虚拟 DOM 就是通过 JS 来生成一个 AST 节点树。
 
 为什么要有虚拟 DOM？为什么不直接去操作 DOM，而是使用 JS 去描述 DOM 对象？
 
@@ -1248,10 +1248,6 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 
 - key 必须满足稳定性和唯一性。
 
-## 生命周期 v3
-
-
-
 ## 生命周期 v2
 
 ### 初始化流程
@@ -1304,20 +1300,28 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
 - 实例销毁，取消所有 watcher 订阅，与所有子组件实例断开连接，移除所有事件监听器，解绑所有指令；
 
-- 实例销毁之后，`destroyed` 触发
+- 实例销毁之后，`destroyed` 触发。
 
 ## 组件通信 v3
 
 ### defineProps
 
-接受父组件传递的属性。
+接受父组件传递的数据。
 
 ```ts
-const props = defineProps<{
+defineProps<{
   count: number
+  state: number[]
 }>()
 
-props.count // count: 1
+// 默认值
+withDefaults(defineProps<{
+  count: number
+  state: number[]
+}>(), {
+  count: 1,
+  state: () => [3, 5] // 引用类型需要使用 getter 函数
+})
 ```
 
 ### defineEmits
@@ -1326,36 +1330,107 @@ props.count // count: 1
 
 ```ts
 const emits = defineEmits<{
-  (event: "changeCount", n: number): void
   (event: "update", value: string): void
+  (event: "change", count: number): void
 }>()
 
-// 3.3+ 更简洁的语法
+// 3.3+ 具名元组语法
 const emits = defineEmits<{
-  changeCount: [id: number] // 具名元组语法
   update: [value: string]
+  change: [count: number]
 }>()
 
-emits("changeCount", 1) // count: 1 => 2
-emits("update", "ts")
+emits("update", "message")
+emits("change", 24)
 ```
 
-### v-model:prop
+### defineExpose
 
-父子组件多个数据的双向绑定。
+暴露一些数据给父组件。
 
-当使用 `:prop` + `@update:prop="prop = $event"` 模式时，可以替换为 `v-model:prop` 模式。
+```ts
+const validate = async () => { /* ... */ }
+const resetFields = () => { /* ... */ }
 
-```vue
-<!-- Parent.vue -->
-<Comp :count="count" @update:count="count = $event" />
-
-<Pagination v-model:count="count" />
+defineExpose({
+  name: "ElForm",
+  validate,
+  resetFields
+})
 ```
 
+然后我们就可以在父组件中，通过子组件实例获取到它暴露的数据。
+
 ```vue
-<!-- Comp.vue -->
-<button @click="emits('update:count', count + 1)"></button>
+<script setup lang="ts">
+  import { ref } from "vue"
+  import { ElForm } from "element-plus"
+  
+  const formRef = ref<InstanceType<typeof ElForm>>()
+  
+  const validate = () => formRef.value?.validate() // 触发表单校验
+  const reset = () => formRef.value?.resetFields() // 重置表单项
+</script>
+
+<template>
+  <ElForm ref="formRef"></ElForm>
+</template>
+```
+
+### defineModel (3.4+)
+
+`defineModel` 是一个编译宏，它会返回一个允许被修改的 ref，编译器会将其展开为以下内容：
+
+- 一个名为 `modelValue` 的 prop，它与返回的 ref 值同步；
+
+- 一个名为 `update:modelValue` 的事件，当返回的 ref 被修改时，会将其触发。
+
+也就是说，`defineModel` 可以声明一个双向绑定的 prop。
+
+如果第一个参数为字符串，它将作为 prop 的名称；否则 prop 名称默认为 `modelValue`。
+
+```vue
+<!-- 父组件 -->
+<script setup lang="ts">
+  import { ref } from "vue"
+  
+  const value = ref(0)
+  const count = ref(1)
+</script>
+
+<template>
+  <Model v-model="value" v-model:count="count" />
+</template>
+```
+
+可以通过 `v-model` 直接将返回的 ref 绑定到一个元素上。
+
+```vue
+<script setup lang=ts>
+  // 子组件
+  const modelValue = defineModel({ default: 0 }) // 默认为 modelValue
+  const modelCount = defineModel("count", { default: 1 })
+  
+  const updateValue = () => modelValue++ // 触发 "update:modelValue" 事件
+  const updateCount = () => modelCount++ // 触发 "update:count" 事件
+</script>
+
+<template>
+  <input v-model="modelValue" />
+</template>
+```
+
+在 3.4 之前，一般通过以下方式实现 prop 的“双向绑定”，这样就会显得非常繁琐。
+
+```vue
+<script setup lang="ts">
+  const props = defineProps(['modelValue'])
+  const emits = defineEmits(['update:modelValue'])
+</script>
+
+<template>
+  <input :value="modelValue" @input="emits('update:modelValue', $event.target.value)" />
+</template>
 ```
 
 ### useAttrs
@@ -1376,25 +1451,6 @@ attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量�
 import { useAttrs } from "vue"
 
 const attrs = useAttrs()
-```
-
-### defineExpose
-
-在 Vue3 中，不能使用 `$parent` 直接访问父组件，需要在父组件使用 defineExpose 暴露一些数据。
-
-```ts
-/* Parent.vue */
-defineExpose({
-  count,
-  message: "hello vue"
-})
-```
-
-这样我们就可以在子组件中通过 $parent 获取到一个代理对象，它包含了 defineExpose 暴露的数据。
-
-```vue
-<!-- Comp.vue -->
-<button @click="console.log($parent)"></button>
 ```
 
 ### provide & inject

@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-02-26
+date: 2024-04-13
 ---
 
 ## 常用类型
@@ -62,24 +62,21 @@ interface Info {
 **函数重载**。根据参数的类型执行不同的函数。
 
 ```ts
-const nums: string = [1, 2, 3]
-
 // 重载
-function fn(param: number): number[]
-function fn(param: number[]): number[]
-function fn(): number[]
+function fn(num: number): number
+function fn(str: string): number
+function fn(arr: number[]): number[]
 
 // 实现
-function fn(param?: number | number[]) {
-  if (typeof param === "number") {
-    return nums.filter(n => n === param)
+function fn(value: any) {
+  if (typeof value === "number") {
+    return value + 1
   }
-  else if (Array.isArray(param)) {
-    nums.push(...param)
-    return nums
+  else if (typeof value === "string") {
+    return value.trim()
   }
-  else {
-    return nums
+  else if (Array.isArray(value)) {
+    return [...value, 1]
   }
 }
 ```
@@ -227,6 +224,8 @@ type CustomUser = Custom<User> // => { readonly name: string, readonly age: numb
 
 infer 就是推导泛型参数。并且 infer 声明只能出现在 extends 子语句中。
 
+> [!warning]
+>
 > 暂时没看懂。
 
 ## 泛型工具
