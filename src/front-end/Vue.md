@@ -1287,122 +1287,62 @@ const count = inject("count")
 
 ### 插槽
 
-#### 默认插槽
-
-子组件：使用 `<slot>` 定义插槽。
-
-父组件：向子组件中插入 HTML，当组件渲染时，`<slot>` 将会被替换为子组件标签内的内容。
-
-> [!note]
->
-> 可以在 `<slot>` 标签内设置默认内容，当子组件标签中没有插入内容时，`<slot>` 会被替换为默认内容。
+在子组件中使用 `<slot>` 定义插槽进行**占位**。
 
 ```vue
-<!-- Parent.vue -->
-<Comp title="音乐">
-  <ul>
-    <li v-for="item in music">{{ item }}</li>
-  </ul>
-</Comp>
-
-<Comp title="电影">
-  <ul>
-    <li v-for="item in movie">{{ item }}</li>
-  </ul>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
+<!-- 子组件 -->
 <div>
-  <h2>{{ title }}</h2>
-  <slot />
+  <header>
+    <!-- 作用域插槽 -->
+    <slot name="header" :navigations />
+  </header>
+  
+  <main>
+    <!-- 默认插槽 -->
+    <slot />
+  </main>
+  
+  <footer>
+    <!-- 具名插槽 -->
+    <slot name="footer" />
+  </footer>
 </div>
 ```
 
-#### 具名插槽
-
-子组件：在 `<slot>` 中注册一个 name 属性。
-
-> [!tip]
->
-> 未注册 name 属性的 `<slot>` 默认值为 default，即默认插槽。
-
-父组件：用 `<template v-slot:name>` 包裹指定元素，可以替换对应 name 属性的 `<slot>`。
-
-> [!warning]
->
-> 最终的渲染结果不包含 `<template>`。
->
-> 任何没有被包裹在带有 v-slot 的 `<template>` 中的内容都会被视为默认插槽的内容。
->
-> v-slot 只能用于 `<template>` 或组件。
+在父组件中，`<slot>` 将会被替换为子组件标签内的内容。
 
 ```vue
-<!-- Parent.vue -->
-<Comp>
-  <template v-slot:music>
-    <ul>
-      <li v-for="item in music">{{ item }}</li>
-    </ul>
+<!-- 父组件 -->
+<MyComponent>
+  <!-- 作用域插槽 -->
+  <template #header="{ navigations }">
+    <el-menu>
+      <el-submenu
+        v-for="navigation in navigations"
+        :key="navigation.title"
+        :index="navigation.title"
+      >
+        <el-menu-item
+          v-for="subNavigation in navigation.children"
+          :key="subNavigation.path"
+          :index="subNavigation.path"
+        >
+          {{ subNavigation.title }}
+        </el-menu-item>
+      </el-submenu>
+    </el-menu>
   </template>
   
-  <template #movie>
-    <ul>
-      <li v-for="item in movie">{{ item }}</li>
-    </ul>
+  <!-- 默认插槽 -->
+  <template #default>
+    main
   </template>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
-<div>
-  <slot name="music" />
-  <slot name="movie" />
-</div>
-```
-
-#### 作用域插槽
-
-> [!note]
->
-> 通过插槽访问子组件的数据。
-
-子组件：通过 `<slot :prop="data">` 传递数据。
-
-父组件：使用 `<template v-slot="slotProps">` 来接受子组件传递的数据。
-
-> [!note]
->
-> 结合具名插槽使用，`<template #prop="slotProps">`。
-
-```vue
-<!-- Parent.vue -->
-<Comp title="音乐">
-  <template v-slot:music="slotProps">
-    <ul>
-      <li v-for="item in slotProps.music">{{ item }}</li>
-    </ul>
+  
+  <!-- 具名插槽 -->
+  <template #footer>
+    footer
   </template>
-</Comp>
-
-<Comp title="电影">
-  <template #movie="{ movie }">
-    <ul>
-      <li v-for="item in movie">{{ item }}</li>
-    </ul>
-  </template>
-</Comp>
-```
-
-```vue
-<!-- Comp.vue -->
-<div>
-  <h2>{{ title }}</h2>
-  <slot name="music" :music="music" />
-  <slot name="movie" :movie="movie" />
-</div>
+</MyComponent>
 ```
 
 ### 缓存组件
