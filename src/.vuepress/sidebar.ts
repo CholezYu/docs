@@ -78,6 +78,19 @@ export default sidebar({
       ]
     },
     {
+      text: "废弃",
+      icon: "warn",
+      prefix: "end-of-life/",
+      collapsible: true,
+      children: [
+        {
+          text: "Vue",
+          icon: "vue",
+          link: "Vue"
+        }
+      ]
+    },
+    {
       text: "后端",
       icon: "back-stage",
       prefix: "after-end/",
@@ -140,7 +153,7 @@ export default sidebar({
     },
     {
       text: "便笺",
-      icon: "align",
+      icon: "list",
       prefix: "notes/",
       collapsible: true,
       children: [
