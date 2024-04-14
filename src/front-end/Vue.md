@@ -1232,7 +1232,7 @@ defineExpose({
 </template>
 ```
 
-在 3.4 之前，一般通过以下方式实现 prop 的“双向绑定”，这样就会显得非常繁琐。
+在 3.4 之前，一般通过以下方式实现 prop 的 “双向绑定”，这样就会显得非常繁琐。
 
 ```vue
 <script setup lang="ts">
@@ -1345,33 +1345,13 @@ const count = inject("count")
 </MyComponent>
 ```
 
-### 缓存组件
-
-切换动态组件时，组件会在切入时被创建，切出时被销毁。频繁地切换会导致重新渲染，从而影响性能。
-
-如果希望动态组件能够在创建的时候被缓存，可以使用 `<KeepAlive>` 将它包裹起来。
-
-默认所有匹配的动态组件都会被缓存，我们可以给 `<KeepAlive>` 设置一些属性，根据条件缓存内部组件：
-
-- include：匹配的动态组件会被缓存；
-
-- exclude：匹配的动态组件不会被缓存；
-
-- max：最大缓存数。
-
-```vue
-<KeepAlive>
-  <component :is="Current" />
-</KeepAlive>
-```
-
 ### 异步组件
 
 如果直接使用 import 模块化引入组件，那么 vite / webpack 在打包的过程中，会把所有 js 文件都打包到一起，但是有很多模块暂时不需要加载，这样会导致包的体积过大，造成首屏加载时间过长。
 
 我们可以使用异步组件，将组件进行分包，需要的时候再加载这个组件：
 
-1. 通过 `defineAsyncComponent` 定义异步组件（需要配合 `<Suspense>` 组件使用），并使用动态 import 引入；
+1. 通过 `defineAsyncComponent` 定义异步组件（可以搭配 `<suspense>` 组件使用），并使用动态 import 引入；
 
 2. 在打包的时候，vite / webpack 如果遇到 import 动态引入，会把引入的资源分开进行打包；
 
@@ -1399,6 +1379,39 @@ const count = inject("count")
     </template>
   </Suspense>
 </template>
+```
+
+### 缓存组件
+
+切换动态组件时，组件会在切入时被创建，切出时被销毁。频繁地切换会导致重新渲染，从而影响性能。
+
+如果希望动态组件能够在创建的时候被缓存，可以使用 `<keep-alive>` 将它包裹起来。
+
+默认所有匹配的动态组件都会被缓存，我们可以给 `<keep-alive>` 设置一些属性，根据条件缓存内部组件：
+
+- include：匹配的动态组件会被缓存；
+
+- exclude：匹配的动态组件不会被缓存；
+
+- max：最大缓存数。
+
+```vue
+<KeepAlive>
+  <component :is="Current" />
+</KeepAlive>
+```
+
+### 传送组件
+
+它可以将组件内部的元素 “传送” 到任意位置。
+
+`<Teleport>` 接收一个 `to` prop 来指定传送的目标。`to` 的值可以是一个 CSS 选择器，也可以是一个 DOM 元素。
+
+```vue
+<!-- 将 Dialog 传送至 body 下面 -->
+<Teleport to="body">
+  <Dialog />
+</Teleport>
 ```
 
 ## Router
