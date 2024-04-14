@@ -1256,7 +1256,7 @@ attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量�
 > 不包含被 defineProps 接受的数据和被 defineEmits 接受的事件。
 
 ```vue
-<Comp v-bind="attrs" />
+<MyComponent v-bind="attrs" />
 ```
 
 ```ts
@@ -1309,7 +1309,7 @@ const count = inject("count")
 </div>
 ```
 
-在父组件中，`<slot>` 将会被替换为子组件标签内的内容。
+在父组件中，`<slot>` 将会被替换为子组件内部的内容。
 
 ```vue
 <!-- 父组件 -->
@@ -1347,13 +1347,11 @@ const count = inject("count")
 
 ### 缓存组件
 
-我们在切换动态组件的时候，组件默认会在进入时被创建，离开时被销毁。频繁切换会导致重新渲染影响性能。
+切换动态组件时，组件会在切入时被创建，切出时被销毁。频繁地切换会导致重新渲染，从而影响性能。
 
-如果希望动态组件能够在第一次被创建的时候缓存，可以使用 `<keep-alive>` 将其包裹起来。
+如果希望动态组件能够在创建的时候被缓存，可以使用 `<KeepAlive>` 将它包裹起来。
 
-我们可以给 `<keep-alive>` 设置一些属性，根据条件缓存内部组件：
-
-- 默认所有匹配的动态组件都会被缓存；
+默认所有匹配的动态组件都会被缓存，我们可以给 `<KeepAlive>` 设置一些属性，根据条件缓存内部组件：
 
 - include：匹配的动态组件会被缓存；
 
@@ -1362,28 +1360,45 @@ const count = inject("count")
 - max：最大缓存数。
 
 ```vue
-<keep-alive>
+<KeepAlive>
   <component :is="Current" />
-</keep-alive>
+</KeepAlive>
 ```
 
 ### 异步组件
 
-如果我们直接使用 import 模块化引入组件，那么 webpack 在打包构建的过程中，会把所有的 js 都打包到了一起，但是里面包含了很多我们暂时没有使用的模块，这样导致包的体积过大，就会造成进入首页的时候需要加载的内容过多，出现长时间的白屏现象。
+如果直接使用 import 模块化引入组件，那么 vite / webpack 在打包的过程中，会把所有 js 文件都打包到一起，但是有很多模块暂时不需要加载，这样会导致包的体积过大，造成首屏加载时间过长。
 
-我们可以使用异步组件，让 webpack 将组件分开进行打包，需要的时候再去加载这个组件：
+我们可以使用异步组件，将组件进行分包，需要的时候再加载这个组件：
 
-1. Vue 允许我们以函数的方式定义组件，函数内部使用 import 方法引入模块，并把结果返回；
+1. 通过 `defineAsyncComponent` 定义异步组件（需要配合 `<Suspense>` 组件使用），并使用动态 import 引入；
 
-2. wabpack 在打包的时候，如果遇到 import 动态引入，会把 import 动态引入的资源单独进行打包；
+2. 在打包的时候，vite / webpack 如果遇到 import 动态引入，会把引入的资源分开进行打包；
 
-3. Vue 只有在这个组件需要被渲染的时候才会触发该函数，且会把结果缓存起来用于下次重新渲染；
+3. 只有在需要渲染的时候才会加载异步组件，并且会把结果缓存起来用于下次重新渲染；
 
-4. import 方法会返回一个 promise 实例，引入成功时 promise 变为成功状态，然后就可以渲染当前组件了。
+4. 动态 import 会返回一个 promise，引入成功时 promise 变为成功状态，然后组件就会被渲染了。
 
-```js
-const Home = () => import("@/components/Home")
-const User = () => import("@/components/User")
+```vue
+<script setup lang="ts">
+  import { defineAsyncComponent } from "vue"
+  
+  const SyncVue = defineAsyncComponent(() => import("@/components/sync.vue"))
+</script>
+
+<template>
+  <Suspense>
+    <!-- 异步组件 -->
+    <template #default>
+      <SyncVue />
+    </template>
+    
+    <!-- 在等待异步组件加载时，渲染一个加载状态 -->
+    <template #fallback>
+      <!-- 骨架屏 -->
+    </template>
+  </Suspense>
+</template>
 ```
 
 ## Router
