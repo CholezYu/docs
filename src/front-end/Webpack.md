@@ -1,6 +1,6 @@
 ---
 title: Webpack
-icon: javascript
+icon: typescript
 date: 2024-02-21
 ---
 

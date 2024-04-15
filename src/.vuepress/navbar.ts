@@ -15,7 +15,6 @@ export default navbar([
           "HTML5",
           "CSS",
           "JavaScript",
-          "JavaScript-Algo",
           "TypeScript",
           "Ajax",
           "Nodejs",
@@ -31,7 +30,6 @@ export default navbar([
         prefix: "after-end/",
         children: [
           "Java",
-          "Java-Algo",
           "MySQL",
           "Python"
         ]

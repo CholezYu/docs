@@ -31,11 +31,6 @@ export default sidebar({
           link: "JavaScript"
         },
         {
-          text: "JavaScript-Algo",
-          icon: "javascript",
-          link: "JavaScript-Algo"
-        },
-        {
           text: "TypeScript",
           icon: "typescript",
           link: "TypeScript"
@@ -57,7 +52,7 @@ export default sidebar({
         },
         {
           text: "Webpack",
-          icon: "javascript",
+          icon: "typescript",
           link: "Webpack"
         },
         {
@@ -66,7 +61,7 @@ export default sidebar({
           link: "React"
         },
         {
-          text: "Vue",
+          text: "Vue 3",
           icon: "vue",
           link: "Vue"
         },
@@ -74,19 +69,6 @@ export default sidebar({
           text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
-        }
-      ]
-    },
-    {
-      text: "废弃",
-      icon: "warn",
-      prefix: "end-of-life/",
-      collapsible: true,
-      children: [
-        {
-          text: "Vue",
-          icon: "vue",
-          link: "Vue"
         }
       ]
     },
@@ -102,11 +84,6 @@ export default sidebar({
           link: "Java"
         },
         {
-          text: "Java-Algo",
-          icon: "java",
-          link: "Java-Algo"
-        },
-        {
           text: "MySQL",
           icon: "mysql",
           link: "MySQL"
@@ -115,6 +92,24 @@ export default sidebar({
           text: "Python",
           icon: "python",
           link: "Python"
+        }
+      ]
+    },
+    {
+      text: "算法",
+      icon: "keyboard",
+      prefix: "algorithm/",
+      collapsible: true,
+      children: [
+        {
+          text: "算法（JavaScript）",
+          icon: "javascript",
+          link: "JavaScript-Algo"
+        },
+        {
+          text: "算法（Java）",
+          icon: "java",
+          link: "Java-Algo"
         }
       ]
     },
@@ -141,12 +136,12 @@ export default sidebar({
         },
         {
           text: "WebGL",
-          icon: "javascript",
+          icon: "typescript",
           link: "WebGL"
         },
         {
           text: "Threejs",
-          icon: "javascript",
+          icon: "typescript",
           link: "Threejs"
         }
       ]
@@ -176,6 +171,19 @@ export default sidebar({
           text: "面试集锦",
           icon: "markdown",
           link: "面试集锦"
+        }
+      ]
+    },
+    {
+      text: "废弃",
+      icon: "bitbucket",
+      prefix: "history/",
+      collapsible: true,
+      children: [
+        {
+          text: "Vue 2",
+          icon: "vue",
+          link: "Vue"
         }
       ]
     }
