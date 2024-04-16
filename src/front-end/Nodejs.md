@@ -1,42 +1,42 @@
 ---
 title: Nodejs
 icon: nodeJS
-date: 2023-12-19
+date: 2024-04-15
 ---
 
-## packages
+## 包管理
 
 ### npm
 
-- 查看下载源：`npm get registry`
+- 安装依赖：`npm i [package]`
 
-- 修改下载源：`npm config set registry https://registry.npmmirror.com`
+- 生产依赖：`npm i [package] -S`
 
-- 安装依赖：`npm install [package]`
+- 开发依赖：`npm i [package] -D`
 
-- 生产依赖：`npm install [package] --save`
+- 全局依赖：`npm i [package] -g`
 
-- 开发依赖：`npm install [package] --save-dev`
-
-- 全局依赖：`npm install [package] -g`
-
-- 删除依赖：`npm uninstall [package]`
-
-- 添加用户名和密码：`npm adduser`
+- 删除依赖：`npm un [package]`
 
 - 发布包：`npm publish`
 
 - 删除包：`npm unpublish --force`
 
+- 添加用户名和密码：`npm adduser`
 
+
+
+- 查看 npm 配置：`npm config list`
 
 - 查看 npm 包的全局安装路径：`npm prefix -g`
 
 - 查看 npm 包的全局缓存路径：`npm config get cache`
 
-### yarn
+- 查看下载源：`npm get registry`
 
-- 查看版本：`yarn --version`
+- 修改下载源：`npm config set registry https://registry.npmmirror.com`
+
+### yarn
 
 - 生产依赖：`yarn add [package]`
 

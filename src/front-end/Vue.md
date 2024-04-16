@@ -1,18 +1,17 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-14
+date: 2024-04-16
 ---
 
 > [!tip]
 >
-> 你正在阅读的是 Vue 3 文档！
+> 你正在阅读的是 Vue 3 文档！Vue 2 已于 **2023 年 12 月 31 日**停止维护。详见 [Vue 2](../history/Vue.md)。
 >
-> Vue 2 已于 **2023 年 12 月 31 日**停止维护。详见 [Vue 2](../history/Vue.md)。
 
 ## 响应式：核心
 
-### ref
+### Ref
 
 接受任意值（基本类型、引用类型）作为参数，返回一个响应式的 ref 对象。通过 `.value` 可以访问这个数据。
 
@@ -29,7 +28,7 @@ count.value++
 count.value // 1
 ```
 
-**源码解析**。调用 `ref()` 时，会通过 `createRef()` 创建一个 RefImpl 实例，在 Class RefImpl 的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
+**源码解析**。调用 `ref()` 时，会通过 `createRef()` 创建一个 RefImpl 实例，在 `class RefImpl` 的内部，如果传入的值是基本类型，则直接返回该值；如果是引用类型，会调用 `reactive()` 进行深层次的响应式。最后，通过 `trackRefValue()` 进行依赖的收集，通过 `triggerRefValue()` 进行依赖的更新。
 
 ```ts
 /* reactivity/src/ref.ts */
@@ -60,9 +59,9 @@ class RefImpl<T> {
   
   constructor(value: T, public readonly __v_isShallow: boolean) {
     this._rawValue = __v_isShallow ? value : toRaw(value)
-    // 如果是 shallowRef，直接返回 .value 的值，如果 value 是引用类型，不会做进一步的响应式
+    // 如果是 shallowRef，直接返回 .value 的值，如果 value 是引用类型，不会做深度响应式
     // 如果是 ref，会调用 toReactive，进行深层次的响应式
-    // const toReactive = (value: T): T => isObject(value) ? reactive(value) : value
+    // const toReactive = (value) => isObject(value) ? reactive(value) : value
     // toReactive：如果 value 是引用类型，就会调用 reactive(value)，否则直接返回 value
     this._value = __v_isShallow ? value : toReactive(value)
   }
@@ -83,7 +82,7 @@ class RefImpl<T> {
 }
 ```
 
-### reactive
+### Reactive
 
 只能接受**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
 
@@ -168,7 +167,7 @@ function createReactiveObject(
 }
 ```
 
-### computed
+### Computed
 
 **函数式写法**。接受一个 getter 函数，返回一个只读的 ref 对象。
 
@@ -196,7 +195,7 @@ const full = computed({
 })
 ```
 
-**源码解析**。调用 `computed()` 时，会根据传入的参数判断是否使用 setter，然后将 getter 和 setter 传入 ComputedRefImpl 类。在这个类中，定义了一个脏值：`_dirty`，标记是否需要重新计算。如果 `_dirty` 为 true，则进行重新计算；否则直接将 `_value` 返回，并将结果缓存，下一次访问时，如果 `_dirty` 为 false，则从缓存中取值。这种机制称为**脏值检测**。
+**源码解析**。调用 `computed()` 时，会根据传入的参数判断是否使用 setter，然后将 getter 和 setter 传入 `ComputedRefImpl` 类。在这个类中，定义了一个脏值：`_dirty`，标记是否需要重新计算。如果 `_dirty` 为 true，则进行重新计算；否则直接将 `_value` 返回，并将结果缓存，下一次访问时，如果 `_dirty` 为 false，则从缓存中取值。这种机制称为**脏值检测**。
 
 > [!important]
 >
@@ -275,7 +274,6 @@ class ComputedRefImpl<T> {
   }
   
   get value() {
-    // the computed ref may get wrapped by other proxies e.g. readonly() #3376
     const self = toRaw(this)
     trackRefValue(self)
     // 如果 _dirty 为 true，则进行重新计算；否则直接返回
@@ -292,7 +290,7 @@ class ComputedRefImpl<T> {
 }
 ```
 
-### watch
+### Watch
 
 > [!warning]
 >
@@ -372,13 +370,13 @@ watch(state, (value, oldValue) => {
 
 格式化 source，先初始化一个 getter，然后对 source 进行判断：如果 source 是一个 ref，则将 `ref.value` 赋值给 getter；如果 source 是一个 reactive，那么直接将其赋值给 getter，并将 deep 设置为 true，也就是默认开启深度监听；如果 source 是一个数组，就会对它进行遍历（如果数组元素是 ref，就返回它的 value；如果是 reactive，就会调用 `traverse()`，递归地对 reactive 中的每个属性进行监听，也就是**深度监听**；如果是一个函数，则对它进行加工，这里不做研究）；如果 source 是一个函数，则进行加工，有 cb 就执行 watch，没有就执行 watchEffect，不做深入研究。
 
-判断 deep 选项，如果为 true，就调用 `traverse()` 进行深度监听。
+判断 `deep` 选项，如果为 true，就调用 `traverse()` 进行深度监听。
 
-初始化 scheduler（调度器）并判断 flush 选项，如果值为 "sync"，则将任务赋值给调度器，同步执行（任务）；如果值为 "post"，则在组件更新之后执行（任务）；如果值为 "pre"，则在组件更新之前执行（任务），**它也是默认值**。然后收集依赖，等待任务的执行。
+初始化调度器 `scheduler` 并判断 `flush` 选项，如果值为 "sync"，则将任务赋值给调度器，同步执行（任务）；如果值为 "post"，则在组件更新之后执行（任务）；如果值为 "pre"，则在组件更新之前执行（任务），**它也是默认值**。然后收集依赖，等待任务的执行。
 
-判断 immediate 选项，如果为 true，则立即执行（任务）。
+判断 `immediate` 选项，如果为 true，则立即执行（任务）。
 
-执行任务时，先获取新值，然后判断如果 immediate 为 true，则将旧值赋值为 undefined；如果没有开启 immediate，则给旧值做初始化，也就是将 `ref(value)` 的默认值赋值给旧值。最后更新旧值，将新值直接赋值给旧值（下一次使用），如果是引用类型的话，就会共用同一个指针，所以会导致之后的新值和旧值都相同。
+执行任务时，先获取新值，然后判断如果 `immediate` 为 true，则将旧值赋值为 undefined；如果没有开启 `immediate`，则给旧值做初始化，也就是将 `ref(value)` 的默认值赋值给旧值。最后更新旧值，将新值直接赋值给旧值（下一次使用），如果是引用类型的话，就会共用同一个指针，所以会导致之后的新值和旧值都相同。
 
 ```ts
 /* runtime-core/src/apiWatch.ts */
@@ -440,7 +438,11 @@ function doWatch(
   else if (isFunction(source)) {
     // 如果有 cb，执行 watch
     if (cb) {
-      getter = () => callWithErrorHandling(source, instance, ErrorCodes.WATCH_GETTER)
+      getter = () => callWithErrorHandling(
+        source,
+        instance,
+        ErrorCodes.WATCH_GETTER
+      )
     }
     // 如果没有 cb，执行 watchEffect
     else {
@@ -490,10 +492,10 @@ function doWatch(
         if (cleanup) {
           cleanup()
         }
-        // 这个就是调用 `watch()` 时的回调函数 cb 以及参数 newValue, oldValue, onCleanup
+        // 这个就是 `watch()` 的回调函数 cb 以及参数 newValue, oldValue, onCleanup
         callWithAsyncErrorHandling(cb, instance, ErrorCodes.WATCH_CALLBACK, [
           newValue,
-          // 如果 immediate 为 true，将旧值赋值为 undefined，否则将 `ref()` 的默认值赋值给旧值
+          // 如果 immediate 为 true，将旧值赋值为 undefined，否则为 `ref()` 的默认值
           oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
           onCleanup
         ])
@@ -560,6 +562,23 @@ function doWatch(
 
 ## 响应式：进阶
 
+### toRaw
+
+返回 Proxy 的原始对象。
+
+可以让 reactive 退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
+
+```ts
+import { reactive, toRaw } from "vue"
+
+const origin = { foo: 1, bar: 2 }
+const state = reactive(origin)
+
+state // Reactive<{ foo: 1, bar: 2 }>
+toRaw(state) // { foo: 1, bar: 2 }
+toRaw(state) === origin // true
+```
+
 ### toRef
 
 **对象属性签名**。基于响应式对象的一个属性，创建一个对应的 ref，它与源属性保持同步。
@@ -607,7 +626,7 @@ toRef(1)
 
 将一个响应式对象转换为普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。
 
-常用于 ref，reactive 对象的解构。
+常用于 ref，reactive 的解构。
 
 > [!tip]
 >
@@ -621,23 +640,6 @@ const state = ref({ foo: 1, bar: 2 })
 const { foo, bar } = toRefs(state.value)
 foo // Ref<1>
 bar // Ref<2>
-```
-
-### toRaw
-
-返回 Proxy 的原始对象。
-
-用于让 reactive 对象退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
-
-```ts
-import { reactive, toRaw } from "vue"
-
-const origin = { foo: 1, bar: 2 }
-const state = reactive(origin)
-
-state // Reactive<{ foo: 1, bar: 2 }>
-toRaw(state) // { foo: 1, bar: 2 }
-toRaw(state) === origin // true
 ```
 
 ## 响应式原理
@@ -1387,7 +1389,7 @@ const count = inject("count")
 
 或者如果希望组件在切换时，能够缓存一些状态，比如输入框、多选框的状态，可以使用 `<keep-alive>` 组件。
 
-`<keep-alive>` 默认会缓存内部的所有组件，可以给它设置一些属性，来约束缓存行为：
+`<keep-alive>` 默认会缓存内部所有的动态组件，可以给它设置一些属性，来约束缓存行为：
 
 - include：缓存匹配的组件；
 
@@ -1396,9 +1398,279 @@ const count = inject("count")
 - max：最大缓存数量。
 
 ```vue
-<KeepAlive>
+<keep-alive>
   <component :is="Current" />
-</KeepAlive>
+</keep-alive>
+```
+
+**源码解析**。`<keep-alive>` 的核心为 `KeepAliveImpl` 对象。它包含了初始化函数 `setup` 和缓存策略：
+
+初始化函数：返回一个 `render` 函数，它首先会读取插槽的默认值，也就是 `<keep-alive>` 的默认插槽，并且判断如果子节点大于 1，就会报错，说明 `<keep-alive>` 内部只能有一个插槽，也就是只会渲染单个组件。最后返回的其实还是它的内部组件（默认插槽），因为 `<keep-alive>` 是一个抽象组件，它本身并不会被渲染。
+
+缓存策略：首先会在 `onMounted` 中执行缓存函数 `cacheSubtree`，因为缓存标记 `pendingCacheKey` 初始为 null，并且它是在 `render` 函数中进行赋值的，所以缓存函数首次执行是不会缓存的。执行 `render` 函数时，将 `vnode.key` 赋值给缓存标记。之后在 `ononUpdated` 中再执行缓存函数时，缓存标记就不为 null 了，就会把缓存组件添加到缓存容器 `cache` 中。再根据 `vnode.key` 去缓存容器中查找是否存在缓存组件（是否被缓存过）。如果缓存组件存在，则继承组件实例，并将 `vnode` 标记为 `COMPONENT_KEPT_ALIVE`，这样渲染器就不会执行销毁和重新创建操作，然后使用 **LRU 算法**更新缓存队列 `keys`（删除不活跃的 key，添加新 key）；如果缓存组件不存在，则直接将 `vnode.key` 添加到 `keys` 中。
+
+**如果与 include 和 exclude 的规则不匹配，则不进行缓存**。
+
+> `activate` 和 `deactivate` 生命周期详见源码。
+
+```ts
+/* runtime-core/src/components/KeepAlive.ts */
+
+const KeepAliveImpl: ComponentOptions = {
+  name: `KeepAlive`,
+  
+  __isKeepAlive: true,
+  
+  props: {
+    include: [String, RegExp, Array],
+    exclude: [String, RegExp, Array],
+    max: [String, Number]
+  },
+  
+  // 初始化函数
+  setup(props: KeepAliveProps, { slots }: SetupContext) {
+    const instance = getCurrentInstance()!
+    const sharedContext = instance.ctx as KeepAliveContext
+    
+    if (!sharedContext.renderer) {
+      return slots.default
+    }
+    
+    // 缓存容器
+    const cache: Cache = new Map()
+    // 缓存 key 队列
+    const keys: Keys = new Set()
+    let current: VNode | null = null
+
+    if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+      ;(instance as any).__v_cache = cache
+    }
+    
+    const parentSuspense = instance.suspense
+    
+    const {
+      renderer: {
+        p: patch,
+        m: move,
+        um: _unmount,
+        o: { createElement }
+      }
+    } = sharedContext
+    // 临时的隐藏容器
+    const storageContainer = createElement('div')
+    
+    // 注册 activate hook
+    sharedContext.activate = (vnode, container, anchor, isSVG, optimized) => {
+      const instance = vnode.component!
+      move(vnode, container, anchor, MoveType.ENTER, parentSuspense)
+      // props 可能会发生变化，所以需要执行 patch
+      patch(
+        instance.vnode,
+        vnode,
+        container,
+        anchor,
+        instance,
+        parentSuspense,
+        isSVG,
+        vnode.slotScopeIds,
+        optimized
+      )
+      // patch 执行完成后，执行子节点的 activate 和 deactivate
+      queuePostRenderEffect(() => {
+        instance.isDeactivated = false
+        if (instance.a) {
+          invokeArrayFns(instance.a)
+        }
+        const vnodeHook = vnode.props && vnode.props.onVnodeMounted
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode)
+        }
+      }, parentSuspense)
+      
+      if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+        devtoolsComponentAdded(instance)
+      }
+    }
+    
+    // 注册 deactivate hook
+    sharedContext.deactivate = (vnode: VNode) => {
+      const instance = vnode.component!
+      // “卸载” 组件时，并不是真正的卸载，
+      // 而是调用 move 方法，将组件移动到一个隐藏的容器中
+      move(vnode, storageContainer, null, MoveType.LEAVE, parentSuspense)
+      queuePostRenderEffect(() => {
+        if (instance.da) {
+          invokeArrayFns(instance.da)
+        }
+        const vnodeHook = vnode.props && vnode.props.onVnodeUnmounted
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode)
+        }
+        instance.isDeactivated = true
+      }, parentSuspense)
+
+      if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+        devtoolsComponentAdded(instance)
+      }
+    }
+    
+    function unmount(vnode: VNode) {
+      resetShapeFlag(vnode)
+      _unmount(vnode, instance, parentSuspense, true)
+    }
+    
+    function pruneCache(filter?: (name: string) => boolean) {
+      cache.forEach((vnode, key) => {
+        const name = getComponentName(vnode.type as ConcreteComponent)
+        if (name && (!filter || !filter(name))) {
+          pruneCacheEntry(key)
+        }
+      })
+    }
+    
+    function pruneCacheEntry(key: CacheKey) {
+      const cached = cache.get(key) as VNode
+      if (!current || cached.type !== current.type) {
+        unmount(cached)
+      } else if (current) {
+        resetShapeFlag(current)
+      }
+      cache.delete(key)
+      keys.delete(key)
+    }
+    
+    watch(
+      () => [props.include, props.exclude],
+      ([include, exclude]) => {
+        include && pruneCache(name => matches(include, name))
+        exclude && pruneCache(name => !matches(exclude, name))
+      },
+      { flush: 'post', deep: true }
+    )
+    
+    // 缓存标记
+    let pendingCacheKey: CacheKey | null = null
+    // 缓存函数
+    const cacheSubtree = () => {
+      // 如果缓存标记不为 null，就把缓存组件存到缓存容器中
+      if (pendingCacheKey != null) {
+        cache.set(pendingCacheKey, getInnerChild(instance.subTree))
+      }
+    }
+    // 首先会在 onMounted 和 onUpdated 中执行缓存函数设置缓存
+    // 因为缓存标记是在 render 函数中进行赋值，所以缓存函数首次执行是不缓存的
+    onMounted(cacheSubtree)
+    onUpdated(cacheSubtree)
+    
+    onBeforeUnmount(() => {
+      cache.forEach(cached => {
+        const { subTree, suspense } = instance
+        const vnode = getInnerChild(subTree)
+        if (cached.type === vnode.type) {
+          resetShapeFlag(vnode)
+          const da = vnode.component!.da
+          da && queuePostRenderEffect(da, suspense)
+          return
+        }
+        unmount(cached)
+      })
+    })
+    
+    // 返回一个 render 函数
+    return () => {
+      pendingCacheKey = null
+      
+      if (!slots.default) {
+        return null
+      }
+      
+      // 读取插槽的默认值（默认插槽）
+      const children = slots.default()
+      const rawVNode = children[0]
+      // 判断如果子节点大于 1，就会报错
+      // 说明 KeepAlive 内部只能有一个子节点（插槽），也就是只渲染单个组件
+      if (children.length > 1) {
+        if (__DEV__) {
+          warn(`KeepAlive should contain exactly one component child.`)
+        }
+        current = null
+        return children
+      } else if (
+        !isVNode(rawVNode) ||
+        (!(rawVNode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) &&
+          !(rawVNode.shapeFlag & ShapeFlags.SUSPENSE))
+      ) {
+        current = null
+        // 最后返回这个默认子节点（内部组件）
+        // KeepAlive 是一个抽象组件，它本身并不会被渲染
+        return rawVNode
+      }
+      
+      let vnode = getInnerChild(rawVNode)
+      const comp = vnode.type as ConcreteComponent
+      
+      const name = getComponentName(
+        isAsyncWrapper(vnode)
+          ? (vnode.type as ComponentOptions).__asyncResolved || {}
+          : comp
+      )
+      
+      const { include, exclude, max } = props
+      
+      // 如果与 include 和 exclude 的规则不匹配，则不进行缓存
+      if (
+        (include && (!name || !matches(include, name))) ||
+        (exclude && name && matches(exclude, name))
+      ) {
+        current = vnode
+        return rawVNode
+      }
+      
+      const key = vnode.key == null ? comp : vnode.key
+      // 根据 `vnode.key` 去缓存容器中查找缓存组件
+      const cachedVNode = cache.get(key)
+      
+      if (vnode.el) {
+        vnode = cloneVNode(vnode)
+        if (rawVNode.shapeFlag & ShapeFlags.SUSPENSE) {
+          rawVNode.ssContent = vnode
+        }
+      }
+      
+      // 将 `vnode.key` 赋值给缓存标记
+      pendingCacheKey = key
+      
+      // 如果缓存组件存在，则继承组件实例，并将 vnode 标记为 ShapeFlags512 静态标记
+      // 这样渲染器就不会重新创建新的组件实例
+      if (cachedVNode) {
+        // 缓存组件存在
+        vnode.el = cachedVNode.el
+        vnode.component = cachedVNode.component
+        if (vnode.transition) {
+          // 处理缓存组件的动画
+          setTransitionHooks(vnode, vnode.transition!)
+        }
+        // 标记 vnode，不会重新渲染
+        vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE
+        // 更新 key 队列
+        keys.delete(key)
+        keys.add(key)
+      }
+      // 如果缓存组件不存在，则将 `vnode.key` 添加到 keys 中
+      else {
+        keys.add(key)
+        // LRU 算法，删除不活跃的 key，添加新 key
+        if (max && keys.size > parseInt(max as string, 10)) {
+          pruneCacheEntry(keys.values().next().value)
+        }
+      }
+      vnode.shapeFlag |= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE
+
+      current = vnode
+      return rawVNode
+    }
+  }
+}
 ```
 
 ### 传送组件
@@ -1408,7 +1680,7 @@ const count = inject("count")
 `<Teleport>` 接收一个 `to` prop 来指定传送的目标。值可以是一个 CSS 选择器，也可以是一个 DOM 元素。
 
 ```vue
-<!-- 将 Dialog 传送至 body 下面 -->
+<!-- 将 Dialog 传送至 body 中 -->
 <Teleport to="body">
   <Dialog />
 </Teleport>

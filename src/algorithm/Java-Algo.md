@@ -1,5 +1,5 @@
 ---
-title: 算法（Java）
+title: Java-Alog
 icon: java
 ---
 

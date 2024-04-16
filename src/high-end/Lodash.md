@@ -1,6 +1,6 @@
 ---
 title: Lodash
-icon: javascript
+icon: typescript
 date: 2024-04-08
 ---
 

@@ -12,26 +12,82 @@ export default navbar([
         text: "前端",
         prefix: "front-end/",
         children: [
-          "HTML5",
-          "CSS",
-          "JavaScript",
-          "TypeScript",
-          "Ajax",
-          "Nodejs",
-          "Git",
-          "Webpack",
-          "React",
-          "Vue",
-          "Wxapp"
+          {
+            text: "HTML5",
+            icon: "html",
+            link: "HTML5"
+          },
+          {
+            text: "CSS",
+            icon: "css",
+            link: "CSS"
+          },
+          {
+            text: "JavaScript",
+            icon: "javascript",
+            link: "JavaScript"
+          },
+          {
+            text: "TypeScript",
+            icon: "typescript",
+            link: "TypeScript"
+          },
+          {
+            text: "Ajax",
+            icon: "ajax",
+            link: "Ajax"
+          },
+          {
+            text: "Nodejs",
+            icon: "nodeJS",
+            link: "Nodejs"
+          },
+          {
+            text: "Git",
+            icon: "git",
+            link: "Git"
+          },
+          {
+            text: "Webpack",
+            icon: "typescript",
+            link: "Webpack"
+          },
+          {
+            text: "React",
+            icon: "react",
+            link: "React"
+          },
+          {
+            text: "Vue 3",
+            icon: "vue",
+            link: "Vue"
+          },
+          {
+            text: "Wxapp",
+            icon: "wechat",
+            link: "Wxapp"
+          }
         ]
       },
       {
         text: "后端",
         prefix: "after-end/",
         children: [
-          "Java",
-          "MySQL",
-          "Python"
+          {
+            text: "Java",
+            icon: "java",
+            link: "Java"
+          },
+          {
+            text: "MySQL",
+            icon: "mysql",
+            link: "MySQL"
+          },
+          {
+            text: "Python",
+            icon: "python",
+            link: "Python"
+          }
         ]
       }
     ]

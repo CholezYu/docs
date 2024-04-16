@@ -1,5 +1,5 @@
 ---
-title: 算法（JavaScript）
+title: JavaScript-Alog
 icon: javascript
 ---
 

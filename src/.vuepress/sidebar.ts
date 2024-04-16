@@ -102,12 +102,12 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "算法（JavaScript）",
+          text: "JavaScript-Alog",
           icon: "javascript",
           link: "JavaScript-Algo"
         },
         {
-          text: "算法（Java）",
+          text: "Java-Alog",
           icon: "java",
           link: "Java-Algo"
         }
@@ -120,19 +120,14 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "Lodash",
-          icon: "javascript",
-          link: "Lodash"
-        },
-        {
           text: "ECharts",
           icon: "typescript",
           link: "ECharts"
         },
         {
-          text: "Exceljs",
+          text: "Lodash",
           icon: "typescript",
-          link: "Exceljs"
+          link: "Lodash"
         },
         {
           text: "WebGL",
@@ -143,6 +138,11 @@ export default sidebar({
           text: "Threejs",
           icon: "typescript",
           link: "Threejs"
+        },
+        {
+          text: "Exceljs",
+          icon: "typescript",
+          link: "Exceljs"
         }
       ]
     },
