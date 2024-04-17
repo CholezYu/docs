@@ -208,23 +208,19 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
 #### v-model
 
-> [!note]
->
-> 父子组件间通信，只能传递一个数据与事件。
-
 当使用 `:value` + `@input` 模式时，可以替换为 `v-model` 模式。
 
 子组件为 input。
 
 ```vue
 <!-- Parent.vue -->
-<Comp :value="message" @input="message = $event" />
+<MyComponent :value="message" @input="message = $event" />
 
-<Comp v-model="message" />
+<MyComponent v-model="message" />
 ```
 
 ```vue
-<!-- Comp.vue -->
+<!-- MyComponent.vue -->
 <input :value="value" @input="$emit('input', $event.target.value)" />
 ```
 
@@ -232,55 +228,51 @@ Vue 被实例化也就是 new Vue 之后，进入初始化阶段：
 
 ```vue
 <!-- Parent.vue -->
-<Comp :value="count" @input="count = $event" />
+<MyComponent :value="count" @input="count = $event" />
 
-<Comp v-model="count" />
+<MyComponent v-model="count" />
 ```
 
 ```vue
-<!-- Comp.vue -->
+<!-- MyComponent.vue -->
 <button @click="$emit('input', value + 1)"></button>
 ```
 
 #### v-bind.sync
 
-> [!note]
->
-> 父子组件间通信，可以传递多个数据与事件。
-
 当使用 `:prop` + `@update:prop="prop = $event"` 模式时，可以替换为 `:prop.sync` 模式。
 
 ```vue
 <!-- Parent.vue -->
-<Comp :count="count" @update:count="count = $event" />
+<MyComponent :count="count" @update:count="count = $event" />
 
-<Comp :count.sync="count" />
+<MyComponent :count.sync="count" />
 ```
 
 ```vue
-<!-- Comp.vue -->
+<!-- MyComponent.vue -->
 <button @click="$emit('update:count', count + 1)"></button>
 ```
 
 ### 事件总线
 
-> [!note]
->
-> 任意组件间通信
-
 ```js
-beforeCreate() {
-  Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线，所有组件都能访问
+export default {
+  beforeCreate() {
+    Vue.prototype.$bus = this // 在 Vue 的原型上安装事件总线，所有组件都能访问
+  }
 }
 ```
 
 ```js
 // A.vue
-mounted() {
-  this.$bus.$on("my-event", value => { /* 监听事件 */ })
-},
-beforeDestroy() {
-  this.$bus.$off("my-event") // 移除事件
+export default {
+  mounted() {
+    this.$bus.$on("my-event", value => { /* 监听事件 */ })
+  },
+  beforeDestroy() {
+    this.$bus.$off("my-event") // 移除事件
+  }
 }
 ```
 
@@ -291,19 +283,17 @@ this.$bus.$emit("my-event", [...this.args]) // 触发事件
 
 ### 发布订阅
 
-> [!note]
->
-> 任意组件间通信。
-
 ```js
 // A.vue
 import Pubsub from "pubsub-js"
 
-mounted() {
-  this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
-},
-beforeDestroy() {
-  Pubsub.unsubscribe(this.pubsubId) // 取消订阅
+export default {
+  mounted() {
+    this.pubsubId = Pubsub.subscribe("my-message", (_ /* message-name */, value) => {}) // 订阅
+  },
+  beforeDestroy() {
+    Pubsub.unsubscribe(this.pubsubId) // 取消订阅
+  }
 }
 ```
 
@@ -316,29 +306,21 @@ Pubsub.publish("my-message", [...this.args]) // 发布消息
 
 ### 透传
 
-> [!note]
->
-> 祖孙组件间通信。
-
 `$attrs` 包含了父组件传递的数据（不包含被 props 接受的数据）。可以通过 `v-bind` 批量传递给内部组件。
 
 ```vue
-<Comp v-bind="$attrs" />
+<MyComponent v-bind="$attrs" />
 ```
 
 `$listeners` 包含了父组件传递的事件。可以通过 `v-on` 批量传递给内部组件。
 
 ```vue
-<Comp v-on="$listeners" />
+<MyComponent v-on="$listeners" />
 ```
 
 ### 依赖注入
 
-> [!note]
->
-> 祖孙组件间通信。
-
-provide 选项可以给后代组件提供数据和方法。
+provide 可以给后代组件提供数据和方法。
 
 注意：
 
@@ -347,18 +329,22 @@ provide 选项可以给后代组件提供数据和方法。
 - 提供的数据需要写成函数返回值形式，否则不具备响应式。
 
 ```js
-provide() {
-  return {
-    count: () => this.count,
-    increment: this.increment
+export default {
+  provide() {
+    return {
+      count: () => this.count,
+      increment: this.increment
+    }
   }
 }
 ```
 
-在任何后代组件里，我们都可以使用 inject 选项来接受 provide 提供的数据和方法。
+在任何后代组件里，我们都可以使用 inject 来接收 provide 提供的数据和方法。
 
 ```js
-inject: ["count", "increment"]
+export default {
+  inject: ["count", "increment"]
+}
 ```
 
 ## Router

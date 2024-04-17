@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-16
+date: 2024-04-17
 ---
 
 > [!tip]
@@ -1197,7 +1197,7 @@ defineExpose({
 
 - 一个名为 `modelValue` 的 prop，它与返回的 ref 值同步；
 
-- 一个名为 `update:modelValue` 的事件，当返回的 ref 被修改时，会将其触发。
+- 一个名为 `update:modelValue` 的事件，当返回的 ref 被修改时触发。
 
 也就是说，`defineModel` 可以声明一个双向绑定的 prop。
 
@@ -1243,8 +1243,36 @@ defineExpose({
 </script>
 
 <template>
-  <input :value="modelValue" @input="emits('update:modelValue', $event.target.value)" />
+  <input
+    :value="modelValue"
+    @input="emits('update:modelValue', $event.target.value)"
+  />
 </template>
+```
+
+### Provide & Inject
+
+Provide 可以给后代组件提供数据。
+
+```ts
+import { ref, provide, readonly } from "vue"
+
+const count = ref(0)
+provide("count", count)
+// 如果希望提供的数据不能被后代组件修改，可以使用 `readonly()` 来包装
+provide("read-only-count", readonly(count))
+```
+
+Inject 可以注入上层组件提供的数据，并且这些数据是可以**直接修改**的。
+
+```ts
+import { ref, inject, type Ref } from "vue"
+
+const count = inject<Ref<number>>("count")
+// 没有设置默认值，可能为 undefined，所以需要非空断言
+count!.value++
+// 设置默认值，可以推断类型
+inject("count", ref(1))
 ```
 
 ### useAttrs
@@ -1265,24 +1293,6 @@ attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量�
 import { useAttrs } from "vue"
 
 const attrs = useAttrs()
-```
-
-### provide & inject
-
-在 Vue3 中，provide 提供的数据不需要写成函数返回值形式，因为提供的是 ref 对象，数据是具有响应式的。
-
-```ts
-import { provide } from "vue"
-
-provide("count", count)
-```
-
-inject 会返回需要注入的数据对应的值。
-
-```ts
-import { inject } from "vue"
-
-const count = inject("count")
 ```
 
 ## 深入组件

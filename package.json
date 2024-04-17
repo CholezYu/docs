@@ -1,17 +1,14 @@
 {
   "name": "docs",
   "author": "cholez",
-  "version": "1.4.15",
-  "description": "since 2023.12.1 => 0.12.1",
+  "version": "24.4.17",
+  "description": "",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "clean-dev": "vuepress dev src --clean-cache",
     "dev": "vuepress dev src",
     "build": "vuepress build src",
-    "docs:build": "vuepress build src",
-    "docs:clean-dev": "vuepress dev src --clean-cache",
-    "docs:dev": "vuepress dev src",
     "docs:update-package": "yarn dlx vp-update"
   },
   "devDependencies": {

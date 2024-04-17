@@ -4,6 +4,7 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
+  locales: undefined,
   hostname: "https://cholez.gitee.io/docs/",
   
   author: {
@@ -11,9 +12,7 @@ export default hopeTheme({
     url: "https://github.com/choIez"
   },
   
-  // iconAssets: "fontawesome",
   iconAssets: "iconfont",
-  // iconAssets: "iconify",
   
   logo: "https://cholez.gitee.io/docs/icon/icon.svg",
   
@@ -24,17 +23,14 @@ export default hopeTheme({
   
   docsDir: "src",
   
-  // navbarf
   navbar,
   
-  // sidebar
   sidebar,
   
   footer: "",
   
   displayFooter: true,
   
-  // page meta
   metaLocales: {
     date: "更新时间",
     editLink: "在 GitHub 上编辑此页"
@@ -52,7 +48,7 @@ export default hopeTheme({
     
     // All features are enabled for demo, only preserve features you need here
     mdEnhance: {
-      // 启用 GFM 警告
+      // 启用 GFM 警告 [!important] [!tip]
       alert: true,
       
       align: true,
