@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-17
+date: 2024-04-19
 ---
 
 > [!tip]
@@ -564,9 +564,7 @@ function doWatch(
 
 ### toRaw
 
-返回 Proxy 的原始对象。
-
-可以让 reactive 退出响应式，合理地使用可以减少代理访问和降低跟踪开销。
+它会返回 Proxy 的原始对象。用于让 reactive 退出响应式，合理使用可以减少代理访问、降低跟踪开销。
 
 ```ts
 import { reactive, toRaw } from "vue"
@@ -643,10 +641,6 @@ bar // Ref<2>
 ```
 
 ## 响应式原理
-
-> [!note]
->
-> 以下全部为自定义实现（简化版）。
 
 ### effect
 
@@ -760,7 +754,7 @@ effect(() => {
 })
 ```
 
-## diff 算法
+## Diff 算法
 
 ### 虚拟 DOM
 
@@ -770,7 +764,7 @@ effect(() => {
 
 因为在一个 DOM 身上，它的属性是非常多的，所以直接操作 DOM 是非常浪费性能的。
 
-### 无 key diff 算法
+### 无 Key Diff 算法
 
 > [!important]
 >
@@ -850,7 +844,7 @@ const patchUnkeyedChildren = (
 }
 ```
 
-### 有 key diff 算法
+### 有 Key Diff 算法
 
 1. 前序对比算法。
 
@@ -1277,9 +1271,7 @@ inject("count", ref(1))
 
 ### useAttrs
 
-使用 `useAttrs()` 可以返回一个 attrs 代理对象。
-
-attrs 包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
+`useAttrs()` 会返回一个 Proxy 对象，它包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
 
 > [!warning]
 >
@@ -1408,9 +1400,9 @@ const attrs = useAttrs()
 - max：最大缓存数量。
 
 ```vue
-<keep-alive>
+<KeepAlive>
   <component :is="Current" />
-</keep-alive>
+</KeepAlive>
 ```
 
 **源码解析**。`<keep-alive>` 的核心为 `KeepAliveImpl` 对象。它包含了初始化函数 `setup` 和缓存策略：
@@ -1701,26 +1693,62 @@ const KeepAliveImpl: ComponentOptions = {
 ### 基本配置
 
 ```ts
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
+
+const routes: Array<RouteRecordRaw> = [
+  {
+    path: "/",
+    redirect: "/home"
+  },
+  {
+    path: "/home",
+    name: "Home",
+    component: () => import("@/views/Home.vue"),
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "404",
+    component: () => import("@/views/NotFound.vue")
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: "/",
-      redirect: "/home"
-    },
-    {
-      path: "/home",
-      component: () => import("@/views/Home.vue"),
-      name: "Home"
-    },
-    {
-      path: "/:pathMatch(.*)*",
-      component: () => import("@/views/NotFound.vue")
-    }
-  ]
+  routes
 })
+```
+
+### 路由模式
+
+#### Hash Mode
+
+监听 `hashchange` 原生事件，当 hash URL 发生变化时触发。
+
+可以通过 `event.newURL` 获取当前的完整路径，拆分得到路由地址。
+
+```ts
+addEventListener("hashchange", (event: Event) => {
+  event.newURL // 'http://127.0.0.1:5173/#/home'
+  event.newURL.split("#")[1] // '/home'
+})
+```
+
+#### History Mode
+
+监听 `popstate` 原生事件，当历史记录改变时触发。
+
+可以通过 `history.pushState` 进行**无刷新**跳转。
+
+> [!warning]
+>
+> `pushState` 不会被 `popstate` 事件监听到，所以需要使用 VueRouter 内置的 push 方法。
+
+```ts
+addEventListener("popstate", (event: Event) => {
+  // ...
+})
+
+history.pushState(null, null, "/home")
 ```
 
 ### 缓存路由
@@ -1728,11 +1756,11 @@ const router = createRouter({
 固定写法
 
 ```vue
-<router-view v-slot="{ Component }">
-  <keep-alive>
-    <component :is="Component"></component>
-  </keep-alive>
-</router-view>
+<RouterView v-slot="{ Component }">
+  <KeepAlive>
+    <component :is="Component" />
+  </KeepAlive>
+</RouterView>
 ```
 
 ## Pinia
