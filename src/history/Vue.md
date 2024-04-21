@@ -393,11 +393,11 @@ VueRouter.prototype.push = function (
 }
 ```
 
-### 路由缓存
+### 缓存路由
 
-`<keep-alive>` 可以用于路由，被包装的路由组件会在初始创建的时候被缓存。
+`<keep-alive>` 内部的路由组件会在初始创建的时候被缓存。
 
-缓存组件的生命周期函数 `activated` 和 `deactivated` 也适用于缓存的路由组件。
+> 缓存组件的生命周期函数 `activated` 和 `deactivated` 也适用于缓存路由组件。
 
 ```vue
 <!-- 缓存一个路由组件 -->
@@ -406,38 +406,36 @@ VueRouter.prototype.push = function (
 </keep-alive>
 
 <!-- 缓存多个路由组件 -->
-<keep-alive :include="['News', 'Message']">
+<keep-alive :include="['Home', 'User']">
   <router-view />
 </keep-alive>
 ```
 
-### 动态路由 - params
+### 动态路由传参
 
-在路由配置中使用 ":" 占位。当匹配到路由时，参数值会被设置到 `$route.params` 中。
+#### Params
 
-在组件中可以通过 `$route.params` 获取 params 参数。
+在路由配置中使用 ":" 占位。当匹配到路由时，参数会被设置到 `$route.params` 中。
 
 ```vue
 <!-- 字符串写法 -->
-<router-link to="/user/1">User</router-link>
+<router-link to="/user/1" />
 
 <!-- 对象写法，params 参数只支持 name -->
-<router-link :to="{ name: 'User', params: { id: 1 } }">User</router-link>
+<router-link :to="{ name: 'User', params: { id: 1 } }" />
 ```
 
-### 动态路由 - query
+#### Query
 
-如果 URL 中有查询参数，参数值会被设置到 `$router.query` 中。
-
-在组件中可以通过 `$route.query` 获取 query 参数。
+如果 URL 中存在查询参数，参数会被设置到 `$router.query` 中。
 
 ```vue
 <!-- 字符串写法 -->
-<router-link to="/user?id=1">User</router-link>
+<router-link to="/user?id=1" />
 
 <!-- 对象写法 -->
-<router-link :to="{ path: '/user', query: { id: 1 } }">User</router-link>
-<router-link :to="{ name: 'User', query: { id: 1 } }">User</router-link>
+<router-link :to="{ path: '/user', query: { id: 1 } }" />
+<router-link :to="{ name: 'User', query: { id: 1 } }" />
 ```
 
 ### 路由组件传参
@@ -476,7 +474,7 @@ const routes = [
 
 #### 函数模式
 
-将函数返回的对象中所有属性以 props 的形式传递给组件。
+将 getter 函数返回的对象中的所有属性以 props 的形式传递给组件。
 
 **注意**：可以接受 `$route`，既能传递 params 参数，又能传递 query 参数，又能传递静态参数。
 
@@ -489,63 +487,6 @@ const routes = [
   }
 ]
 ```
-
-### 导航守卫
-
-#### router.beforeEach
-
-在所有路由跳转前触发。
-
-```js
-router.beforeEach((to, from, next) => {
-  to // 目标路由的 `$route` 对象
-  from // 原路由的 `$route` 对象
-  next() // 放行，下一步
-  next("/login") // 重定向
-})
-```
-
-#### router.beforeResolve
-
-在导航被确认之前，同时也是所有组件内守卫和异步路由组件被解析后触发。
-
-#### router.afterEach
-
-在路由跳转后触发，注意：不会接受 next 参数。
-
-#### beforeEnter
-
-进入指定路由前触发。
-
-```js
-const routes = [
-  {
-    path: "/user",
-    component: () => import("@/views/User"),
-    beforeEnter: (to, from, next) => {
-      next()
-    }
-  }
-]
-```
-
-#### beforeRouteEnter
-
-进入组件时时触发。
-
-```js
-beforeRouteEnter(to, from, next) {
-  next()
-}
-```
-
-#### beforeRouteUpdate
-
-在当前路由改变，但是该组件被复用时触发（动态路由传参跳转）。
-
-#### beforeRouteLeave
-
-导航离开组件对应的路由时触发。
 
 ## Vuex
 
@@ -566,10 +507,12 @@ Vuex 是一个状态（数据）管理插件，对所有组件的共享状态进
 ```js
 import store from "@/store"
 
-new Vue({
+const app = new Vue({
   render: h => h(App),
   store
-}).$mount("#app")
+})
+
+app.$mount("#app")
 ```
 
 ### State

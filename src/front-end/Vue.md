@@ -766,7 +766,7 @@ effect(() => {
 
 ### 无 Key Diff 算法
 
-> [!important]
+> [!warning]
 >
 > 无 key 的情况下，旧节点是不会进行复用的，非常浪费性能。
 
@@ -1389,9 +1389,9 @@ const attrs = useAttrs()
 
 切换动态组件时，组件会在切入时被创建，切出时被销毁。频繁地切换会导致重新渲染，从而影响性能。
 
-或者如果希望组件在切换时，能够缓存一些状态，比如输入框、多选框的状态，可以使用 `<keep-alive>` 组件。
+或者如果希望组件在切换时，能够缓存一些状态，比如输入框、多选框的状态，可以使用 `<KeepAlive>` 组件。
 
-`<keep-alive>` 默认会缓存内部所有的动态组件，可以给它设置一些属性，来约束缓存行为：
+`<KeepAlive>` 默认会缓存内部所有的动态组件，可以给它设置一些属性，来约束缓存行为：
 
 - include：缓存匹配的组件；
 
@@ -1405,9 +1405,9 @@ const attrs = useAttrs()
 </KeepAlive>
 ```
 
-**源码解析**。`<keep-alive>` 的核心为 `KeepAliveImpl` 对象。它包含了初始化函数 `setup` 和缓存策略：
+**源码解析**。`<KeepAlive>` 的核心为 `KeepAliveImpl` 对象。它包含了初始化函数 `setup` 和缓存策略：
 
-初始化函数：返回一个 `render` 函数，它首先会读取插槽的默认值，也就是 `<keep-alive>` 的默认插槽，并且判断如果子节点大于 1，就会报错，说明 `<keep-alive>` 内部只能有一个插槽，也就是只会渲染单个组件。最后返回的其实还是它的内部组件（默认插槽），因为 `<keep-alive>` 是一个抽象组件，它本身并不会被渲染。
+初始化函数：返回一个 `render` 函数，它首先会读取插槽的默认值，也就是 `<KeepAlive>` 的默认插槽，并且判断如果子节点大于 1，就会报错，说明 `<KeepAlive>` 内部只能有一个插槽，也就是只会渲染单个组件。最后返回的其实还是它的内部组件（默认插槽），因为 `<KeepAlive>` 是一个抽象组件，它本身并不会被渲染。
 
 缓存策略：首先会在 `onMounted` 中执行缓存函数 `cacheSubtree`，因为缓存标记 `pendingCacheKey` 初始为 null，并且它是在 `render` 函数中进行赋值的，所以缓存函数首次执行是不会缓存的。执行 `render` 函数时，将 `vnode.key` 赋值给缓存标记。之后在 `ononUpdated` 中再执行缓存函数时，缓存标记就不为 null 了，就会把缓存组件添加到缓存容器 `cache` 中。再根据 `vnode.key` 去缓存容器中查找是否存在缓存组件（是否被缓存过）。如果缓存组件存在，则继承组件实例，并将 `vnode` 标记为 `COMPONENT_KEPT_ALIVE`，这样渲染器就不会执行销毁和重新创建操作，然后使用 **LRU 算法**更新缓存队列 `keys`（删除不活跃的 key，添加新 key）；如果缓存组件不存在，则直接将 `vnode.key` 添加到 `keys` 中。
 
@@ -1698,10 +1698,10 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    redirect: "/home"
+    redirect: "/Home"
   },
   {
-    path: "/home",
+    path: "/Home",
     name: "Home",
     component: () => import("@/views/Home.vue"),
   },
@@ -1741,7 +1741,7 @@ addEventListener("hashchange", (event: Event) => {
 
 > [!warning]
 >
-> `pushState` 不会被 `popstate` 事件监听到，所以需要使用 VueRouter 内置的 push 方法。
+> `pushState` 不会被 `popstate` 事件监听到，所以需要使用 VueRouter 内置的 `router.push()`。
 
 ```ts
 addEventListener("popstate", (event: Event) => {
@@ -1753,7 +1753,9 @@ history.pushState(null, null, "/home")
 
 ### 缓存路由
 
-固定写法
+`<KeepAlive>` 内部的路由组件会在初始创建的时候被缓存。
+
+> 缓存组件的生命周期函数 `activated` 和 `deactivated` 也适用于缓存路由组件。
 
 ```vue
 <RouterView v-slot="{ Component }">
@@ -1762,6 +1764,93 @@ history.pushState(null, null, "/home")
   </KeepAlive>
 </RouterView>
 ```
+
+### 导航守卫
+
+#### 全局前置守卫 beforeEach
+
+在路由跳转前触发。常用于路由鉴权。
+
+```js
+router.beforeEach(async (to, _from, next) => {
+  NProgress.start()
+  useTitle(to.meta.title)
+  
+  // 有 Token
+  if (userToken) {
+    if (whiteRoutes.includes(to.name)) {
+      next({ path: "/" })
+    }
+    else {
+      // 用户信息有效
+      if (userInfo?.username) {
+        const addRoutes = (routes: RouteRecordRaw[]) => {
+          routes.forEach(route => router.addRoute(route))
+        }
+        addRoutes([...userRoutes, ...errorRoutes])
+        // addRoute 是异步的, 此时 next() 依然匹配不到路由, 需要重新进入当前路由
+        next({ ...to, replace: true })
+      }
+      // 用户信息无效
+      else {
+        try {
+          await getUserInfo()
+          // 重新进入当前路由(重新鉴权)
+          next({ ...to })
+        }
+        catch {
+          userReset()
+          next({ name: "Login" })
+        }
+      }
+    }
+  }
+  // 无 Token
+  else {
+    if (whiteRoutes.includes(to.name)) {
+      next()
+    }
+    else {
+      userReset()
+      next({ name: "Login" })
+    }
+  }
+})
+```
+
+#### 全局解析守卫 beforeResolve
+
+在导航被确认之前，同时也是所有组件内守卫和异步路由组件被解析后触发。
+
+#### 全局后置钩子 afterEach
+
+在路由跳转后触发。常用于路由鉴权的结束工作，例如关闭进度条。
+
+```ts
+router.afterEach((_to, _from) => {
+  NProgress.done()
+})
+```
+
+#### 路由独享守卫 beforeEnter
+
+进入指定路由前触发。
+
+```js
+const routes = [
+  {
+    path: "/user",
+    component: () => import("@/views/User"),
+    beforeEnter: (to, from, next) => {
+      next()
+    }
+  }
+]
+```
+
+#### 组件内守卫
+
+[导航守卫 | Vue Router](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#组件内的守卫)
 
 ## Pinia
 
