@@ -95,17 +95,14 @@ export default echarts
   import echarts, { type ECOption } from "@/utils/echarts.ts"
   import { merge, cloneDeep } from "lodash"
   
-  const props = withDefaults(
-    defineProps<{
-      option: ECOption
-      width?: string
-      height?: string
-    }>(),
-    {
-      width: "100%",
-      height: "100%"
-    }
-  )
+  const props = withDefaults(defineProps<{
+    option: ECOption
+    width?: string
+    height?: string
+  }>(), {
+    width: "100%",
+    height: "100%"
+  })
   
   const initOption: ECOption = {
     title: {},
@@ -131,17 +128,15 @@ export default echarts
   
   const chart = ref()
   
-  watch(
-    () => props.option,
-    (option: ECOption) => {
-      // 初始化 charts 实例
-      chart.value = charts.init(chartRef.value)
-      
-      // 渲染图表
-      chart.value.setOption(merge(cloneDeep(initOption), option))
-    },
-    { deep: true }
-  )
+  watch(() => props.option, (option: ECOption) => {
+    // 初始化 charts 实例
+    chart.value = charts.init(chartRef.value)
+
+    // 渲染图表
+    chart.value.setOption(merge(cloneDeep(initOption), option))
+  }, {
+    deep: true
+  })
 </script>
 
 <template>

@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-19
+date: 2024-04-22
 ---
 
 > [!caution]
@@ -12,21 +12,13 @@ date: 2024-04-19
 
 ### 数据代理
 
-- Vue 实例中的 data 数据，默认在 _data 属性中，如果想要操作这个数据，需要通过 _data 访问。
+- Vue 实例中的 data 数据，默认在 `_data` 属性中，如果想要操作这个数据，需要通过 `_data` 访问。
 
-- 为了更方便地操作数据，可以将 _data 中的数据拷贝到实例上。访问实例上的数据，就是访问 _data 的数据。
+- 为了更方便地操作数据，可以将 `_data` 中的数据拷贝到实例上。访问实例上的数据，就是访问 `_data` 的数据。
 
 - 过程：
 
-  1. 遍历 _data 中的数据；
-
-  2. 使用 `Object.defineProperty` 给实例扩展一个同名属性；
-
-  3. 通过 getter 和 setter 监听这些属性；
-
-  4. 读取属性时，使用 `getter` 返回在 `_data` 中同名属性的值；
-
-  5. 修改属性时，使用 `setter` 设置为 `_data` 中同名属性的值。
+  遍历 `_data` 中的数据，使用 `defineProperty` 给实例扩展一个同名属性，并通过 get 和 set 监听这些属性。它们实际都是操作 `_data` 中的数据，所以我们访问实例上的数据就是访问 `_data` 中的数据。
 
 ### 数据劫持
 
@@ -36,11 +28,11 @@ date: 2024-04-19
 
 - 过程：
 
-  1. 遍历并重写 `_data` 中的数据，通过添加存取器监听；
+  遍历 `_data` 中的数据，然后调用 defineReactive 函数为每一个属性都创建一个 dep 对象，通过 defineProperty 对这些属性进行重写，并添加 getter 和 setter，此时 dep 对象会以闭包的形式保存在 getter 和 setter 中。
 
-  2. 读取属性时，收集当前的模板信息；
+  当我们访问响应式数据时，就会触发 get 方法，它会返回数据的值，同时调用 dep 的 depend 方法，让 dep 和 watcher 相互收集依赖。dep 收集 watcher 是为了可以通过 dep 找到 watcher，然后触发视图更新；watcher 收集 dep 是为了防止重复收集。在 dep 的 depend 方法中，会调用 watcher 的 addDep 方法将 dep 收集到 newDeps 数组中，同时还会收集 dep 对象的 id；在 addDep 方法中，又会调用 dep 的 addSub 方法将 watcher 收集到 subs 数组中。这就是一个相互收集依赖的过程。
 
-  3. 修改属性时，通知所有模板重新获取最新的值。
+  当我们修改响应式数据时，就会触发 set 方法，它会更新数据，同时调用 dep 的 notify 方法，遍历 dep 的 subs 数组中的 watcher，并按照 id 从小到大排列，然后依次执行每个 watcher 的 update 方法。在 update 方法中，判断 watcher 的类型，如果是计算 watcher，则不执行回调，后续会在 evaluate 方法中计算求值；如果是渲染 watcher 或侦听 watcher，则把 watcher 对象添加到一个调度队列中，然后通过 nextTick 将一个调度任务的方法 flushSchedulerQueue 添加到异步队列，等待异步执行。当执行这个调度任务的方法时，会从调度队列中依次取出每一个 watcher 对象执行它的 run 方法触发视图更新并重新收集依赖。
 
 ### 观察者模式
 
@@ -62,7 +54,7 @@ date: 2024-04-19
 
 ### 响应式原理
 
-- 当 data 中的数据发生变化的时候，视图也会随之更新。
+- 当响应式数据更新时，根据 render 函数返回的虚拟 DOM 树生成真实 DOM 元素，插入到页面，触发视图更新。
 
 - 主要由三个部分构成：
 
@@ -74,13 +66,45 @@ date: 2024-04-19
 
 - 详细过程：
 
-  1. 使用 `Object.defineProperty` 完成数据代理，将 _data 中的数据拷贝到实例上，我们访问实例上的数据，其实就是访问 _data 中的数据。
+  1. 使用 `Object.defineProperty` 完成数据代理，将 `_data` 中的数据拷贝到实例上，我们访问实例上的数据，其实就是访问 `_data` 中的数据。
 
-  2. 在 Observer 类（发布者）中，主要通过 `Object.defineProperty` 对 _data 中的所有属性进行重写，并添加 getter 和 setter：1. 在 getter 中建立 dep（订阅中心的实例化对象）和 watcher（订阅者的实例化对象）的关系，让 dep 收集依赖（访问当前数据的 watcher）；2. 在 setter 中让 dep 通知所有依赖（watcher）更新数据。
+  2. 在 `Observer` 类（发布者）中，主要通过 `Object.defineProperty` 对 `_data` 中的所有属性进行重写，并添加 getter 和 setter：1. 在 getter 中建立 dep（订阅中心的实例化对象）和 watcher（订阅者的实例化对象）的关系，让 dep 收集依赖（访问当前数据的 watcher）；2. 在 setter 中让 dep 通知所有依赖（watcher）更新数据。
 
-  3. 在 Dep 类（订阅中心）中，有收集所有 watcher 的方法，和通知所有 watcher 更新数据的方法。当 _data 中每一个属性被劫持的时候，都会创建一个 dep（Dep 的实例化对象），在 getter 中调用 dep 的 depend 方法收集依赖，在 setter 中调用 dep 的 notify 方法通知更新。
+  3. 在 Dep 类（订阅中心）中，有收集所有 watcher 的方法，和通知所有 watcher 更新数据的方法。当 `_data` 中每一个属性被劫持的时候，都会创建一个 dep（Dep 的实例化对象），在 getter 中调用 dep 的 depend 方法收集依赖，在 setter 中调用 dep 的 notify 方法通知更新。
 
   4. 在 Watcher 类（订阅者）中，有获取数据的 get 方法和更新视图的 update 方法，每一个组件都对应一个 Wathcer。watcher 会在第一次获取数据时被 dep 收集，当收到更新要求的时候，dep 就会通知所有的 watcher（Wacther 的实例化对象）调用 update 方法重新获取数据并更新视图。
+
+### 响应式原理-v3
+
+- Vue2 的响应式使用的是 defineProperty，它只能监听对象的现有属性，无法监听新增属性或者删除属性。
+
+- Vue3 使用的是 Proxy 进行数据监听，它可以监听整个对象，包括对属性的读取、新增、修改和删除等操作。
+
+- Vue3 的响应式主要用了四个方法：reactive、track、effect、trigger
+
+  - reactive：
+
+    它是用来将数据定义成响应式的。当我们定义 reactive 数据时，内部会通过 Proxy 对数据进行代理。但是 Proxy 只能进行代理对象的第一层属性，所以如果是引用类型，会递归调用 reactive，进行深度代理。
+
+    当我们访问响应式数据的时候，就会触发 get 方法，会使用 Reflect.get 返回数据的值，然后通过 track 收集依赖，相对于 Vue2 中 dep 的 depend 方法。
+
+    当我们修改响应式数据的时候，就会触发 set 方法，会使用 Reflect.set 更新数据，然后通过 trigger 触发视图更新，相对于 Vue2中 dep 的 notify 方法。
+
+  - track：
+
+    它是用来收集依赖的。建立响应式数据和 effect 实例之间的联系。
+
+  - effect：
+
+    它是用来触发视图更新的。
+
+    初始化渲染时，effect 方法会执行一遍，此时会生成 effect 实例，将更新视图的方法保存在 effect 实例，并调用这个方法来完成页面的初始化渲染。此时会触发 Proxy 的 get 方法，通过 track 收集依赖：创建一个 WeakMap 容器，存储的 key 为响应式对象，value 是一个 Map 容器，Map 容器的 key 是响应式数据的某个属性，value 是一个 Set 容器，Set 容器会存储 effect 实例。这就是一个建立响应式数据和 effect 实例之间的联系的过程。
+
+  - trigger：
+
+    它是用来更新依赖的。找到响应式数据对应的 effect 实例，调用 run 方法更新视图。
+
+    当响应式数据更新时，会触发 Proxy 的 set 方法，通过 trigger 更新依赖：通过 WeakMap 容器找到响应式数据对应的 effect 实例，调用 run 方法更新视图，完成响应式。这就是一个更新依赖的过程。
 
 ## Diff 算法
 
@@ -147,6 +171,34 @@ diff 算法就是比较新旧 DOM 树，寻找差异的算法，在源码中通�
 - key 可以使 Vue 更高效地渲染虚拟 DOM；
 
 - key 必须满足稳定性和唯一性。
+
+## nextTick
+
+### nextTick 是什么？
+
+`nextTick` 是用于异步执行任务的方法，会在下一次 DOM 更新完成之后执行。主要用于修改数据后，需要等待 DOM 更新再执行某些操作。例如打开弹窗需要等待表单元素渲染完成才能关闭表单校验，使用 Swiper 组件需要等待图片资源请求完成才能开启图片轮播。由于 Vue 在数据更新后不会立即进行 DOM 的重新渲染，而是在下一次事件循环中进行批量更新，因此直接在数据修改后获取 DOM 可能会得到旧的结果或者报错。此时可以使用 nextTick 确保在 DOM 更新后执行回调。
+
+### nextTick 原理
+
+在 Vue2 和 Vue3 中，`nextTick` 的原理有所不同。在 Vue2 的实现中，先准备一个 `callbacks` 数组，用来存放回调函数。再定义一个 `flushCallbacks` 方法，用来遍历 `callbacks` 并执行回调函数。再定义一个 `timerFunc` 函数，用来将 `flushCallbacks` 添加到异步队列。考虑到兼容性问题，`timerFunc` 依次使用四种添加异步任务的方法，分别是 `Promise`、`MutationObserver`、`setImmediate`、`setTimeout`，择优使用。Promise 通过 `.then()` 将回调函数添加到微队列；`MutationObserver` 会监听 DOM 元素的变化，并在变化时将回调函数添加到微队列；`setImmediate` 和 `setTimeout` 都是将回调函数添加到宏队列，但是 `setImmediate` 用于 nodejs 环境。
+
+`nextTick` 有两种调用方式：回调函数形式和 Promise 形式。执行 nextTick 时，会将一个匿名函数添加到 `callbacks` 数组中。再执行 `timerFunc`，将 `flushCallbacks` 添加到异步队列。在这个匿名函数中，判断 `nextTick` 是否传入了回调函数。如果传入了回调函数，就会执行这个回调函数；如果没有，就会返回一个 `Promise`，并执行 `resolve()`，这样就会将 `.then()` 中的代码添加到微队列。等浏览器执行完同步代码，就会开始执行异步队列中的任务。执行到 `flushCallbacks` 时，会遍历 `callbacks` 中的回调函数并执行。
+
+### 与 Vue3 的区别
+
+Vue3 不再考虑兼容性问题，所以只会使用 `Promise.then()` 将回调函数添加到异步队列。
+
+## KeepAlive
+
+在 created 阶段，创建一个 cache 对象，用来缓存组件；再创建一个 keys 数组，用来缓存组件的 key。
+
+在初始化渲染时触发 render 函数，判断组件是否符合缓存规则，也就是判断组件名是否在 include 数组中或者不在 exclude 数组中。如果符合缓存规则，再判断组件之前是否缓存过，如果缓存过，就使用之前缓存的组件，还需要移除原来缓存的 key，并将最新的 key 添加到缓存列表 keys 的末尾，然后返回缓存的组件；如果之前没有缓存过，就将新组件和 key 临时存储一下，等待 mounted 阶段再缓存，然后返回新组件。如果不符合缓存规则，就不缓存，直接返回组件。
+
+在挂载完成后，也就是 mounted 阶段，使用 cacheVNode 方法将组件缓存起来，还要判断缓存列表长度是否超过设置的最大缓存数量，如果超过的话，就使用 LRU 算法，删除缓存列表的第一个组件。同时监听 include 和 exclude 数组，一旦它们发生变化，就删除不需要缓存的组件。
+
+在组件渲染时，会触发 insert 方法，判断是不是缓存的组件，如果是，就会触发 activated 生命周期。
+
+在组件卸载时，会触发 destroy 方法，判断是不是缓存的组件，如果是，就会触发 disactivated 生命周期。
 
 ## 生命周期
 

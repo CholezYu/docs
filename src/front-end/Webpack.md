@@ -50,7 +50,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 module.exports = {
   module: {
     rules: [
@@ -79,7 +78,6 @@ Webpack 默认使用 JS 动态创建 style 标签来生成样式。我们可以�
 
 ```js
 /* webpack.prod.js */
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
@@ -109,8 +107,6 @@ module.exports = {
 
 ```js
 /* webpack.prod.js */
-
-// 获取处理样式的 loaders
 const getStyleLoaders = (preProcessor) => {
   return [
     MiniCssExtractPlugin.loader,
@@ -151,7 +147,6 @@ module.exports = {
 
 ```json
 /* package.json */
-
 {
   "browserslist": ["last 2 version", "> 1%", "not dead"] // 不兼容低版本浏览器
 }
@@ -163,7 +158,6 @@ module.exports = {
 
 ```js
 /* webpack.prod.js */
-
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 
 module.exports = {
@@ -181,7 +175,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 module.exports = {
   module: {
     rules: [
@@ -213,7 +206,6 @@ module.exports = {
 
 ```js
 /* babel.config.js */
-
 module.exports = {
   // 预设
   presets: [
@@ -226,7 +218,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 module.exports = {
   module: {
     rules: [
@@ -248,14 +239,13 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
   module: {
     plugins: [
       new HtmlWebpackPlugin({
-        template: path.resolve(__dirname, "./index.html") // 指定源文件，打包生成一个 html 文件
+        template: "./public/index.html" // 指定源文件，打包生成一个 html 文件
       })
     ]
   }
@@ -268,7 +258,6 @@ module.exports = {
 
 ```js
 /* .eslintrc.js */
-
 module.exports = {
   // 继承其他规则
   extends: ["eslint:recommended"],
@@ -295,7 +284,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const ESLintWebpackPlugin = require("eslint-webpack-plugin")
 
 module.exports = {
@@ -311,7 +299,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const webpack = require("webpack")
 
 module.exports = {
@@ -327,7 +314,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const TerserWebpackPlugin = require("terser-webpack-plugin")
 
 module.exports = {
@@ -358,7 +344,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 module.exports = {
   optimization: {
     splitChunks: {
@@ -398,8 +383,8 @@ module.exports = {
 ```json
 {
   "scripts": {
-    "build": "webpack",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "build": "webpack"
   }
 }
 ```
@@ -412,7 +397,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const path = require("node:path")
 
 module.exports = {
@@ -435,7 +419,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { VueLoaderPlugin } = require("vue-loader")
 
@@ -458,10 +441,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      template: "./index.html"
-    })
+      template: "./public/index.html"
+    }),
+    new VueLoaderPlugin()
   ]
 }
 ```
@@ -470,7 +453,6 @@ module.exports = {
 
 ```ts
 /* shim.d.ts */
-
 declare module "*.vue" {
   import { DefineComponent } from "vue"
   const component: DefineComponent<{}, {}, any>
@@ -482,7 +464,6 @@ declare module "*.vue" {
 
 ```js
 /* webpack.config.js */
-
 module.exports = {
   optimization: {
     splitChunks: {
@@ -502,7 +483,6 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {

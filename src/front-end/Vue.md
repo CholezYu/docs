@@ -1,7 +1,7 @@
 ---
 title: Vue
 icon: vue
-date: 2024-04-19
+date: 2024-04-22
 ---
 
 > [!tip]
@@ -1848,19 +1848,35 @@ const routes = [
 ]
 ```
 
-#### 组件内守卫
+#### 组件内的守卫
 
-[导航守卫 | Vue Router](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#组件内的守卫)
+[导航守卫 | Vue Router (vuejs.org)](https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#组件内的守卫)
+
+#### 导航解析流程
+
+- 导航被触发。
+
+- 如果是离开一个组件，调用组件内离开时守卫 `beforeRouteLeave`。
+
+- 如果不是，则调用全局前置守卫 `beforeEach`。
+
+- 如果是动态路由切换，调用组件内更新时守卫 `beforeRouteUpdate`。再调用全局解析守卫 `beforeResolve`。
+
+- 如果不是动态路由切换，调用路由独享守卫 `beforeEnter`。
+
+- 然后解析异步路由组件。
+
+- 调用组件内进入时守卫 `beforeRouteEnter`。
+
+- 调用全局解析守卫 `beforeResolve`。
+
+- 导航被确认。
+
+- 最后调用全局后置钩子 `afterEach`。
+
+- 触发 DOM 更新。
 
 ## Pinia
-
-### 全局注入
-
-```ts
-import { createPinia } from "pinia"
-
-const pinia = createPinia()
-```
 
 ### 选项式 Store
 
