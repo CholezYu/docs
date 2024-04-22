@@ -112,15 +112,15 @@ HTTP 是超文本传输协议，是浏览器与服务器通信的协议。
 
 - 请求头：
 
-  - `Accept`: 浏览器可以接收的数据类型。
+  - `Accept`：浏览器可以接收的数据类型。
 
-  - `User-Agent`: 浏览器类型。
+  - `User-Agent`：浏览器类型。
 
-  - `Content-Type`: 请求体的数据类型。
+  - `Content-Type`：请求体的数据类型。
 
-  - `Referer`: 请求来源地址。
+  - `Referer`：请求来源地址。
 
-  - `Cookie`: 可以携带数据发送给服务器。
+  - `Cookie`：可以携带数据发送给服务器。
 
 - 空行用于分隔请求头和请求体。
 
@@ -134,13 +134,13 @@ HTTP 是超文本传输协议，是浏览器与服务器通信的协议。
 
 - 响应头：
 
-  - `Access-Control-Allow-Origin`: 允许跨域的地址。
+  - `Access-Control-Allow-Origin`：允许跨域的地址。
 
-  - `Content-Type`: 响应体的数据类型。
+  - `Content-Type`：响应体的数据类型。
 
-  - `Cache-Control`: 强制缓存字段。
+  - `Cache-Control`：强制缓存字段。
 
-  - `Etag / Last-Modifined`: 协商缓存字段。
+  - `Etag / Last-Modifined`：协商缓存字段。
 
 - 空行用于分隔响应头和响应体。
 
@@ -148,37 +148,41 @@ HTTP 是超文本传输协议，是浏览器与服务器通信的协议。
 
 ### 响应状态码
 
-- 1xx: 请求正在处理
+- 1xx：请求正在处理
 
-- 2xx: 请求处理成功
+- 2xx：请求处理成功
 
-  - 200: 请求成功
+  - 200：请求成功
 
-- 3xx: 请求重定向，需要进一步处理
+- 3xx：请求重定向，需要进一步处理
 
-  - 301: 永久重定向
+  - 301：永久重定向
 
-  - 302: 临时重定向
+  - 302：临时重定向
 
-  - 304: 重定向到浏览器缓存
+  - 304：重定向到浏览器缓存
 
-- 4xx: 客户端错误
+- 4xx：客户端错误
 
-  - 400: 请求出现语法错误
+  - 400：请求出现语法错误
 
-  - 401: 未认证、未授权
+  - 401：未认证、未授权
 
-  - 403: 拒绝访问
+  - 403：拒绝访问
 
-  - 404: 找不到资源
+  - 404：找不到资源
 
-  - 407: token 无效
+  - 407：token 无效
 
-- 5xx: 服务器错误
+- 5xx：服务器错误
 
-  - 500: 服务器内部错误
+  - 500：服务器执行过程中出现错误
 
-  - 503: 服务器停机维护或已超载，无法处理请求
+  - 501：服务器内部错误
+  
+  - 502：服务器正在更新
+  
+  - 503：服务器停机维护或已超载，无法处理请求
 
 ### Get vs Post
 
@@ -192,130 +196,114 @@ HTTP 是超文本传输协议，是浏览器与服务器通信的协议。
 
 ## Ajax
 
-### 状态码
+### 发送请求
 
-- readyState：请求状态码
+readyState 状态码
 
-  - 0：XMLHttpRequest 实例化对象被创建
+- 0：XMLHttpRequest 实例化对象被创建；
 
-  - 1：调用了 open()，可以使用 `setRequestHeader()` 设置请求头
+- 1：调用 `open()` 初始化请求，可以使用 `setRequestHeader()` 设置请求头；
 
-  - 2：调用了 send()，响应头被接收
+- 2：调用 `send()` 发送请求，响应被接收；
 
-  - 3: 正在接收响应体中的部分数据
+- 3：正在接收响应体中的数据；
 
-  - 4: Ajax 请求完成，响应报文被全部接收
+- 4：Ajax 请求完成，响应报文全部被接收。
 
-- status：响应状态码
-
-  - 200：请求成功
-
-  - 301：永久重定向
-
-  - 302：临时重定向
-
-  - 304：读取缓存
-
-  - 400：请求出现语法错误
-
-  - 403：拒绝访问
-
-  - 404：请求资源不存在
-
-  - 500：服务器执行过程中出现错误
-
-  - 501：服务器内部错误
-
-  - 503：服务器由于各种原因停止运行，无法处理请求
-
-### Get 请求
-
-```js
+```ts
 // 创建 xhr 对象
 const xhr = new XMLHttpRequest()
 
-// 初始化请求
-xhr.open("get", "http://127.0.0.1:8000/user")
+// Get 请求
+xhr.open("get", "http://127.0.0.1:3000/api")
+// Post 请求
+xhr.open("post", "http://127.0.0.1:3000/api")
 
-// 发送请求
-xhr.send()
-
-// 监听请求状态码
-xhr.onreadystatechange = () => {
-  if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
-    console.log(xhr.responseText) // JSON
-  }
-}
-
-// or
-xhr.onload = () => {
-  if (xhr.status >= 200 && xhr.status < 300) {
-    console.log(xhr.responseText)
-  }
-}
-```
-
-### Post 请求
-
-```js
-const xhr = new XMLHttpRequest()
-
-xhr.open("post", "http://127.0.0.1:8000/user")
-
+// Post 请求需要设置该请求头，通过 JSON 传递数据
 xhr.setRequestHeader("Content-Type", "application/json")
 
-xhr.send(JSON.stringify({ name: "xiaoming", age: 20 }))
+// Get 请求
+xhr.send()
+// Post 请求，可以添加请求体
+xhr.send(JSON.stringify({ username: "admin", password: 498642 }))
 
-xhr.onreadystatechange = () => {
-  if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
-    console.log(xhr.responseText)
+// 监听请求状态码
+xhr.addEventListener("readystatechange", () => {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    xhr.responseText // JSON
   }
-}
+}) 
+
+// or
+xhr.addEventListener("load", () => {
+  if (xhr.status === 200) {
+    xhr.responseText
+  }
+})
 ```
 
-### 异常请求处理
+### 监听上传进度
 
-```js
-// 设置延迟时间
+> [!warning]
+>
+> 只适用于 Post 请求。
+
+```ts
+xhr.addEventListener("progress", (event: ProgressEvent) => {
+  event.loaded // 当前进度
+  event.total // 总进度
+})
+```
+
+### 设置超时时间
+
+```ts
+// 设置超时时间
 xhr.timeout = 3000
 
 // 请求超时时触发
-xhr.ontimeout = () => {}
+xhr.addEventListener("timeout", () => {})
+```
 
-// 请求取消时触发
-xhr.onabort = () => {}
+### 中断请求
 
-// 取消发送请求
+```ts
+// 请求中断时触发
+xhr.addEventListener("abort", () => {})
+
+// 取消请求
 xhr.abort()
+```
 
-// 网络异常时触发
-xhr.onerror = () => {}
+### 请求异常
+
+```ts
+// 请求异常时触发
+xhr.addEventListener("error", () => {})
 ```
 
 ### 上传文件
 
-```js
-// 获取文件对象
-const imgFile = fileEle.files[0]
+```ts
+// 获取文件对象 `<input id="file" type="file" />`
+const file = document.querySelector("#file")!
 
-// 创建 formdata 对象
-const form = new FormData()
-
-// 将文件对象添加到 formdata 对象中
-form.append("img", imgFile)
-
-// 将 formdata 对象发送给服务器
-const xhr = new XMLHttpRequest()
-
-xhr.open("post", "/file")
-
-xhr.send(form)
-
-xhr.onload = () => {
-  if (xhr.status >= 200 && xhr.status < 300) {
-    console.log(xhr.responseText)
-  }
-}
+file.addEventListener("change", () => {
+  const formData = new FormData()
+  formData.append("file", file.files[0])
+  
+  const xhr = new XMLHttpRequest()
+  xhr.open("post", "http://127.0.0.1:3000/upload")
+  // 浏览器会自动设置 form-data 请求头
+  // xhr.setRequestHeader("Content-Type", "multipart/form-data")
+  xhr.send(formData)
+  
+  xhr.addEventListener("load", () => {
+    if (xhr.status === 200) {
+      xhr.responseText
+    }
+  })
+})
 ```
 
 ## Fetch
@@ -324,37 +312,30 @@ xhr.onload = () => {
 
 Promise 风格。
 
-```js
-fetch("http://127.0.0.1:8000/user").then(
-  result => {
-    if (result.status >= 200 && result.status < 300) {
-      return result.json()
-    }
-  }
-).then(
-  result => {
-    console.log(result.data)
-  }
-)
+```ts
+fetch("http://127.0.0.1:3000/api")
+  .then(result => result.json())
+  .then(result => {
+    result.data
+  })
 ```
 
 async & await 风格。
 
 ```js
 const request = async () => {
-  const result = await (await fetch("http://127.0.0.1:8000/user")).json()
-  
-  console.log(result.data)
+  const result = await (await fetch("http://127.0.0.1:3000/api")).json()
+  result.data
 }
 ```
 
 ### Post 请求
 
-```js
-fetch("http://127.0.0.1:8000/user", {
+```ts
+fetch("http://127.0.0.1:3000/api", {
   method: "post",
   headers: {
-    "Content-type": "application/json"
+    "Content-Type": "application/json"
   },
   body: JSON.stringify({
     // json data
@@ -364,10 +345,10 @@ fetch("http://127.0.0.1:8000/user", {
 
 ### 取消请求
 
-```js
+```ts
 const controller = new AbortController()
 
-fetch("http://127.0.0.1:8000/user", {
+fetch("http://127.0.0.1:3000/api", {
   signal: controller.signal
 })
 
@@ -402,8 +383,8 @@ element.onclick = () => {
 
 - 用法：`axios.get(url, [config])`
 
-  ```js
-  axios.get("http://127.0.0.1:8000/user")
+  ```ts
+  axios.get("http://127.0.0.1:3000/api")
   ```
 
 ### Post 请求
@@ -426,8 +407,8 @@ element.onclick = () => {
 
 - 用法：`axios.post(url, [data], [config])`
 
-  ```js
-  axios.post("http://127.0.0.1:8000/user", {
+  ```ts
+  axios.post("http://127.0.0.1:3000/api", {
     username: "admin",
     nickname: "超级管理员"
   })
@@ -435,13 +416,13 @@ element.onclick = () => {
 
 ### 请求配置
 
-```js
+```ts
 {
-  url: "/user", // 请求地址
+  url: "/api", // 请求地址
 
   method: "get", // 请求方法
 
-  baseURL: "http://127.0.0.1:8000", // 基础路径, 与 url 拼接
+  baseURL: "http://127.0.0.1:3000", // 基础路径, 与 url 拼接
 
   headers: {}, // 请求头
 
@@ -457,7 +438,7 @@ element.onclick = () => {
 
 ### 响应信息
 
-```js
+```ts
 {
   data: {}, // 响应体
 
@@ -477,7 +458,7 @@ element.onclick = () => {
 
 > 队列：[请求拦截器3，请求拦截器2，请求拦截器1，axios, 响应拦截器1，响应拦截器2，响应拦截器3]
 
-```js
+```ts
 // 创建实例
 const instance = axios.create({
   baseURL: "/dev-api",
@@ -508,23 +489,59 @@ instance.interceptors.response.use(
 )
 ```
 
+### 监听上传进度
+
+```ts
+import { axios, type AxiosProgressEvent } from "axios"
+
+axios.post("http://127.0.0.1:3000/api", {
+  username: "admin",
+  nickname: "超级管理员"
+}, {
+  onUploadProgress: (event: AxiosProgressEvent) => {
+    event.loaded // 当前进度
+    event.total // 总进度
+  }
+})
+```
+
+### 上传文件
+
+```ts
+import { axios, type AxiosProgressEvent } from "axios"
+
+const apiUpload = (data: any) => {
+  const formData = new FormData()
+  formData.append("file", data.file)
+  
+  return axios.post("http://127.0.0.1:3000/ipload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    onUploadProgress: (event: AxiosProgressEvent) => {
+      /* 监听上传进度 */
+    }
+  })
+}
+```
+
 ## 跨域
 
 ### 同源策略
 
-同源策略指的是：请求时浏览器和服务器的协议、域名、端口必须保持一致。
+同源策略：发送请求时，浏览器和服务器的**协议、域名、端口**必须保持一致。
 
 不同源的网站不能进行资源交互：
 
-- 无法发送 Ajax 请求
+- 无法发送 Ajax 请求；
 
-- 无法操作 DOM
+- 无法操作 DOM；
 
-- 无法读取 Cookie、LocalStorage、IndexedDB
+- 无法读取 Cookie、Storage、IndexedDB。
 
-### Jsonp
+### JSONP
 
-使用：`<script>` 标签不受同源策略的影响，可以通过 src 属性携带执行代码发送跨域请求。
+利用 `<script>` 标签的 src 属性不受同源策略限制的特性，进行跨域请求。
+
+前端定义一个函数发送给后端，后端将要返回的数据注入到这个函数的参数里面，再返回给前端。
 
 优点：没有兼容性问题。
 
@@ -532,11 +549,11 @@ instance.interceptors.response.use(
 
 ### CORS
 
-使用：跨域资源共享。由 **服务器** 设置一组响应头字段实现跨域。
+跨域资源共享。后端设置 `Access-Control-Allow-Origin` 响应头，也就是允许跨域的白名单。
 
-优点：CORS 通信与同源的 Ajax 通信没有差别，代码完全一样，容易维护；支持所有类型的 HTTP 请求。
+优点：前端不需要任何操作；支持所有请求方式。
 
-缺点：不支持 IE10 以下的浏览器；第一次发送非简单请求时会多一次请求；需要服务器配合。
+缺点：不支持 IE10 以下的浏览器。
 
 ```js
 // 允许的 URL
@@ -546,16 +563,18 @@ res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8000")
 res.setHeader("Access-Control-Allow-Methods", "*")
 
 // 允许的请求头
-res.setHeader("Access-Control-Allow-Headers", "Content-type")
+res.setHeader("Access-Control-Allow-Headers", "Content-Type")
 ```
 
 参考：[跨源资源共享（CORS） - HTTP | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/CORS)
 
 ### Proxy
 
-使用：浏览器有跨域限制，但是服务器没有跨域问题。所以可以由代理服务器向目标服务器请求资源再返回给客户端。
+正向代理。前端配置代理服务器，它会向目标服务器请求资源再返回给客户端。
 
-优点：服务器代理是目前最好的跨域解决方案。
+优点：服务器代理是开发环境下最好的跨域解决方案。
+
+缺点：只适用于开发环境，生产环境下还需要配置 Nginx。
 
 Vue-CLI
 
@@ -566,7 +585,7 @@ const { defineConfig } = require("@vue/cli-service")
 module.exports = defineConfig({
   devServer: {
     host: "127.0.0.1",
-    port: 8888,
+    port: 8000,
     proxy: {
       "/dev-api": {
         target: "http://localhost:3000",
@@ -589,7 +608,7 @@ import { defineConfig } from "vite"
 export default defineConfig({
   server: {
     host: "127.0.0.1",
-    port: 8888,
+    port: 8000,
     proxy: {
       "/dev-api": {
         target: "http://localhost:3000",
@@ -600,3 +619,7 @@ export default defineConfig({
   }
 })
 ```
+
+### Nginx
+
+反向代理。
