@@ -13,11 +13,9 @@ actions:
   - text: GitHub
     icon: github
     link: https://github.com/choIez
-  
   - text: 开始使用
     icon: markdown
     link: ./overview/
     type: primary
-
 footer: ""
 ---

@@ -749,6 +749,48 @@ display: -webkit-box;
 -webkit-line-clamp: 2;
 ```
 
+## 重绘重排
+
+> [!important]
+>
+> 重绘不一定导致重排，但是重排一定会导致重绘！
+
+### 重绘
+
+元素的样式改变，但不影响它在文档流中的位置（例如：文本颜色、背景颜色、可见性等）。
+
+浏览器会对这些元素进行重新绘制。
+
+### 重排（回流）
+
+- 页面首次渲染；
+
+- 浏览器窗口大小发生改变；
+
+- 元素尺寸或位置发生改变；
+
+- 元素内容发生变化（文字数量或图片大小等）；
+
+- 元素字体大小变化；
+
+- DOM 元素的添加与删除；
+
+- 一些导致重排的属性和方法：
+
+  - `clientWidth` `clientHeight` `clientTop` `clientLeft`
+
+  - `offsetWidth` `offsetHeight` `foosetTop` `offsetLeft`
+
+  - `scrollWidth` `scrollHeight` `scrollTop` `scrollLest`
+
+  - `scrollIntoView()` `scrollIntoViewIfNeeded()`
+
+  - `getComputedStyle()`
+
+  - `getBoundingClientRect()`
+
+  - `scrollTo()`
+
 ## 响应式布局
 
 ### 媒体查询
