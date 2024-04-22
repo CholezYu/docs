@@ -120,14 +120,19 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "ECharts",
-          icon: "typescript",
-          link: "ECharts"
+          text: "VueUse",
+          icon: "vue",
+          link: "VueUse"
         },
         {
           text: "Lodash",
           icon: "typescript",
           link: "Lodash"
+        },
+        {
+          text: "ECharts",
+          icon: "typescript",
+          link: "ECharts"
         },
         {
           text: "WebGL",
