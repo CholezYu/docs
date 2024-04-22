@@ -4,13 +4,22 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
-  locales: undefined,
   hostname: "https://cholez.gitee.io/docs/",
   
   author: {
     name: "俞文健",
     url: "https://github.com/choIez"
   },
+  
+  navbar,
+  
+  sidebar,
+  
+  // 全屏
+  // fullscreen: true,
+  
+  // 深色模式
+  darkmode: "disable",
   
   iconAssets: "iconfont",
   
@@ -22,10 +31,6 @@ export default hopeTheme({
   repo: "choIez/docs",
   
   docsDir: "src",
-  
-  navbar,
-  
-  sidebar,
   
   footer: "",
   

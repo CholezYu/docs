@@ -17,11 +17,11 @@ import { useStorage } from "@vueuse/core"
 const userToken = useStorage<string>(STORAGE_KEY.TOKEN, null)
 
 // USER_INFO
-const userInfo = useStorage<UserInfo | object>(STORAGE_KEY.USER_INFO, null, localStorage, {
+const userInfo = useStorage<UserInfo | null>(STORAGE_KEY.USER_INFO, null, localStorage, {
   // 对象类型的 storage 需要自定义序列化
   serializer: {
     read: (v: string) => v ? JSON.parse(v) : null,
-    write: (v: UserInfo | object) => JSON.stringify(v)
+    write: (v: UserInfo | null) => JSON.stringify(v)
   },
   // 如果默认值为 null，需要使用下面这种写法
   // 但是测试发现使用上面的方式也行

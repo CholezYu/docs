@@ -93,7 +93,7 @@ export default navbar([
     ]
   },
   {
-    text: "构建文档",
-    link: "https://theme-hope.vuejs.press/zh/"
+    text: "深入解析 Vue.js ",
+    link: "https://cholez.gitee.io/vapor/"
   }
 ])

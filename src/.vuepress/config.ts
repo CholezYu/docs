@@ -6,7 +6,7 @@ export default defineUserConfig({
   base: "/docs/",
   lang: "zh-CN",
   description: "",
-  theme
+  theme,
   // Enable it with pwa
   // shouldPrefetch: false,
 })
