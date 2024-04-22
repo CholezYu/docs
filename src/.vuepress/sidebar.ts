@@ -96,20 +96,25 @@ export default sidebar({
       ]
     },
     {
-      text: "算法",
-      icon: "keyboard",
-      prefix: "algorithm/",
+      text: "工具",
+      icon: "tool",
+      prefix: "tools/",
       collapsible: true,
       children: [
         {
-          text: "JavaScript-Alog",
-          icon: "javascript",
-          link: "JavaScript-Algo"
+          text: "VueUse",
+          icon: "physics",
+          link: "VueUse"
         },
         {
-          text: "Java-Alog",
-          icon: "java",
-          link: "Java-Algo"
+          text: "Lodash",
+          icon: "function",
+          link: "Lodash"
+        },
+        {
+          text: "Exceljs",
+          icon: "table",
+          link: "Exceljs"
         }
       ]
     },
@@ -119,16 +124,6 @@ export default sidebar({
       prefix: "high-end/",
       collapsible: true,
       children: [
-        {
-          text: "VueUse",
-          icon: "vue",
-          link: "VueUse"
-        },
-        {
-          text: "Lodash",
-          icon: "typescript",
-          link: "Lodash"
-        },
         {
           text: "ECharts",
           icon: "typescript",
@@ -143,11 +138,24 @@ export default sidebar({
           text: "Threejs",
           icon: "typescript",
           link: "Threejs"
+        }
+      ]
+    },
+    {
+      text: "算法",
+      icon: "keyboard",
+      prefix: "algorithm/",
+      collapsible: true,
+      children: [
+        {
+          text: "JavaScript-Alog",
+          icon: "javascript",
+          link: "JavaScript-Algo"
         },
         {
-          text: "Exceljs",
-          icon: "typescript",
-          link: "Exceljs"
+          text: "Java-Alog",
+          icon: "java",
+          link: "Java-Algo"
         }
       ]
     },
