@@ -222,10 +222,12 @@ xhr.open("post", "http://127.0.0.1:3000/api")
 // Post 请求需要设置该请求头，通过 JSON 传递数据
 xhr.setRequestHeader("Content-Type", "application/json")
 
-// Get 请求
+// Get 请求的请求体为空
 xhr.send()
-// Post 请求，可以添加请求体
-xhr.send(JSON.stringify({ username: "admin", password: 498642 }))
+// Post 请求可以添加请求体
+xhr.send(JSON.stringify({
+  // json data
+}))
 
 // 监听请求状态码
 xhr.addEventListener("readystatechange", () => {
@@ -242,11 +244,7 @@ xhr.addEventListener("load", () => {
 })
 ```
 
-### 监听上传进度
-
-> [!warning]
->
-> 只适用于 Post 请求。
+### 监测上传进度
 
 ```ts
 xhr.addEventListener("progress", (event: ProgressEvent) => {
@@ -308,16 +306,28 @@ file.addEventListener("change", () => {
 
 ## Fetch
 
-### Get 请求
+### 发送请求
 
 Promise 风格。
 
 ```ts
+// Get 请求
 fetch("http://127.0.0.1:3000/api")
   .then(result => result.json())
   .then(result => {
     result.data
   })
+
+// Post 请求
+fetch("http://127.0.0.1:3000/api", {
+  method: "post",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    // json data
+  })
+})
 ```
 
 async & await 风格。
@@ -329,18 +339,34 @@ const request = async () => {
 }
 ```
 
-### Post 请求
+### 监测上传进度
 
 ```ts
-fetch("http://127.0.0.1:3000/api", {
-  method: "post",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    // json data
+fetch("http://127.0.0.1:3000/upload")
+  .then(async result => {
+    // 拷贝一份，用于计算上传进度
+    const response = result.clone()
+    
+    // 流
+    const reader = response.body.getReader()
+    // 总字节
+    const total = response.headers.get("Content-Length")
+    // 记录完成的进度
+    let loaded = 0
+    
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        break
+      }
+      loaded += value.length
+    }
+    
+    return result.json()
   })
-})
+  .then(result => {
+    result.data
+  })
 ```
 
 ### 取消请求
@@ -358,61 +384,24 @@ setTimeout(() => {
 }, 3000)
 
 // 点击取消请求
-element.onclick = () => {
+const stop = () => {
   controller && controller.abort()
 }
 ```
 
 ## Axios
 
-### Get 请求
+### 发送请求
 
-- 参数：
+```ts
+// Get 请求
+axios.get("http://127.0.0.1:3000/api")
 
-  - url：请求地址
-
-  - config：请求配置
-
-- 返回值：
-
-  - data：响应体
-
-  - headers：响应头
-
-  - status：状态码
-
-- 用法：`axios.get(url, [config])`
-
-  ```ts
-  axios.get("http://127.0.0.1:3000/api")
-  ```
-
-### Post 请求
-
-- 参数：
-
-  - url：请求地址
-
-  - data：请求体
-
-  - config：请求配置
-
-- 返回值：
-
-  - data：响应体
-
-  - headers：响应头
-
-  - status：状态码
-
-- 用法：`axios.post(url, [data], [config])`
-
-  ```ts
-  axios.post("http://127.0.0.1:3000/api", {
-    username: "admin",
-    nickname: "超级管理员"
-  })
-  ```
+// Post 请求
+axios.post("http://127.0.0.1:3000/api", {
+  // json data
+})
+```
 
 ### 请求配置
 
@@ -454,22 +443,21 @@ element.onclick = () => {
 }
 ```
 
-### 实例和拦截器
-
-> 队列：[请求拦截器3，请求拦截器2，请求拦截器1，axios, 响应拦截器1，响应拦截器2，响应拦截器3]
+### 拦截器
 
 ```ts
+import { axios } from "axios"
+
 // 创建实例
 const instance = axios.create({
-  baseURL: "/dev-api",
-  timeout: 3000,
-  headers: {}
+  baseURL: "/api",
+  timeout: 3000
 })
 
 // 请求拦截器
 instance.interceptors.request.use(
   config => {
-    config.headers["Authorization"] = store.state.user.token
+    config.headers["Token"] = storage.get(STORAGE_KEY.TOKEN)
     
     return config
   }
@@ -489,14 +477,13 @@ instance.interceptors.response.use(
 )
 ```
 
-### 监听上传进度
+### 监测上传进度
 
 ```ts
 import { axios, type AxiosProgressEvent } from "axios"
 
 axios.post("http://127.0.0.1:3000/api", {
-  username: "admin",
-  nickname: "超级管理员"
+  // json data
 }, {
   onUploadProgress: (event: AxiosProgressEvent) => {
     event.loaded // 当前进度
@@ -514,10 +501,10 @@ const apiUpload = (data: any) => {
   const formData = new FormData()
   formData.append("file", data.file)
   
-  return axios.post("http://127.0.0.1:3000/ipload", formData, {
+  return axios.post("http://127.0.0.1:3000/upload", formData, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress: (event: AxiosProgressEvent) => {
-      /* 监听上传进度 */
+      /* 监测上传进度 */
     }
   })
 }
