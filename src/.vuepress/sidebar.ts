@@ -52,7 +52,7 @@ export default sidebar({
         },
         {
           text: "Webpack",
-          icon: "typescript",
+          icon: "waline",
           link: "Webpack"
         },
         {

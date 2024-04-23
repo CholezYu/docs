@@ -193,17 +193,15 @@ import { saveAs } from "file-saver/dist/FileSaver"
 import { urlToBase64 } from "@/utils/urlToBase64"
 
 
-export async function toExcel(tableData, headers, title) {
+export async function toExcel(data, headers, title) {
   const workbook = new Workbook()
-  
   const sheet = workbook.addWorksheet("sheet")
   
   sheet.columns = headers
-  
-  sheet.addRows(tableData)
+  sheet.addRows(data)
   
   for (let i = 1; i <= headers.length; i++) { // 列
-    for (let j = 1; j <= tableData.length + 1; j++) { // 行
+    for (let j = 1; j <= data.length + 1; j++) { // 行
       if (j > 1) sheet.getRow(j).height = 120
       
       sheet.getRow(j).getCell(i).alignment = {
@@ -227,8 +225,6 @@ export async function toExcel(tableData, headers, title) {
   await (async function () {
     for (let row = 1; row <= urls.length; row++) {
       const base64 = await urlToBase64(urls[row - 1])
-      
-      remainder.value--
       
       const imageId = workbook.addImage({
         base64: base64.toString(),

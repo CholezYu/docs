@@ -1,7 +1,7 @@
 ---
 title: Webpack
-icon: typescript
-date: 2024-02-21
+icon: waline
+date: 2024-04-23
 ---
 
 ## 基本配置
@@ -25,12 +25,12 @@ module.exports = {
     clean: true // 自动清空上次打包资源
   },
   
-  // Loader
+  // 预处理器
   module: {
     rules: []
   },
   
-  // Plugins
+  // 插件
   plugins: [],
   
   // 其他配置
@@ -38,7 +38,7 @@ module.exports = {
 }
 ```
 
-## Loader
+## 预处理器
 
 ### 处理样式资源
 
@@ -50,6 +50,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 module.exports = {
   module: {
     rules: [
@@ -78,6 +79,7 @@ Webpack 默认使用 JS 动态创建 style 标签来生成样式。我们可以�
 
 ```js
 /* webpack.prod.js */
+
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
@@ -107,6 +109,7 @@ module.exports = {
 
 ```js
 /* webpack.prod.js */
+
 const getStyleLoaders = (preProcessor) => {
   return [
     MiniCssExtractPlugin.loader,
@@ -147,6 +150,7 @@ module.exports = {
 
 ```json
 /* package.json */
+
 {
   "browserslist": ["last 2 version", "> 1%", "not dead"] // 不兼容低版本浏览器
 }
@@ -158,6 +162,7 @@ module.exports = {
 
 ```js
 /* webpack.prod.js */
+
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 
 module.exports = {
@@ -175,6 +180,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 module.exports = {
   module: {
     rules: [
@@ -206,6 +212,7 @@ module.exports = {
 
 ```js
 /* babel.config.js */
+
 module.exports = {
   // 预设
   presets: [
@@ -218,6 +225,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 module.exports = {
   module: {
     rules: [
@@ -231,7 +239,7 @@ module.exports = {
 }
 ```
 
-## Plugins
+## 插件
 
 ### 处理 HTML
 
@@ -239,6 +247,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
@@ -258,6 +267,7 @@ module.exports = {
 
 ```js
 /* .eslintrc.js */
+
 module.exports = {
   // 继承其他规则
   extends: ["eslint:recommended"],
@@ -284,6 +294,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const ESLintWebpackPlugin = require("eslint-webpack-plugin")
 
 module.exports = {
@@ -299,6 +310,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const webpack = require("webpack")
 
 module.exports = {
@@ -314,6 +326,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const TerserWebpackPlugin = require("terser-webpack-plugin")
 
 module.exports = {
@@ -344,6 +357,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 module.exports = {
   optimization: {
     splitChunks: {
@@ -381,6 +395,8 @@ module.exports = {
 配置打包命令和启动服务器命令。
 
 ```json
+/* package.json */
+
 {
   "scripts": {
     "dev": "webpack-dev-server",
@@ -397,6 +413,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const path = require("node:path")
 
 module.exports = {
@@ -419,6 +436,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const { VueLoaderPlugin } = require("vue-loader")
 
@@ -453,6 +471,7 @@ module.exports = {
 
 ```ts
 /* shim.d.ts */
+
 declare module "*.vue" {
   import { DefineComponent } from "vue"
   const component: DefineComponent<{}, {}, any>
@@ -464,6 +483,7 @@ declare module "*.vue" {
 
 ```js
 /* webpack.config.js */
+
 module.exports = {
   optimization: {
     splitChunks: {
@@ -483,6 +503,7 @@ module.exports = {
 
 ```js
 /* webpack.config.js */
+
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {

@@ -1,7 +1,7 @@
 ---
 title: Ajax
 icon: ajax
-date: 2024-04-22
+date: 2024-04-23
 ---
 
 ## TCP/IP
@@ -202,7 +202,7 @@ readyState 状态码
 
 - 0：XMLHttpRequest 实例化对象被创建；
 
-- 1：调用 `open()` 初始化请求，可以使用 `setRequestHeader()` 设置请求头；
+- 1：调用 `open()` 初始化请求，可以通过 `setRequestHeader()` 设置请求头；
 
 - 2：调用 `send()` 发送请求，响应被接收；
 
@@ -211,37 +211,39 @@ readyState 状态码
 - 4：Ajax 请求完成，响应报文全部被接收。
 
 ```ts
-// 创建 xhr 对象
-const xhr = new XMLHttpRequest()
-
-// Get 请求
-xhr.open("get", "http://127.0.0.1:3000/api")
-// Post 请求
-xhr.open("post", "http://127.0.0.1:3000/api")
-
-// Post 请求需要设置该请求头，通过 JSON 传递数据
-xhr.setRequestHeader("Content-Type", "application/json")
-
-// Get 请求的请求体为空
-xhr.send()
-// Post 请求可以添加请求体
-xhr.send(JSON.stringify({
-  // json data
-}))
-
-// 监听请求状态码
-xhr.addEventListener("readystatechange", () => {
-  if (xhr.readyState === 4 && xhr.status === 200) {
-    xhr.responseText // JSON
-  }
-}) 
-
-// or
-xhr.addEventListener("load", () => {
-  if (xhr.status === 200) {
-    xhr.responseText
-  }
-})
+const request = (url: string) => {
+  // 创建 xhr 对象
+  const xhr = new XMLHttpRequest()
+  
+  // Get 请求
+  xhr.open("get", url)
+  // Post 请求
+  xhr.open("post", url)
+  
+  // Post 请求需要设置该请求头，通过 JSON 传递数据
+  xhr.setRequestHeader("Content-Type", "application/json")
+  
+  // Get 请求的请求体为空
+  xhr.send()
+  // Post 请求可以添加请求体
+  xhr.send(JSON.stringify({
+    // json data
+  }))
+  
+  // 监听请求状态码
+  xhr.addEventListener("readystatechange", () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      xhr.responseText // JSON
+    }
+  }) 
+  
+  // or
+  xhr.addEventListener("load", () => {
+    if (xhr.status === 200) {
+      xhr.responseText
+    }
+  })
+}
 ```
 
 ### 监测上传进度
@@ -260,14 +262,18 @@ xhr.addEventListener("progress", (event: ProgressEvent) => {
 xhr.timeout = 3000
 
 // 请求超时时触发
-xhr.addEventListener("timeout", () => {})
+xhr.addEventListener("timeout", () => {
+  // ...
+})
 ```
 
 ### 中断请求
 
 ```ts
 // 请求中断时触发
-xhr.addEventListener("abort", () => {})
+xhr.addEventListener("abort", () => {
+  // ...
+})
 
 // 取消请求
 xhr.abort()
@@ -277,31 +283,35 @@ xhr.abort()
 
 ```ts
 // 请求异常时触发
-xhr.addEventListener("error", () => {})
+xhr.addEventListener("error", () => {
+  // ...
+})
 ```
 
 ### 上传文件
 
 ```ts
-// 获取文件对象 `<input id="file" type="file" />`
-const file = document.querySelector("#file")!
-
-file.addEventListener("change", () => {
-  const formData = new FormData()
-  formData.append("file", file.files[0])
+const request = (url: string) => {
+  // 获取文件对象 `<input type="file" />`
+  const file = document.getElementById("file")
   
-  const xhr = new XMLHttpRequest()
-  xhr.open("post", "http://127.0.0.1:3000/upload")
-  // 浏览器会自动设置 form-data 请求头
-  // xhr.setRequestHeader("Content-Type", "multipart/form-data")
-  xhr.send(formData)
-  
-  xhr.addEventListener("load", () => {
-    if (xhr.status === 200) {
-      xhr.responseText
-    }
+  file.addEventListener("change", () => {
+    const formData = new FormData()
+    formData.append("file", file.files[0])
+    
+    const xhr = new XMLHttpRequest()
+    xhr.open("post", url)
+    // 浏览器会自动设置 form-data 请求头
+    // xhr.setRequestHeader("Content-Type", "multipart/form-data")
+    xhr.send(formData)
+    
+    xhr.addEventListener("load", () => {
+      if (xhr.status === 200) {
+        xhr.responseText
+      }
+    })
   })
-})
+}
 ```
 
 ## Fetch
@@ -311,81 +321,86 @@ file.addEventListener("change", () => {
 Promise 风格。
 
 ```ts
-// Get 请求
-fetch("http://127.0.0.1:3000/api")
-  .then(result => result.json())
-  .then(result => {
-    result.data
+const request = (url: string) => {
+  // Get 请求
+  fetch(url)
+    .then(result => result.json())
+    .then(result => {
+      result.data
+    })
+  
+  // Post 请求
+  fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      // json data
+    })
   })
-
-// Post 请求
-fetch("http://127.0.0.1:3000/api", {
-  method: "post",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    // json data
-  })
-})
+}
 ```
 
 async & await 风格。
 
 ```js
-const request = async () => {
-  const result = await (await fetch("http://127.0.0.1:3000/api")).json()
-  result.data
+const request = async (url: string) => {
+  const result = await fetch(url)
+  const response = await result.json()
+  response.data
 }
 ```
 
 ### 监测上传进度
 
 ```ts
-fetch("http://127.0.0.1:3000/upload")
-  .then(async result => {
-    // 拷贝一份，用于计算上传进度
-    const response = result.clone()
-    
-    // 流
-    const reader = response.body.getReader()
-    // 总字节
-    const total = response.headers.get("Content-Length")
-    // 记录完成的进度
-    let loaded = 0
-    
-    while (true) {
-      const { done, value } = await reader.read()
-      if (done) {
-        break
+const request = (url: string) => {
+  fetch(url)
+    .then(async result => {
+      // 拷贝一份，用于计算上传进度
+      const response = result.clone()
+      
+      // 流
+      const reader = response.body.getReader()
+      // 总字节
+      const total = response.headers.get("Content-Length")
+      // 记录完成的进度
+      let loaded = 0
+      
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) {
+          break
+        }
+        loaded += value.length
       }
-      loaded += value.length
-    }
-    
-    return result.json()
-  })
-  .then(result => {
-    result.data
-  })
+      
+      return result.json()
+    })
+    .then(result => {
+      result.data
+    })
+}
 ```
 
 ### 取消请求
 
 ```ts
-const controller = new AbortController()
-
-fetch("http://127.0.0.1:3000/api", {
-  signal: controller.signal
-})
-
-// 超过 3 秒, 取消请求
-setTimeout(() => {
-  controller.abort()
-}, 3000)
-
-// 点击取消请求
-const stop = () => {
-  controller && controller.abort()
+const request = (url: string) => {
+  const controller = new AbortController()
+  
+  fetch(url, { signal: controller.signal })
+  
+  // 超过 3 秒, 取消请求
+  setTimeout(() => {
+    controller.abort()
+  }, 3000)
+  
+  // 点击取消请求
+  const stop = () => {
+    controller && controller.abort()
+  }
 }
 ```
 
@@ -394,52 +409,14 @@ const stop = () => {
 ### 发送请求
 
 ```ts
-// Get 请求
-axios.get("http://127.0.0.1:3000/api")
-
-// Post 请求
-axios.post("http://127.0.0.1:3000/api", {
-  // json data
-})
-```
-
-### 请求配置
-
-```ts
-{
-  url: "/api", // 请求地址
-
-  method: "get", // 请求方法
-
-  baseURL: "http://127.0.0.1:3000", // 基础路径, 与 url 拼接
-
-  headers: {}, // 请求头
-
-  params: {}, // 请求参数
-
-  data: {}, // 请求体
-
-  timeout: 1000, // 延迟时间
-
-  responseType: "json" // 响应体数据类型
-}
-```
-
-### 响应信息
-
-```ts
-{
-  data: {}, // 响应体
-
-  status: 200, // 响应状态码
-
-  statusText: "OK", // 响应状态码信息
-
-  headers: {}, // 响应头
-
-  config: {}, // 请求时配置
-
-  request: {} // 生成响应的请求 (xhr)
+const request = (url: string) => {
+  // Get 请求
+  axios.get(url)
+  
+  // Post 请求
+  axios.post(url, {
+    // json data
+  })
 }
 ```
 
@@ -466,7 +443,7 @@ instance.interceptors.request.use(
 // 响应拦截器
 instance.interceptors.response.use(
   response => {
-    if (response.data.code === 200) {
+    if (response.data.code === RESPONSE_CODE.SUCCESS) {
       return response.data.data
     }
     else {
@@ -479,17 +456,19 @@ instance.interceptors.response.use(
 
 ### 监测上传进度
 
-```ts
+``` ts
 import { axios, type AxiosProgressEvent } from "axios"
 
-axios.post("http://127.0.0.1:3000/api", {
-  // json data
-}, {
-  onUploadProgress: (event: AxiosProgressEvent) => {
-    event.loaded // 当前进度
-    event.total // 总进度
-  }
-})
+const request = (url: string) => {
+  axios.post(url, {
+    // json data
+  }, {
+    onUploadProgress: (event: AxiosProgressEvent) => {
+      event.loaded // 当前进度
+      event.total // 总进度
+    }
+  })
+}
 ```
 
 ### 上传文件
@@ -497,11 +476,11 @@ axios.post("http://127.0.0.1:3000/api", {
 ```ts
 import { axios, type AxiosProgressEvent } from "axios"
 
-const apiUpload = (data: any) => {
+const request = (url: string, data: any) => {
   const formData = new FormData()
   formData.append("file", data.file)
   
-  return axios.post("http://127.0.0.1:3000/upload", formData, {
+  return axios.post(url, formData, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress: (event: AxiosProgressEvent) => {
       /* 监测上传进度 */
@@ -557,16 +536,13 @@ res.setHeader("Access-Control-Allow-Headers", "Content-Type")
 
 ### Proxy
 
-正向代理。前端配置代理服务器，它会向目标服务器请求资源再返回给客户端。
-
-优点：服务器代理是开发环境下最好的跨域解决方案。
-
-缺点：只适用于开发环境，生产环境下还需要配置 Nginx。
+正向代理，**开发环境**跨域。前端配置代理服务器，它会向目标服务器请求资源再返回给客户端。
 
 Vue-CLI
 
 ```js
 /* vue.config.js */
+
 const { defineConfig } = require("@vue/cli-service")
 
 module.exports = defineConfig({
@@ -590,6 +566,7 @@ Vite
 
 ```ts
 /* vite.config.ts */
+
 import { defineConfig } from "vite"
 
 export default defineConfig({
@@ -609,4 +586,88 @@ export default defineConfig({
 
 ### Nginx
 
-反向代理。
+反向代理，**生产环境**跨域。配置 Nginx 服务。
+
+```nginx
+# nginx/sites-available/default
+
+server {
+  listen 80 default_server;
+  listen [::] default_server;
+  #...
+  
+  location /api {
+    proxy_pass http://107.172.103.215:3000;
+  }
+}
+```
+
+## 实时数据推送
+
+### SSE
+
+SSE（Server-Send Events）是一种用于实现服务器主动向客户端推送数据的技术，也被称为“事件流”。
+
+利用其长连接特性，在客户端与服务器之间建立持久化的连接，服务器可以向客户端实时推送数据。
+
+**只能接受 Get 请求**。
+
+```ts
+const sse = new EventSource(url, options)
+
+sse.readyState // 连接状态：CONNECTING 正在连接，OPEN 已经连接，CLOSED 连接已关闭
+sse.close() // 断开SSE连接，停止接收服务器发送的数据
+sse.onopen // 监听服务器连接成功
+sse.onerror // 监听服务器连接失败或接收数据错误
+sse.onmessage // 监听服务器发送的数据（如果后端没有设置名称，默认为 message 事件）
+```
+
+```ts
+/* Client */
+
+const sse = new EventSource("http://127.0.0.1:3000/api")
+
+// 监听默认的 message 事件
+sse.addEventListener("message", (event: Event) => {
+  event.data // 接收的数据
+})
+
+// 监听后端定义的 stream 事件
+sse.addEventListener("stream", (event: Event) => {
+  event.data // 接收的数据
+})
+```
+
+```ts
+/* Server nodejs */
+
+import express from "express"
+
+const app = express()
+
+app.get("/api", (req, res) => {
+  res.writeHead(200, {
+    "Content-Type": "text/event-stream", // ！设置对应的请求头
+    "Connection": "close"
+  })
+  
+  const data = fs.readFileSync("./index.txt", "utf-8")
+  const total = data.length
+  let current = 0
+  const timer = setInterval(() => {
+    if (current > total) {
+      return clearInterval(timer)
+    }
+    res.write(`event: stream\n`) // 自定义事件名称，前端需要使用 stream 事件监听数据
+    res.write(`data: ${ arr[current] }\n\n`)
+    current++
+  }, 100)
+})
+
+app.listen(3000)
+```
+
+### WebSocket
+
+
+

@@ -49,7 +49,7 @@ export default navbar([
           },
           {
             text: "Webpack",
-            icon: "typescript",
+            icon: "waline",
             link: "Webpack"
           },
           {
