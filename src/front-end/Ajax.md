@@ -586,7 +586,7 @@ export default defineConfig({
 
 ### Nginx
 
-反向代理，**生产环境**跨域。配置 Nginx 服务。
+反向代理，**生产环境**跨域。后端配置 Nginx 服务。
 
 ```nginx
 # nginx/sites-available/default
@@ -604,13 +604,15 @@ server {
 
 ## 实时数据推送
 
-### SSE
+### Server-Send Events
 
 SSE（Server-Send Events）是一种用于实现服务器主动向客户端推送数据的技术，也被称为“事件流”。
 
 利用其长连接特性，在客户端与服务器之间建立持久化的连接，服务器可以向客户端实时推送数据。
 
-**只能接受 Get 请求**。
+> [!warning]
+>
+> SSE 的不足：它是单工通讯，只能服务器向客服端推送数据；只能接受 Get 请求。
 
 ```ts
 const sse = new EventSource(url, options)
@@ -669,5 +671,233 @@ app.listen(3000)
 
 ### WebSocket
 
+WebSocket 是全双工通讯协议，服务器和客户端可以在任何时间向对方推送数据。
 
+#### 简单案例
 
+开启 WebSocket 实时接收数据。连接成功后还需要持续检测是否断线，如果断开连接，就会触发 close 事件，在 close 事件中进行重连。但是弱网、断网情况下，不会触发 close 事件，所以就需要使用心跳检测机制检测是否断线。
+
+#### 心跳检测
+
+客户端每隔一分钟向服务器发送一个特定的信号，比如 ping；服务器要立即返回一个信号，比如 pong。客户端需要检测在规定时间内（5 秒）是否收到信号，如果客户端收到了信号，说明连接没问题，开始下一次心跳检测；如果没有收到信号，说明连接有问题，需要重连。
+
+#### 断线重连
+
+设置最大重连次数，每隔一段时间重连一次，如果超过最大次数，就不重连了。
+
+```ts
+/* useSocket.ts */
+
+class Socket {
+  HEART_CHECK_TIME = 1000 // 心跳检测间隔时间
+  HEART_CHECK_END_TIME = 5000 // 心跳检测接收服务器信号时间
+  success = false // 心跳检测是否成功
+  
+  RECONNECT_TIME = 30000 // 断线重连间隔时间
+  MAX_RECONNECT_COUNT = 5 // 最大重连次数
+  reconnectCount = 0 // 当前重连次数
+  reconnectId: NodeJS.Timeout | undefined
+  
+  url: string
+  ws: WebSocket
+  
+  callbacks: { (data: any): void }[] = []
+  
+  constructor(url: string) {
+    this.url = url
+    this.ws = this.initSocket()
+  }
+  
+  initSocket() {
+    // 创建一个 WebSocket 实例
+    const ws = new WebSocket(this.url)
+    
+    // WebSocket 连接成功
+    ws.addEventListener("open", () => {
+      this.ws.addEventListener("message", this.onPong) // 监听 pong 信号
+      this.keepAlive() // 心跳检测
+      this.reconnectCount = 0 // 重置重连次数
+    })
+    
+    // WebSocket 断开连接
+    ws.addEventListener("close", () => {
+      this.reconnect() // 开始重连
+    })
+    
+    // WebSocket 连接失败
+    ws.addEventListener("error", (error) => {
+      console.log("error", error)
+    })
+    
+    ws.addEventListener("message", ({ data }) => {
+      if (data === "pong") return
+      this.callbacks.forEach(cb => cb(JSON.parse(data)))
+    })
+    
+    return ws
+  }
+  
+  // 接收消息
+  onMessage(cb: { (data: any): void }) {
+    this.callbacks.push(cb)
+  }
+  
+  // 删除消息
+  removeMessage(cb?: { (data: any): void }) {
+    if (!cb) {
+      this.callbacks = []
+      return
+    }
+    
+    this.callbacks = this.callbacks.filter(callback => callback !== cb)
+  }
+  
+  // 监听 pong 信号
+  onPong = ({ data }: MessageEvent) => {
+    if (data === "pong") {
+      this.success = true
+    }
+  }
+  
+  // 心跳检测
+  keepAlive() {
+    setTimeout(() => {
+      // 向服务器发送 ping 信号
+      this.ws.send("ping")
+      
+      // 在 5s 内检测是否接收到 pong 信号
+      setTimeout(() => {
+        if (this.success) {
+          this.success = false
+          this.keepAlive() // 开始下一次心跳检测
+        }
+        else {
+          this.ws.close() // 关闭 WebSocket
+          this.reconnect() // 开始重连
+        }
+      }, this.HEART_CHECK_END_TIME)
+    }, this.HEART_CHECK_TIME)
+  }
+  
+  // 断线重连
+  reconnect() {
+    // 超过次数限制，就不重连了
+    if (this.reconnectCount >= this.MAX_RECONNECT_COUNT) return
+    
+    clearTimeout(this.reconnectId)
+    this.reconnectId = setTimeout(() => {
+      this.reconnectCount++
+      this.ws = this.initSocket()
+    }, this.RECONNECT_TIME)
+  }
+}
+
+export default function useSocket(url: string) {
+  return new Socket(url)
+}
+```
+
+#### 虚拟列表
+
+假如有一万条数据需要处理，如果每条数据都生成一个元素，那么就会造成页面卡死。
+
+降采样策略：我们可以不用渲染全部数据，只渲染能看见的二十条数据，其他数据替换为一个空元素进行占位，这个空元素的大小与原本需要渲染的数据的大小相同。
+
+设置渲染数据范围：我们需要知道这二十条数据在总数据列表中的开始索引和结束索引，那么这个空元素的高度就是开始索引乘数据的高度。
+
+控制数据的变化：用平移来控制容器的滚动，每平移一条数据的高度，开始索引就加一，从而实现数据的滚动效果。
+
+```vue
+<script setup lang="ts">
+  import { ref, computed, onBeforeUnmount } from "vue"
+  import useSocket from "./useSocket.ts"
+  
+  Interface ItemType {
+    id: string
+    date: string
+    address: string
+    number: number
+  }
+  
+  const virtualList = ref<ItemType[]>([])
+  
+  const startIndex = ref(0)
+  const endIndex = ref(20)
+  
+  const realList = computed(() => virtualList.value.slice(startIndex.value, endIndex.value))
+  
+  const socket = useSocket("ws://localhost:8000")
+  
+  socket.onMessage((data: ItemType[]) => {
+    virtualList.value = [...virtualList.value, ...data]
+    start()
+  })
+  
+  const top = ref(0)
+  
+  let timer: NodeJS.Timeout
+  let isMouseEnter = false
+  
+  const start = () => {
+    if (virtualList.value.length <= 23 || isMouseEnter) return
+    
+    clearInterval(timer)
+    timer = setInterval(() => {
+      top.value -= 0.6
+      
+      startIndex.value = Math.abs(Math.ceil(top.value / 30))
+      endIndex.value = startIndex.value + 20
+    }, 1000 / 60)
+  }
+  
+  onBeforeUnmount(() => {
+    clearInterval(timer)
+  })
+  
+  const onEnter = () => {
+    isMouseEnter = true
+    clearInterval(timer)
+  }
+  
+  const onLeave = () => {
+    isMouseEnter = false
+    start()
+  }
+</script>
+
+<template>
+  <div>
+    <h3>需求人数</h3>
+    
+    <div class="container">
+      <header class="row">
+        <div>日期</div>
+        <div>地址</div>
+        <div>人数</div>
+      </header>
+      
+      <main class="main" @mouseenter="onEnter" @mouseleave="onLeave">
+        <div :style="{ transform: `translateY(${ top }px)` }">
+          <div :style="{ height: startIndex * 30 + 'px' }"></div>
+          
+          <div class="row" v-for="{ id, date, address, number } in realList" :key="id">
+            <div>{{ date }}</div>
+            <div>{{ address }}</div>
+            <div>{{ number }}</div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+  .container .main {
+    overflow: hidden;
+  }
+  
+  .container .main .row {
+    height: 30px;
+  }
+</style>
+```
