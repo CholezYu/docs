@@ -16,14 +16,14 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "HTML5",
-          icon: "html",
-          link: "HTML5"
+          text: "Vue 3",
+          icon: "vue",
+          link: "Vue"
         },
         {
-          text: "CSS",
-          icon: "css",
-          link: "CSS"
+          text: "React",
+          icon: "react",
+          link: "React"
         },
         {
           text: "JavaScript",
@@ -41,6 +41,11 @@ export default sidebar({
           link: "Ajax"
         },
         {
+          text: "Webpack",
+          icon: "waline",
+          link: "Webpack"
+        },
+        {
           text: "Nodejs",
           icon: "nodeJS",
           link: "Nodejs"
@@ -51,19 +56,14 @@ export default sidebar({
           link: "Git"
         },
         {
-          text: "Webpack",
-          icon: "waline",
-          link: "Webpack"
+          text: "HTML5",
+          icon: "html",
+          link: "HTML5"
         },
         {
-          text: "React",
-          icon: "react",
-          link: "React"
-        },
-        {
-          text: "Vue 3",
-          icon: "vue",
-          link: "Vue"
+          text: "CSS",
+          icon: "css",
+          link: "CSS"
         },
         {
           text: "Wxapp",
@@ -84,14 +84,14 @@ export default sidebar({
           link: "Java"
         },
         {
-          text: "MySQL",
-          icon: "mysql",
-          link: "MySQL"
-        },
-        {
           text: "Python",
           icon: "python",
           link: "Python"
+        },
+        {
+          text: "MySQL",
+          icon: "mysql",
+          link: "MySQL"
         }
       ]
     },
@@ -166,6 +166,11 @@ export default sidebar({
       collapsible: true,
       children: [
         {
+          text: "面试集锦",
+          icon: "markdown",
+          link: "面试集锦"
+        },
+        {
           text: "代码规范",
           icon: "markdown",
           link: "代码规范"
@@ -179,11 +184,6 @@ export default sidebar({
           text: "心得体会",
           icon: "markdown",
           link: "心得体会"
-        },
-        {
-          text: "面试集锦",
-          icon: "markdown",
-          link: "面试集锦"
         }
       ]
     },

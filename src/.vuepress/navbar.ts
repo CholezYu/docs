@@ -13,14 +13,14 @@ export default navbar([
         prefix: "front-end/",
         children: [
           {
-            text: "HTML5",
-            icon: "html",
-            link: "HTML5"
+            text: "Vue 3",
+            icon: "vue",
+            link: "Vue"
           },
           {
-            text: "CSS",
-            icon: "css",
-            link: "CSS"
+            text: "React",
+            icon: "react",
+            link: "React"
           },
           {
             text: "JavaScript",
@@ -38,6 +38,11 @@ export default navbar([
             link: "Ajax"
           },
           {
+            text: "Webpack",
+            icon: "waline",
+            link: "Webpack"
+          },
+          {
             text: "Nodejs",
             icon: "nodeJS",
             link: "Nodejs"
@@ -48,19 +53,14 @@ export default navbar([
             link: "Git"
           },
           {
-            text: "Webpack",
-            icon: "waline",
-            link: "Webpack"
+            text: "HTML5",
+            icon: "html",
+            link: "HTML5"
           },
           {
-            text: "React",
-            icon: "react",
-            link: "React"
-          },
-          {
-            text: "Vue 3",
-            icon: "vue",
-            link: "Vue"
+            text: "CSS",
+            icon: "css",
+            link: "CSS"
           },
           {
             text: "Wxapp",
@@ -79,14 +79,14 @@ export default navbar([
             link: "Java"
           },
           {
-            text: "MySQL",
-            icon: "mysql",
-            link: "MySQL"
-          },
-          {
             text: "Python",
             icon: "python",
             link: "Python"
+          },
+          {
+            text: "MySQL",
+            icon: "mysql",
+            link: "MySQL"
           }
         ]
       }

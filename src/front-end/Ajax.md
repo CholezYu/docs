@@ -812,14 +812,14 @@ export default function useSocket(url: string) {
   import { ref, computed, onBeforeUnmount } from "vue"
   import useSocket from "./useSocket.ts"
   
-  Interface ItemType {
+  interface Item {
     id: string
     date: string
     address: string
     number: number
   }
   
-  const virtualList = ref<ItemType[]>([])
+  const virtualList = ref<Item[]>([])
   
   const startIndex = ref(0)
   const endIndex = ref(20)
@@ -828,7 +828,7 @@ export default function useSocket(url: string) {
   
   const socket = useSocket("ws://localhost:8000")
   
-  socket.onMessage((data: ItemType[]) => {
+  socket.onMessage((data: Item[]) => {
     virtualList.value = [...virtualList.value, ...data]
     start()
   })
