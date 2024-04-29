@@ -2,4 +2,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: https://cholez.gitee.io/docs/sitemap.xml
+Sitemap: http://116.62.35.178:5001/sitemap.xml

@@ -4,7 +4,7 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
-  hostname: "https://cholez.gitee.io/docs/",
+  hostname: "http://116.62.35.178:5001",
   
   author: {
     name: "俞文健",
@@ -23,7 +23,7 @@ export default hopeTheme({
   
   iconAssets: "iconfont",
   
-  logo: "https://cholez.gitee.io/docs/icon/icon.svg",
+  logo: "/icon/icon.svg",
   
   favicon: "favicon.ico",
   
