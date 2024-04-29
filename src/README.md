@@ -7,8 +7,8 @@ bgImage: https://theme-hope-assets.vuejs.press/bg/9-light.svg
 bgImageDark: https://theme-hope-assets.vuejs.press/bg/9-dark.svg
 bgImageStyle:
   background-attachment: fixed
-heroText: Docs
-tagline: 个人文档。
+heroText: Cholez Web Docs
+tagline: 练习前端两年半。
 actions:
   - text: GitHub
     icon: github
