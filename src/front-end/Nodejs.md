@@ -746,7 +746,7 @@ const server = http.createServer((req, res) => {
   // ......
 })
 
-server.listen(1118)
+server.listen(3000)
 ```
 
 ### req.method
@@ -1393,7 +1393,7 @@ app.post("/login", (req, res) => {
 客户端接收到 token 后在本地存储，并在下次请求（登录或路由跳转）时携带。
 
 ```js
-fetch("http://127.0.0.1:8000/user", {
+fetch("http://127.0.0.1:3000/user", {
   method: "GET",
   headers: {
     "Authorization": `Bearer ${ token }` // Bearer 是一种身份验证方案

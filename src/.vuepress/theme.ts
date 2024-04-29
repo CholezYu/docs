@@ -28,7 +28,7 @@ export default hopeTheme({
   favicon: "favicon.ico",
   
   // 仓库配置，用于在导航栏中显示仓库链接
-  repo: "choIez/docs",
+  repo: "choIez",
   
   docsDir: "src",
   
