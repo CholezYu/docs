@@ -2,4 +2,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: http://116.62.35.178:5001/sitemap.xml
+Sitemap: http://121.41.85.87:5001/sitemap.xml
