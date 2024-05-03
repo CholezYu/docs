@@ -1,36 +1,28 @@
 ---
 title: Nodejs
 icon: nodeJS
-date: 2024-04-15
+date: 2024-05-03
 ---
 
 ## 包管理
 
 ### npm
 
-- 安装依赖：`npm i [package]`
-
-- 生产依赖：`npm i [package] -S`
-
-- 开发依赖：`npm i [package] -D`
-
-- 全局依赖：`npm i [package] -g`
-
-- 删除依赖：`npm un [package]`
-
+- 安装包：`npm i [package]`
+- 安装开发环境的包：`npm i [package] -D`
+- 安装全局环境的包：`npm i [package] -g`
+- 删除包：`npm un [package]`
 - 发布包：`npm publish`
-
-- 删除包：`npm unpublish --force`
-
+- 取消发布：`npm unpublish --force`
 - 添加用户名和密码：`npm adduser`
 
 
 
 - 查看 npm 配置：`npm config ls`
 
-- 查看 npm 包的全局安装路径：`npm prefix -g`
+- 查看全局安装路径：`npm prefix -g`
 
-- 查看 npm 包的全局缓存路径：`npm config get cache`
+- 查看全局缓存路径：`npm config get cache`
 
 - 查看下载源：`npm get registry`
 
@@ -38,84 +30,81 @@ date: 2024-04-15
 
 ### yarn
 
-- 生产依赖：`yarn add [package]`
+- 安装包：`yarn add [package]`
 
-- 开发依赖：`yarn add [package] --dev`
+- 安装开发环境的包：`yarn add [package] --dev`
 
-- 全局依赖：`yarn global add [package]`
+- 安装全局环境的包：`yarn global add [package]`
 
-- 删除依赖：`yarn remove [package]`
+- 删除包：`yarn remove [package]`
 
 - 使用 `node_modules`：`yarn config set nodeLinker node-modules`
-
-## process
-
-### process.exit 
-
-结束当前进程。
-
-```js
-console.log(1) // 1
-console.log(2) // 2
-
-process.exit()
-
-console.log(3)
-```
-
-### process.nextTick
-
-向 next tick 队列中添加一个任务，优先级会高于微任务。
-
-```js
-setTimeout(() => {
-  console.log(1)
-})
-
-queueMicrotask(() => {
-  console.log(2)
-})
-
-process.nextTick(() => {
-  console.log(3)
-})
-
-console.log(4)
-
-// 执行顺序: 4 3 2 1
-```
 
 ## path
 
 ### path.resolve
 
-生成绝对路径。
+解析绝对路径。
 
-```js
+```ts
 const path = require("node:path")
 
-path.resolve(__dirname)               // "E:/0215/index"
-path.resolve(__dirname, "./file.txt") // "E:/0215/index/file.txt"
+path.resolve(__dirname)               // 'F:\app\src'
+path.resolve(__dirname, "./main.ts")  // 'F:\app\src\main.ts'
 ```
 
 ### path.join
 
-拼接多个路径。
+拼接路径。
 
-```js
+```ts
 const path = require("node:path")
 
-path.join("./src", "./js", "./index.js") // src/js/index.js
+path.join("./src", "./js", "./index.js") // 'src\js\index.js'
 ```
 
 ### path.extname
 
 获取文件的扩展名。
 
-```js
+```ts
 const path = require("node:path")
 
-path.extname("./public/index.html") // .html
+path.extname("./public/index.html") // '.html'
+```
+
+### path.parse
+
+将路径字符串解析成一个包含路径信息的对象。
+
+```ts
+const path = require("node:path")
+
+path.parse("/app/src/index.html")
+/* 
+  root: '/',           根目录
+  dir: '/app/src',     文件所在目录
+  base: 'index.html',  文件名.后缀名
+  ext: '.html',        后缀名
+  name: 'index'        文件名
+*/
+```
+
+### path.format
+
+将一个包含路径信息的对象解析成路径字符串。与 `path.parse()` 相反。
+
+```ts
+const path = require("node:path")
+
+path.format({
+  root: "/",
+  dir: "/app/src",
+  base: "index.html",
+  ext: ".html",
+  name: "index"
+})
+// '/app/src/index.html'
 ```
 
 ## url
@@ -127,12 +116,11 @@ path.extname("./public/index.html") // .html
 ```js
 const url = require("node:url")
 
-url.parse("http://localhost:1118/user?name=xiaoming&age=20", true)
-
-/* 
+url.parse("http://localhost:3000/user?name=xiaoming&age=20", true)
+/*
   protocol: 'http:',       协议
-  host: 'localhost:1118',  域名
-  port: '1118',            端口号
+  host: 'localhost:3000',  域名
+  port: '3000',            端口号
   hostname: 'localhost',   端口名
   
   search: '?name=xiaoming&age=20',         查询参数
@@ -140,7 +128,7 @@ url.parse("http://localhost:1118/user?name=xiaoming&age=20", true)
   
   pathname: '/user',                       无参路径
   path: '/user?name=xiaoming&age=20',      带参路径
-  href: 'http://localhost:1118/user?name=xiaoming&age=20'  完整路径
+  href: 'http://localhost:3000/user?name=xiaoming&age=20'  完整路径
 */
 ```
 
@@ -150,20 +138,20 @@ url.parse("http://localhost:1118/user?name=xiaoming&age=20", true)
 
 ```js
 const { URL } = require("node:url")
-const url = new URL("http://localhost:1118/user?name=xiaoming&age=20")
+const url = new URL("http://localhost:3000/user?name=xiaoming&age=20")
 
 /*
   protocol: 'http:',       协议
-  host: 'localhost:1118',  域名
-  port: '1118',            端口号
+  host: 'localhost:3000',  域名
+  port: '3000',            端口号
   hostname: 'localhost',   端口名
   
   search: '?name=xiaoming&age=20',  查询参数
   searchParams: { 'name' => 'xiaoming', 'age' => '20' }     查询参数对象
   
   pathname: '/user',                无参路径
-  origin: 'http://localhost:1118',  源路径
-  href: 'http://localhost:1118/user?name=xiaoming&age=20',  完整路径
+  origin: 'http://localhost:3000',  源路径
+  href: 'http://localhost:3000/user?name=xiaoming&age=20',  完整路径
 */
 ```
 
@@ -546,6 +534,147 @@ catch {
 
 > "fs/promises" 模块中没有 exists 方法
 
+## os
+
+### os.platform
+
+获取操作系统的平台。
+
+```ts
+const os = require("node:os")
+
+os.platform() // win32
+```
+
+### os.type
+
+获取操作系统的名称。
+
+```ts
+const os = require("node:os")
+
+os.type() // Windows_NT
+```
+
+### os.release
+
+获取操作系统的版本号。
+
+```ts
+const os = require("node:os")
+
+os.release() // 10.0.22631
+```
+
+### os.version
+
+获取操作系统的版本。
+
+```ts
+const os = require("node:os")
+
+os.version() // Windows 11 Home China
+```
+
+### os.arch
+
+获取操作系统的 CPU 架构。
+
+```ts
+const os = require("node:os")
+
+os.arch() // x64
+```
+
+### os.cpus
+
+获取 CPU 信息。
+
+```ts
+const os = require("node:os")
+
+os.cups().length // 16
+os.cups()
+/*
+  model: '13th Gen Intel(R) Core(TM) i7-13620H',
+  speed: 2918,
+  times: { user: 110250, nice: 0, sys: 213468, idle: 25279343, irq: 73421 }
+*/
+```
+
+## process
+
+> [!tip]
+>
+> process 是挂载到 globalThis 下的全局 API，不需要引入就可以直接使用。
+
+### process.cwd
+
+获取当前工作目录。与 `__dirname` 相同。
+
+> [!warning]
+>
+> ESM 模式下使用 `__dirname` 会报错 "__dirname is not defined in ES module scope"。
+
+```ts
+process.cwd() // 'F:\app\src'
+```
+
+### process.exit 
+
+结束进程。
+
+```ts
+process.exit()
+
+// 进程结束时触发
+process.on("exit", () => {
+  //...
+})
+```
+
+### process.kill
+
+杀死进程。
+
+```ts
+process.kill(process.pid /* 进程ID */)
+```
+
+### process.nextTick
+
+向异步队列中添加一个任务，优先级高于微任务。
+
+```ts
+queueMicrotask(() => {
+  console.log(1)
+})
+
+process.nextTick(() => {
+  console.log(2)
+})
+
+console.log(3)
+
+// 执行顺序: 3 2 1
+```
+
+### process.platform
+
+获取操作系统的平台。与 `os.platform()` 结果相同。
+
+```ts
+process.platform // win32
+```
+
+### process.arch
+
+获取操作系统的 CPU 架构。与 `os.arch()` 结果相同。
+
+```ts
+process.arch // x64
+```
+
 ## buffer
 
 ### Buffer.alloc
@@ -801,7 +930,7 @@ app.get("/home", (req, res) => {})
 
 app.get("/user", (req, res) => {})
 
-app.listen(1118, () => { /* 服务器启动后执行 */ })
+app.listen(3000, () => { /* 服务器启动后执行 */ })
 ```
 
 ### app.post
@@ -812,7 +941,7 @@ const app = express()
 
 app.post("/", (req, res) => {})
 
-app.listen(1118)
+app.listen(3000)
 ```
 
 ### req.path

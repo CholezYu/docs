@@ -112,9 +112,9 @@ export default sidebar({
           link: "Lodash"
         },
         {
-          text: "Exceljs",
+          text: "ExcelJS",
           icon: "table",
-          link: "Exceljs"
+          link: "ExcelJS"
         }
       ]
     },

@@ -1,7 +1,7 @@
 ---
 title: Ajax
 icon: ajax
-date: 2024-04-23
+date: 2024-05-03
 ---
 
 ## TCP/IP
@@ -409,6 +409,8 @@ const request = (url: string) => {
 ### 发送请求
 
 ```ts
+import axios from "axios"
+
 const request = (url: string) => {
   // Get 请求
   axios.get(url)
@@ -423,7 +425,7 @@ const request = (url: string) => {
 ### 拦截器
 
 ```ts
-import { axios } from "axios"
+import axios from "axios"
 
 // 创建实例
 const instance = axios.create({
@@ -457,7 +459,7 @@ instance.interceptors.response.use(
 ### 监测上传进度
 
 ``` ts
-import { axios, type AxiosProgressEvent } from "axios"
+import axios, { type AxiosProgressEvent } from "axios"
 
 const request = (url: string) => {
   axios.post(url, {
@@ -474,7 +476,7 @@ const request = (url: string) => {
 ### 上传文件
 
 ```ts
-import { axios, type AxiosProgressEvent } from "axios"
+import axios, { type AxiosProgressEvent } from "axios"
 
 const request = (url: string, data: any) => {
   const formData = new FormData()
@@ -589,14 +591,15 @@ export default defineConfig({
 反向代理，**生产环境**跨域。后端配置 Nginx 服务。
 
 ```nginx
-# nginx/sites-available/default
+# nginx/conf/nginx.conf
 
 server {
-  listen 80 default_server;
-  listen [::] default_server;
-  #...
+  listen       5000;
+  server_name  localhost;
   
   location /api {
+    root   /app/src/dist;
+    index  index.html index.htm;
     proxy_pass http://107.172.103.215:3000;
   }
 }
@@ -634,7 +637,7 @@ sse.addEventListener("message", (event: Event) => {
   event.data // 接收的数据
 })
 
-// 监听后端定义的 stream 事件
+// 监听自定义的 stream 事件
 sse.addEventListener("stream", (event: Event) => {
   event.data // 接收的数据
 })
