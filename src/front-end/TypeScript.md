@@ -376,7 +376,7 @@ type CE = CustomExclude<"a" | "b" | "c", "a" | "c"> // => never | 'b' | never =>
 
 ### ReturnType
 
-获取函数类型的返回值。
+获取函数返回值的类型。
 
 ```ts
 const fn = () => [1, 2, 3, true]
