@@ -94,6 +94,6 @@ export default navbar([
   },
   {
     text: "深入解析 Vue.js ",
-    link: "https://cholez.gitee.io/vapor/"
+    link: "http://121.41.85.87:5002"
   }
 ])
