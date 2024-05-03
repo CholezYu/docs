@@ -26,7 +26,7 @@ date: 2024-04-15
 
 
 
-- 查看 npm 配置：`npm config list`
+- 查看 npm 配置：`npm config ls`
 
 - 查看 npm 包的全局安装路径：`npm prefix -g`
 

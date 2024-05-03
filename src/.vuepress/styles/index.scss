@@ -1,6 +1,6 @@
 // place your custom styles here
 .vp-hero-info-wrapper {
-  height: calc(100vh - 114px); /* header 60px, footer 54px */
+  height: calc(100vh - var(--navbar-height) - 54.4px); /* header --navbar-height, footer 54.4px */
 }
 
 /* .vp-feature-wrapper {
