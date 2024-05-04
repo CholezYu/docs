@@ -1,7 +1,7 @@
 ---
 title: Nodejs
 icon: nodeJS
-date: 2024-05-03
+date: 2024-05-04
 ---
 
 ## 包管理
@@ -157,382 +157,263 @@ const url = new URL("http://localhost:3000/user?name=xiaoming&age=20")
 
 ## fs
 
-### fs.readFileSync
-
-同步读取文件，不推荐。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  const data = fs.readFileSync(path.resolve(__dirname, "./file.txt"), "utf-8")
-}
-catch {
-  // ...
-}
-```
-
 ### fs.readFile
 
-异步读取文件 (callback)，不推荐。
+读取文件。
 
 ```ts
-const fs = require("node:fs")
-const path = require("node:path")
+const { readFile } = require("node:fs")
+const { readFileSync } = require("node:fs")
 
-fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8", (error, data) => {})
-```
-
-异步读取文件 (Promise)，推荐。
-
-```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
-
-fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8")
-  .then(data => {})
-  .catch(error => {})
-```
-
-异步读取文件 (async)，推荐。
-
-```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
-
-;(async () => {
-  try {
-    const data = await fs.readFile(path.resolve(__dirname, "./file.txt"), "utf-8")
-  }
-  catch {
-    // ...
-  }
-})()
-```
-
-### fs.writeFileSync
-
-同步写入文件。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.writeFileSync(path.resolve(__dirname, "./file.txt"), "hello world")
-}
-catch {
+// 异步读取文件 callback
+readFile("./file.txt", {
+  encoding: "utf-8"
+}, (error, data) => {
   // ...
-}
+})
+
+// 异步读取文件 Promise
+readFile("./file.txt", {
+  encoding: "utf-8"
+}).then(data => {
+  // ...
+})
+
+// 异步读取文件 async / await
+;(async () => {
+  const data = await readFile("./file.txt", {
+    encoding: "utf-8"
+  })
+})()
+
+// 同步读取文件
+const data = readFileSync("./file.txt", {
+  encoding: "utf-8"
+})
+```
+
+### fs.createReadStream
+
+创建可读流（分段）读取文件。用于处理大文件。
+
+```ts
+const { createReadStream } = require("node:fs")
+
+const readStream = createReadStream("./file.txt")
+
+// 正在读取时触发
+readStream.on("data", chunk => {
+  // ...
+})
+
+// 读取完成时触发
+readStream.on("end", () => {
+  // ...
+})
 ```
 
 ### fs.writeFile
 
-异步写入文件。
+写入文件，会替换原有的内容。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { writeFile } = require("node:fs/promises")
+const { writeFileSync } = require("node:fs")
 
-fs.writeFile(path.resolve(__dirname, "./file.txt"), "hello world")
-  .catch(error => {})
-```
+// 异步写入文件
+writeFile("./file.txt", "hello world")
 
-### fs.appendFileSync
-
-同步追加内容，若文件不存在，则创建该文件。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.appendFileSync(path.resolve(__dirname, "./file.txt"), "hello world")
-}
-catch {
-  // ...
-}
+// 同步写入文件
+writeFileSync("./file.txt", "hello world", {
+  flag: "a" /* append 追加内容，而不是替换 */
+})
 ```
 
 ### fs.appendFile
 
-异步追加内容，若文件不存在，则创建该文件。
+写入文件，会向文件追加内容。若文件不存在，则创建该文件。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { appendFile } = require("node:fs/promises")
+const { appendFileSync } = require("node:fs")
 
-fs.appendFile(path.resolve(__dirname, "./file.txt"), "hello world")
-  .catch(error => {})
+// 异步写入文件
+appendFile("./file.txt", "hello world")
+
+// 同步写入文件
+appendFileSync("./file.txt", "hello world")
 ```
 
-### fs.unlinkSync
+### fs.createWriteStream
 
-同步删除文件。
+创建可写流（分段）写入文件。用于处理大文件。
 
 ```ts
-const fs = require("node:fs")
-const path = require("node:path")
+const { createWriteStream } = require("node:fs")
 
-try {
-  fs.unlinkSync(path.resolve(__dirname, "./file.txt"))
-}
-catch {
+const writeStream = createWriteStream("./file.txt")
+
+writeStream.write(/* data */)
+writeStream.end()
+
+// 写入完成时触发
+writeStream.on("finish", () => {
   // ...
-}
-```
+})
 
-### fs.unlink
-
-异步删除文件。
-
-```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
-
-fs.unlink(path.resolve(__dirname, "./file.txt"))
-  .catch(error => {})
-```
-
-### fs.copyFileSync
-
-同步复制文件。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.copyFileSync(
-    path.resolve(__dirname, "./file.txt"),
-    path.resolve(__dirname, "./docs.txt")
-  )
-}
-catch {
+// 写入失败时触发
+writeStream.on("error", () => {
   // ...
-}
+})
 ```
 
 ### fs.copyFile
 
-异步复制文件。
+复制文件。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { copyFile } = require("node:fs/promises")
+const { copyFileSync } = require("node:fs")
 
-fs.copyFile(
-  path.resolve(__dirname, "./file.txt"),
-  path.resolve(__dirname, "./docs.txt")
-).catch(error => {})
+// 异步复制文件
+copyFile("./file.txt", "./text.txt")
+
+// 同步复制文件
+copyFileSync("./file.txt", "./text.txt")
 ```
 
-### fs.readdirSync
+### fs.unlink
 
-同步读取目录。
+删除文件。
 
 ```ts
-const fs = require("node:fs")
-const path = require("node:path")
+const { unlink } = require("node:fs/promises")
+const { unlinkSync } = require("node:fs")
 
-try {
-  const data = fs.readdirSync(path.resolve(__dirname, "./dir"))
-}
-catch {
-  // ...
-}
+// 异步删除文件
+unlink("./file.txt")
+
+// 同步删除文件
+unlinkSync("./file.txt")
 ```
 
 ### fs.readdir
 
-异步读取目录。
+读取目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { readdir } = require("node:fs/promises")
+const { readdirSync } = require("node:fs")
 
-fs.readdir(path.resolve(__dirname, "./dir"))
-  .then(data => {})
-  .catch(error => {})
-```
-
-### fs.mkdirSync
-
-同步创建目录。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.mkdirSync(path.resolve(__dirname, "./dir/src"), {
-    recursive: true /* 执行递归创建 */
-  })
-}
-catch {
+// 异步读取目录
+readdir("./src").then(data => {
   // ...
-}
+})
+
+// 同步读取目录
+const data = readdirSync("./src")
 ```
 
 ### fs.mkdir
 
-异步创建目录。
+创建目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { mkdir } = require("node:fs/promises")
+const { mkdirSync } = require("node:fs")
 
-fs.mkdir(path.resolve(__dirname, "./dir/src"), {
-  recursive: true /* 执行递归创建 */
-}).catch(error => {})
-```
+// 异步创建目录
+mkdir("./src/config", {
+  recursive: true /* 多层级递归创建 */
+})
 
-### fs.rmdirSync
-
-同步删除目录。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.rmdirSync(path.resolve(__dirname, "./dir"))
-}
-catch {
-  // ...
-}
+// 同步创建目录
+mkdirSync("./src/config", {
+  recursive: true /* 多层级递归创建 */
+})
 ```
 
 ### fs.rmdir
 
-异步删除目录。
+删除目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { rmdir } = require("node:fs/promises")
+const { rmdirSync } = require("node:fs")
 
-fs.rmdir(path.resolve(__dirname, "./dir"))
-  .catch(error => {})
-```
+// 异步删除目录
+rmdir("./src", {
+  recursive: true /* 多层级递归删除 */
+})
 
-### fs.rmSync
-
-同步删除文件/目录。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.rmSync(path.resolve(__dirname, "./file.txt"), {
-    recursive: true, /* 执行递归删除 */
-    force: true /* 忽略路径导致的异常 */
-  })
-}
-catch {
-  // ...
-}
+// 同步删除目录
+rmdirSync("./src", {
+  recursive: true /* 多层级递归删除 */
+})
 ```
 
 ### fs.rm
 
-异步删除文件/目录。
+删除文件或目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { rm } = require("node:fs/promises")
+const { rmSync } = require("node:fs")
 
-fs.rm(path.resolve(__dirname, "./dir"), {
-  recursive: true, /* 执行递归删除 */
+// 异步删除文件或目录
+rm("./src", {
+  recursive: true, /* 多层级递归删除 */
   force: true /* 忽略路径导致的异常 */
-}).catch(error => {})
-```
+})
 
-### fs.renameSync
-
-同步重命名文件/目录。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  fs.renameSync(
-    path.resolve(__dirname, "./file.txt"),
-    path.resolve(__dirname, "./file.md")
-  )
-}
-catch {
-  // ...
-}
+// 同步删除文件或目录
+rmSync("./file.txt")
 ```
 
 ### fs.rename
 
-异步重命名文件/目录。
+重命名文件或目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { rename } = require("node:fs/promises")
+const { renameSync } = require("node:fs")
 
-fs.rename(
-  path.resolve(__dirname, "./dir"),
-  path.resolve(__dirname, "./src")
-).catch(error => {})
-```
+// 异步重命名文件或目录
+rename("./src", "./lib")
 
-### fs.statSync
-
-同步判断是否为文件/目录。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  const data = fs.statSync(path.resolve(__dirname, "./file.txt"))
-  data.isFile()
-}
-catch {
-  // ...
-}
+// 同步重命名文件或目录
+renameSync("./file.txt", "./file.md")
 ```
 
 ### fs.stat
 
-异步判断是否为文件/目录。
+判断是否为文件或目录。
 
 ```ts
-const fs = require("node:fs/promises")
-const path = require("node:path")
+const { stat } = require("node:fs/promises")
+const { statSync } = require("node:fs")
 
-fs.stat(path.resolve(__dirname, "./dir"))
-  .then(data => data.isDirectory())
-  .catch(error => {})
-```
+// 异步判断是否为文件或目录
+stat("./src").then(data => data.isDirectory())
 
-### fs.existsSync
-
-同步判断文件/目录是否存在。
-
-```ts
-const fs = require("node:fs")
-const path = require("node:path")
-
-try {
-  const data = fs.existsSync(path.resolve(__dirname, "./file.txt"))
-}
-catch {
-  // ...
-}
+// 同步判断是否为文件或目录
+const data = statSync("./file.txt")
+data.isFile()
 ```
 
 ### fs.exists
 
-异步判断文件/目录是否存在，**已弃用**。
+判断文件或目录是否存在。
 
-> "fs/promises" 模块中没有 exists 方法
+```ts
+const { existsSync } = require("node:fs")
+
+// 异步判断文件或目录是否存在
+// 已弃用，"fs/promises" 模块中没有 exists 方法
+
+// 同步判断文件或目录是否存在
+const data = existsSync("./file.txt")
+```
 
 ## os
 
@@ -690,11 +571,11 @@ const buf = Buffer.alloc(5) // <Buffer 00 00 00 00 00>
 创建一个 64k 文件。
 
 ```ts
-const fs = require("node:fs")
+const { writeFileSync } = require("node:fs")
 const { Buffer } = require("node:buffer")
 
 const buf = Buffer.alloc(64 * 1024)
-fs.writeFileSync("file", buf)
+writeFileSync("file", buf)
 ```
 
 ### Buffer.allocUnsafe
@@ -724,30 +605,6 @@ const { Buffer } = require("node:buffer")
 
 const buf = Buffer.from([0x68, 0x65, 0x6c, 0x6c, 0x6f])
 buf.toString() // "hello"
-```
-
-## stream
-
-### stream.on("data")
-
-当数据块 (chunk) 被读取时，触发事件。
-
-```ts
-const fs = require("node:fs")
-
-const stream = fs.createReadStream("./file")
-stream.on("data", chunk => {})
-```
-
-### stream.on("end")
-
-当数据块 (chunk) 读取完成时，触发事件。
-
-```ts
-const fs = require("node:fs")
-
-const stream = fs.createReadStream("./file")
-stream.on("end", () => {})
 ```
 
 ## events
