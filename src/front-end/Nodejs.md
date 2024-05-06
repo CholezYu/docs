@@ -107,54 +107,6 @@ path.format({
 // '/app/src/index.html'
 ```
 
-## url
-
-### url.parse
-
-解析网络路径并返回相关信息 (旧版 API)。
-
-```ts
-const url = require("node:url")
-
-url.parse("http://localhost:3000/user?name=xiaoming&age=20", true)
-/*
-  protocol: 'http:',       协议
-  host: 'localhost:3000',  域名
-  port: '3000',            端口号
-  hostname: 'localhost',   端口名
-  
-  search: '?name=xiaoming&age=20',         查询参数
-  query: { name: 'xiaoming', age: '20' },  查询参数对象
-  
-  pathname: '/user',                       无参路径
-  path: '/user?name=xiaoming&age=20',      带参路径
-  href: 'http://localhost:3000/user?name=xiaoming&age=20'  完整路径
-*/
-```
-
-### new URL
-
-解析网络路径并返回相关信息 (新版 API)。
-
-```ts
-const { URL } = require("node:url")
-const url = new URL("http://localhost:3000/user?name=xiaoming&age=20")
-
-/*
-  protocol: 'http:',       协议
-  host: 'localhost:3000',  域名
-  port: '3000',            端口号
-  hostname: 'localhost',   端口名
-  
-  search: '?name=xiaoming&age=20',  查询参数
-  searchParams: { 'name' => 'xiaoming', 'age' => '20' }     查询参数对象
-  
-  pathname: '/user',                无参路径
-  origin: 'http://localhost:3000',  源路径
-  href: 'http://localhost:3000/user?name=xiaoming&age=20',  完整路径
-*/
-```
-
 ## fs
 
 ### fs.readFile
@@ -527,17 +479,9 @@ process.kill(process.pid /* 进程ID */)
 向异步队列中添加一个任务，优先级高于微任务。
 
 ```ts
-queueMicrotask(() => {
-  console.log(1)
-})
-
 process.nextTick(() => {
-  console.log(2)
+  // ...
 })
-
-console.log(3)
-
-// 执行顺序: 3 2 1
 ```
 
 ### process.platform
@@ -554,57 +498,6 @@ process.platform // win32
 
 ```ts
 process.arch // x64
-```
-
-## buffer
-
-### Buffer.alloc
-
-创建一个 buffer。
-
-```ts
-const { Buffer } = require("node:buffer")
-
-const buf = Buffer.alloc(5) // <Buffer 00 00 00 00 00>
-```
-
-创建一个 64k 文件。
-
-```ts
-const { writeFileSync } = require("node:fs")
-const { Buffer } = require("node:buffer")
-
-const buf = Buffer.alloc(64 * 1024)
-writeFileSync("file", buf)
-```
-
-### Buffer.allocUnsafe
-
-创建一个 buffer，可以快速创建，但是不安全。
-
-```ts
-const { Buffer } = require("node:buffer")
-
-const buf = Buffer.allocUnsafe(5) // <Buffer 00 00 00 00 00>
-```
-
-### Buffer.from
-
-将字符串转换为 buffer。
-
-```ts
-const { Buffer } = require("node:buffer")
-
-const buf = Buffer.from("hello") // <Buffer 68 65 6c 6c 6f>
-```
-
-将 buffer 转换为字符串。
-
-```ts
-const { Buffer } = require("node:buffer")
-
-const buf = Buffer.from([0x68, 0x65, 0x6c, 0x6c, 0x6f])
-buf.toString() // "hello"
 ```
 
 ## events
@@ -721,6 +614,105 @@ emitter.on("eventB", () => {})
 emitter.on("eventC", () => {})
 
 emitter.eventNames() // ['eventA', 'eventB', 'eventC']
+```
+
+## buffer
+
+### Buffer.alloc
+
+创建一个 buffer。
+
+```ts
+const { Buffer } = require("node:buffer")
+
+const buffer = Buffer.alloc(5) // <Buffer 00 00 00 00 00>
+```
+
+创建一个 64k 文件。
+
+```ts
+const { writeFileSync } = require("node:fs")
+const { Buffer } = require("node:buffer")
+
+const buffer = Buffer.alloc(64 * 1024)
+writeFileSync("./file.txt", buffer)
+```
+
+### Buffer.allocUnsafe
+
+创建一个 buffer，可以快速创建，但是不安全。
+
+```ts
+const { Buffer } = require("node:buffer")
+
+const buffer = Buffer.allocUnsafe(5) // <Buffer 00 00 00 00 00>
+```
+
+### Buffer.from
+
+将字符串转换为 buffer。
+
+```ts
+const { Buffer } = require("node:buffer")
+
+const buffer = Buffer.from("hello") // <Buffer 68 65 6c 6c 6f>
+```
+
+将 buffer 转换为字符串。
+
+```ts
+const { Buffer } = require("node:buffer")
+
+const buffer = Buffer.from([0x68, 0x65, 0x6c, 0x6c, 0x6f])
+buffer.toString() // "hello"
+```
+
+## url
+
+### url.parse
+
+解析网络路径并返回相关信息 (旧版 API)。
+
+```ts
+const url = require("node:url")
+
+url.parse("http://localhost:3000/user?name=xiaoming&age=20", true)
+/*
+  protocol: 'http:',       协议
+  host: 'localhost:3000',  域名
+  port: '3000',            端口号
+  hostname: 'localhost',   端口名
+  
+  search: '?name=xiaoming&age=20',         查询参数
+  query: { name: 'xiaoming', age: '20' },  查询参数对象
+  
+  pathname: '/user',                       无参路径
+  path: '/user?name=xiaoming&age=20',      带参路径
+  href: 'http://localhost:3000/user?name=xiaoming&age=20'  完整路径
+*/
+```
+
+### new URL
+
+解析网络路径并返回相关信息 (新版 API)。
+
+```ts
+const { URL } = require("node:url")
+const url = new URL("http://localhost:3000/user?name=xiaoming&age=20")
+
+/*
+  protocol: 'http:',       协议
+  host: 'localhost:3000',  域名
+  port: '3000',            端口号
+  hostname: 'localhost',   端口名
+  
+  search: '?name=xiaoming&age=20',  查询参数
+  searchParams: { 'name' => 'xiaoming', 'age' => '20' }     查询参数对象
+  
+  pathname: '/user',                无参路径
+  origin: 'http://localhost:3000',  源路径
+  href: 'http://localhost:3000/user?name=xiaoming&age=20',  完整路径
+*/
 ```
 
 ## http

@@ -1,8 +1,16 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-03-14
+date: 2024-05-06
 ---
+
+## 布尔判定
+
+在需要判断真假的情况下，如进行 `!value` 或 `if(value)` 运算时，会进行布尔判定。
+
+- 判定为 false：`false` `null` `undefined` `0` `NaN` `""`
+
+- 判定为 true：其余数据。
 
 ## 强制转换
 
