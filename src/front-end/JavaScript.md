@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-05-06
+date: 2024-05-07
 ---
 
 ## 布尔判定
@@ -31,7 +31,7 @@ date: 2024-05-06
 ```js
 Number({ a: 1 }) // NaN
 
-// 等价于
+// 等同于
 
 function _Number(value) {
   if (typeof value.valueOf() === "object") {
@@ -94,8 +94,7 @@ Number({
 ```js
 String({ a: 1 }) // [object Object]
 
-// 等价于
-
+// 等同于
 String({ a: 1 }.toString()) // [object Object]
 ```
 
@@ -332,18 +331,6 @@ fn.bind({}).name // "bound fn"
 
 ## 对象
 
-### new 关键字
-
-1. 创建一个空对象，作为将要返回的实例对象；
-
-2. 将这个空对象的原型，指向构造函数的 prototype；
-
-3. 将这个空对象赋值给函数内部的 this；
-
-4. 开始执行构造函数内部的代码。
-
-如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
-
 ### this 指向
 
 | 函数调用方式  | 示例                                   | this 指向                |
@@ -365,6 +352,32 @@ Object.prototype.b = 2
 "b" in obj // true
 "c" in obj // false
 ```
+
+### new 关键字
+
+1. 创建一个空对象，作为实例对象；
+
+2. 将构造函数的 `prototype` 赋值给这个空对象的 `__proto__`；
+
+3. 调用 `call()`，让构造函数的 this 指向这个空对象；
+
+4. 执行构造函数内部的代码。
+
+```js
+function Person(name, age) {
+  this.name = name
+  this.age = age
+}
+
+const person = new Person("Minji", 20)
+
+// 等同于
+const person = {}
+person.__proto__ = Person.prototype
+Person.call(person, "Minji", 20)
+```
+
+如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
 
 ### obj.hasOwnProperty
 
@@ -396,7 +409,7 @@ obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 创建一个对象，并指定它的原型对象。
 
 ```js
-const ctz = Object.create(null, {
+const person = Object.create(null, {
 	name: {
 		value: "Minji",
 		enumerable: true
@@ -406,7 +419,7 @@ const ctz = Object.create(null, {
 	}
 })
 
-ctz // { name: "Minji", sex: "female" }
+person // { name: "Minji", sex: "female" }
 ```
 
 ### Object.defineProperty
@@ -414,14 +427,14 @@ ctz // { name: "Minji", sex: "female" }
 劫持对象的某个属性。
 
 ```js
-const ctz = { name: "Minji" }
+const person = { name: "Minji" }
 
-Object.defineProperty(ctz, "age", {
-  value: 15,
+Object.defineProperty(person, "age", {
+  value: 20,
   enumerable: true
 })
 
-ctz // { name: "Minji", age: 15 }
+person // { name: "Minji", age: 20 }
 ```
 
 ### Object.defineProperties
@@ -429,11 +442,11 @@ ctz // { name: "Minji", age: 15 }
 劫持对象的多个属性。
 
 ```js
-const ctz = { name: "Minji" }
+const person = { name: "Minji" }
 
-Object.defineProperties(ctz, {
+Object.defineProperties(person, {
   "age": {
-    value: 15,
+    value: 20,
     enumerable: true
   },
   "sex": {
@@ -442,7 +455,7 @@ Object.defineProperties(ctz, {
   }
 })
 
-ctz // { name: "Minji", age: 15, sex: "female" }
+person // { name: "Minji", age: 20, sex: "female" }
 ```
 
 ### 继承
@@ -503,7 +516,7 @@ class Student extends Person {
 ```js
 Object.keys({
   name: "Minji",
-  age: 18
+  age: 20
 })
 // ['name', 'age']
 ```
@@ -515,9 +528,9 @@ Object.keys({
 ```js
 Object.values({
   name: "Minji",
-  age: 18
+  age: 20
 })
-// ['Minji', 18]
+// ['Minji', 20]
 ```
 
 ### Object.entries
@@ -527,9 +540,9 @@ Object.values({
 ```js
 Object.entries({
   name: "Minji",
-  age: 18
+  age: 20
 })
-// [['name', 'Minji'], ['age', 18]]
+// [['name', 'Minji'], ['age', 20]]
 ```
 
 ### Object.assign
@@ -537,12 +550,12 @@ Object.entries({
 合并对象，并返回。可用于浅拷贝。
 
 ```js
-const ctz = { a: 1 }
+const obj = { a: 1 }
 
-Object.assign({}, ctz)
+Object.assign({}, obj)
 
 // 等同于
-{ ...ctz }
+{ ...obj }
 ```
 
 ### Object.freeze
@@ -552,13 +565,13 @@ Object.assign({}, ctz)
 ```js
 const person = {
   name: "Minji",
-  age: 18
+  age: 20
 }
 
 Object.freeze(person)
 
 person.age = 30
-person // { name: 'Minji', age: 18 }
+person // { name: 'Minji', age: 20 }
 ```
 
 ### Object.is
@@ -580,7 +593,7 @@ Object.is(NaN, NaN) // true
 ```js
 const person = {
   name: "Minji",
-  age: 18
+  age: 20
 }
 
 person.__proto__.foo = "bar"
@@ -1227,17 +1240,17 @@ WeakMap 是弱引用，不会被计入垃圾回收策略，也不能进行遍历
 当一个对象的引用次数降为 0，就会被垃圾回收机制回收。
 
 ```js
-let ctz = { a: 1 } // 引用次数：1
+let ctx = { a: 1 } // 引用次数：1
 
-let dpt = ctz // 引用次数：2
+let dpt = ctx // 引用次数：2
 
 const map = new Map()
-map.set(ctz, "f") // 引用次数：3
+map.set(ctx, "f") // 引用次数：3
 
 const weakmap = new WeakMap()
-weakmap.set(ctz, "b") // 引用次数：3, 弱引用不会增加引用次数
+weakmap.set(ctx, "b") // 引用次数：3, 弱引用不会增加引用次数
 
-ctz = null // 引用次数 -1
+ctx = null // 引用次数 -1
 dpt = null // 引用次数 -1
 map.clear() // 引用次数 - 1
 
@@ -1253,9 +1266,9 @@ weakmap // WeakMap {}
 对引用类型的操作（属性查找、赋值、枚举、函数调用）进行拦截和自定义，返回一个代理对象。
 
 ```js
-const ctz = { a: 1, b: 2 }
+const obj = { a: 1, b: 2 }
 
-const ctzProxy = new Proxy(ctz, {
+const objProxy = new Proxy(obj, {
   // 拦截取值操作
   get(target, p, receiver) {
   
@@ -1298,13 +1311,13 @@ const ctzProxy = new Proxy(ctz, {
 Reflect 是 ES6 推荐的操作对象的方法。
 
 ```js
-const ctz = { a: 1, b: 2 }
+const obj = { a: 1, b: 2 }
 
-ctz.a // 1
-Reflect.get(ctz, "a") // 1
+obj.a // 1
+Reflect.get(obj, "a") // 1
 
-Reflect.set(ctz, "b", 3) // true, 表示修改成功
-ctz // { a: 1, b: 3 }
+Reflect.set(obj, "b", 3) // true, 表示修改成功
+obj // { a: 1, b: 3 }
 ```
 
 ## Promise
@@ -1676,8 +1689,7 @@ async 函数是 Promise 的语法糖。
 ```js
 const fn = async () => 5
 
-// 等价于
-
+// 等同于
 const fn = () => Promise.resolve(5)
 ```
 
@@ -1689,8 +1701,7 @@ const fn = async () => {
   console.log(2)
 }
 
-// 等价于
-
+// 等同于
 const fn = () => {
   return new Promise(resolve => {
     console.log(1)
@@ -1722,7 +1733,7 @@ const fn = async () => {
 
 console.log(4)
 
-/* 等价于 */
+/* 等同于 */
 
 ;(() => {
   return new Promise(resolve => {
