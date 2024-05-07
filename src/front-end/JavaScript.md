@@ -363,7 +363,9 @@ Object.prototype.b = 2
 
 4. 执行构造函数内部的代码。
 
-如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
+> [!warning]
+>
+> 如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
 
 ```js
 function Person(name, age) {
@@ -409,7 +411,7 @@ obj.__proto__.foo = "bar"
 obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 ```
 
-### descriptor
+### descriptor 属性描述符
 
 - value：属性值。
 
@@ -425,7 +427,7 @@ obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 
 ### Object.create
 
-创建一个对象，并指定它的原型对象。
+创建一个对象，并指定它的原型。
 
 ```js
 const person = Object.create(null, {
@@ -439,6 +441,34 @@ const person = Object.create(null, {
 })
 
 person // { name: "Minji", sex: "female" }
+```
+
+### Object.getPrototypeOf
+
+获取一个对象的原型。
+
+> [!warning]
+>
+> JS 不允许我们直接操作 `obj.__proto__`。
+
+```js
+const obj = {}
+
+Object.getPrototypeOf(obj) // Object.prototype
+```
+
+### Object.setPrototypeOf
+
+给一个对象指定原型。
+
+> [!warning]
+>
+> JS 不允许我们直接操作 `obj.__proto__`。
+
+```js
+const obj = {}
+
+Object.setPrototypeOf(obj, null)
 ```
 
 ### Object.defineProperty
