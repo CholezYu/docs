@@ -411,38 +411,6 @@ obj.__proto__.foo = "bar"
 obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 ```
 
-### descriptor 属性描述符
-
-- value：属性值。
-
-- writable：是否可修改。
-
-- enumerable：是否可枚举。
-
-- configurable：是否可配置。
-
-- get：getter 函数。
-
-- set：setter 函数。
-
-### Object.create
-
-创建一个对象，并指定它的原型。
-
-```js
-const person = Object.create(null, {
-	name: {
-		value: "Minji",
-		enumerable: true
-	},
-	sex: {
-		value: "female"
-	}
-})
-
-person // { name: "Minji", sex: "female" }
-```
-
 ### Object.getPrototypeOf
 
 获取一个对象的原型。
@@ -459,7 +427,7 @@ Object.getPrototypeOf(obj) // Object.prototype
 
 ### Object.setPrototypeOf
 
-给一个对象指定原型。
+给一个对象指定原型（对象或 null）。
 
 > [!warning]
 >
@@ -469,6 +437,49 @@ Object.getPrototypeOf(obj) // Object.prototype
 const obj = {}
 
 Object.setPrototypeOf(obj, null)
+```
+
+### descriptor 属性描述符
+
+- value：属性值。
+
+- writable：是否可修改。
+
+- enumerable：是否可枚举。
+
+- configurable：是否可配置。
+
+- get：getter 函数。
+
+- set：setter 函数。
+
+### Object.create
+
+创建一个对象，并指定它的原型。常用于创建一个**纯空**对象。
+
+```js
+const obj = {}
+obj.__proto__ // Object.prototype
+
+// 创建一个纯 “空” 对象
+const obj = Object.create(null)
+Object.getPrototypeOf(obj) // null
+```
+
+它也可以使用属性描述符创建对象。
+
+```js
+const person = Object.create(null, {
+	name: {
+		value: "Minji",
+		enumerable: true
+	},
+	sex: {
+		value: "female"
+	}
+})
+
+person // { name: "Minji", sex: "female" }
 ```
 
 ### Object.defineProperty
