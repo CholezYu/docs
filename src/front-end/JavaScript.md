@@ -353,15 +353,28 @@ fn.bind({}).name // "bound fn"
 | 通过 new 调用 | `new Fn()`                             | 实例对象                 |
 | call、apply   | `fn.call(thisArg)` `fn.apply(thisArg)` | call、apply 的第一个参数 |
 
+### in 操作符
+
+判断某个属性是否在一个对象及其原型（链）上。
+
+```js
+const obj = { a: 1 }
+Object.prototype.b = 2
+
+"a" in obj // true
+"b" in obj // true
+"c" in obj // false
+```
+
 ### obj.hasOwnProperty
 
-判断一个属性是否是对象自身的属性。
+判断一个对象**自身**是否存在某个属性。
 
 ```js
 const obj = {}
 obj.__proto__.foo = "bar"
 
-obj.hasOwnProperty("foo") // false
+obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 ```
 
 ### descriptor
@@ -562,7 +575,7 @@ Object.is(NaN, NaN) // true
 
 ### Object.hasOwn
 
-判断一个属性是否是对象自身的属性，与 `.hasOwnProperty(prop)` 相同。
+判断一个属性是否是对象**自身**的属性，与 `.hasOwnProperty(prop)` 相同。
 
 ```js
 const person = {
