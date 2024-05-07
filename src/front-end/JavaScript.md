@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-05-07
+date: 2024-05-08
 ---
 
 ## 布尔判定
@@ -363,6 +363,8 @@ Object.prototype.b = 2
 
 4. 执行构造函数内部的代码。
 
+如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
+
 ```js
 function Person(name, age) {
   this.name = name
@@ -377,9 +379,7 @@ person.__proto__ = Person.prototype
 Person.call(person, "Minji", 20)
 ```
 
-如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
-
-### obj.hasOwnProperty
+### .hasOwnProperty
 
 判断一个对象**自身**是否存在某个属性。
 
@@ -604,7 +604,7 @@ Object.hasOwn(person, "foo") // false
 
 ## 数组
 
-### arr.push
+### .push
 
 向数组尾部添加元素，返回新数组的长度。
 
@@ -616,7 +616,7 @@ arr.push(5, 6)
 arr // [2, 3, 4, 5, 6]
 ```
 
-### arr.pop
+### .pop
 
 删除数组最后一个元素，返回被删除的元素。
 
@@ -628,7 +628,7 @@ arr.pop()
 arr // [1, 2, 3, 4]
 ```
 
-### arr.unshift
+### .unshift
 
 向数组首部添加元素，返回新数组的长度。
 
@@ -640,7 +640,7 @@ arr.unshift(1)
 arr // [1, 2, 3, 4]
 ```
 
-### arr.shift
+### .shift
 
 删除数组第一个元素，返回被删除的元素。
 
@@ -652,7 +652,7 @@ arr.shift()
 arr // [2, 3, 4, 5]
 ```
 
-### arr.splice
+### .splice
 
 删除元素 | 添加元素，返回被删除的元素。
 
@@ -686,7 +686,7 @@ arr.splice(1, 0, 7, 8, 9) // []
 arr // [2, 7, 8, 9, 3, 4, 5, 6]
 ```
 
-### arr.sort
+### .sort
 
 将元素按 UTF-16 升序排列。可以传入比较函数进行排序。
 
@@ -702,7 +702,7 @@ arr.sort((a, b) => a.age - b.age)
 arr // [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
 ```
 
-### arr.reverse
+### .reverse
 
 反转数组中的元素。
 
@@ -714,7 +714,7 @@ arr.reverse()
 arr // [5, 4, 3, 2, 1]
 ```
 
-### arr.slice
+### .slice
 
 截取数组，返回被截取的部分。
 
@@ -726,7 +726,7 @@ arr.slice(0, arr.length) // [2, 3, 4, 5, 6]
 arr.slice() // [2, 3, 4, 5, 6]
 ```
 
-### arr.concat
+### .concat
 
 合并数组，并返回。
 
@@ -736,7 +736,7 @@ const arr = [2, 3, 4]
 arr.concat([5, 6]) // [2, 3, 4, 5, 6]
 ```
 
-### arr.join
+### .join
 
 拆分数组，将被拆分的部分组成字符串，并返回。
 
@@ -748,7 +748,7 @@ arr.join(" ") // "h e l l o"
 arr.join("") === "" // false, 判断 arr 是否为空数组
 ```
 
-### arr.indexOf
+### .indexOf
 
 查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -760,7 +760,7 @@ arr.indexOf('b', 2) // 4
 arr.indexOf('g') // -1
 ```
 
-### arr.lastIndexOf
+### .lastIndexOf
 
 查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -772,7 +772,7 @@ arr.lastIndexOf('b', -2) // 1
 arr.lastIndexOf('g') // -1
 ```
 
-### arr.forEach
+### .forEach
 
 遍历数组。
 
@@ -782,7 +782,7 @@ const arr = [4, 9, 16, 25]
 arr.forEach(item => item) // 4 9 16 25
 ```
 
-### arr.filter
+### .filter
 
 遍历数组，过滤出一个新数组。
 
@@ -794,7 +794,7 @@ const newArr = arr.filter(item => item > 12)
 newArr // [16, 25]
 ```
 
-### arr.map
+### .map
 
 遍历数组，映射出一个新数组。
 
@@ -806,7 +806,7 @@ const newArr = arr.map(item => Math.sqrt(item))
 newArr // [2, 3, 4, 5]
 ```
 
-### arr.reduce
+### .reduce
 
 遍历数组，得到一个值。
 
@@ -819,6 +819,59 @@ total // 55 (1 + 4 + 9 + 16 + 25)
 ```
 
 ## 数组（ES6）
+
+### .includes
+
+判断数组中是否含有某元素。
+
+```js
+const arr = [1, 2, 3, 4, 5]
+
+arr.includes(3) // true
+arr.includes(9) // false
+```
+
+### .fill
+
+填充数组。
+
+```js
+const arr = [1, 2, 3]
+
+arr.fill("*")
+
+arr // ["*", "*", "*"]
+```
+
+### .flat
+
+降维数组。
+
+```js
+const arr = [1, 2, 3, [4, 5, [6]]]
+
+arr.flat(2) // [1, 2, 3, 4, 5, 6]
+```
+
+### .find
+
+遍历数组，返回符合条件的第一个元素。
+
+```js
+const arr = [1, 3, 5, 7, 9]
+
+arr.find(item => item > 3) // 5
+```
+
+### .findIndex
+
+遍历数组，返回符合条件的第一个元素的索引。
+
+```js
+const arr = [1, 3, 5, 7, 9]
+
+arr.findIndex(item => item > 3) // 2
+```
 
 ### Array.of
 
@@ -846,62 +899,9 @@ Array.from([1, 2, 3], value => value * 2) // [2, 4, 6]
 Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3, 4, 5, 6, 7]
 ```
 
-### arr.includes
-
-判断数组中是否含有某元素。
-
-```js
-const arr = [1, 2, 3, 4, 5]
-
-arr.includes(3) // true
-arr.includes(9) // false
-```
-
-### arr.fill
-
-填充数组。
-
-```js
-const arr = [1, 2, 3]
-
-arr.fill("*")
-
-arr // ["*", "*", "*"]
-```
-
-### arr.flat
-
-降维数组。
-
-```js
-const arr = [1, 2, 3, [4, 5, [6]]]
-
-arr.flat(2) // [1, 2, 3, 4, 5, 6]
-```
-
-### arr.find
-
-遍历数组，返回符合条件的第一个元素。
-
-```js
-const arr = [1, 3, 5, 7, 9]
-
-arr.find(item => item > 3) // 5
-```
-
-### arr.findIndex
-
-遍历数组，返回符合条件的第一个元素的索引。
-
-```js
-const arr = [1, 3, 5, 7, 9]
-
-arr.findIndex(item => item > 3) // 2
-```
-
 ## 字符串
 
-### str.indexOf
+### .indexOf
 
 查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -913,7 +913,7 @@ str.indexOf("world", 10) // 18
 str.indexOf("woood") // -1
 ```
 
-### str.lastIndexOf
+### .lastIndexOf
 
 查找元素（反向），返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -925,7 +925,7 @@ str.lastIndexOf("world", 10) // 6
 str.indexOf("woood") // -1
 ```
 
-### str.slice
+### .slice
 
 截取字符串，返回被截取的部分。
 
@@ -938,7 +938,7 @@ str.slice(2, 5) // "llo"
 str.slice(3, -1) // "lo worl"
 ```
 
-### str.substring
+### .substring
 
 截取字符串，返回被截取的部分。若 startIndex 大于 endIndex，则交换顺序。
 
@@ -950,7 +950,7 @@ str.substring(6) // "world"
 str.substring(-10, -5) // ""
 ```
 
-### str.substr
+### .substr
 
 截取字符串，返回被截取的部分。
 
@@ -963,7 +963,7 @@ str.substr(6, 3) // "wor"
 str.substr(3) // "lo world"
 ```
 
-### str.toUpperCase
+### .toUpperCase
 
 将字符串转为大写，并返回。
 
@@ -973,7 +973,7 @@ let str = "I love JavaScript"
 str.toUpperCase() // "I LOVE JAVASCRIPT"
 ```
 
-### str.toLowerCase
+### .toLowerCase
 
 将字符串转为小写，并返回。
 
@@ -983,7 +983,7 @@ let str = "I love JavaScript"
 str.toLowerCase() // "i love javascript"
 ```
 
-### str.trim
+### .trim
 
 去除字符串两边的空格。
 
@@ -993,7 +993,7 @@ let str = "   hello world   "
 str.trim() // "hello world"
 ```
 
-### str.split
+### .split
 
 拆分字符串，将被拆分的部分组成数组，并返回。
 
@@ -1011,7 +1011,7 @@ let str = "fdaf123fdsa12321fdas123fda"
 str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 ```
 
-### str.search
+### .search
 
 查找元素，返回元素（正则）首次出现（匹配）的索引。若不存在，则返回 -1。
 
@@ -1021,7 +1021,7 @@ let str = "hello world 666"
 str.search(/[0-9]+/g) // 12
 ```
 
-### str.match
+### .match
 
 返回匹配项组成的数组。若匹配不到，则返回 -1。
 
@@ -1031,7 +1031,7 @@ let str = "1 hello 2 world 666"
 str.match(/[0-9]+/g) // [1, 2, 666]
 ```
 
-### str.replace
+### .replace
 
 替换匹配到的元素。
 
@@ -1052,7 +1052,7 @@ str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 
 ## 字符串（ES6）
 
-### str.includes
+### .includes
 
 判断字符串中是否含有某元素。
 
@@ -1063,7 +1063,7 @@ str.includes("world") // true
 str.includes("yeah") // false
 ```
 
-### str.startsWith
+### .startsWith
 
 判断字符串是否以某元素开始。
 
@@ -1073,7 +1073,7 @@ let str = "abcdefg"
 str.startsWith("ab") // true
 ```
 
-### str.endsWith
+### .endsWith
 
 判断字符串是否以某元素结束。
 
@@ -1083,7 +1083,7 @@ let str = "abcdefg"
 str.endsWith("ef") // false
 ```
 
-### str.repeat
+### .repeat
 
 重复字符串，并返回。
 
@@ -1093,7 +1093,7 @@ let str = "abc"
 str.repeat(3) // "abcabcabc"
 ```
 
-### str.padStart
+### .padStart
 
 当字符串不足某长度时，在首部填充元素，并返回。
 
@@ -1103,7 +1103,7 @@ let str = "abc"
 str.padStart(10, "*") // "*******abc"
 ```
 
-### str.padEnd
+### .padEnd
 
 当字符串不足某长度时，在尾部填充元素，并返回。
 
@@ -1113,7 +1113,7 @@ let str = "abc"
 str.padEnd(10, "*") // "abc*******"
 ```
 
-### str.trimStart
+### .trimStart
 
 去除字符串首部的空格。
 
@@ -1123,7 +1123,7 @@ let str = "   hello world   "
 str.trimStart() // "hello world   "
 ```
 
-### str.trimEnd
+### .trimEnd
 
 去除字符串尾部的空格。
 
