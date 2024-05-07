@@ -12,7 +12,7 @@ date: 2024-05-06
 
 - 判定为 true：其余数据。
 
-## 强制转换
+## 强制转换原理
 
 ### Number()
 
@@ -34,11 +34,17 @@ Number({ a: 1 }) // NaN
 // 等价于
 
 function _Number(value) {
-  return typeof value.valueOf() === "object"
-    ? typeof value.toString() === "object"
-      ? new TypeError("Cannot convert object to primitive value")
-      : Number(value.toString())
-    : Number(value.valueOf())
+  if (typeof value.valueOf() === "object") {
+    if (typeof value.toString() === "object") {
+      return new TypeError("Cannot convert object to primitive value")
+    }
+    else {
+      return Number(value.toString())
+    }
+  }
+  else {
+    return Number(value.valueOf())
+  }
 }
 
 _Number({ a: 1 }) // NaN
@@ -330,13 +336,22 @@ fun.bind({}).name // "bound fun"
 
 1. 创建一个空对象，作为将要返回的实例对象；
 
-2. 将这个空对象的原型，指向构造函数的 prototype 属性；
+2. 将这个空对象的原型，指向构造函数的 prototype；
 
 3. 将这个空对象赋值给函数内部的 this；
 
 4. 开始执行构造函数内部的代码。
 
 如果构造函数内部返回一个对象，new 就会返回该对象；否则，new 会返回 this 指向的对象。
+
+### this 指向
+
+| 函数调用方式  | 示例                                   | this 指向                |
+| ------------- | -------------------------------------- | ------------------------ |
+| 直接调用      | `fn()` `window.fn()`                   | window                   |
+| 通过对象调用  | `obj.fn()`                             | 调用它的对象             |
+| 通过 new 调用 | `new Fn()`                             | 实例对象                 |
+| call、apply   | `fn.call(thisArg)` `fn.apply(thisArg)` | call、apply 的第一个参数 |
 
 ### descriptor
 
