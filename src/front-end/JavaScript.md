@@ -268,7 +268,7 @@ arr // [1, 2, 3]
 rest 参数只能是最后一个参数。
 
 ```js
-function fun(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal parameter
+function fn(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal parameter
 ```
 
 ### name 属性
@@ -276,20 +276,20 @@ function fun(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal p
 函数的 name 属性返回该函数的函数名。
 
 ```js
-function fun() {}
-fun.name // "fun"
+function fn() {}
+fn.name // "fn"
 ```
 
 如果将一个匿名函数赋值给一个变量，在 ES5 中 name 的值为空字符串，而 ES6 中 name 的值为实际函数名。
 
 ```js
-var fun = function() {}
+var fn = function() {}
 
 // ES5
-fun.name // ""
+fn.name // ""
 
 // ES6
-fun.name // "fun"
+fn.name // "fn"
 ```
 
 如果将一个具名函数赋值给一个变量，ES5 和 ES6 中 name 的值都为这个具名函数原本的名字。
@@ -313,9 +313,9 @@ Function 构造函数返回的函数实例，name 的值为 anonymous。
 bind 返回的函数，name 的值会加上 bound 前缀。
 
 ```js
-function fun() {}
+function fn() {}
 
-fun.bind({}).name // "bound fun"
+fn.bind({}).name // "bound fn"
 
 (function() {}).bind({}).name // "bound"
 ```
@@ -352,6 +352,17 @@ fun.bind({}).name // "bound fun"
 | 通过对象调用  | `obj.fn()`                             | 调用它的对象             |
 | 通过 new 调用 | `new Fn()`                             | 实例对象                 |
 | call、apply   | `fn.call(thisArg)` `fn.apply(thisArg)` | call、apply 的第一个参数 |
+
+### obj.hasOwnProperty
+
+判断一个属性是否是对象自身的属性。
+
+```js
+const obj = {}
+obj.__proto__.foo = "bar"
+
+obj.hasOwnProperty("foo") // false
+```
 
 ### descriptor
 
@@ -433,7 +444,7 @@ function Person(name, age) {
   this.age = age
 }
 
-Person.prototype.fun = function () {}
+Person.prototype.fn = function () {}
 
 function Student(name, age) {
   // 继承构造函数
