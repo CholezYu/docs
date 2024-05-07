@@ -379,6 +379,25 @@ person.__proto__ = Person.prototype
 Person.call(person, "Minji", 20)
 ```
 
+### instanceof 关键字
+
+判断一个对象的原型链中，是否存在某个构造函数。
+
+> [!tip]
+>
+> 也就是判断一个对象是否是某个构造函数实例化的结果，或者这个对象对应的构造函数是否与某个构造函数存在继承关系。
+
+```js
+const obj = {}
+const arr = []
+function Fn() {}
+
+obj instanceof Fn // false
+obj instanceof Function // false
+obj instanceof Object // true
+arr instanceof Array // true
+```
+
 ### .hasOwnProperty
 
 判断一个对象**自身**是否存在某个属性。

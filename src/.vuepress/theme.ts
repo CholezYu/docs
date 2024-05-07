@@ -8,7 +8,7 @@ export default hopeTheme({
   
   author: {
     name: "俞文健",
-    url: "https://github.com/choIez"
+    url: "https://github.com/choIez/docs"
   },
   
   navbar,
