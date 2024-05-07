@@ -423,6 +423,9 @@ obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 const obj = {}
 
 Object.getPrototypeOf(obj) // Object.prototype
+
+// 等同于
+obj.__proto__
 ```
 
 ### Object.setPrototypeOf
@@ -437,6 +440,9 @@ Object.getPrototypeOf(obj) // Object.prototype
 const obj = {}
 
 Object.setPrototypeOf(obj, null)
+
+// 等同于
+obj.__proto__ = undefined // 这里注意！不是 null
 ```
 
 ### descriptor 属性描述符
