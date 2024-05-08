@@ -490,7 +490,7 @@ person // { name: "Minji", sex: "female" }
 
 ### Object.defineProperty
 
-劫持对象的某个属性。
+使用属性描述符为对象定义或修改一个属性。
 
 ```js
 const person = { name: "Minji" }
@@ -505,7 +505,7 @@ person // { name: "Minji", age: 20 }
 
 ### Object.defineProperties
 
-劫持对象的多个属性。
+使用属性描述符为对象定义或修改多个属性。
 
 ```js
 const person = { name: "Minji" }
@@ -526,9 +526,11 @@ person // { name: "Minji", age: 20, sex: "female" }
 
 ### 继承
 
-#### 组合继承
+组合继承（构造函数继承 + 原型链继承）。
 
-构造函数 + 原型链组合继承
+> 构造函数继承：调用 `call()` 改变父类的 this，让子类也能使用父类的属性。
+>
+> 原型链继承：调用 `Object.setPrototypeOf()` 指定子类原型对象的原型，确认原型链。
 
 ```js
 function Person(name, age) {
@@ -536,26 +538,31 @@ function Person(name, age) {
   this.age = age
 }
 
-Person.prototype.fn = function () {}
+Person.prototype.fn = function () {
+  // ...
+}
 
-function Student(name, age) {
+function Student(name, age, grade) {
   // 继承构造函数
+  // 此次调用，Person 中的 this 就是 Student 中的 this
+  // 相当于往 Student 中的 this 上添加了 name 和 age 属性
   Person.call(this, name, age)
+  this.grade = grade
 }
 
 // 继承原型链
-// 相当于 Student.prototype = Person.prototype
-// 但是这种做法是地址的指向，会带来副作用
-// 正确的做法是进行深拷贝，或者指向 Person 的实例对象
-Student.prototype = new Person()
-// 或
-Student.prototype = Object.create(Parent.prototype)
+// 让 `Student.prototype.__proto__` 指向 `Person.prototype`
+Object.setPrototypeOf(Student.prototype, Person.prototype)
 
-// 修改原型对象的 constructor 属性
+// 或（不推荐）
+Student.prototype = Object.create(Person.prototype)
+// 注意：使用这种方式继承原型链，会导致 `Student.prototype` 为空对象 {}
+// `Student.prototype.constructor` 会指向 `Person.prototype.constructor`，也就是 Person
+// 所以需要将 `Student.prototype.constructor` 改回 Student
 Student.prototype.constructor = Student
 ```
 
-#### 类的继承
+ES6 Class 继承。
 
 ```js
 class Person {
@@ -566,9 +573,10 @@ class Person {
 }
 
 class Student extends Person {
-  constructor(name, age) {
+  constructor(name, age, grade) {
     // 如果需要使用继承的属性或方法，必须调用 super 方法
     super(name, age)
+    this.grade = grade
   }
 }
 ```
