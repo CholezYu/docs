@@ -87,6 +87,11 @@ export default navbar([
             text: "MySQL",
             icon: "mysql",
             link: "MySQL"
+          },
+          {
+            text: "Nginx",
+            icon: "nginx",
+            link: "Nginx"
           }
         ]
       }

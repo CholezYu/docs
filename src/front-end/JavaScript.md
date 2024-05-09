@@ -214,7 +214,7 @@ fn("延时输出", 2000) // 调用外部函数，产生一个闭包
 
 - 通过闭包可以操作自由变量，该操作由内部函数决定。
 
-## 函数（ES6）
+## 函数（ES6+）
 
 ### rest 参数
 
@@ -411,40 +411,6 @@ obj.__proto__.foo = "bar"
 obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 ```
 
-### Object.getPrototypeOf
-
-获取一个对象的原型。
-
-> [!warning]
->
-> JS 不允许我们直接操作 `obj.__proto__`。
-
-```js
-const obj = {}
-
-Object.getPrototypeOf(obj) // Object.prototype
-
-// 等同于
-obj.__proto__
-```
-
-### Object.setPrototypeOf
-
-给一个对象指定原型（对象或 null）。
-
-> [!warning]
->
-> JS 不允许我们直接操作 `obj.__proto__`。
-
-```js
-const obj = {}
-
-Object.setPrototypeOf(obj, null)
-
-// 等同于
-obj.__proto__ = undefined // 这里注意！不是 null
-```
-
 ### descriptor 属性描述符
 
 - value：属性值。
@@ -551,10 +517,10 @@ function Student(name, age, grade) {
 }
 
 // 继承原型链
-// 让 `Student.prototype.__proto__` 指向 `Person.prototype`
+// ES6+
 Object.setPrototypeOf(Student.prototype, Person.prototype)
 
-// 或（不推荐）
+// 或（ES6 之后不推荐）
 Student.prototype = Object.create(Person.prototype)
 // 注意：使用这种方式继承原型链，会导致 `Student.prototype` 为空对象 {}
 // `Student.prototype.constructor` 会指向 `Person.prototype.constructor`，也就是 Person
@@ -581,7 +547,41 @@ class Student extends Person {
 }
 ```
 
-## 对象（ES6）
+## 对象（ES6+）
+
+### Object.getPrototypeOf
+
+获取一个对象的原型。
+
+> [!warning]
+>
+> JS 不允许我们直接操作 `obj.__proto__`。
+
+```js
+const obj = {}
+
+Object.getPrototypeOf(obj) // Object.prototype
+
+// 等同于
+obj.__proto__
+```
+
+### Object.setPrototypeOf
+
+给一个对象指定原型（对象或 null）。
+
+> [!warning]
+>
+> JS 不允许我们直接操作 `obj.__proto__`。
+
+```js
+const obj = {}
+
+Object.setPrototypeOf(obj, null)
+
+// 等同于
+obj.__proto__ = undefined // 这里注意！不是 null
+```
 
 ### Object.keys
 
@@ -892,7 +892,7 @@ const total = arr.reduce((prev, item) => prev + item, 1)
 total // 55 (1 + 4 + 9 + 16 + 25)
 ```
 
-## 数组（ES6）
+## 数组（ES6+）
 
 ### .includes
 
@@ -1028,7 +1028,7 @@ str.substring(-10, -5) // ""
 
 截取字符串，返回被截取的部分。
 
-> 不推荐使用
+> 不推荐使用。
 
 ```js
 let str = "hello world"
@@ -1059,7 +1059,7 @@ str.toLowerCase() // "i love javascript"
 
 ### .trim
 
-去除字符串两边的空格。
+去除字符串两边的空格，并返回。
 
 ```js
 let str = "   hello world   "
@@ -1124,7 +1124,7 @@ let str = "html and css"
 str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 ```
 
-## 字符串（ES6）
+## 字符串（ES6+）
 
 ### .includes
 
@@ -1189,7 +1189,7 @@ str.padEnd(10, "*") // "abc*******"
 
 ### .trimStart
 
-去除字符串首部的空格。
+去除字符串首部的空格，并返回。
 
 ```js
 let str = "   hello world   "
@@ -1199,7 +1199,7 @@ str.trimStart() // "hello world   "
 
 ### .trimEnd
 
-去除字符串尾部的空格。
+去除字符串尾部的空格，并返回。
 
 ```js
 let str = "   hello world   "
@@ -1211,7 +1211,7 @@ str.trimEnd() // "   hello world"
 
 
 
-## 正则（ES6）
+## 正则（ES6+）
 
 
 
