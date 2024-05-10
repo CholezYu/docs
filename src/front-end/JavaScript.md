@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-05-10
+date: 2024-05-11
 ---
 
 ## 布尔判定
@@ -1059,16 +1059,6 @@ let str = "I love JavaScript"
 str.toLowerCase() // "i love javascript"
 ```
 
-### .trim
-
-去除字符串两边的空格，并返回。
-
-```js
-let str = "   hello world   "
-
-str.trim() // "hello world"
-```
-
 ### .split
 
 拆分字符串，将被拆分的部分组成数组，并返回。
@@ -1109,7 +1099,7 @@ str.match(/[0-9]+/g) // [1, 2, 666]
 
 ### .replace
 
-替换匹配到的元素。
+替换（第一个）匹配到的元素。
 
 ```js
 let str = "18-31-56"
@@ -1139,26 +1129,6 @@ str.includes("world") // true
 str.includes("yeah") // false
 ```
 
-### .startsWith
-
-判断字符串是否以某元素开始。
-
-```js
-let str = "abcdefg"
-
-str.startsWith("ab") // true
-```
-
-### .endsWith
-
-判断字符串是否以某元素结束。
-
-```js
-let str = "abcdefg"
-
-str.endsWith("ef") // false
-```
-
 ### .repeat
 
 重复字符串，并返回。
@@ -1169,24 +1139,27 @@ let str = "abc"
 str.repeat(3) // "abcabcabc"
 ```
 
-### .padStart
+### .replaceAll
 
-当字符串不足某长度时，在首部填充元素，并返回。
+替换所有匹配到的元素。
 
 ```js
-let str = "abc"
+let str = "18-31-56"
+ 
+str.replaceAll("-", ":") // 18:31:56
 
-str.padStart(10, "*") // "*******abc"
+// 等同于
+str.replace(/-/g, ":") // 18:31:56
 ```
 
-### .padEnd
+### .trim
 
-当字符串不足某长度时，在尾部填充元素，并返回。
+去除字符串两边的空格，并返回。
 
 ```js
-let str = "abc"
+let str = "   hello world   "
 
-str.padEnd(10, "*") // "abc*******"
+str.trim() // "hello world"
 ```
 
 ### .trimStart
@@ -1207,6 +1180,46 @@ str.trimStart() // "hello world   "
 let str = "   hello world   "
 
 str.trimEnd() // "   hello world"
+```
+
+### .startsWith
+
+判断字符串是否以某元素开始。
+
+```js
+let str = "abcdefg"
+
+str.startsWith("ab") // true
+```
+
+### .endsWith
+
+判断字符串是否以某元素结束。
+
+```js
+let str = "abcdefg"
+
+str.endsWith("ef") // false
+```
+
+### .padStart
+
+当字符串不足某长度时，在首部填充元素，并返回。
+
+```js
+let str = "abc"
+
+str.padStart(10, "*") // "*******abc"
+```
+
+### .padEnd
+
+当字符串不足某长度时，在尾部填充元素，并返回。
+
+```js
+let str = "abc"
+
+str.padEnd(10, "*") // "abc*******"
 ```
 
 ## 正则
