@@ -89,7 +89,9 @@ cd /usr/local/nginx/sbin
 ./nginx -s reload
 ```
 
-## 断开SSH客户端后，保持进程继续运行
+## 断开 SSH 客户端后，保持进程继续运行
+
+[Linux 系统下如何保持进程在 SSH 客户端断开后仍继续运行？-阿里云帮助中心 (aliyun.com)](https://help.aliyun.com/zh/ecs/support/configure-linux-to-keep-the-process-running-after-the-ssh-client-is-disconnected#a1407bd096eso)
 
 安装 screen 工具。
 
@@ -118,7 +120,7 @@ screen ./nginx -s stop
 screen ./nginx -s reload
 ```
 
-同时按 **Ctrl** + **a** + **d** 键，就可以退出 SSH 登录，但不会影响 screen 程序的运行。
+同时按 **Ctrl** + **A** + **D** 键，就可以退出 SSH 登录，但不会影响 screen 程序的运行。
 
 需要继续工作时，登录实例，然后执行如下命令，恢复会话即可。
 

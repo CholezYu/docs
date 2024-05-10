@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-05-08
+date: 2024-05-10
 ---
 
 ## 布尔判定
@@ -333,12 +333,12 @@ fn.bind({}).name // "bound fn"
 
 ### this 指向
 
-| 函数调用方式  | 示例                                   | this 指向                |
-| ------------- | -------------------------------------- | ------------------------ |
-| 直接调用      | `fn()` `window.fn()`                   | window                   |
-| 通过对象调用  | `obj.fn()`                             | 调用它的对象             |
-| 通过 new 调用 | `new Fn()`                             | 实例对象                 |
-| call、apply   | `fn.call(thisArg)` `fn.apply(thisArg)` | call、apply 的第一个参数 |
+| 函数调用方式       | 示例                                   | this 指向                       |
+| ------------------ | -------------------------------------- | ------------------------------- |
+| 直接调用           | `fn()` `window.fn()`                   | window                          |
+| 通过对象调用       | `obj.fn()`                             | 调用它的对象                    |
+| 通过 new 调用      | `new Fn()`                             | 实例对象                        |
+| `call()` `apply()` | `fn.call(thisArg)` `fn.apply(thisArg)` | `call()` `apply()` 的第一个参数 |
 
 ### in 操作符
 
@@ -662,7 +662,7 @@ Object.is(NaN, NaN) // true
 
 ### Object.hasOwn
 
-判断一个属性是否是对象**自身**的属性，与 `.hasOwnProperty(prop)` 相同。
+判断一个属性是否是对象**自身**的属性，与 `.hasOwnProperty()` 相同。
 
 ```js
 const person = {
@@ -728,7 +728,7 @@ arr // [2, 3, 4, 5]
 
 ### .splice
 
-删除元素 | 添加元素，返回被删除的元素。
+删除元素 | 插入元素，返回被删除的元素。
 
 ```js
 /* 删除元素 */
@@ -751,7 +751,7 @@ arr // [2, 7, 8, 9, 6]
 ```
 
 ```js
-/* 添加元素 */
+/* 插入元素 */
 
 const arr = [2, 3, 4, 5, 6]
 
@@ -1835,24 +1835,40 @@ console.log(4)
 
 [DOM - JavaScript 教程 - 网道 (wangdoc.com)](https://wangdoc.com/javascript/dom/)
 
-### 元素节点
+### 获取 DOM
 
-|      | 节点类型（nodeType） | 节点名（nodeName） | 节点值（nodeValue） |
-| :--: | :------------------: | :----------------: | :-----------------: |
-| 元素 |          1           |     大写标签名     |        null         |
-| 属性 |          2           |       属性名       |       属性值        |
-| 文本 |          3           |       #text        |      文本内容       |
-| 注释 |          8           |      #comment      |      注释内容       |
+直接获取 DOM 元素。
 
-### 查询元素节点
+```js
+// 通过 ID 获取 DOM
+document.getElementById()
 
-| API                              | 用法               |
+// 通过标签名获取 DOM
+document.getElementsByTagName()
+element.getElementsByTagName()
+
+// 通过类名获取 DOM
+document.getElementsByClassName()
+element.getElementsByClassName()
+
+// 通过 CSS 选择器获取 DOM（推荐）
+// 获取匹配到的第一个 DOM
+document.querySelector()
+element.querySelector()
+// 获取所有匹配的 DOM
+document.querySelectorAll()
+element.querySelectorAll()
+```
+
+获取 “亲代” DOM 元素。
+
+| API                              | 描述               |
 | -------------------------------- | ------------------ |
 | `element.parentElement`          | 获取父元素         |
 | `element.parentNode`             | 获取父节点         |
 | `element.offsetParent`           | 获取定位父元素     |
-| `element.children`               | 获取所有子元素     |
-| `element.childNodes`             | 获取所有子节点     |
+| `element.children`               | 获取（所有）子元素 |
+| `element.childNodes`             | 获取（所有）子节点 |
 | `element.firstElementChild`      | 获取第一个子元素   |
 | `element.firstChild`             | 获取第一个子节点   |
 | `element.lastElementChild`       | 获取最后一个子元素 |
@@ -1862,67 +1878,134 @@ console.log(4)
 | `element.nextElementSilbing`     | 获取下一个兄弟元素 |
 | `element.nextSibling`            | 获取下一个兄弟节点 |
 
-### 操作元素节点
+一些特殊的 DOM 元素。
 
-| API                                        | 用法                         |
-| ------------------------------------------ | ---------------------------- |
-| `document.createElement(element)`          | 创建一个元素                 |
-| `document.createTextNode(textNode)`        | 创建一个文本节点             |
-| `element.appendChild(child)`               | 添加一个子元素               |
-| `element.remove()`                         | 删除一个元素                 |
-| `element.removeChild(child)`               | 删除一个子元素               |
-| `element.replaceChild(newChild, oldChild)` | 替换一个子元素               |
-| `element.insertBefore(newChild, oldChild)` | 在一个子元素前插入一个子元素 |
-| `element.cloneNode()`                      | 克隆一个元素                 |
-| `element.cloneNode(true)`                  | 克隆一个元素及其内容         |
+| API                        | 描述           |
+| -------------------------- | -------------- |
+| `document.documentElement` | 获取 html 元素 |
+| `document.body`            | 获取 body 元素 |
+| `document.head`            | 获取 head 元素 |
 
-### 操作元素样式
+### 操作 DOM
 
-| API                                 | 用法                           |
-| ----------------------------------- | ------------------------------ |
-| `element.style.attr`                | 获取元素行内样式               |
-| `element.style.attr = "value"`      | 设置元素行内样式               |
-| `getComputedStyle(element)["attr"]` | 获取元素实时样式，*不兼容 IE8* |
-| `element.currentStyle["attr"]`      | 获取元素实时样式，*仅支持 IE8* |
+创建 DOM 元素。
 
-### 操作元素类名
+```js
+// 创建一个 DOM 元素
+document.createElement(element)
 
-| API                                   | 用法                 |
-| ------------------------------------- | -------------------- |
-| `element.className`                   | 获取元素类名         |
-| `element.className = "value"`         | 设置元素类名         |
-| `element.classList.add("value")`      | 添加元素类名         |
-| `element.classList.remove("value")`   | 删除元素类名         |
-| `element.classList.contains("value")` | 判断元素是否有该类名 |
-| `element.classList.toggle("value")`   | 切换元素类名         |
+// 创建一个文本节点
+document.createTextNode(textNode)
+```
 
-### 操作元素属性
+添加 DOM 元素。
 
-| API                                     | 用法                 |
-| --------------------------------------- | -------------------- |
-| `element.getAttribute("attr")`          | 获取元素属性         |
-| `element.setAttribute("attr", "value")` | 设置元素属性         |
-| `element.removeAttribute("attr")`       | 移除元素属性         |
-| `element.hasAttribute("attr")`          | 判断元素是否有该属性 |
+```js
+// 向 DOM 元素的末尾添加一个子元素
+element.appendChild(childElement)
 
-### 获取元素宽高
+// 在一个子元素前面插入一个子元素
+element.insertBefore(newChildElement, oldChildElement)
+```
 
-| API                                     | 用法                           |
-| --------------------------------------- | ------------------------------ |
-| `element.clientWidth`                   | 获取元素宽度（不含边框）       |
-| `element.clientHeight`                  | 获取元素高度（不含边框）       |
-| `element.offsetWidth`                   | 获取元素宽度（含边框）         |
-| `element.offsetHeight`                  | 获取元素高度（含边框）         |
-| `element.clientLeft`                    | 获取元素左边框宽度             |
-| `element.clientTop`                     | 获取元素上边框宽度             |
-| `window.innerWidth`                     | 获取浏览器宽度（包含滚动条）   |
-| `window.innerHeight`                    | 获取浏览器高度（包含滚动条）   |
-| `document.documentElement.offsetWidth`  | 获取浏览器宽度（不包含滚动条） |
-| `document.documentElement.offsetHeight` | 获取浏览器高度（不包含滚动条） |
-| `element.scrollWidth`                   | 获取元素滚动区域的宽度         |
-| `element.scrollHeight`                  | 获取元素滚动区域的高度         |
+删除 DOM 元素。
 
-### 获取元素偏移量
+```js
+// 删除 DOM 元素
+element.remove()
+
+// 删除一个子元素
+element.removeChild(childElement)
+```
+
+其他 DOM 操作。
+
+```js
+// 替换一个子元素
+element.replaceChild(newChildElement, oldChildElement)
+
+// 复制 DOM 元素
+element.cloneNode()
+// 复制 DOM 元素及其内容
+element.cloneNode(true)
+```
+
+### DOM Style
+
+```js
+// 获取元素的行内样式
+element.style["attr"]
+
+// 设置元素的行内样式
+element.style["attr"] = "value"
+
+// 获取元素的实时样式，*不兼容 IE8*
+getComputedStyle(element)["attr"]
+
+// 获取元素的实时样式，*仅支持 IE8*
+element.currentStyle["attr"]
+```
+
+### DOM className
+
+```js
+// 获取元素的类名
+element.className
+
+// 设置元素的类名
+element.className = "className"
+
+// 给元素添加一个类名
+element.classList.add("className")
+
+// 删除元素的类名
+element.classList.remove("className")
+
+// 判断元素是否具有该类名
+element.classList.contains("className")
+
+// 切换元素的类名
+element.classList.toggle("className")
+```
+
+### DOM Attribute
+
+```js
+// 获取元素的属性
+element.getAttribute("attr")
+
+// 设置元素的属性
+element.setAttribute("attr", "value")
+
+// 移除元素的属性
+element.removeAttribute("attr")
+
+// 判断元素是否存在某个属性
+element.hasAttribute("attr")
+```
+
+### DOM 尺寸和位置
+
+#### DOM 尺寸
+
+| API                                     | 用法                             |
+| --------------------------------------- | -------------------------------- |
+| `window.innerWidth`                     | 获取浏览器宽度（含滚动条）       |
+| `window.innerHeight`                    | 获取浏览器高度（含滚动条）       |
+| `document.documentElement.clientWidth`  | 获取浏览器宽度（不含滚动条）     |
+| `document.documentElement.clientHeight` | 获取浏览器高度（不含滚动条）     |
+| `element.clientWidth`                   | 获取元素宽度（不含边框和滚动条） |
+| `element.clientHeight`                  | 获取元素高度（不含边框和滚动条） |
+| `element.offsetWidth`                   | 获取元素宽度（含边框和滚动条）   |
+| `element.offsetHeight`                  | 获取元素高度（含边框和滚动条）   |
+| `element.scrollWidth`                   | 获取元素滚动区域的宽度           |
+| `element.scrollHeight`                  | 获取元素滚动区域的高度           |
+| `element.scrollTop`                     | 获取滚动条滚动过（到顶部）的距离 |
+| `element.scrollLeft`                    | 获取滚动条滚动过（到左侧）的距离 |
+| `element.clientLeft`                    | 获取元素左边框宽度               |
+| `element.clientTop`                     | 获取元素上边框宽度               |
+
+#### DOM 位置
 
 | API                  | 用法                                 |
 | -------------------- | ------------------------------------ |
@@ -1931,39 +2014,67 @@ console.log(4)
 | `element.scrollLeft` | 获取元素水平滚动条滚动的距离         |
 | `element.scrollTop`  | 获取元素垂直滚动条滚动的距离         |
 
-### 宽高偏移量函数
-
-`element.getBoundingClientRect()`
+#### getBoundingClientRect
 
 获取元素的宽高及偏移量。
 
 | 属性     | 描述                                  |
 | -------- | ------------------------------------- |
-| `width`  | 元素宽度 (content + padding + border) |
-| `height` | 元素高度 (content + padding + border) |
+| `width`  | 元素宽度 `content + padding + border` |
+| `height` | 元素高度 `content + padding + border` |
 | `x/left` | 元素相对于浏览器的水平偏移量          |
 | `y/top`  | 元素相对于浏览器的垂直偏移量          |
-| `right`  | x/left + width                        |
-| `bottom` | y/top + height                        |
+| `right`  | `x/left + width`                      |
+| `bottom` | `y/top + height`                      |
 
-## 事件
+### DOM 事件
 
-### 事件类型
+[事件参考 | MDN (mozilla.org)](https://developer.mozilla.org/zh-CN/docs/Web/Events)
 
-#### 鼠标事件
+#### 事件类型
 
-| 事件名（属性）  | 触发条件（描述）          |
-| :-------------- | ------------------------- |
-| `onclick`       | 鼠标点击                  |
-| `contextmenu`   | 右键点击                  |
-| `dblclick`      | 鼠标双击                  |
-| `onmousedown`   | 鼠标按下                  |
-| `onmouseup`     | 鼠标松开                  |
-| `onmousemove`   | 鼠标移动                  |
-| `onmouseenter`  | 鼠标移入                  |
-| `onmouseleave`  | 鼠标移出                  |
-| `mouseover`     | 鼠标移入（含子元素）      |
-| `onmouseout`    | 鼠标移出（含子元素）      |
+> 鼠标事件
+
+| 事件名称     | 触发条件         |
+| :----------- | ---------------- |
+| `click`      | 鼠标点击         |
+| `mousedown`  | 鼠标按下         |
+| `mouseup`    | 鼠标松开         |
+| `mousemove`  | 鼠标移动         |
+| `mouseenter` | 鼠标移入         |
+| `mouseleave` | 鼠标移出         |
+| `mouseover`  | 鼠标移入（冒泡） |
+| `mouseout`   | 鼠标移出（冒泡） |
+
+> 键盘事件
+
+| 事件名称  | 触发条件 |
+| --------- | -------- |
+| `keydown` | 键盘按下 |
+| `keyup`   | 键盘松开 |
+
+> 表单事件
+
+| 事件名称 | 触发条件           |
+| -------- | ------------------ |
+| `input`  | 输入               |
+| `focus`  | 获取焦点           |
+| `blur`   | 失去焦点           |
+| `change` | 内容改变且失去焦点 |
+| `submit` | 提交表单           |
+
+> 浏览器事件
+
+| 事件名称 | 触发条件               |
+| -------- | ---------------------- |
+| `load`   | DOM 和资源加载完成之后 |
+| `resize` | 浏览器窗口尺寸发生改变 |
+| `scroll` | 滚动条滚动             |
+
+> 事件属性
+
+| 属性名称        | 描述                      |
+| --------------- | ------------------------- |
 | `event.clientX` | 鼠标相对于视口的 X 坐标   |
 | `event.clientY` | 鼠标相对于视口的 Y 坐标   |
 | `event.offsetX` | 鼠标相对于事件源的 X 坐标 |
@@ -1971,62 +2082,7 @@ console.log(4)
 | `event.pageX`   | 鼠标相对于页面的 X 坐标   |
 | `event.pageY`   | 鼠标相对于页面的 Y 坐标   |
 
-#### 键盘事件
-
-| 事件名（属性）   | 触发条件（描述）          |
-| ---------------- | ------------------------- |
-| `onkeydown`      | 键盘按下                  |
-| `onkeyup`        | 键盘松开                  |
-| `onkeypress`     | 键盘按压                  |
-| `event.keyCode`  | 按键的 ASCII 码，*已弃用* |
-| `event.key`      | 按键别名                  |
-| `event.altKey`   | Alt 键                    |
-| `event.ctrlKey`  | Ctrl 键                   |
-| `event.shiftKey` | Shift 键                  |
-
-#### 滚轮事件
-
-| 事件名（属性）     | 触发条件（描述）                                     |
-| ------------------ | ---------------------------------------------------- |
-| `onmousewheel`     | 滚轮滚动，*不支持 Firefox*                           |
-| `DOMMouseScroll`   | 滚轮滚动，需要二级监听。*仅支持 Firefox*             |
-| `event.wheelDelta` | 滚轮滚动的方向，正值向上，负值向下，*不支持 Firefox* |
-| `event.detail`     | 滚轮滚动的方向，正值向下，负值向上，*仅支持 Firefox* |
-
-#### 表单事件
-
-| 事件名     | 触发条件           |
-| ---------- | ------------------ |
-| `oninput`  | 输入               |
-| `onfocus`  | 获取焦点           |
-| `onblur`   | 失去焦点           |
-| `onchange` | 内容改变且失去焦点 |
-| `onsubmit` | 提交表单           |
-
-#### 浏览器事件
-
-| 事件名     | 触发条件                   |
-| ---------- | -------------------------- |
-| `onload`   | DOM 结构和资源加载完成之后 |
-| `onresize` | 浏览器窗口尺寸发生改变     |
-| `onscroll` | 滚动条滚动                 |
-
-#### 移动端事件
-
-| 事件名         | 触发条件 |
-| -------------- | -------- |
-| `ontouchstart` | 触摸开始 |
-| `ontouchmove`  | 正在触摸 |
-| `ontouchend`   | 触摸结束 |
-
-#### 其他事件
-
-| 事件名            | 触发条件 |
-| ----------------- | -------- |
-| `ontransitionend` | 过渡结束 |
-| `onanimationend`  | 动画结束 |
-
-### 事件传播
+#### 事件传播
 
 - 捕获阶段：
 
@@ -2060,7 +2116,7 @@ console.log(4)
 
   - `return false`
 
-### 事件委派
+#### 事件委派
 
 将多个元素的事件监听委托给祖先元素处理，当该元素中的事件被触发时，会一直冒泡到祖先元素。
 

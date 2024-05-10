@@ -304,7 +304,7 @@ import { ref, watch } from "vue"
 const count = ref(0)
 
 watch(count, (value, oldValue) => {
-  /* ... */
+  // ...
 })
 
 const fooRef = ref()
@@ -312,7 +312,7 @@ const barRef = ref()
 
 // 监听多个源，回调函数接受两个数组，分别对应来源数组中的新值和旧值
 watch([fooRef, barRef], ([foo, bar], [oldFoo, oldBar]) => {
-  /* ... */
+  // ...
 })
 ```
 
@@ -338,7 +338,7 @@ import { ref, watch } from "vue"
 const count = ref(0)
 
 watch(() => count.value, (value, oldValue) => {
-  /* ... */
+  // ...
 })
 ```
 
