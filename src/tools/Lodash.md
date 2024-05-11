@@ -1,12 +1,14 @@
 ---
 title: Lodash
 icon: function
-date: 2024-05-11
+date: 2024-05-12
 ---
 
 ## 数组方法
 
-### .compact
+### 过滤假值
+
+#### .compact
 
 过滤数组中的非 “真” 元素（`false` `null` `0` `""`）。
 
@@ -16,9 +18,11 @@ import { compact } from "lodash"
 compact([0, 1, false, 2, "", 3]) // => [1, 2, 3]
 ```
 
-### .difference
+### 数组差异
 
-**数组差异**。接受两个数组作为参数，返回包含差异元素的数组。或者说是数组的 “减法”。
+#### .difference
+
+接受两个数组作为参数，返回包含差异元素的数组。或者说是数组的 “减法”。
 
 ```ts
 import { difference } from "lodash"
@@ -26,9 +30,9 @@ import { difference } from "lodash"
 difference([2, 1], [2, 3]) // => [1]
 ```
 
-### .differenceBy
+#### .differenceBy
 
-`.differenceBy()` 可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行差异比较；也可以是一个函数，在进行差异比较之前可以做一些格式化操作。
+可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行差异比较；也可以是一个函数，在进行差异比较之前可以做一些格式化操作。
 
 ```ts
 import { differenceBy } from "lodash"
@@ -49,9 +53,9 @@ differenceBy(target, values, "id") // => [{ id: 2, props }]
 differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor) // => [1.2]
 ```
 
-### .differenceWith
+#### .differenceWith
 
-`.differenceWith()` 可以接受一个比较函数作为参数，它允许自定义比较条件。
+可以接受一个比较函数作为参数，它允许自定义比较条件。
 
 ```ts
 import { differenceWith, isEqual } from "lodash"
@@ -72,9 +76,11 @@ differenceWith(target, values, (a, b) => a.id === b.id) // => [{ id: 2, props }]
 differenceWith(target, values, isEqual) // => [{ id: 2, props }]
 ```
 
-### .intersection
+### 数组交集
 
-**数组交集**。接受两个数组作为参数，返回包含相同元素的数组。
+#### .intersection
+
+接受两个数组作为参数，返回包含相同元素的数组。
 
 ```ts
 import { intersection } from "lodash"
@@ -82,9 +88,9 @@ import { intersection } from "lodash"
 intersection([2, 1], [2, 3]) // => [2]
 ```
 
-### .intersectionBy
+#### .intersectionBy
 
-`.intersectionBy()` 可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行交集判断；也可以是一个函数，在进行交集判断之前可以做一些格式化操作。
+可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行交集判断；也可以是一个函数，在进行交集判断之前可以做一些格式化操作。
 
 ```ts
 import { intersectionBy } from "lodash"
@@ -105,9 +111,9 @@ intersectionBy(target, values, "id") // => [{ id: 1, props }, { id: 3, props }]
 intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor) // => [2.1]
 ```
 
-### .intersectionWith
+#### .intersectionWith
 
-`.intersectionWith()` 可以接受一个比较函数作为参数，它允许自定义比较条件。
+可以接受一个比较函数作为参数，它允许自定义比较条件。
 
 ```ts
 import { intersectionWith, isEqual } from "lodash"
@@ -128,9 +134,11 @@ intersectionWith(target, values, (a, b) => a.id === b.id) // => [{ id: 3, props 
 intersectionWith(target, values, isEqual) // => [{ id: 3, props }]
 ```
 
-### .union
+### 数组并集 / 合并去重
 
-**数组并集**。接受两个数组作为参数，返回合并去重后的数组。
+#### .union
+
+接受两个数组作为参数，返回合并去重后的数组。
 
 ```ts
 import { union } from "lodash"
@@ -138,9 +146,9 @@ import { union } from "lodash"
 union([2, 1], [2, 3]) // => [2, 1, 3]
 ```
 
-### .unionBy
+#### .unionBy
 
-`.unionBy()` 可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行合并去重；也可以是一个函数，在进行合并去重之前可以做一些格式化操作。
+可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行合并去重；也可以是一个函数，在进行合并去重之前可以做一些格式化操作。
 
 ```ts
 import { unionBy } from "lodash"
@@ -166,9 +174,9 @@ unionBy(target1, target2, "id") /* => [
 unionBy([2.1, 1.2], [2.3, 3.4], Math.floor) // => [2.1, 1.2, 3.4]
 ```
 
-### .unionWith
+#### .unionWith
 
-`.unionWith()` 可以接受一个比较函数作为参数，它允许自定义比较条件。
+可以接受一个比较函数作为参数，它允许自定义比较条件。
 
 ```ts
 import { unionWith, isEqual } from "lodash"
@@ -199,9 +207,11 @@ unionWith(target1, target2, isEqual) /* => [
 ] */
 ```
 
-### .uniq
+### 数组去重
 
-**数组去重**。接受一个数组作为参数，返回去重后的数组。与 `.union()` 相似。
+#### .uniq
+
+接受一个数组作为参数，返回去重后的数组。与 `.union()` 相似。
 
 ```ts
 import { uniq } from "lodash"
@@ -209,9 +219,9 @@ import { uniq } from "lodash"
 uniq([2, 1, 2, 3]) // => [2, 1, 3]
 ```
 
-### .uniqBy
+#### .uniqBy
 
-`.uniqBy()` 可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行去重；也可以是一个函数，在进行去重之前可以做一些格式化操作。
+可以接受一个迭代器作为参数。它可以是一个字符串，指定比较的属性进行去重；也可以是一个函数，在进行去重之前可以做一些格式化操作。
 
 ```ts
 import { uniqBy } from "lodash"
@@ -227,9 +237,9 @@ uniqBy(target, "id") // => [{ id: 1, props }, { id: 2, props }]
 uniqBy([2.1, 1.2, 2.3], Math.floor) // => [2.1, 1.2]
 ```
 
-### .uniqWith
+#### .uniqWith
 
-`.uniqWith()` 可以接受一个比较函数作为参数，它允许自定义比较条件。
+可以接受一个比较函数作为参数，它允许自定义比较条件。
 
 ```ts
 import { uniqWith, isEqual } from "lodash"
