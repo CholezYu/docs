@@ -107,14 +107,14 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "VueUse",
-          icon: "vue",
-          link: "VueUse"
-        },
-        {
           text: "Lodash",
           icon: "function",
           link: "Lodash"
+        },
+        {
+          text: "VueUse",
+          icon: "vue",
+          link: "VueUse"
         },
         {
           text: "ExcelJS",
