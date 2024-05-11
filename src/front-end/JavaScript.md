@@ -411,19 +411,19 @@ obj.__proto__.foo = "bar"
 obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 ```
 
-### descriptor 属性描述符
+### 属性描述符
 
-- value：属性值。
+- value：属性值
 
-- writable：是否可修改。
+- writable：是否可修改
 
-- enumerable：是否可枚举。
+- enumerable：是否可枚举
 
-- configurable：是否可配置。
+- configurable：是否可被重新定义
 
-- get：getter 函数。
+- getter
 
-- set：setter 函数。
+- setter
 
 ### Object.create
 
@@ -442,13 +442,8 @@ Object.getPrototypeOf(obj) // null
 
 ```js
 const person = Object.create(null, {
-	name: {
-		value: "Minji",
-		enumerable: true
-	},
-	sex: {
-		value: "female"
-	}
+	name: { value: "Minji", enumerable: true },
+	sex: { value: "female" }
 })
 
 person // { name: "Minji", sex: "female" }
@@ -477,14 +472,8 @@ person // { name: "Minji", age: 20 }
 const person = { name: "Minji" }
 
 Object.defineProperties(person, {
-  "age": {
-    value: 20,
-    enumerable: true
-  },
-  "sex": {
-    value: "female",
-    enumerable: true
-  }
+  age: { value: 20, enumerable: true },
+  sex: { value: "female", enumerable: true }
 })
 
 person // { name: "Minji", age: 20, sex: "female" }
@@ -510,12 +499,12 @@ Person.prototype.fn = function () {
   // ...
 }
 
-function Student(name, age, grade) {
+function Student(name, age, sex) {
   // 继承构造函数
   // 此次调用，Person 中的 this 就是 Student 中的 this
   // 相当于往 Student 中的 this 上添加了 name 和 age 属性
   Person.call(this, name, age)
-  this.grade = grade
+  this.sex = sex
 }
 
 // 继承原型链
@@ -541,10 +530,10 @@ class Person {
 }
 
 class Student extends Person {
-  constructor(name, age, grade) {
-    // 如果需要使用继承的属性或方法，必须调用 super 方法
+  constructor(name, age, sex) {
+    // 如果需要使用父类的属性，必须调用 super 方法
     super(name, age)
-    this.grade = grade
+    this.sex = sex
   }
 }
 ```
@@ -590,11 +579,7 @@ obj.__proto__ = undefined // 这里注意！不是 null
 遍历对象，返回对象属性名组成的数组。
 
 ```js
-Object.keys({
-  name: "Minji",
-  age: 20
-})
-// ['name', 'age']
+Object.keys({ name: "Minji", age: 20 }) // ['name', 'age']
 ```
 
 ### Object.values
@@ -602,11 +587,7 @@ Object.keys({
 遍历对象，返回对象属性值组成的数组。
 
 ```js
-Object.values({
-  name: "Minji",
-  age: 20
-})
-// ['Minji', 20]
+Object.values({ name: "Minji", age: 20 }) // ['Minji', 20]
 ```
 
 ### Object.entries
@@ -614,11 +595,7 @@ Object.values({
 遍历对象，返回对象属性名与属性值组成的二维数组。
 
 ```js
-Object.entries({
-  name: "Minji",
-  age: 20
-})
-// [['name', 'Minji'], ['age', 20]]
+Object.entries({ name: "Minji", age: 20 }) // [['name', 'Minji'], ['age', 20]]
 ```
 
 ### Object.assign
@@ -626,7 +603,7 @@ Object.entries({
 合并对象，并返回。可用于浅拷贝。
 
 ```js
-const obj = { a: 1 }
+const obj = { foo: 1 }
 
 Object.assign({}, obj)
 
@@ -639,10 +616,7 @@ Object.assign({}, obj)
 冻结对象属性。如果属性是对象或数组，可以改变其内部结构，必要时需要深冻结。
 
 ```js
-const person = {
-  name: "Minji",
-  age: 20
-}
+const person = { name: "Minji", age: 20 }
 
 Object.freeze(person)
 
@@ -667,10 +641,7 @@ Object.is(NaN, NaN) // true
 判断一个属性是否是对象**自身**的属性，与 `.hasOwnProperty()` 相同。
 
 ```js
-const person = {
-  name: "Minji",
-  age: 20
-}
+const person = { name: "Minji", age: 20 }
 
 person.__proto__.foo = "bar"
 
@@ -896,6 +867,32 @@ total // 55 (1 + 4 + 9 + 16 + 25)
 
 ## 数组（ES6+）
 
+### Array.of
+
+创建数组，相比于 `new Array()`，`Array.of()` 可以创建**一个元素**的数组。
+
+```js
+new Array(3) // [empty × 3]
+
+Array.of(3) // [3]
+```
+
+### Array.from
+
+将伪数组或可迭代对象转换为数组。
+
+```js
+Array.from(document.querySelectorAll("li"))
+```
+
+可以用于生成一个数字序列。
+
+```js
+Array.from([1, 2, 3], value => value * 2) // [2, 4, 6]
+
+Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3, 4, 5, 6, 7]
+```
+
 ### .includes
 
 判断数组中是否含有某元素。
@@ -921,7 +918,7 @@ arr // ["*", "*", "*"]
 
 ### .flat
 
-降维数组。
+数组扁平化。
 
 ```js
 const arr = [1, 2, 3, [4, 5, [6]]]
@@ -947,32 +944,6 @@ arr.find(item => item > 3) // 5
 const arr = [1, 3, 5, 7, 9]
 
 arr.findIndex(item => item > 3) // 2
-```
-
-### Array.of
-
-创建数组，相比于 `new Array()`，`Array.of()` 可以创建一个元素的数组。
-
-```js
-new Array(3) // [empty × 3]
-
-Array.of(3) // [3]
-```
-
-### Array.from
-
-将伪数组或可迭代对象转换为数组。
-
-```js
-Array.from(document.querySelectorAll("li"))
-```
-
-可以用于生成一个数字序列
-
-```js
-Array.from([1, 2, 3], value => value * 2) // [2, 4, 6]
-
-Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3, 4, 5, 6, 7]
 ```
 
 ## 字符串
@@ -1316,10 +1287,10 @@ map.set([1, 2 ,3 ], "abc")
 ```js
 const map = new Map()
 
-const fKey = () => {}
-map.set(fKey, 1)
+const fnKey = () => {}
+map.set(fnKey, 1)
 
-map.get(fKey) // 1
+map.get(fnKey) // 1
 ```
 
 删除 map 中的某个元素。
@@ -1327,14 +1298,14 @@ map.get(fKey) // 1
 ```js
 const map = new Map()
 
-const oKey = { a: 1 }
-const aKey = [2]
-map.set(oKey, "f")
-map.set(aKey, "b")
+const objKey = { a: 1 }
+const arrKey = [2]
+map.set(objKey, "f")
+map.set(arrKey, "b")
 
 map // Map(2) { { a: 1 } => "f", [2] => "b" }
 
-map.delete(aKey) // true, 表示删除成功
+map.delete(arrKey) // true, 表示删除成功
 map // Map(1) { { a: 1 } => "f" }
 ```
 
@@ -1464,62 +1435,55 @@ new Promise((resolve, reject) => {
 
 ### Promise.all
 
-只有 p1, p2, p3 都成功时，p 才会成功，
+当所有 Promise 都成功时，`Promise.all()` 才会成功，`.then()` 的值为这些 Promise 的值组成的数组；
 
-如果 p 成功，p 返回的 Promise 结果为 p1, p2, p3 返回的 Promise 的值组成的数组；
-
-只要 p1, p2, p3 有一个失败，p 就会失败，
-
-如果 p 失败，p 返回的 Promise 结果为 p1, p2, p3 中第一个失败返回的 Promise 的值。
+只要有一个 Promise 失败，`Promise.all()` 就会失败，`.catch()` 的值为第一个失败的 Promise 的值。
 
 ```js
 const p1 = Promise.resolve(1)
 const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
+const p4 = new Promise((resolve, reject) => {})
 
-Promise.all([p1, p2]).then(
-  value => value, // [1, 2]
-  error => error
-)
+Promise.all([p1, p2]) // Promise { <state>: 'fulfilled', <value>: [1, 2] }
 
-Promise.all([p1, p2, p3]).then(
-  value => value,
-  error => error // 3
-)
+Promise.all([p1, p2, p3]) // Promise { <state>: 'rejected', <reason>: 3 }
+
+Promise.all([p1, p2, p4]) // Promise { <state>: 'pending' }
 ```
 
 ### Promise.allSettled
 
-无论 p1, p2, p3 成功还是失败，p 都会成功，
+当所有 Promise **改变状态**时，`Promise.allSettled()` 就会成功；
 
-p 返回的 Promise 结果为包含 [p1, p2, p3 返回的 Promise 的状态和值] 的对象组成的数组。
+只要有一个 Promise 为 pending 状态，`Promise.allSettled()` 会一直处于 pending 状态。
+
+`.then()` 的值为包含 { 这些 Promise 的状态和值 } 组成的数组。
 
 ```js
 const p1 = Promise.resolve(1)
 const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
-Promise.all([p1, p2, p3]).then(
-  value => value
-  /* [
-    { status: "fulfilled", value: 1 },
-    { status: "fulfilled", value: 2 },
-    { status: "rejected", reason: 3 }
-  ] */
-)
+Promise.allSettled([p1, p2, p3])
+/* Promise { <state>: 'fulfilled', [
+  { status: 'fulfilled', value: 1 },
+  { status: 'fulfilled', value: 2 },
+  { status: 'rejected', reason: 3 }
+] } */
 ```
 
 ### Promise.any
 
-只有 p1, p2, p3 都失败时，p 才会失败；
+当所有 Promise 都失败时，`Promise.any()` 才会失败；
 
-只要 p1, p2, p3 有一个成功，p 就会成功。
+只要有一个 Promise 成功，`Promise.any()` 就会成功。
 
 ### Promise.race
 
-只要 p1, p2, p3 中有一个状态发生改变，p 的状态就随之改变，
+只要有一个 Promise 状态发生改变，`Promise.race()` 就会随之改变（状态和值与其保持一致）。
 
-p 返回的 Promise 为 p1, p2, p3 中率先改变状态的实例返回的 Promise。
+`.then()` 的值为率先改变状态的 Promise 的值。
 
 ```js
 const p1 = new Promise((resolve, reject) => {
@@ -1527,14 +1491,10 @@ const p1 = new Promise((resolve, reject) => {
     resolve(1)
   }, 100)
 })
-
 const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
-Promise.race([p1, p2, p3]).then(
-  value => value, // 2
-  error => error
-)
+Promise.race([p1, p2, p3]).then(value => value) // 'fulfilled' 2
 ```
 
 ### then 的返回值
@@ -1546,15 +1506,15 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    error  // 1
+    error // 1
     return 2
   }
 ).then(
-  value => value  // 2
+  value => value // 2
 )
 ```
 
-返回一个 Promise，则该 Promise 的状态和值就会作为 `.then()` 返回的 Promise 的状态和值。
+返回一个 Promise，`.then()` 返回的 Promise 的状态和值与其保持一致。
 
 ```js
 new Promise((resolve, reject) => {
@@ -1622,7 +1582,7 @@ new Promise((resolve, reject) => {
 )
 ```
 
-### 任务队列
+### 异步任务
 
 微任务：Promise、MutationObserver、queueMicrotask。
 
@@ -1805,42 +1765,62 @@ iterator.next()
 async 函数是 Promise 的语法糖。
 
 ```js
-const fn = async () => 5
+;(async () => {
+  const result = 5
+})()
 
 // 等同于
-const fn = () => Promise.resolve(5)
+Promise.resolve(5).then(value => {
+  // ...
+})
 ```
 
 async 函数的返回值是一个 Promise 对象，且返回的 Promise 的结果由函数执行结果决定。
 
 ```js
-const fn = async () => {
-  console.log(1)
-  console.log(2)
-}
-
-// 等同于
-const fn = () => {
-  return new Promise(resolve => {
+;(async () => {
+  try {
     console.log(1)
     console.log(2)
-    
-    resolve()
+    throw 3
+  }
+  catch (error) {
+    // ...
+  }
+})()
+
+// 等同于
+;(() => {
+  return new Promise((resolve, reject) => {
+    console.log(1)
+    console.log(2)
+    reject(3)
+  }).catch(error => {
+    // ...
   })
-}
+})()
 ```
 
 ### await 表达式
 
 在 async 声明的异步函数中可以使用 await 关键字来调用异步函数。
 
+> [!tip]
+>
+> ES2022 规范提出了 “顶层 await” 语法，浏览器在 ES2023 实现了 await 的顶层调用。
+>
+> 注意：nodejs 暂不支持！
+
 ```js
-const fn = async () => {
-  const result = await axios()
-}
+const result = await request()
+
+// 等同于
+request().then(value => {
+  // ...
+})
 ```
 
-当我们使用 await 调用函数后，await 语句后面的所有代码会在 await 语句执行完之后放入微任务队列。
+当我们使用 await 调用函数后，await 语句后面的所有代码会在 await 语句执行完之后加入到微任务队列。
 
 ```js
 ;(async () => {
@@ -1857,12 +1837,9 @@ console.log(4)
   return new Promise(resolve => {
     console.log(1)
     console.log(2)
-    
     resolve()
   }).then(
-    () => {
-      console.log(3)
-    }
+    () => console.log(3)
   )
 })()
 
