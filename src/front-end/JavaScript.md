@@ -29,7 +29,7 @@ date: 2024-05-11
 - 如果 toString 返回的是对象，则报错。
 
 ```js
-Number({ a: 1 }) // NaN
+Number({ a: 1 }) // => NaN
 
 // 等同于
 
@@ -47,7 +47,7 @@ function _Number(value) {
   }
 }
 
-_Number({ a: 1 }) // NaN
+_Number({ a: 1 }) // => NaN
 
 // 转换过程：{ a: 1 } => [object Object] => NaN
 ```
@@ -92,10 +92,10 @@ Number({
 - 如果 valueOf 返回的是对象，则报错。
 
 ```js
-String({ a: 1 }) // [object Object]
+String({ a: 1 }) // => [object Object]
 
 // 等同于
-String({ a: 1 }.toString()) // [object Object]
+String({ a: 1 }.toString()) // => [object Object]
 ```
 
 同样可以重新定义 valueOf 与 toString 方法。如果 valueOf 和 toString 都返回对象，则报错。
@@ -143,15 +143,15 @@ String({ a: 1 }.toString()) // [object Object]
 通过 var 声明的变量会提升到所在作用域的顶部，但是变量的赋值还在原来的位置。
 
 ```js
-a // undefined
+a // => undefined
 var a = 100
-a // 100
+a // => 100
 
 // 等同于
 var a
-a // undefined
+a // => undefined
 a = 100
-a // 100
+a // => 100
 ```
 
 通过 function 声明的函数（包括函数体）会提升到所在作用域的顶部，在此之后都可以调用。
@@ -235,7 +235,7 @@ function add(...values) {
   return sum
 }
 
-add(2, 5, 3) // 10
+add(2, 5, 3) // => 10
 ```
 
 下面是一个 rest 参数代替 arguments 变量的例子，比较发现，rest 参数的写法更简洁易读。
@@ -261,7 +261,7 @@ function push(arr, ...items) {
 
 const arr = []
 push(arr, 1, 2, 3)
-arr // [1, 2, 3]
+arr // => [1, 2, 3]
 ```
 
 rest 参数只能是最后一个参数。
@@ -276,7 +276,7 @@ function fn(a, ...b, c) {} // SyntaxError: Rest parameter must be last formal pa
 
 ```js
 function fn() {}
-fn.name // "fn"
+fn.name // => "fn"
 ```
 
 如果将一个匿名函数赋值给一个变量，在 ES5 中 name 的值为空字符串，而 ES6 中 name 的值为实际函数名。
@@ -285,10 +285,10 @@ fn.name // "fn"
 var fn = function() {}
 
 // ES5
-fn.name // ""
+fn.name // => ""
 
 // ES6
-fn.name // "fn"
+fn.name // => "fn"
 ```
 
 如果将一个具名函数赋值给一个变量，ES5 和 ES6 中 name 的值都为这个具名函数原本的名字。
@@ -297,16 +297,16 @@ fn.name // "fn"
 let foo = function bar() {}
 
 // ES5
-foo.name // "bar"
+foo.name // => "bar"
 
 // ES6
-foo.name // "bar"
+foo.name // => "bar"
 ```
 
 Function 构造函数返回的函数实例，name 的值为 anonymous。
 
 ```js
-(new Function).name // "anonymous"
+(new Function).name // => "anonymous"
 ```
 
 bind 返回的函数，name 的值会加上 bound 前缀。
@@ -314,9 +314,9 @@ bind 返回的函数，name 的值会加上 bound 前缀。
 ```js
 function fn() {}
 
-fn.bind({}).name // "bound fn"
+fn.bind({}).name // => "bound fn"
 
-(function() {}).bind({}).name // "bound"
+(function() {}).bind({}).name // => "bound"
 ```
 
 ### 箭头函数
@@ -348,9 +348,9 @@ fn.bind({}).name // "bound fn"
 const obj = { a: 1 }
 Object.prototype.b = 2
 
-"a" in obj // true
-"b" in obj // true
-"c" in obj // false
+"a" in obj // => true
+"b" in obj // => true
+"c" in obj // => false
 ```
 
 ### new 关键字
@@ -394,10 +394,10 @@ const obj = {}
 const arr = []
 function Fn() {}
 
-obj instanceof Fn // false
-obj instanceof Function // false
-obj instanceof Object // true
-arr instanceof Array // true
+obj instanceof Fn // => false
+obj instanceof Function // => false
+obj instanceof Object // => true
+arr instanceof Array // => true
 ```
 
 ### .hasOwnProperty
@@ -408,7 +408,7 @@ arr instanceof Array // true
 const obj = {}
 obj.__proto__.foo = "bar"
 
-obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
+obj.hasOwnProperty("foo") // => false，'foo' 是 obj 原型上的属性
 ```
 
 ### 属性描述符
@@ -431,11 +431,11 @@ obj.hasOwnProperty("foo") // false，'foo' 是 obj 原型上的属性
 
 ```js
 const obj = {}
-obj.__proto__ // Object.prototype
+obj.__proto__ // <=> Object.prototype
 
 // 创建一个纯 “空” 对象
 const obj = Object.create(null)
-Object.getPrototypeOf(obj) // null
+Object.getPrototypeOf(obj) // => null
 ```
 
 它也可以使用属性描述符创建对象。
@@ -446,7 +446,7 @@ const person = Object.create(null, {
 	sex: { value: "female" }
 })
 
-person // { name: "Minji", sex: "female" }
+person // => { name: "Minji", sex: "female" }
 ```
 
 ### Object.defineProperty
@@ -461,7 +461,7 @@ Object.defineProperty(person, "age", {
   enumerable: true
 })
 
-person // { name: "Minji", age: 20 }
+person // => { name: "Minji", age: 20 }
 ```
 
 ### Object.defineProperties
@@ -476,7 +476,7 @@ Object.defineProperties(person, {
   sex: { value: "female", enumerable: true }
 })
 
-person // { name: "Minji", age: 20, sex: "female" }
+person // => { name: "Minji", age: 20, sex: "female" }
 ```
 
 ### 继承
@@ -551,7 +551,7 @@ class Student extends Person {
 ```js
 const obj = {}
 
-Object.getPrototypeOf(obj) // Object.prototype
+Object.getPrototypeOf(obj) // <=> Object.prototype
 
 // 等同于
 obj.__proto__
@@ -579,7 +579,7 @@ obj.__proto__ = undefined // 这里注意！不是 null
 遍历对象，返回对象属性名组成的数组。
 
 ```js
-Object.keys({ name: "Minji", age: 20 }) // ['name', 'age']
+Object.keys({ name: "Minji", age: 20 }) // => ['name', 'age']
 ```
 
 ### Object.values
@@ -587,7 +587,7 @@ Object.keys({ name: "Minji", age: 20 }) // ['name', 'age']
 遍历对象，返回对象属性值组成的数组。
 
 ```js
-Object.values({ name: "Minji", age: 20 }) // ['Minji', 20]
+Object.values({ name: "Minji", age: 20 }) // => ['Minji', 20]
 ```
 
 ### Object.entries
@@ -595,7 +595,7 @@ Object.values({ name: "Minji", age: 20 }) // ['Minji', 20]
 遍历对象，返回对象属性名与属性值组成的二维数组。
 
 ```js
-Object.entries({ name: "Minji", age: 20 }) // [['name', 'Minji'], ['age', 20]]
+Object.entries({ name: "Minji", age: 20 }) // => [['name', 'Minji'], ['age', 20]]
 ```
 
 ### Object.assign
@@ -621,7 +621,7 @@ const person = { name: "Minji", age: 20 }
 Object.freeze(person)
 
 person.age = 30
-person // { name: 'Minji', age: 20 }
+person // => { name: 'Minji', age: 20 }
 ```
 
 ### Object.is
@@ -629,11 +629,11 @@ person // { name: 'Minji', age: 20 }
 判断两个值是否相等，解决了 "==" 会自动转换数据类型、`NaN === NaN => false` 等问题。
 
 ```js
-1 == "1" // true
-Object.is(1, "1") // false
+1 == "1" // => true
+Object.is(1, "1") // => false
 
-NaN === NaN // false
-Object.is(NaN, NaN) // true
+NaN === NaN // => false
+Object.is(NaN, NaN) // => true
 ```
 
 ### Object.hasOwn
@@ -645,8 +645,8 @@ const person = { name: "Minji", age: 20 }
 
 person.__proto__.foo = "bar"
 
-person.hasOwnProperty("foo") // false
-Object.hasOwn(person, "foo") // false
+person.hasOwnProperty("foo") // => false
+Object.hasOwn(person, "foo") // => false
 ```
 
 ## 数组
@@ -660,7 +660,7 @@ const arr = [2, 3, 4]
 
 arr.push(5, 6)
 
-arr // [2, 3, 4, 5, 6]
+arr // => [2, 3, 4, 5, 6]
 ```
 
 ### .pop
@@ -672,7 +672,7 @@ const arr = [1, 2, 3, 4, 5]
 
 arr.pop()
 
-arr // [1, 2, 3, 4]
+arr // => [1, 2, 3, 4]
 ```
 
 ### .unshift
@@ -684,7 +684,7 @@ const arr = [2, 3, 4]
 
 arr.unshift(1)
 
-arr // [1, 2, 3, 4]
+arr // => [1, 2, 3, 4]
 ```
 
 ### .shift
@@ -696,7 +696,7 @@ const arr = [1, 2, 3, 4, 5]
 
 arr.shift()
 
-arr // [2, 3, 4, 5]
+arr // => [2, 3, 4, 5]
 ```
 
 ### .splice
@@ -710,7 +710,7 @@ const arr = [2, 3, 4, 5, 6]
 
 arr.splice(1, 2) // [3, 4]
 
-arr // [2, 5, 6]
+arr // => [2, 5, 6]
 ```
 
 ```js
@@ -718,9 +718,9 @@ arr // [2, 5, 6]
 
 const arr = [2, 3, 4, 5, 6]
 
-arr.splice(1, 3, 7, 8, 9) // [3, 4, 5]
+arr.splice(1, 3, 7, 8, 9) // => [3, 4, 5]
 
-arr // [2, 7, 8, 9, 6]
+arr // => [2, 7, 8, 9, 6]
 ```
 
 ```js
@@ -728,9 +728,9 @@ arr // [2, 7, 8, 9, 6]
 
 const arr = [2, 3, 4, 5, 6]
 
-arr.splice(1, 0, 7, 8, 9) // []
+arr.splice(1, 0, 7, 8, 9) // => []
 
-arr // [2, 7, 8, 9, 3, 4, 5, 6]
+arr // => [2, 7, 8, 9, 3, 4, 5, 6]
 ```
 
 ### .sort
@@ -746,7 +746,7 @@ const arr = [
 
 arr.sort((a, b) => a.age - b.age)
 
-arr // [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
+arr // => [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
 ```
 
 ### .reverse
@@ -758,7 +758,7 @@ const arr = [1, 2, 3, 4, 5]
 
 arr.reverse()
 
-arr // [5, 4, 3, 2, 1]
+arr // => [5, 4, 3, 2, 1]
 ```
 
 ### .slice
@@ -768,9 +768,9 @@ arr // [5, 4, 3, 2, 1]
 ```js
 const arr = [2, 3, 4, 5, 6]
 
-arr.slice(1, 3) // [3, 4]
-arr.slice(0, arr.length) // [2, 3, 4, 5, 6]
-arr.slice() // [2, 3, 4, 5, 6]
+arr.slice(1, 3) // => [3, 4]
+arr.slice(0, arr.length) // => [2, 3, 4, 5, 6]
+arr.slice() // => [2, 3, 4, 5, 6]
 ```
 
 ### .concat
@@ -780,7 +780,7 @@ arr.slice() // [2, 3, 4, 5, 6]
 ```js
 const arr = [2, 3, 4]
 
-arr.concat([5, 6]) // [2, 3, 4, 5, 6]
+arr.concat([5, 6]) // => [2, 3, 4, 5, 6]
 ```
 
 ### .join
@@ -790,9 +790,9 @@ arr.concat([5, 6]) // [2, 3, 4, 5, 6]
 ```js
 const arr = ["h", "e", "l", "l", "o"]
 
-arr.join("") // "hello"
-arr.join(" ") // "h e l l o"
-arr.join("") === "" // false, 判断 arr 是否为空数组
+arr.join("") // => "hello"
+arr.join(" ") // => "h e l l o"
+arr.join("") === "" // => false, 判断 arr 是否为空数组
 ```
 
 ### .indexOf
@@ -802,9 +802,9 @@ arr.join("") === "" // false, 判断 arr 是否为空数组
 ```js
 const arr = ['a', 'b', 'c', 'd', 'b']
 
-arr.indexOf('b') // 1
-arr.indexOf('b', 2) // 4
-arr.indexOf('g') // -1
+arr.indexOf('b') // => 1
+arr.indexOf('b', 2) // => 4
+arr.indexOf('g') // => -1
 ```
 
 ### .lastIndexOf
@@ -814,9 +814,9 @@ arr.indexOf('g') // -1
 ```js
 const arr = ['a', 'b', 'c', 'd', 'b']
 
-arr.lastIndexOf('b') // 4
-arr.lastIndexOf('b', -2) // 1
-arr.lastIndexOf('g') // -1
+arr.lastIndexOf('b') // => 4
+arr.lastIndexOf('b', -2) // => 1
+arr.lastIndexOf('g') // => -1
 ```
 
 ### .forEach
@@ -826,7 +826,7 @@ arr.lastIndexOf('g') // -1
 ```js
 const arr = [4, 9, 16, 25]
 
-arr.forEach(item => item) // 4 9 16 25
+arr.forEach(item => item) // => 4 9 16 25
 ```
 
 ### .filter
@@ -838,7 +838,7 @@ const arr = [4, 9, 16, 25]
 
 const newArr = arr.filter(item => item > 12)
 
-newArr // [16, 25]
+newArr // => [16, 25]
 ```
 
 ### .map
@@ -850,7 +850,7 @@ const arr = [4, 9, 16, 25]
 
 const newArr = arr.map(item => Math.sqrt(item))
 
-newArr // [2, 3, 4, 5]
+newArr // => [2, 3, 4, 5]
 ```
 
 ### .reduce
@@ -862,7 +862,7 @@ const arr = [4, 9, 16, 25]
 
 const total = arr.reduce((prev, item) => prev + item, 1)
 
-total // 55 (1 + 4 + 9 + 16 + 25)
+total // => 55 (1 + 4 + 9 + 16 + 25)
 ```
 
 ## 数组（ES6+）
@@ -872,9 +872,9 @@ total // 55 (1 + 4 + 9 + 16 + 25)
 创建数组，相比于 `new Array()`，`Array.of()` 可以创建**一个元素**的数组。
 
 ```js
-new Array(3) // [empty × 3]
+new Array(3) // => [empty × 3]
 
-Array.of(3) // [3]
+Array.of(3) // => [3]
 ```
 
 ### Array.from
@@ -888,9 +888,9 @@ Array.from(document.querySelectorAll("li"))
 可以用于生成一个数字序列。
 
 ```js
-Array.from([1, 2, 3], value => value * 2) // [2, 4, 6]
+Array.from([1, 2, 3], value => value * 2) // => [2, 4, 6]
 
-Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3, 4, 5, 6, 7]
+Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // => [3, 4, 5, 6, 7]
 ```
 
 ### .includes
@@ -900,8 +900,8 @@ Array.from({ length: 5 } /* [empty × 5] */, (value, index) => index + 3) // [3,
 ```js
 const arr = [1, 2, 3, 4, 5]
 
-arr.includes(3) // true
-arr.includes(9) // false
+arr.includes(3) // => true
+arr.includes(9) // => false
 ```
 
 ### .fill
@@ -913,7 +913,7 @@ const arr = [1, 2, 3]
 
 arr.fill("*")
 
-arr // ["*", "*", "*"]
+arr // => ["*", "*", "*"]
 ```
 
 ### .flat
@@ -923,7 +923,7 @@ arr // ["*", "*", "*"]
 ```js
 const arr = [1, 2, 3, [4, 5, [6]]]
 
-arr.flat(2) // [1, 2, 3, 4, 5, 6]
+arr.flat(2) // => [1, 2, 3, 4, 5, 6]
 ```
 
 ### .find
@@ -933,7 +933,7 @@ arr.flat(2) // [1, 2, 3, 4, 5, 6]
 ```js
 const arr = [1, 3, 5, 7, 9]
 
-arr.find(item => item > 3) // 5
+arr.find(item => item > 3) // => 5
 ```
 
 ### .findIndex
@@ -943,7 +943,7 @@ arr.find(item => item > 3) // 5
 ```js
 const arr = [1, 3, 5, 7, 9]
 
-arr.findIndex(item => item > 3) // 2
+arr.findIndex(item => item > 3) // => 2
 ```
 
 ## 字符串
@@ -955,9 +955,9 @@ arr.findIndex(item => item > 3) // 2
 ```js
 let str = "hello world hello world"
 
-str.indexOf("world") // 6
-str.indexOf("world", 10) // 18
-str.indexOf("woood") // -1
+str.indexOf("world") // => 6
+str.indexOf("world", 10) // => 18
+str.indexOf("woood") // => -1
 ```
 
 ### .lastIndexOf
@@ -967,9 +967,9 @@ str.indexOf("woood") // -1
 ```js
 let str = "hello world hello world"
 
-str.lastIndexOf("world") // 18
-str.lastIndexOf("world", 10) // 6
-str.indexOf("woood") // -1
+str.lastIndexOf("world") // => 18
+str.lastIndexOf("world", 10) // => 6
+str.indexOf("woood") // => -1
 ```
 
 ### .slice
@@ -979,10 +979,10 @@ str.indexOf("woood") // -1
 ```js
 let str = "hello world"
 
-str.slice() // "hello world"
-str.slice(6) // "world"
-str.slice(2, 5) // "llo"
-str.slice(3, -1) // "lo worl"
+str.slice() // => 'hello world'
+str.slice(6) // => 'world'
+str.slice(2, 5) // => 'llo'
+str.slice(3, -1) // => 'lo worl'
 ```
 
 ### .substring
@@ -992,9 +992,9 @@ str.slice(3, -1) // "lo worl"
 ```js
 let str = "hello world"
 
-str.substring(1, 4) // "ell"
-str.substring(6) // "world"
-str.substring(-10, -5) // ""
+str.substring(1, 4) // => 'ell'
+str.substring(6) // => 'world'
+str.substring(-10, -5) // => ''
 ```
 
 ### .substr
@@ -1006,8 +1006,8 @@ str.substring(-10, -5) // ""
 ```js
 let str = "hello world"
 
-str.substr(6, 3) // "wor"
-str.substr(3) // "lo world"
+str.substr(6, 3) // => 'wor'
+str.substr(3) // => 'lo world'
 ```
 
 ### .toUpperCase
@@ -1017,7 +1017,7 @@ str.substr(3) // "lo world"
 ```js
 let str = "I love JavaScript"
 
-str.toUpperCase() // "I LOVE JAVASCRIPT"
+str.toUpperCase() // => 'I LOVE JAVASCRIPT'
 ```
 
 ### .toLowerCase
@@ -1027,7 +1027,7 @@ str.toUpperCase() // "I LOVE JAVASCRIPT"
 ```js
 let str = "I love JavaScript"
 
-str.toLowerCase() // "i love javascript"
+str.toLowerCase() // => 'i love javascript'
 ```
 
 ### .split
@@ -1037,15 +1037,15 @@ str.toLowerCase() // "i love javascript"
 ```js
 let str = "hello world"
 
-str.split() // ["hello world"]
-str.split("") // ["h", "e", "l", "l", "o", " ", "w", "o", "r", "l", "d"]
-str.split(" ") // ["hello", "world"]
+str.split() // => ['hello world']
+str.split("") // => ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+str.split(" ") // => ['hello', 'world']
 ```
 
 ```js
 let str = "fdaf123fdsa12321fdas123fda"
 
-str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
+str.split(/\d+/) // => ['fdaf', 'fdsa', 'fdas', 'fda']
 ```
 
 ### .search
@@ -1055,7 +1055,7 @@ str.split(/\d+/) // ["fdaf", "fdsa", "fdas", "fda"]
 ```js
 let str = "hello world 666"
 
-str.search(/[0-9]+/g) // 12
+str.search(/[0-9]+/g) // => 12
 ```
 
 ### .match
@@ -1065,7 +1065,7 @@ str.search(/[0-9]+/g) // 12
 ```js
 let str = "1 hello 2 world 666"
 
-str.match(/[0-9]+/g) // [1, 2, 666]
+str.match(/[0-9]+/g) // => [1, 2, 666]
 ```
 
 ### .replace
@@ -1076,15 +1076,15 @@ str.match(/[0-9]+/g) // [1, 2, 666]
 let str = "18-31-56"
  
 // 当第一个参数是字符串时, 只替换第一个匹配项
-str.replace("-", ":") // 18:31-56
+str.replace("-", ":") // => '18:31-56'
 
 // 第一个参数使用正则表达式全局匹配, 可以替换所有匹配项
-str.replace(/-/g, ":") // 18:31:56
+str.replace(/-/g, ":") // => '18:31:56'
 
 
 let str = "html and css"
 
-str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
+str.replace(/html|css/g, value => value.toUpperCase()) // => 'HTML and CSS'
 ```
 
 ## 字符串（ES6+）
@@ -1096,8 +1096,8 @@ str.replace(/html|css/g, value => value.toUpperCase()) // HTML and CSS
 ```js
 let str = "hello world"
 
-str.includes("world") // true
-str.includes("yeah") // false
+str.includes("world") // => true
+str.includes("yeah") // => false
 ```
 
 ### .repeat
@@ -1107,7 +1107,7 @@ str.includes("yeah") // false
 ```js
 let str = "abc"
 
-str.repeat(3) // "abcabcabc"
+str.repeat(3) // => 'abcabcabc'
 ```
 
 ### .replaceAll
@@ -1117,10 +1117,10 @@ str.repeat(3) // "abcabcabc"
 ```js
 let str = "18-31-56"
  
-str.replaceAll("-", ":") // 18:31:56
+str.replaceAll("-", ":") // => '18:31:56'
 
 // 等同于
-str.replace(/-/g, ":") // 18:31:56
+str.replace(/-/g, ":") // => '18:31:56'
 ```
 
 ### .trim
@@ -1130,7 +1130,7 @@ str.replace(/-/g, ":") // 18:31:56
 ```js
 let str = "   hello world   "
 
-str.trim() // "hello world"
+str.trim() // => 'hello world'
 ```
 
 ### .trimStart
@@ -1140,7 +1140,7 @@ str.trim() // "hello world"
 ```js
 let str = "   hello world   "
 
-str.trimStart() // "hello world   "
+str.trimStart() // => 'hello world   '
 ```
 
 ### .trimEnd
@@ -1150,7 +1150,7 @@ str.trimStart() // "hello world   "
 ```js
 let str = "   hello world   "
 
-str.trimEnd() // "   hello world"
+str.trimEnd() // => '   hello world'
 ```
 
 ### .startsWith
@@ -1160,7 +1160,7 @@ str.trimEnd() // "   hello world"
 ```js
 let str = "abcdefg"
 
-str.startsWith("ab") // true
+str.startsWith("ab") // => true
 ```
 
 ### .endsWith
@@ -1170,7 +1170,7 @@ str.startsWith("ab") // true
 ```js
 let str = "abcdefg"
 
-str.endsWith("ef") // false
+str.endsWith("ef") // => false
 ```
 
 ### .padStart
@@ -1180,7 +1180,7 @@ str.endsWith("ef") // false
 ```js
 let str = "abc"
 
-str.padStart(10, "*") // "*******abc"
+str.padStart(10, "*") // => '*******abc'
 ```
 
 ### .padEnd
@@ -1190,7 +1190,7 @@ str.padStart(10, "*") // "*******abc"
 ```js
 let str = "abc"
 
-str.padEnd(10, "*") // "abc*******"
+str.padEnd(10, "*") // => 'abc*******'
 ```
 
 ## 正则
@@ -1239,8 +1239,8 @@ set 常用于数组去重。
 ```js
 const arr = [1, 2, 3, 4, 5, 5, 5, 5]
 
-[...new Set(arr)] // [1, 2, 3, 4, 5]
-Array.from(new Set(arr)) // [1, 2, 3, 4, 5]
+[...new Set(arr)] // => [1, 2, 3, 4, 5]
+Array.from(new Set(arr)) // => [1, 2, 3, 4, 5]
 ```
 
 向 set 中添加一个元素。
@@ -1248,7 +1248,7 @@ Array.from(new Set(arr)) // [1, 2, 3, 4, 5]
 ```js
 const set = new Set()
 
-set.add(1).add(2).add(2) // Set(2) {1, 2}
+set.add(1).add(2).add(2) // => Set(2) {1, 2}
 ```
 
 删除 set 中的某个元素。
@@ -1256,8 +1256,8 @@ set.add(1).add(2).add(2) // Set(2) {1, 2}
 ```js
 const set = new Set([1, 2])
 
-set.delete(1) // true, 表示删除成功
-set // Set(1) {2}
+set.delete(1) // => true, 表示删除成功
+set // => Set(1) {2}
 ```
 
 判断 set 中是否存在某个元素。
@@ -1265,9 +1265,9 @@ set // Set(1) {2}
 ```js
 const set = new Set([1, 2])
 
-set.has(1) // true
-set.has(2) // true
-set.has(3) // alse
+set.has(1) // => true
+set.has(2) // => true
+set.has(3) // => false
 ```
 
 ### Map
@@ -1290,7 +1290,7 @@ const map = new Map()
 const fnKey = () => {}
 map.set(fnKey, 1)
 
-map.get(fnKey) // 1
+map.get(fnKey) // => 1
 ```
 
 删除 map 中的某个元素。
@@ -1303,10 +1303,10 @@ const arrKey = [2]
 map.set(objKey, "f")
 map.set(arrKey, "b")
 
-map // Map(2) { { a: 1 } => "f", [2] => "b" }
+map // => Map(2) { { a: 1 } => "f", [2] => "b" }
 
-map.delete(arrKey) // true, 表示删除成功
-map // Map(1) { { a: 1 } => "f" }
+map.delete(arrKey) // => true, 表示删除成功
+map // => Map(1) { { a: 1 } => "f" }
 ```
 
 判断 map 中是否存在某个元素。
@@ -1317,9 +1317,9 @@ const map = new Map()
 map.set(true, "a")
 map.set(null, "b")
 
-map.has(true) // true
-map.has(null) // true
-map.has("fz") // false
+map.has(true) // => true
+map.has(null) // => true
+map.has("fz") // => false
 ```
 
 ### WeakMap
@@ -1343,7 +1343,7 @@ ctx = null // 引用次数 -1
 dpt = null // 引用次数 -1
 map.clear() // 引用次数 - 1
 
-weakmap // WeakMap {}
+weakmap // => WeakMap {}
 ```
 
 ### WeakSet
@@ -1402,11 +1402,11 @@ Reflect 是 ES6 推荐的操作对象的方法。
 ```js
 const obj = { a: 1, b: 2 }
 
-obj.a // 1
-Reflect.get(obj, "a") // 1
+obj.a // => 1
+Reflect.get(obj, "a") // => 1
 
-Reflect.set(obj, "b", 3) // true, 表示修改成功
-obj // { a: 1, b: 3 }
+Reflect.set(obj, "b", 3) // => true, 表示修改成功
+obj // => { a: 1, b: 3 }
 ```
 
 ## Promise
@@ -1445,11 +1445,11 @@ const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 const p4 = new Promise((resolve, reject) => {})
 
-Promise.all([p1, p2]) // Promise { <state>: 'fulfilled', <value>: [1, 2] }
+Promise.all([p1, p2]) // => Promise { <state>: 'fulfilled', <value>: [1, 2] }
 
-Promise.all([p1, p2, p3]) // Promise { <state>: 'rejected', <reason>: 3 }
+Promise.all([p1, p2, p3]) // => Promise { <state>: 'rejected', <reason>: 3 }
 
-Promise.all([p1, p2, p4]) // Promise { <state>: 'pending' }
+Promise.all([p1, p2, p4]) // => Promise { <state>: 'pending' }
 ```
 
 ### Promise.allSettled
@@ -1466,7 +1466,7 @@ const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
 Promise.allSettled([p1, p2, p3])
-/* Promise { <state>: 'fulfilled', [
+/* => Promise { <state>: 'fulfilled', [
   { status: 'fulfilled', value: 1 },
   { status: 'fulfilled', value: 2 },
   { status: 'rejected', reason: 3 }
@@ -1494,7 +1494,7 @@ const p1 = new Promise((resolve, reject) => {
 const p2 = Promise.resolve(2)
 const p3 = Promise.reject(3)
 
-Promise.race([p1, p2, p3]).then(value => value) // 'fulfilled' 2
+Promise.race([p1, p2, p3]).then(value => value) // => 'fulfilled' 2
 ```
 
 ### then 的返回值
@@ -1506,11 +1506,11 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    error // 1
+    error // => 1
     return 2
   }
 ).then(
-  value => value // 2
+  value => value // => 2
 )
 ```
 
@@ -1521,11 +1521,11 @@ new Promise((resolve, reject) => {
   reject(1)
 }).catch(
   error => {
-    error // 1
+    error // => 1
     return Promise.reject(2)
   }
 ).catch(
-  error => error // 2
+  error => error // => 2
 )
 ```
 
@@ -1536,11 +1536,11 @@ new Promise((resolve, reject) => {
   resolve(1)
 }).then(
   value => {
-    value  // 1
+    value  // => 1
     throw 2
   }
 ).catch(
-  error => error  // 2
+  error => error  // => 2
 )
 ```
 
@@ -1619,10 +1619,10 @@ const set = new Set([1, 1, 2, 3])
 
 const iterator = set[Symbol.iterator]()
 
-iterator.next() // { value: 1, done: false }
-iterator.next() // { value: 2, done: false }
-iterator.next() // { value: 3, done: false }
-iterator.next() // { value: undefined, done: true }
+iterator.next() // => { value: 1, done: false }
+iterator.next() // => { value: 2, done: false }
+iterator.next() // => { value: 3, done: false }
+iterator.next() // => { value: undefined, done: true }
 ```
 
 ### 实现原理
@@ -1648,8 +1648,8 @@ function iterate(iterable: any, callback: (current: any) => void) {
 const set = new Set([1, 1, 2, 3])
 
 iterate(set, current => {
-  current // { value: 1, done: false }  { value: 2, done: false }  { value: 3, done: false }
-  current.value // 1  2  3
+  current // => { value: 1, done: false }  { value: 2, done: false }  { value: 3, done: false }
+  current.value // => 1  2  3
 })
 ```
 
@@ -1661,7 +1661,7 @@ ES6 提供了 for...of 语法糖，不需要我们去实现迭代器的遍历函
 const set = new Set([1, 1, 2, 3])
 
 for (const value of set) {
-  value // 1  2  3
+  value // => 1  2  3
 }
 ```
 
@@ -1695,10 +1695,10 @@ const iterative = {
 }
 
 for (const value of iterative) {
-  value // 0  1  2  3  4
+  value // => 0  1  2  3  4
 }
 
-[...iterative] // [ 0, 1, 2, 3, 4 ]
+[...iterative] // => [ 0, 1, 2, 3, 4 ]
 ```
 
 ## Generator
@@ -1717,11 +1717,11 @@ function* generator() {
 
 const iterator = generator()
 
-iterator.next() // { value: Promise { 'first' }, done: false }
-iterator.next() // { value: 'Generator', done: false }
-iterator.next() // { value: 123, done: false }
-iterator.next() // { value: true, done: false }
-iterator.next() // { value: undefined, done: true }
+iterator.next() // => { value: Promise { 'first' }, done: false }
+iterator.next() // => { value: 'Generator', done: false }
+iterator.next() // => { value: 123, done: false }
+iterator.next() // => { value: true, done: false }
+iterator.next() // => { value: undefined, done: true }
 ```
 
 ### 解决回调地狱
@@ -1748,9 +1748,9 @@ function f3() {
 }
 
 function* generator() {
-  const r1 = yield f1() // data1
-  const r2 = yield f2() // data2
-  const r3 = yield f3() // data3
+  const r1 = yield f1() // => data1
+  const r2 = yield f2() // => data2
+  const r3 = yield f3() // => data3
 }
 
 const iterator = generator()

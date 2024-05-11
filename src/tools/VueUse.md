@@ -1,6 +1,6 @@
 ---
 title: VueUse
-icon: physics
+icon: vue
 date: 2024-04-22
 ---
 

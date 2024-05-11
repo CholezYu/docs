@@ -108,7 +108,7 @@ export default sidebar({
       children: [
         {
           text: "VueUse",
-          icon: "physics",
+          icon: "vue",
           link: "VueUse"
         },
         {
