@@ -18,7 +18,7 @@ import { compact } from "lodash"
 compact([0, 1, false, 2, "", 3]) // => [1, 2, 3]
 ```
 
-### 数组差异
+### 数组差异 / 数组减法
 
 #### .difference
 

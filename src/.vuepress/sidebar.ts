@@ -73,6 +73,57 @@ export default sidebar({
       ]
     },
     {
+      text: "工具",
+      icon: "tool",
+      prefix: "tools/",
+      collapsible: true,
+      children: [
+        {
+          text: "Lodash",
+          icon: "function",
+          link: "Lodash"
+        },
+        {
+          text: "Dayjs",
+          icon: "date",
+          link: "Dayjs"
+        },
+        {
+          text: "Exceljs",
+          icon: "table",
+          link: "Exceljs"
+        },
+        {
+          text: "VueUse",
+          icon: "vue",
+          link: "VueUse"
+        }
+      ]
+    },
+    {
+      text: "高级",
+      icon: "launch",
+      prefix: "high-end/",
+      collapsible: true,
+      children: [
+        {
+          text: "ECharts",
+          icon: "typescript",
+          link: "ECharts"
+        },
+        {
+          text: "WebGL",
+          icon: "typescript",
+          link: "WebGL"
+        },
+        {
+          text: "Threejs",
+          icon: "typescript",
+          link: "Threejs"
+        }
+      ]
+    },
+    {
       text: "后端",
       icon: "back-stage",
       prefix: "after-end/",
@@ -97,52 +148,6 @@ export default sidebar({
           text: "Nginx",
           icon: "nginx",
           link: "Nginx"
-        }
-      ]
-    },
-    {
-      text: "工具",
-      icon: "tool",
-      prefix: "tools/",
-      collapsible: true,
-      children: [
-        {
-          text: "Lodash",
-          icon: "function",
-          link: "Lodash"
-        },
-        {
-          text: "VueUse",
-          icon: "vue",
-          link: "VueUse"
-        },
-        {
-          text: "ExcelJS",
-          icon: "table",
-          link: "ExcelJS"
-        }
-      ]
-    },
-    {
-      text: "高级",
-      icon: "launch",
-      prefix: "high-end/",
-      collapsible: true,
-      children: [
-        {
-          text: "ECharts",
-          icon: "typescript",
-          link: "ECharts"
-        },
-        {
-          text: "WebGL",
-          icon: "typescript",
-          link: "WebGL"
-        },
-        {
-          text: "Threejs",
-          icon: "typescript",
-          link: "Threejs"
         }
       ]
     },
