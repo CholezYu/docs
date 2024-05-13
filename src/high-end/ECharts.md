@@ -3,13 +3,11 @@ title: ECharts
 icon: typescript
 ---
 
-## 按需引入
+## 基本配置
 
 ```ts
-/* echarts.ts */
-
 // 引入核心
-import * as echarts from "echarts/core"
+import * as charts from "echarts/core"
 
 // 引入图表
 import {
@@ -67,7 +65,7 @@ export type ECOption = ComposeOption<
 >
 
 // 注册组件
-echarts.use([
+charts.use([
   BarChart,
   LineChart,
   PieChart,
@@ -82,17 +80,15 @@ echarts.use([
   CanvasRenderer
 ])
 
-export default echarts
+export default charts
 ```
 
 ## 组件封装
 
 ```vue
-<!-- Chart/index.vue -->
-
 <script setup lang="ts">
-  import { ref, watch } from "vue"
-  import echarts, { type ECOption } from "@/utils/echarts.ts"
+  import { ref, watch, onMounted } from "vue"
+  import charts, { type ECOption } from "@/utils/charts"
   import { merge, cloneDeep } from "lodash"
   
   const props = withDefaults(defineProps<{
@@ -126,16 +122,23 @@ export default echarts
   
   const chartRef = ref<HTMLDivElement>()
   
-  const chart = ref()
+  const chart = ref<charts.ECharts>()
   
-  watch(() => props.option, (option: ECOption) => {
+  onMounted(() => {
     // 初始化 charts 实例
     chart.value = charts.init(chartRef.value)
-
+  })
+  
+  watch(() => props.option, (option: ECOption) => {
     // 渲染图表
-    chart.value.setOption(merge(cloneDeep(initOption), option))
+    chart.value?.setOption(merge(cloneDeep(initOption), option))
   }, {
     deep: true
+  })
+  
+  defineExpose({
+    name: "Chart",
+    chart
   })
 </script>
 
@@ -230,10 +233,10 @@ export default echarts
 ```vue
 <script setup lang="ts">
   import Chart from "@/components/Chart/index.vue"
-  import echarts, { type ECOption } from "@/utils/echarts.ts"
+  import charts, { type ECOption } from "@/utils/charts.ts"
   import china from "@/china.json" // https://github.com/yezongyang/china-geojson
   
-  echarts.registerMap("china", china as any)
+  charts.registerMap("china", china as any)
   
   const option: ECOption = {
     title: {

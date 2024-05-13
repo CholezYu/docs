@@ -8,7 +8,7 @@ date: 2024-05-12
 
 > [!tip]
 >
-> 我们把 “年”，“月”，“周”，“日” 称为一个时间单位
+> 我们把 “年”，“月”，“周”，“日” 称为一个时间单位。
 
 ### 今天
 
@@ -184,20 +184,20 @@ type UnitOf = "d" | "w" | "M" | "y" // "day" "week" "month" "year"
 // 一个时间单位前
 function unitOfTime(unitOf?: UnitOf, timeOf?: TimeOf) {
   const i = unitOf ? 1 : 0
-  if (timeOf === "n") return dayjs().subtract(1, unitOf).format("YYYY-MM-DD HH:mm:ss")
-  if (timeOf === "s") return dayjs().subtract(1, unitOf).startOf("d").format("YYYY-MM-DD HH:mm:ss")
-  if (timeOf === "e") return dayjs().subtract(1, unitOf).endOf("d").format("YYYY-MM-DD HH:mm:ss")
+  if (timeOf === "n") return dayjs().subtract(i, unitOf).format("YYYY-MM-DD HH:mm:ss")
+  if (timeOf === "s") return dayjs().subtract(i, unitOf).startOf("d").format("YYYY-MM-DD HH:mm:ss")
+  if (timeOf === "e") return dayjs().subtract(i, unitOf).endOf("d").format("YYYY-MM-DD HH:mm:ss")
   return dayjs().subtract(1, unitOf).format("YYYY-MM-DD")
 }
 
 // 今天
 unitOfTime() // => '2024-05-12'
 // 现在
-unitOfTime(null, "n") // => '2024-05-12 19:23:12'
+unitOfTime(undefined, "n") // => '2024-05-12 19:23:12'
 // 今天的零点
-unitOfTime(null, "s") // => '2024-05-12 00:00:00'
+unitOfTime(undefined, "s") // => '2024-05-12 00:00:00'
 // 今天的最后一秒
-unitOfTime(null, "e") // => '2024-05-12 23:59:59'
+unitOfTime(undefined, "e") // => '2024-05-12 23:59:59'
 
 // 昨天
 unitOfTime("d") // => '2024-05-11'
@@ -249,6 +249,12 @@ function unitOfCycle(n: number, unitOf: UnitOf) {
     dayjs().subtract(n, unitOf).endOf(unitOf).format("YYYY-MM-DD")
   ]
 }
+
+// 今天
+unitOfCycle(0, "d") // => ['2024-05-12', '2024-05-12']
+
+// 昨天
+unitOfCycle(1, "d") // => ['2024-05-11', '2024-05-11']
 
 // 本周
 unitOfCycle(0, "w") // => ['2024-05-06', '2024-05-12']

@@ -95,7 +95,7 @@ export default sidebar({
         },
         {
           text: "VueUse",
-          icon: "vue",
+          icon: "valine",
           link: "VueUse"
         }
       ]
