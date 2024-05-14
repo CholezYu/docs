@@ -89,7 +89,7 @@ interface This {
   append: (this: This, num: number) => void
 }
 
-const ctz = {
+const ctx = {
   nums: [1, 2, 3],
   append(this: This, num: number) {
     this.nums.push(num)

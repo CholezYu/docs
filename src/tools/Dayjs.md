@@ -181,7 +181,25 @@ dayjs.locale("zh-cn") // 本地化处理
 type TimeOf = "n" | "s" | "e" // "now" "startOf" "endOf"
 type UnitOf = "d" | "w" | "M" | "y" // "day" "week" "month" "year"
 
-// 一个时间单位前
+/**
+ * 一个时间单位前
+ *
+ * @example 今天
+ * unitOfTime() // => '2024-05-12'
+ * @example 现在
+ * unitOfTime(undefined, "n") // => '2024-05-12 19:23:12'
+ * @example 今天的零点
+ * unitOfTime(undefined, "s") // => '2024-05-12 00:00:00'
+ * @example 今天的最后一秒
+ * unitOfTime(undefined, "e") // => '2024-05-12 23:59:59'
+ *
+ * @example 昨天
+ * unitOfTime("d") // => '2024-05-11'
+ * @example 昨天的零点
+ * unitOfTime("d", "s") // => '2024-05-11 00:00:00'
+ * @example 昨天的最后一秒
+ * unitOfTime("d", "e") // => '2024-05-11 23:59:59'
+ */
 function unitOfTime(unitOf?: UnitOf, timeOf?: TimeOf) {
   const i = unitOf ? 1 : 0
   if (timeOf === "n") return dayjs().subtract(i, unitOf).format("YYYY-MM-DD HH:mm:ss")
@@ -189,43 +207,6 @@ function unitOfTime(unitOf?: UnitOf, timeOf?: TimeOf) {
   if (timeOf === "e") return dayjs().subtract(i, unitOf).endOf("d").format("YYYY-MM-DD HH:mm:ss")
   return dayjs().subtract(1, unitOf).format("YYYY-MM-DD")
 }
-
-// 今天
-unitOfTime() // => '2024-05-12'
-// 现在
-unitOfTime(undefined, "n") // => '2024-05-12 19:23:12'
-// 今天的零点
-unitOfTime(undefined, "s") // => '2024-05-12 00:00:00'
-// 今天的最后一秒
-unitOfTime(undefined, "e") // => '2024-05-12 23:59:59'
-
-// 昨天
-unitOfTime("d") // => '2024-05-11'
-// 昨天的零点
-unitOfTime("d", "s") // => '2024-05-11 00:00:00'
-// 昨天的最后一秒
-unitOfTime("d", "e") // => '2024-05-11 23:59:59'
-
-// 一周前
-unitOfTime("w") // => '2024-05-05'
-// 一周前的零点
-unitOfTime("w", "s") // => '2024-05-05 00:00:00'
-// 一周前的最后一秒
-unitOfTime("w", "e") // => '2024-05-05 23:59:59'
-
-// 一个月前
-unitOfTime("M") // => '2024-04-12'
-// 一个月前的零点
-unitOfTime("M", "s") // => '2024-04-12 00:00:00'
-// 一个月前的最后一秒
-unitOfTime("M", "e") // => '2024-04-12 23:59:59'
-
-// 一年前
-unitOfTime("y") // => '2023-05-12'
-// 一年前的零点
-unitOfTime("y", "s") // => '2023-05-12 00:00:00'
-// 一年前的最后一秒
-unitOfTime("y", "e") // => '2023-05-12 23:59:59'
 ```
 
 ### unitOfCycle
@@ -242,35 +223,30 @@ dayjs.locale("zh-cn") // 本地化处理
 
 type UnitOf = "d" | "w" | "M" | "y" // "day" "week" "month" "year"
 
-// 一个时间单位的周期
+/**
+ * 一个时间单位的周期
+ *
+ * @example 今天
+ * unitOfCycle(0, "d") // => ['2024-05-12', '2024-05-12']
+ * @example 昨天
+ * unitOfCycle(1, "d") // => ['2024-05-11', '2024-05-11']
+ * @example 本周
+ * unitOfCycle(0, "w") // => ['2024-05-06', '2024-05-12']
+ * @example 上周
+ * unitOfCycle(1, "w") // => ['2024-04-29', '2024-05-05']
+ * @example 本月
+ * unitOfCycle(0, "M") // => ['2024-05-01', '2024-05-31']
+ * @example 上个月
+ * unitOfCycle(1, "M") // => ['2024-04-01', '2024-04-30']
+ * @example 今年
+ * unitOfCycle(0, "y") // => ['2024-01-01', '2024-12-31']
+ * @example 去年
+ * unitOfCycle(1, "y") // => ['2023-01-01', '2023-12-31']
+ */
 function unitOfCycle(n: number, unitOf: UnitOf) {
   return [
     dayjs().subtract(n, unitOf).startOf(unitOf).format("YYYY-MM-DD"),
     dayjs().subtract(n, unitOf).endOf(unitOf).format("YYYY-MM-DD")
   ]
 }
-
-// 今天
-unitOfCycle(0, "d") // => ['2024-05-12', '2024-05-12']
-
-// 昨天
-unitOfCycle(1, "d") // => ['2024-05-11', '2024-05-11']
-
-// 本周
-unitOfCycle(0, "w") // => ['2024-05-06', '2024-05-12']
-
-// 上周
-unitOfCycle(1, "w") // => ['2024-04-29', '2024-05-05']
-
-// 本月
-unitOfCycle(0, "M") // => ['2024-05-01', '2024-05-31']
-
-// 上个月
-unitOfCycle(1, "M") // => ['2024-04-01', '2024-04-30']
-
-// 今年
-unitOfCycle(0, "y") // => ['2024-01-01', '2024-12-31']
-
-// 去年
-unitOfCycle(1, "y") // => ['2023-01-01', '2023-12-31']
 ```

@@ -69,6 +69,11 @@ export default sidebar({
           text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
+        },
+        {
+          text: "WebGL",
+          icon: "typescript",
+          link: "WebGL"
         }
       ]
     },
@@ -97,30 +102,17 @@ export default sidebar({
           text: "VueUse",
           icon: "valine",
           link: "VueUse"
-        }
-      ]
-    },
-    {
-      text: "高级",
-      icon: "launch",
-      prefix: "high-end/",
-      collapsible: true,
-      children: [
+        },
         {
           text: "ECharts",
           icon: "typescript",
           link: "ECharts"
         },
         {
-          text: "WebGL",
-          icon: "typescript",
-          link: "WebGL"
-        },
-        {
           text: "Threejs",
           icon: "typescript",
           link: "Threejs"
-        }
+        },
       ]
     },
     {
@@ -152,20 +144,20 @@ export default sidebar({
       ]
     },
     {
-      text: "算法",
-      icon: "keyboard",
-      prefix: "algorithm/",
+      text: "高级",
+      icon: "launch",
+      prefix: "high-end/",
       collapsible: true,
       children: [
         {
-          text: "JavaScript-Alog",
-          icon: "javascript",
-          link: "JavaScript-Algo"
+          text: "数据结构与算法-JavaScript",
+          icon: "keyboard",
+          link: "数据结构与算法-JavaScript"
         },
         {
-          text: "Java-Alog",
-          icon: "java",
-          link: "Java-Algo"
+          text: "数据结构与算法-Java",
+          icon: "keyboard",
+          link: "数据结构与算法-Java"
         }
       ]
     },

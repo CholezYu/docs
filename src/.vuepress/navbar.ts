@@ -66,6 +66,11 @@ export default navbar([
             text: "Wxapp",
             icon: "wechat",
             link: "Wxapp"
+          },
+          {
+            text: "WebGL",
+            icon: "typescript",
+            link: "WebGL"
           }
         ]
       },
