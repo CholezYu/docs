@@ -2,4 +2,4 @@
 User-agent:*
 Disallow:
 
-Sitemap: http://121.41.85.87:5001/sitemap.xml
+Sitemap: http://docs.yuwenjian.com/sitemap.xml

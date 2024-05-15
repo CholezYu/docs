@@ -4,7 +4,7 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
-  hostname: "http://121.41.85.87:5001",
+  hostname: "http://docs.yuwenjian.com", // http://121.41.85.87:5001
   
   author: {
     name: "俞文健",
@@ -28,7 +28,7 @@ export default hopeTheme({
   favicon: "favicon.ico",
   
   // 仓库配置，用于在导航栏中显示仓库链接
-  repo: "choIez",
+  repo: "choIez/docs",
   
   docsDir: "src",
   
