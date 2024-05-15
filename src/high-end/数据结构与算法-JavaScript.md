@@ -4,192 +4,129 @@ icon: keyboard
 date: 2024-05-15
 ---
 
-## 栈 Stack
+## 栈与队列
 
-栈是一种受限的线性结构。
+> [!tip]
+>
+> 栈和队列都是受限的线性数据结构
+
+### 栈 Stack
 
 后进先出（LIFO，Last In First Out）。栈顶进，栈顶出。
 
 ```js
-function Stack() {
-  this.items = []
+class Stack<T> {
+  values: T[]
+  
+  constructor() {
+    this.values = []
+  }
+  
+  // 向栈顶添加元素
+  push(value: T) {
+    this.values.push(value)
+  }
+  
+  // 移除栈顶的元素
+  pop() {
+    return this.values.pop()
+  }
+  
+  // 获取栈顶的元素
+  peek() {
+    return this.values[this.values.length - 1]
+  }
+  
+  // 遍历栈
+  forEach(callback: (value: T, index: number) => void) {
+    for (let i = 0; i < this.values.length; i++) {
+      callback(this.values[i], i)
+    }
+  }
 }
 ```
 
-### stack.push
-
-向栈顶添加元素。
-
-```js
-Stack.prototype.push = function (item) {
-  this.items.push(item)
-}
-```
-
-### stack.pop
-
-移除栈顶的元素。
-
-```js
-Stack.prototype.pop = function () {
-  return this.items.pop()
-}
-```
-
-### stack.peek
-
-返回栈顶的元素。
-
-```js
-Stack.prototype.peek = function () {
-  return this.items[this.items.length - 1]
-}
-```
-
-### stack.isEmpty
-
-判断栈是否为空。
-
-```js
-Stack.prototype.isEmpty = function () {
-  return this.items.length === 0
-}
-```
-
-### stack.size
-
-返回栈的元素个数。
-
-```js
-Stack.prototype.size = function () {
-  return this.items.length
-}
-```
-
-### stack.toString
-
-将栈转为字符串。
-
-```js
-Stack.prototype.toString = function () {
-  return this.items.reduce((prev, item) => prev + item + " ", "")
-}
-```
-
-## 队列 Queue
+### 队列 Queue
 
 队列是一种受限的线性结构。
 
-先进先出（FIFO，First In First Out）。后端进，前端出。
+先进先出（FIFO，First In First Out）。队尾进，队首出。
 
-```js
-function Queue() {
-  this.items = []
-}
-```
-
-### queue.enqueue
-
-向队列尾部插入元素。
-
-```js
-Queue.prototype.enqueue = function (item) {
-  this.items.push(item)
-}
-```
-
-### queue.dequeue
-
-移除队列的第一个元素。
-
-```js
-Queue.prototype.dequeue = function () {
-  return this.items.shift()
-}
-```
-
-### quque.front
-
-返回队列的第一个元素。
-
-```js
-Queue.prototype.front = function () {
-  return this.items[0]
-}
-```
-
-### queue.isEmpty
-
-判断队列是否为空。
-
-```js
-Queue.prototype.isEmpty = function () {
-  return this.items.length === 0
-}
-```
-
-### queue.size
-
-返回队列的元素个数。
-
-```js
-Queue.prototype.size = function () {
-  return this.items.length
-}
-```
-
-### queue.toString
-
-将队列转为字符串。
-
-```js
-Queue.prototype.toString = function () {
-  return this.items.reduce((prev, item) => prev + item + " ", "")
-}
-```
-
-## 优先级队列
-
-优先级队列的元素具有优先级。
-
-```js
-function Queue() {
-  this.items = []
+```ts
+class Queue<T> {
+  values: T[]
   
-  function QueueItem(item, priority) {
-    this.item = item
+  constructor() {
+    this.values = []
+  }
+  
+  // 向队尾添加元素
+  enqueue(value: T) {
+    this.values.push(value)
+  }
+  
+  // 移除队首的元素
+  dequeue() {
+    return this.values.shift()
+  }
+  
+  // 返回队首的元素
+  front() {
+    return this.values[0]
+  }
+  
+  // 遍历队列
+  forEach(callback: (value: T, index: number) => void) {
+    for (let i = 0; i < this.values.length; i++) {
+      callback(this.values[i], i)
+    }
+  }
+}
+```
+
+### 优先级队列
+
+优先级队列在插入操作时，需要比较元素的优先级，而不是先进先出，其他操作与普通队列相同。
+
+```js
+class QueueNode<T> {
+  value: T
+  priority: number
+  
+  constructor(value: T, priority: number) {
+    this.value = value
     this.priority = priority
   }
 }
-```
 
-### queue.enqueue
-
-在插入操作时，需要比较元素的优先级，而不是先进先出。其他操作与普通队列相同。
-
-```js
-Queue.prototype.enqueue = function (item, priority) {
-  const queueItem = new QueueItem(item, priority)
-  
-  if (this.isEmpty()) {
-    this.items.push(queueItem)
+class PriorityQueue<T> extends Queue<QueueNode<T>> {
+  constructor() {
+    super()
   }
-  else {
-    // 标记节点的优先级是否最低
-    let lowest = true
+  
+  // 向队列插入元素
+  enqueue(node: QueueNode<T>) {
+    const { value, priority } = node
+    const queueNode = new QueueNode(value, priority)
     
-    for (let i = 0; i < this.items.length; i++) {
-      if (queueItem.priority < this.items[i].priority) {
-        this.items.splice(i, 0, queueItem)
-        // 优先级不是最低
-        lowest = false
-        break
-      }
+    if (this.values.length === 0) {
+      this.values.push(queueNode)
     }
-    
-    if (lowest) {
-      // 优先级最低，插入到最后
-      this.items.push(queueItem)
+    else {
+      // 标记节点的优先级是否最低
+      let lowest = true
+      for (let i = 0; i < this.values.length; i++) {
+        if (queueNode.priority < this.values[i].priority) {
+          this.values.splice(i, 0, queueNode)
+          // 优先级不是最低
+          lowest = false
+          break
+        }
+      }
+      if (lowest) {
+        // 优先级最低，插入到最后
+        this.values.push(queueNode)
+      }
     }
   }
 }
@@ -269,7 +206,7 @@ class LinkedList<T> {
       this.head = node
     }
     else {
-      lastNode.next = node
+      lastNode!.next = node
     }
     this.length++
   }
@@ -285,38 +222,38 @@ class LinkedList<T> {
     }
     else {
       let current = this.head
-      let previous: LinkedNode<T> = null
+      let previous: LinkedNode<T> | null = null
       for (let i = 0; i < index; i++) {
         previous = current
-        current = current.next
+        current = current!.next
       }
-      previous.next = node
+      previous!.next = node
       node.next = current
     }
     this.length++
   }
   
-  // 查找对应索引的节点
+  // 获取对应索引的节点
   getNodeAt(index: number) {
     if (index < 0 || index > this.length) throw new Error("Index out of range")
     
     let current = this.head
     for (let i = 0; i < index; i++) {
-      current = current.next
+      current = current!.next
     }
     return current
   }
   
-  // 查找对应索引的节点数据
+  // 获取对应索引的节点数据
   getValueAt(index: number) {
     const node = this.getNodeAt(index)
-    return node.value
+    return node!.value
   }
   
   // 修改对应索引的节点数据
   setValueAt(index: number, value: T) {
     const node = this.getNodeAt(index)
-    node.value = value
+    node!.value = value
   }
   
   // 移除对应索引的节点
@@ -324,17 +261,17 @@ class LinkedList<T> {
     if (index < 0 || index >= this.length) throw new Error("Index out of range")
     
     let current = this.head
-    let previous: LinkedNode<T> = null
+    let previous: LinkedNode<T> | null = null
     if (index === 0) {
-      this.head = current.next
+      this.head = current!.next
       current = null
     }
     else {
       for (let i = 0; i < index; i++) {
         previous = current
-        current = current.next
+        current = current!.next
       }
-      previous.next = current.next
+      previous!.next = current!.next
       current = null
     }
     this.length--
@@ -344,9 +281,9 @@ class LinkedList<T> {
   forEach(callback: (value: T, index: number) => void) {
     let current = this.head
     let index = 0
-    callback(current.value, index++)
-    while (current.next) {
-      current = current.next
+    callback(current!.value, index++)
+    while (current!.next) {
+      current = current!.next
       callback(current.value, index++)
     }
   }
