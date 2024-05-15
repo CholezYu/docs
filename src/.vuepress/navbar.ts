@@ -104,6 +104,6 @@ export default navbar([
   },
   {
     text: "深入解析 Vue.js ",
-    link: "http://121.41.85.87:5002"
+    link: "http://vapor.yuwenjian.com"
   }
 ])
