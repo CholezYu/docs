@@ -14,7 +14,7 @@ date: 2024-05-15
 
 后进先出（LIFO，Last In First Out）。栈顶进，栈顶出。
 
-```js
+```ts
 class Stack<T> {
   values: T[]
   
@@ -88,8 +88,13 @@ class Queue<T> {
 
 优先级队列在插入操作时，需要比较元素的优先级，而不是先进先出，其他操作与普通队列相同。
 
-```js
-class QueueNode<T> {
+```ts
+interface QueueNodeType {
+  value: T
+  priority: number
+}
+
+class QueueNode<T> implements QueueNodeType<T> {
   value: T
   priority: number
   
@@ -99,13 +104,13 @@ class QueueNode<T> {
   }
 }
 
-class PriorityQueue<T> extends Queue<QueueNode<T>> {
+class PriorityQueue<T> extends Queue<QueueNodeType<T>> {
   constructor() {
     super()
   }
   
   // 向队列插入元素
-  enqueue(node: QueueNode<T>) {
+  enqueue(node: QueueNodeType<T>) {
     const { value, priority } = node
     const queueNode = new QueueNode(value, priority)
     
@@ -154,6 +159,42 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 
 - 数组的存储空间是连续的，当数组较大时，如果空间碎片较多，内存可能无法提供足够大的连续空间。
 
+```ts
+class ArrayList extends Array {
+  value: number[]
+  
+  constructor(value: number[]) {
+    super()
+    this.value = value
+  }
+  
+  // 冒泡排序
+  bubbleSort() {
+    // ...
+  }
+  
+  // 选择排序
+  selectionSort() {
+    // ...
+  }
+  
+  // 插入排序
+  insertionSort() {
+    // ...
+  }
+  
+  // 快速排序
+  quickSort() {
+    // ...
+  }
+  
+  // 希尔排序
+  shellSort() {
+    
+  }
+}
+```
+
 ### 链表 Linked List
 
 **链表的优点**：
@@ -169,9 +210,14 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 - 占用内存大：链表除了需要存储节点值，还要存储节点指针。如果节点数据越多，指针的内存影响就越小。
 
 ```ts
-class LinkedNode<T> {
+interface LinkedNodeType<T> {
   value: T
-  next: LinkedNode<T> | null
+  next: LinkedNodeType<T> | null
+}
+
+class LinkedNode<T> implements LinkedNodeType<T> {
+  value: T
+  next: LinkedNodeType<T> | null
   
   constructor(value: T) {
     this.value = value
@@ -180,7 +226,7 @@ class LinkedNode<T> {
 }
 
 class LinkedList<T> {
-  head: LinkedNode<T> | null
+  head: LinkedNodeType<T> | null
   length: number
   
   constructor() {
@@ -188,7 +234,7 @@ class LinkedList<T> {
     this.length = 0
   }
   
-  // 获取最后一个节点
+  // 获取尾部节点
   getLastNode() {
     if (!this.head) return null
     let current = this.head
@@ -198,7 +244,7 @@ class LinkedList<T> {
     return current
   }
   
-  // 向链表最后添加节点
+  // 向链表尾部添加节点
   append(value: T) {
     const lastNode = this.getLastNode()
     const node = new LinkedNode(value)
@@ -222,7 +268,7 @@ class LinkedList<T> {
     }
     else {
       let current = this.head
-      let previous: LinkedNode<T> | null = null
+      let previous: LinkedNodeType<T> | null = null
       for (let i = 0; i < index; i++) {
         previous = current
         current = current!.next
@@ -261,7 +307,7 @@ class LinkedList<T> {
     if (index < 0 || index >= this.length) throw new Error("Index out of range")
     
     let current = this.head
-    let previous: LinkedNode<T> | null = null
+    let previous: LinkedNodeType<T> | null = null
     if (index === 0) {
       this.head = current!.next
       current = null
@@ -294,228 +340,140 @@ class LinkedList<T> {
 
 相比于单向链表，双向链表相连的过程是双向的。既可以从头部遍历到尾部，也可以从尾部遍历到头部。
 
-```js
-function LinkedList() {
-  this.head = null
-  this.tail = null
-  this.length = 0
+```ts
+interface DoubleLinkedListNodeType<T> {
+  value: T
+  prev: DoubleLinkedListNodeType<T> | null
+  next: DoubleLinkedListNodeType<T> | null
+}
+
+class DoubleLinkedListNode<T> implements DoubleLinkedListNodeType<T> {
+  value: T
+  prev: DoubleLinkedListNodeType<T> | null
+  next: DoubleLinkedListNodeType<T> | null
   
-  function Node(data) {
-    this.data = data
+  constructor(value: T) {
+    this.value = value
     this.prev = null
     this.next = null
   }
 }
-```
 
-### link.append
-
-向链表尾部添加节点。
-
-```js
-LinkedList.prototype.append = function (data) {
-  const node = new Node(data)
+class DoubleLinkedList<T> {
+  head: DoubleLinkedListNodeType<T> | null
+  tail: DoubleLinkedListNodeType<T> | null
+  length: number
   
-  if (this.length === 0) {
-    this.head = node
-    this.tail = node
-  }
-  else {
-    this.tail.next = node
-    node.prev = this.tail
-    this.tail = node
+  constructor() {
+    this.head = null
+    this.tail = null
+    this.length = 0
   }
   
-  this.length += 1
-}
-```
-
-### link.insert
-
-向链表指定位置插入节点。
-
-```js
-LinkedList.prototype.insert = function (position, data) {
-  if (position < 0 || position > this.length) return false
-  
-  const node = new Node(data)
-  
-  if (this.length === 0) {
-    this.head = node
-    this.tail = node
-  }
-  else {
-    if (position === 0) {
-      this.head.prev = node
-      node.next = this.head
+  // 向链表尾部添加节点
+  append(value: T) {
+    const node = new DoubleLinkedListNode(value)
+    if (!this.head) {
       this.head = node
-    }
-    else if (position === this.length) {
-      this.tail.next = node
-      node.prev = this.tail
       this.tail = node
     }
     else {
-      let current = this.head
-      let index = 0
-      
-      while (index < position) {
-        current = current.next
-        index += 1
+      this.tail!.next = node
+      node.prev = this.tail
+      this.tail = node
+    }
+    this.length++
+  }
+  
+  // 向链表指定位置插入节点
+  insert(index: number, value: T) {
+    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    
+    const node = new DoubleLinkedListNode(value)
+    if (this.length === 0) {
+      this.head = node
+      this.tail = node
+    }
+    else {
+      if (index === 0) {
+        this.head!.prev = node
+        node.next = this.head
+        this.head = node
       }
-      
-      node.prev = current.prev
-      node.next = current
-      current.prev.next = node
-      current.prev = node
+      else if (index === this.length) {
+        this.tail!.next = node
+        node.prev = this.tail
+        this.tail = node
+      }
+      else {
+        let current = this.head
+        for (let i = 0; i < index; i++) {
+          current = current!.next
+        }
+        node.prev = current!.prev
+        node.next = current
+        current!.prev!.next = node
+        current!.prev = node
+      }
+    }
+    this.length++
+  }
+  
+  // 获取对应索引的节点
+  getNodeAt(index: number) {
+    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    
+    // 从前往后
+    if (this.length / 2 > index) {
+      let current = this.head
+      for (let i = 0; i < index; i++) {
+        current = current!.next
+      }
+      return current
+    }
+    // 从后往前
+    else {
+      let current = this.tail
+      for (let i = this.length - 1; i > index; i--) {
+        current = current!.prev
+      }
+      return current
     }
   }
   
-  this.length += 1
-}
-```
-
-### link.indexOf
-
-查找对应节点数据的索引。
-
-```js
-LinkedList.prototype.indexOf = function (data) {
-  let current = this.head
-  let index = 0
-  
-  while (current) {
-    if (current.data === data) return index
-    
-    current = current.next
-    index += 1
+  // 获取对应索引的节点数据
+  getValueAt(index: number) {
+    const node = this.getNodeAt(index)
+    return node!.value
   }
   
-  return -1
-}
-```
-
-### link.get
-
-返回对应索引的节点数据。
-
-```js
-LinkedList.prototype.get = function (position) {
-  if (position < 0 || position >= this.length) return null
+  // 修改对应索引的节点数据
+  setValueAt(index: number, value: T) {
+    const node = this.getNodeAt(index)
+    node!.value = value
+  }
   
-  // 从前往后
-  if (this.length / 2 > position) {
+  // 移除对应索引的节点
+  removeAt(index: number) {
+    if (index < 0 || index >= this.length) throw new Error("Index out of range")
+    
+    // ...
+  }
+  
+  // 遍历链表
+  forEach(callback: (value: T, index: number) => void) {
     let current = this.head
     let index = 0
-    
-    while (index < position) {
-      current = current.next
-      index += 1
+    callback(current!.value, index++)
+    while (current!.next) {
+      current = current!.next
+      callback(current.value, index++)
     }
-    
-    return current.data
-  }
-  // 从后往前
-  else {
-    let current = this.tail
-    let index = this.length - 1
-    
-    while (index > position) {
-      current = current.prev
-      index -= 1
-    }
-    
-    return current.data
   }
 }
 ```
 
-### link.update
-
-修改对应索引的节点数据。
-
-```js
-LinkedList.prototype.update = function (position, data) {
-  if (position < 0 || position >= this.length) return
-  
-  if (this.length / 2 > position) {
-    let current = this.head
-    let index = 0
-    
-    while (index < position) {
-      current = current.next
-      index += 1
-    }
-    
-    current.data = data
-  }
-  else {
-    let current = this.tail
-    let index = this.length - 1
-    
-    while (index > position) {
-      current = current.prev
-      index -= 1
-    }
-    
-    current.data = data
-  }
-}
-```
-
-### link.removeAt
-
-移除对应索引的节点。
-
-### link.remove
-
-移除链表中的某个节点。
-
-### link.isEmpty
-
-判断链表是否为空。
-
-### link.size
-
-返回链表的节点个数。
-
-### link.forwardToString
-
-将链表转为字符串（正向遍历链表）。
-
-```js
-LinkedList.prototype.forwardToString = function () {
-  let current = this.head
-  let result = ""
-  
-  while (current) {
-    result += current.data + " "
-    current = current.next
-  }
-  
-  return result
-}
-```
-
-### link.reverseToString
-
-将链表转为字符串（反向遍历链表）。
-
-```js
-LinkedList.prototype.reverseToString = function () {
-  let current = this.tail
-  let result = ""
-  
-  while (current) {
-    result += current.data + " "
-    current = current.prev
-  }
-  
-  return result
-}
-```
-
-## 哈希表 Hash Table
+## 哈希表 Hash Map
 
 ### 哈希表理论
 
@@ -553,11 +511,36 @@ LinkedList.prototype.reverseToString = function () {
 
 
 
-## 排序搜索
+## 排序算法
 
-### 简单排序
+### 冒泡排序
+
+```ts
+ArrayList.prototype.bubbleSort = function () {
+  let flag = true
+  for (let i = 0; i < this.value.length - 1; i++) {
+    for (let j = 1; j < this.value.length - i; j++) {
+      if (this.value[j - 1] > this.value[j]) {
+        [this.value[j - 1], this.value[j]] = [this.value[j], this.value[j - 1]]
+        flag = false
+      }
+    }
+    if (flag) break
+  }
+}
+```
+
+### 选择排序
 
 
 
-### 高级排序
+### 插入排序
+
+
+
+### 快速排序
+
+
+
+### 希尔排序
 
