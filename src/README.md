@@ -17,5 +17,4 @@ actions:
     icon: markdown
     link: ./overview/
     type: primary
-footer: ""
 ---

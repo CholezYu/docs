@@ -1,14 +1,14 @@
 ---
 title: 数据结构与算法-JavaScript
 icon: keyboard
-date: 2024-05-15
+date: 2024-05-16
 ---
 
 ## 栈与队列
 
 > [!tip]
 >
-> 栈和队列都是受限的线性数据结构
+> 栈和队列都是受限的线性数据结构。
 
 ### 栈 Stack
 
@@ -457,7 +457,31 @@ class DoubleLinkedList<T> {
   removeAt(index: number) {
     if (index < 0 || index >= this.length) throw new Error("Index out of range")
     
-    // ...
+    if (this.length === 1) {
+      this.head = null
+      this.tail = null
+    }
+    else {
+      if (index === 0) {
+        this.head!.next!.prev = null
+        this.head = this.head!.next
+      }
+      else if (index === this.length - 1) {
+        current = this.tail
+        this.tail!.prev!.next = null
+        this.tail = this.tail!.prev
+      }
+      else {
+        let current = this.head
+        for (let i = 0; i < index; i++) {
+          current = current!.next
+        }
+        current!.prev!.next = current!.next
+        current!.next!.prev = current!.prev
+      }
+    }
+    this.length--
+    return 
   }
   
   // 遍历链表
