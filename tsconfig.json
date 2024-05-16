@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    /* Projects */
-    
     /* Language and Environment */
     "target": "esnext",                                      /* 目标语言的版本 */
     "jsx": "preserve",                                       /* JSX 解析器 */
