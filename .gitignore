@@ -1,9 +1,7 @@
 # File color
 Desktop.ini
 
-# Vuepress Cache
 **/.vuepress/.cache/**
-# Vuepress Temp
 **/.vuepress/.temp/**
 
 # Logs
