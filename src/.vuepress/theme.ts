@@ -32,10 +32,9 @@ export default hopeTheme({
   
   docsDir: "src",
   
-  // footer 和 copyright 样式不一样，这里直接使用 copyright 显示备案信息
-  copyright: `<a href="https://beian.miit.gov.cn" target="_blank">赣ICP备2024033222号-1</a>`,
+  // copyright: false,
   
-  // footer: `<a href="https://beian.miit.gov.cn" target="_blank">赣ICP备2024033222号-1</a>`,
+  footer: `<a href="https://beian.miit.gov.cn" target="_blank">赣ICP备2024033222号-1</a>`,
   
   displayFooter: true,
   

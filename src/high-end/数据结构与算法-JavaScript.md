@@ -89,12 +89,7 @@ class Queue<T> {
 优先级队列在插入操作时，需要比较元素的优先级，而不是先进先出，其他操作与普通队列相同。
 
 ```ts
-interface QueueNodeType {
-  value: T
-  priority: number
-}
-
-class QueueNode<T> implements QueueNodeType<T> {
+class QueueNode<T> {
   value: T
   priority: number
   
@@ -104,13 +99,13 @@ class QueueNode<T> implements QueueNodeType<T> {
   }
 }
 
-class PriorityQueue<T> extends Queue<QueueNodeType<T>> {
+class PriorityQueue<T> extends Queue<QueueNode<T>> {
   constructor() {
     super()
   }
   
   // 向队列插入元素
-  enqueue(node: QueueNodeType<T>) {
+  enqueue(node: QueueNode<T>) {
     const { value, priority } = node
     const queueNode = new QueueNode(value, priority)
     
@@ -143,7 +138,7 @@ class PriorityQueue<T> extends Queue<QueueNodeType<T>> {
 >
 > 数组和链表都是线性结构数据。
 
-### 数组 Array
+### 数组 Array List
 
 **数组的优点**：
 
@@ -210,14 +205,9 @@ class ArrayList extends Array {
 - 占用内存大：链表除了需要存储节点值，还要存储节点指针。如果节点数据越多，指针的内存影响就越小。
 
 ```ts
-interface LinkedNodeType<T> {
+class LinkedNode<T> {
   value: T
-  next: LinkedNodeType<T> | null
-}
-
-class LinkedNode<T> implements LinkedNodeType<T> {
-  value: T
-  next: LinkedNodeType<T> | null
+  next: LinkedNode<T> | null
   
   constructor(value: T) {
     this.value = value
@@ -226,7 +216,7 @@ class LinkedNode<T> implements LinkedNodeType<T> {
 }
 
 class LinkedList<T> {
-  head: LinkedNodeType<T> | null
+  head: LinkedNode<T> | null
   length: number
   
   constructor() {
@@ -259,7 +249,7 @@ class LinkedList<T> {
   
   // 向链表指定位置插入节点
   insertAt(index: number, value: T) {
-    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    if (index < 0 || index > this.length) throw new Error("out of range")
     
     const node = new LinkedNode(value)
     if (index === 0) {
@@ -268,7 +258,7 @@ class LinkedList<T> {
     }
     else {
       let current = this.head
-      let previous: LinkedNodeType<T> | null = null
+      let previous: LinkedNode<T> | null = null
       for (let i = 0; i < index; i++) {
         previous = current
         current = current!.next
@@ -281,7 +271,7 @@ class LinkedList<T> {
   
   // 获取对应索引的节点
   getNodeAt(index: number) {
-    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    if (index < 0 || index > this.length) throw new Error("out of range")
     
     let current = this.head
     for (let i = 0; i < index; i++) {
@@ -304,10 +294,10 @@ class LinkedList<T> {
   
   // 移除对应索引的节点
   removeAt(index: number) {
-    if (index < 0 || index >= this.length) throw new Error("Index out of range")
+    if (index < 0 || index >= this.length) throw new Error("out of range")
     
     let current = this.head
-    let previous: LinkedNodeType<T> | null = null
+    let previous: LinkedNode<T> | null = null
     if (index === 0) {
       this.head = current!.next
       current = null
@@ -341,16 +331,10 @@ class LinkedList<T> {
 相比于单向链表，双向链表相连的过程是双向的。既可以从头部遍历到尾部，也可以从尾部遍历到头部。
 
 ```ts
-interface DoubleLinkedListNodeType<T> {
+class DoubleLinkedListNode<T> {
   value: T
-  prev: DoubleLinkedListNodeType<T> | null
-  next: DoubleLinkedListNodeType<T> | null
-}
-
-class DoubleLinkedListNode<T> implements DoubleLinkedListNodeType<T> {
-  value: T
-  prev: DoubleLinkedListNodeType<T> | null
-  next: DoubleLinkedListNodeType<T> | null
+  prev: DoubleLinkedListNode<T> | null
+  next: DoubleLinkedListNode<T> | null
   
   constructor(value: T) {
     this.value = value
@@ -360,8 +344,8 @@ class DoubleLinkedListNode<T> implements DoubleLinkedListNodeType<T> {
 }
 
 class DoubleLinkedList<T> {
-  head: DoubleLinkedListNodeType<T> | null
-  tail: DoubleLinkedListNodeType<T> | null
+  head: DoubleLinkedListNode<T> | null
+  tail: DoubleLinkedListNode<T> | null
   length: number
   
   constructor() {
@@ -387,7 +371,7 @@ class DoubleLinkedList<T> {
   
   // 向链表指定位置插入节点
   insert(index: number, value: T) {
-    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    if (index < 0 || index > this.length) throw new Error("out of range")
     
     const node = new DoubleLinkedListNode(value)
     if (this.length === 0) {
@@ -421,7 +405,7 @@ class DoubleLinkedList<T> {
   
   // 获取对应索引的节点
   getNodeAt(index: number) {
-    if (index < 0 || index > this.length) throw new Error("Index out of range")
+    if (index < 0 || index > this.length) throw new Error("out of range")
     
     // 从前往后
     if (this.length / 2 > index) {
@@ -455,7 +439,7 @@ class DoubleLinkedList<T> {
   
   // 移除对应索引的节点
   removeAt(index: number) {
-    if (index < 0 || index >= this.length) throw new Error("Index out of range")
+    if (index < 0 || index >= this.length) throw new Error("out of range")
     
     if (this.length === 1) {
       this.head = null
@@ -497,6 +481,10 @@ class DoubleLinkedList<T> {
 }
 ```
 
+## 集合 Set
+
+
+
 ## 哈希表 Hash Map
 
 ### 哈希表理论
@@ -532,6 +520,12 @@ class DoubleLinkedList<T> {
 
 
 ### 图的遍历
+
+
+
+## 查找算法
+
+### 二分查找
 
 
 
