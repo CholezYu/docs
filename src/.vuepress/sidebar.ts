@@ -9,6 +9,7 @@ export default sidebar({
       link: "overview/",
       collapsible: true
     },
+    
     {
       text: "前端",
       icon: "network",
@@ -69,14 +70,10 @@ export default sidebar({
           text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
-        },
-        {
-          text: "WebGL",
-          icon: "typescript",
-          link: "WebGL"
         }
       ]
     },
+    
     {
       text: "工具",
       icon: "tool",
@@ -84,24 +81,9 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "Lodash",
-          icon: "function",
-          link: "Lodash"
-        },
-        {
           text: "Dayjs",
           icon: "date",
           link: "Dayjs"
-        },
-        {
-          text: "Exceljs",
-          icon: "table",
-          link: "Exceljs"
-        },
-        {
-          text: "VueUse",
-          icon: "valine",
-          link: "VueUse"
         },
         {
           text: "ECharts",
@@ -109,12 +91,47 @@ export default sidebar({
           link: "ECharts"
         },
         {
+          text: "Exceljs",
+          icon: "table",
+          link: "Exceljs"
+        },
+        {
+          text: "Lodash",
+          icon: "function",
+          link: "Lodash"
+        },
+        {
+          text: "VueUse",
+          icon: "valine",
+          link: "VueUse"
+        }
+      ]
+    },
+    
+    {
+      text: "高级",
+      icon: "launch",
+      prefix: "high-end/",
+      collapsible: true,
+      children: [
+        {
+          text: "WebGL",
+          icon: "typescript",
+          link: "WebGL"
+        },
+        {
           text: "Threejs",
           icon: "typescript",
           link: "Threejs"
         },
+        {
+          text: "MicroFrontend",
+          icon: "typescript",
+          link: "MicroFrontend"
+        }
       ]
     },
+    
     {
       text: "后端",
       icon: "back-stage",
@@ -143,24 +160,26 @@ export default sidebar({
         }
       ]
     },
+    
     {
-      text: "高级",
-      icon: "launch",
-      prefix: "high-end/",
+      text: "算法",
+      icon: "keyboard",
+      prefix: "algorithm/",
       collapsible: true,
       children: [
         {
-          text: "数据结构与算法-JavaScript",
-          icon: "keyboard",
-          link: "数据结构与算法-JavaScript"
+          text: "Alog-JavaScript",
+          icon: "javascript",
+          link: "Alog-JavaScript"
         },
         {
-          text: "数据结构与算法-Java",
-          icon: "keyboard",
-          link: "数据结构与算法-Java"
+          text: "Alog-Java",
+          icon: "java",
+          link: "Alog-Java"
         }
       ]
     },
+    
     {
       text: "便笺",
       icon: "list",
@@ -189,6 +208,7 @@ export default sidebar({
         }
       ]
     },
+    
     {
       text: "废弃",
       icon: "bitbucket",
