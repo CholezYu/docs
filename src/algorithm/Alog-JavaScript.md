@@ -588,6 +588,7 @@ index = hash(key) % capacity
 ```ts
 12836 % 100 = 36
 20336 % 100 = 36
+http://docs.yuwenjian.com/assets/stack_operations-0c_Tc-fQ.png
 ```
 
 如果哈希表容量越大，多个 `key` 被分配到同一个桶的概率就越低，冲突就越少。所以我们可以**通过扩容哈希表来减少哈希冲突**。
