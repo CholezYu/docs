@@ -1,4 +1,3 @@
-// @ts-ignore
 import { navbar } from "vuepress-theme-hope"
 
 export default navbar([
@@ -16,6 +15,11 @@ export default navbar([
             text: "Vue 3",
             icon: "vue",
             link: "Vue"
+          },
+          {
+            text: "Vue 2",
+            icon: "vue",
+            link: "/history/Vue"
           },
           {
             text: "React",
@@ -69,29 +73,36 @@ export default navbar([
           }
         ]
       },
+      
       {
-        text: "后端",
-        prefix: "after-end/",
+        text: "工具",
+        icon: "tool",
+        prefix: "tools/",
         children: [
           {
-            text: "Java",
-            icon: "java",
-            link: "Java"
+            text: "Dayjs",
+            icon: "date",
+            link: "Dayjs"
           },
           {
-            text: "Python",
-            icon: "python",
-            link: "Python"
+            text: "ECharts",
+            icon: "typescript",
+            link: "ECharts"
           },
           {
-            text: "MySQL",
-            icon: "mysql",
-            link: "MySQL"
+            text: "Exceljs",
+            icon: "table",
+            link: "Exceljs"
           },
           {
-            text: "Nginx",
-            icon: "nginx",
-            link: "Nginx"
+            text: "Lodash",
+            icon: "function",
+            link: "Lodash"
+          },
+          {
+            text: "VueUse",
+            icon: "valine",
+            link: "VueUse"
           }
         ]
       }

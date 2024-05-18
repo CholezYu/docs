@@ -22,6 +22,11 @@ export default sidebar({
           link: "Vue"
         },
         {
+          text: "Vue 2",
+          icon: "vue",
+          link: "/history/Vue"
+        },
+        {
           text: "React",
           icon: "react",
           link: "React"
@@ -205,20 +210,6 @@ export default sidebar({
           text: "心得体会",
           icon: "markdown",
           link: "心得体会"
-        }
-      ]
-    },
-    
-    {
-      text: "废弃",
-      icon: "bitbucket",
-      prefix: "history/",
-      collapsible: true,
-      children: [
-        {
-          text: "Vue 2",
-          icon: "vue",
-          link: "Vue"
         }
       ]
     }
