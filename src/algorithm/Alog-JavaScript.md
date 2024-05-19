@@ -636,7 +636,7 @@ index = hash(key) % capacity
 
 ### 负载因子
 
-负载因子表示**哈希表元素的数量**和**哈希表长度**的比值，用于衡量哈希冲突的严重程度，也常作为**哈希表扩容的触发条件**。链式地址的平均探测步长与负载因子的比值呈线性增长；而开放寻址的平均探测步长与负载因子的比值呈指数增长。由此可见，在链式地址中负载因子的增加对平均探测步长的影响更平缓。所以**真实开发中链式地址的使用情况更多**。
+负载因子表示**哈希表元素的数量**和**哈希表容量**的比值，用于衡量哈希冲突的严重程度，也常作为**哈希表扩容的触发条件**。链式地址的平均探测步长与负载因子的比值呈线性增长；而开放寻址的平均探测步长与负载因子的比值呈指数增长。由此可见，在链式地址中负载因子的增加对平均探测步长的影响更平缓。
 
 ### 哈希算法
 
@@ -660,7 +660,185 @@ const hash = (key: string, capacity: number) => {
 
 ### 哈希表 Hash Map
 
+**真实开发中链式地址的使用情况更多**。所以我们使用链式地址来封装一个哈希表。
+
 ```ts
+class Pair {
+  public key: string
+  public val: any
+  
+  constructor(key: string, val: any) {
+    this.key = key
+    this.val = val
+  }
+}
+
+class HashMap {
+  /**
+   * 哈希表容量
+   */
+  private capacity = 7
+  
+  /**
+   * 所有的桶
+   */
+  private buckets: (Pair[] | null)[]
+  
+  /**
+   * 元素的数量
+   */
+  private length = 0
+  
+  constructor() {
+    this.buckets = new Array(this.capacity).fill(null)
+  }
+  
+  /**
+   * 哈希函数
+   * @param {string} key - 键
+   */
+  private hash(key: string) {
+    let hashCode = 0
+    for (let i = 0; i < key.length; i++) {
+      hashCode = 37 * hashCode + key.charCodeAt(i)
+    }
+    return hashCode % this.capacity
+  }
+  
+  /**
+   * 获取哈希表的值
+   */
+  get value() {
+    return this.buckets
+  }
+  
+  /**
+   * 获取哈希表的元素数量
+   */
+  get size() {
+    return this.length
+  }
+  
+  /**
+   * 计算负载因子
+   */
+  private get loadFactor() {
+    return this.length / this.capacity
+  }
+  
+  /**
+   * 查找元素
+   * @param {string} key - 键
+   */
+  get(key: string) {
+    const index = this.hash(key)
+    const bucket = this.buckets[index]
+    // 如果桶为 null，说明目标元素不存在
+    if (!bucket) return null
+    // 如果桶中存在目标元素，直接返回
+    for (const pair of bucket) {
+      if (pair.key === key) {
+        return pair
+      }
+    }
+    // 目标元素不存在
+    return null
+  }
+  
+  /**
+   * 插入或修改元素
+   * @param {string} key - 键
+   * @param val - 值
+   */
+  set(key: string, val: any) {
+    const index = this.hash(key)
+    // 如果桶为 null，就初始化为一个空数组
+    const bucket = this.buckets[index] ?? []
+    this.buckets[index] = bucket
+    // 如果存在目标元素，则修改数据
+    for (const pair of bucket) {
+      if (pair.key === key) {
+        pair.val = val
+        return
+      }
+    }
+    // 没有找到目标元素，则插入数据
+    bucket.push(new Pair(key, val))
+    this.length++
+    // 负载因子 > 0.75，进行扩容
+    if (this.loadFactor > 0.75) {
+      this.resize(this.capacity * 2)
+    }
+  }
+  
+  /**
+   * 删除元素
+   * @param {string} key - 键
+   */
+  del(key: string) {
+    const index = this.hash(key)
+    let bucket = this.buckets[index]
+    // 如果桶为 null，说明目标元素不存在
+    if (!bucket) return null
+    // 如果桶中存在目标元素，直接返回
+    for (const pair of bucket) {
+      if (pair.key === key) {
+        bucket = bucket.filter(item => item.key !== pair.key)
+        this.buckets[index] = bucket.length ? bucket : null
+        this.length--
+        // 负载因子 < 0.75，进行缩容
+        if (this.loadFactor < 0.25) {
+          this.resize(Math.floor(this.capacity / 2))
+        }
+        return pair
+      }
+    }
+    // 目标元素不存在
+    return null
+  }
+  
+  /**
+   * 重新计算哈希表容量（扩容/缩容）
+   */
+  private resize(n: number) {
+    const buckets = this.buckets // 原来的桶
+    this.capacity = this.nextPrime(n)
+    this.buckets = new Array(this.capacity).fill(null)
+    this.length = 0
+    for (const bucket of buckets) {
+      if (!bucket) continue
+      for (const pair of bucket) {
+        // 将原来所有的键值对重新插入到新的哈希表中
+        this.set(pair.key, pair.val)
+      }
+    }
+  }
+  
+  /**
+   * 判断是否为质数
+   * @param {number} n - 任意数字
+   */
+  private isPrime(n: number) {
+    if (n <= 1) return false
+    for (let i = 2; i * i <= n; i++) {
+      if (n % i === 0) {
+        return false
+      }
+    }
+    return true
+  }
+  
+  /**
+   * 获取 >= n 的下一个质数
+   * @param {number} n - 任意数字
+   */
+  private nextPrime(n: number) {
+    while (true) {
+      if (this.isPrime(n)) return n
+      n++
+    }
+  }
+}
 ```
 
 ## 树 Tree
