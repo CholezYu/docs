@@ -1,7 +1,7 @@
 ---
 title: Alog-JavaScript
 icon: keyboard
-date: 2024-05-18
+date: 2024-05-19
 ---
 
 > [!tip]
