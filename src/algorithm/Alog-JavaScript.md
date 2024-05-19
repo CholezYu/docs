@@ -14,7 +14,7 @@ date: 2024-05-19
 
 栈是一种遵循后进先出（LIFO，Last In First Out）的线性数据结构。将元素添加到栈顶称为 “入栈”，移除栈顶元素称为 “出栈”。栈可以通过 “数组” 或 “链表” 来实现，然而数组和链表可以在任意位置添加或删除元素，但是栈遵循后进先出（或先进后出）的原则，所以**栈可以视为一种受限的数组或链表**。
 
-![栈的先入后出规则](../../public/img/stack_operations.png)
+![栈的先入后出规则](../.vuepress/public/image/stack_operations.png)
 
 使用数组实现栈，可以将数组的尾部作为栈顶。入栈就是向数组尾部添加元素，出栈就是删除数组尾部的元素。
 
@@ -84,7 +84,7 @@ class Stack<T> {
 
 队列是一种遵循先进先出（FIFO，First In First Out）的线性数据结构。向队尾添加元素称为 “入队”，移除队首元素称为 “出队”。队列也可以通过 “数组” 或 “链表” 来实现，所以**队列也可以视为一种受限的数组或链表**。
 
-![队列的先入先出规则](../../public/img/queue_operations.png)
+![队列的先入先出规则](../.vuepress/public/image/queue_operations.png)
 
 使用数组实现队列，可以将数组的尾部作为队尾，将数组的头部作为队首。入队就是向数组尾部添加元素，出队就是移除数组头部的元素。
 
@@ -207,7 +207,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 
 数组是一种线性数据结构。数组元素被存储在连续的内存空间中，根据数组内存地址（首元素内存地址）和索引可以计算出元素的内存地址。**索引本质上是内存地址的偏移量**，也就是说通过**索引**可以直接访问数组元素，所以数组访问元素的效率非常高。
 
-![数组定义与存储方式](../../public/img/array_definition.png)
+![数组定义与存储方式](../.vuepress/public/image/array_definition.png)
 
 **数组的缺点**：
 
@@ -259,7 +259,7 @@ class ArrayList extends Array {
 
 链表是一种线性数据结构，链表的每个元素都是一个节点对象，各节点通过 “指针” 连接，指针指向下一个节点的内存地址，通过指针可以访问下一个节点。在链表中插入与删除节点非常方便，只需要改变指针的指向即可，所以链表插入与删除元素的效率非常高。链表的元素节点被分散存储在内存空间中，它们的内存地址无须连续，所以不用担心空间碎片的问题。
 
-![链表定义与存储方式](../../public/img/linkedlist_definition.png)
+![链表定义与存储方式](../.vuepress/public/image/linkedlist_definition.png)
 
 **链表的缺点**：
 
@@ -569,7 +569,7 @@ class DoubleLinkedList<T> {
 
 哈希表通过建立 `key` 和 `value` 之间的映射，实现高效的元素查询。我们可以使用数组来实现哈希表。在哈希表中，可以将数组中的每个空位称为 “桶”，每个桶可以存储一个键值对。因此，查询操作就是找到 `key` 对应的桶，并在桶中获取 `value`。基于 `key` 定位对应的桶，需要通过**哈希函数**来实现。
 
-![哈希表的抽象表示](../../public/img/hash_table_lookup.png)
+![哈希表的抽象表示](../.vuepress/public/image/hash_table_lookup.png)
 
 哈希函数能将一个较大的输入空间映射到一个较小的输出空间。换句话说，输入一个 `key`，可以通过哈希函数得到该 `key` 对应的键值对在数组中的存储位置。
 
@@ -583,7 +583,7 @@ index = hash(key) % capacity
 
 即使哈希函数的输入空间远远大于输出空间，但是也会存在**多个输入对应相同输出**的情况。如图所示，20336 和 12836 输入哈希函数的结果都指向同一个桶，我们将这种情况称为 “**哈希冲突**”。
 
-![哈希冲突示例](../../public/img/hash_collision.png)
+![哈希冲突示例](../.vuepress/public/image/hash_collision.png)
 
 ```ts
 12836 % 100 = 36
@@ -604,7 +604,7 @@ index = hash(key) % capacity
 
 输入 `key` ，经过哈希函数得到桶的索引，就可以访问链表头节点，接下来就是通过链表操作去查找目标元素。
 
-![链式地址哈希表](../../public/img/hash_table_chaining.png)
+![链式地址哈希表](../.vuepress/public/image/hash_table_chaining.png)
 
 ### 开放寻址
 
@@ -614,11 +614,11 @@ index = hash(key) % capacity
 
 线性探测采用固定步长（通常为 1）的线性搜索来进行探测。插入元素时，通过哈希函数计算桶索引，若发现桶内已有元素，则从冲突位置向后线性遍历，直至找到空桶，将元素插入其中。查找元素时，若发现哈希冲突，则使用相同步长向后进行线性遍历，直到找到目标元素；如果遇到空桶，说明目标元素不在哈希表中 。
 
-![开放寻址哈希表的键值对分布](../../public/img/hash_table_linear_probing.png)
+![开放寻址哈希表的键值对分布](../.vuepress/public/image/hash_table_linear_probing.png)
 
 在进行删除操作时，如果将元素直接从哈希表中移除（赋值为 null），这会导致在哈希表中产生一个空桶。再次查找元素时，线性探测到这个空桶就会返回，如果目标元素在该空桶之后，就会导致误判了该元素不存在。
 
-![在开放寻址中删除元素导致的查询问题](../../public/img/hash_table_open_addressing_deletion.png)
+![在开放寻址中删除元素导致的查询问题](../.vuepress/public/image/hash_table_open_addressing_deletion.png)
 
 为了解决这个问题，我们可以采用**懒删除**机制：**用一个常量来标记这个桶**，而不是直接从哈希表中移除元素。当线性探测到被标记的桶时，不会把它当作一个空桶，而是会向下继续遍历。
 
