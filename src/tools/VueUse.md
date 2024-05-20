@@ -1,6 +1,6 @@
 ---
 title: VueUse
-icon: valine
+icon: vueuse
 date: 2024-04-22
 ---
 

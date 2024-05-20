@@ -1,6 +1,6 @@
 ---
 title: ECharts
-icon: typescript
+icon: echarts
 ---
 
 ## 基本配置

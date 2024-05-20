@@ -1,6 +1,6 @@
 ---
 title: WebGL
-icon: typescript
+icon: webgl
 ---
 
 ## 简单使用

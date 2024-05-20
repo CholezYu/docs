@@ -1,6 +1,6 @@
 ---
 title: Threejs
-icon: typescript
+icon: threejs
 ---
 
 ## 

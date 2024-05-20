@@ -48,7 +48,7 @@ export default sidebar({
         },
         {
           text: "Webpack",
-          icon: "waline",
+          icon: "webpack",
           link: "Webpack"
         },
         {
@@ -72,6 +72,11 @@ export default sidebar({
           link: "CSS"
         },
         {
+          text: "Bootstrap",
+          icon: "bootstrap",
+          link: "Bootstrap"
+        },
+        {
           text: "Wxapp",
           icon: "wechat",
           link: "Wxapp"
@@ -87,28 +92,28 @@ export default sidebar({
       children: [
         {
           text: "Dayjs",
-          icon: "date",
+          icon: "dayjs",
           link: "Dayjs"
         },
         {
-          text: "ECharts",
-          icon: "typescript",
-          link: "ECharts"
-        },
-        {
-          text: "Exceljs",
-          icon: "table",
-          link: "Exceljs"
-        },
-        {
           text: "Lodash",
-          icon: "function",
+          icon: "lodash",
           link: "Lodash"
         },
         {
+          text: "Exceljs",
+          icon: "exceljs",
+          link: "Exceljs"
+        },
+        {
           text: "VueUse",
-          icon: "valine",
+          icon: "vueuse",
           link: "VueUse"
+        },
+        {
+          text: "ECharts",
+          icon: "echarts",
+          link: "ECharts"
         }
       ]
     },
@@ -121,17 +126,17 @@ export default sidebar({
       children: [
         {
           text: "WebGL",
-          icon: "typescript",
+          icon: "webgl",
           link: "WebGL"
         },
         {
           text: "Threejs",
-          icon: "typescript",
+          icon: "threejs",
           link: "Threejs"
         },
         {
           text: "MicroFrontend",
-          icon: "typescript",
+          icon: "microfrontend",
           link: "MicroFrontend"
         }
       ]

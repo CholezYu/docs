@@ -1,6 +1,6 @@
 ---
 title: Lodash
-icon: function
+icon: lodash
 date: 2024-05-12
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: MicroFrontend
-icon: typescript
+icon: microfrontend
 ---
 
 ## 

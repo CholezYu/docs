@@ -1,6 +1,6 @@
 ---
 title: Webpack
-icon: waline
+icon: webpack
 date: 2024-04-23
 ---
 

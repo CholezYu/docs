@@ -9,176 +9,6 @@ date: 2024-05-13
 > 你正在阅读的是 Vue 3 文档！Vue 2 已于 **2023 年 12 月 31 日**停止维护。详见 [Vue 2](../history/Vue.md)。
 >
 
-## 渲染效率优化
-
-> [!tip]
->
-> 客户端渲染效率比 Vue2 提升了 1.3~2 倍。
->
-> SSR 渲染效率比 Vue2 提升了 2~3 倍。
-
-### 静态提升
-
-Vue2 没有对静态节点进行处理，而是全部处理成虚拟节点，这导致每次解析一个静态节点时，都会先创建一个虚拟节点，再进行渲染。创建不必要的虚拟节点会占用大量内存，造成性能的浪费。
-
-由于静态节点不会发生变化，所以可以进行复用。而 Vue3 的编译器会发现静态节点并对其进行提升：
-
-- 元素节点；
-
-- 没有绑定动态内容。
-
-```ts
-// Vue2
-function render() {
-  createVNode("h1", null, "Hello World")
-}
-
-// Vue3
-const hoisted = createVNode("h1", null, "Hello World")
-function render() {
-  // 直接复用 hoisted
-}
-```
-
-静态属性也会被提升。
-
-```vue
-<div class="user">
-  {{ user.name }}
-</div>
-```
-
-```ts
-// Vue2
-function render() {
-  createVNode("div", { class: "user" }, user.name)
-}
-
-// Vue3
-const hoisted = { class: "user" }
-function render() {
-  createVNode("div", hoisted, user.name)
-}
-```
-
-### 预字符串化
-
-```vue
-<div class="menu-container">
-  <div class="logo">
-    <h1>logo</h1>
-  </div>
-  <ul class="nav">
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-  </ul>
-  <div class="user">
-    <span>{{ user.name }}</span>
-  </div>
-</div>
-```
-
-当编译器遇到大量连续的静态内容，会直接将其编译成一个普通字符串节点。
-
-> [!tip]
->
-> 在 SSR 中作用非常明显，因为服务端会向客户端不断发送字符串，预字符串化后，只需要进行字符串拼接就行了。
-
-```ts
-const _hoisted_2 = _createStaticVNode("<div class=\"logo\"><h1>logo</h1></div><ul class=\"nav\">" +
-  "<li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li>" +
-  "<li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li></ul>")
-```
-
-### 缓存事件处理函数
-
-编译器会对事件处理函数进行缓存，可以减少事件函数的创建。
-
-```vue
-<button @click="count++">plus</button>
-```
-
-```ts
-// Vue2
-function render(ctx) {
-  return createVNode("button", {
-    onClick: function($event) {
-      ctx.count++
-    }
-  })
-}
-
-// Vue3
-function render(ctx, _cache) {
-  return createVNode("button", {
-    onClick: cache[0] || (cache[0] = ($event) => (ctx.count++))
-  })
-}
-```
-
-### Block Tree
-
-Vue2 在对比新旧树的时候，并不知道哪些节点是静态的，哪些是动态的，因此只能一层一层比较，这就浪费了大部分时间在比较静态节点树上。
-
-Vue3 会把所有动态节点提取到根（Block）节点上，对比的时候只需要比较根节点。
-
-```vue
-<form>
-  <div>
-    <label>账号：</label>
-    <input v-model="form.username" />
-  </div>
-  <div>
-    <label>密码：</label>
-    <input v-model="form.password" />
-  </div>
-</form>
-```
-
-### PatchFlag
-
-Vue2 在对比每一个节点时，并不知道这些节点哪些信息会发生变化，因此只能将所有信息依次比较。
-
-Vue3 会对静态节点和动态节点进行标记，只需要比较这些标记。
-
-下列模板中，Vue2 会比较元素的类型、属性，并递归比较子节点，而 Vue3 只会比较元素的内容。
-
-```vue
-<div class="menu-container">
-  <div class="logo">
-    <h1>logo</h1>
-  </div>
-  <ul class="nav">
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-    <li><a href="">menu</a></li>
-  </ul>
-  <div class="user" :class="user.class">
-    <span :class="active">{{ user.name }}</span>
-  </div>
-</div>
-```
-
-```ts
-function render(_ctx, _cache) {
-  return (_openBlock(), _createBlock("div", _hoisted_1, [
-    _hoisted_2,
-    _createVNode("div", {
-      class: ["user", _ctx.user.class]
-    }, [
-      _createVNode("span", {
-        class: _ctx.active
-      }, _toDisplayString(_ctx.user.name), 3 /* TEXT CLASS */)
-    ], 2 /* CLASS */)
-  ]))
-}
-```
-
 ## 响应式：核心
 
 ### Ref
@@ -1277,6 +1107,176 @@ const patchKeyedChildren = (
       }
     }
   }
+}
+```
+
+## 渲染效率优化
+
+> [!tip]
+>
+> 客户端渲染效率比 Vue2 提升了 1.3~2 倍。
+>
+> SSR 渲染效率比 Vue2 提升了 2~3 倍。
+
+### 静态提升
+
+Vue2 没有对静态节点进行处理，而是全部处理成虚拟节点，这导致每次解析一个静态节点时，都会先创建一个虚拟节点，再进行渲染。创建不必要的虚拟节点会占用大量内存，造成性能的浪费。
+
+由于静态节点不会发生变化，所以可以进行复用。而 Vue3 的编译器会发现静态节点并对其进行提升：
+
+- 元素节点；
+
+- 没有绑定动态内容。
+
+```ts
+// Vue2
+function render() {
+  createVNode("h1", null, "Hello World")
+}
+
+// Vue3
+const hoisted = createVNode("h1", null, "Hello World")
+function render() {
+  // 直接复用 hoisted
+}
+```
+
+静态属性也会被提升。
+
+```vue
+<div class="user">
+  {{ user.name }}
+</div>
+```
+
+```ts
+// Vue2
+function render() {
+  createVNode("div", { class: "user" }, user.name)
+}
+
+// Vue3
+const hoisted = { class: "user" }
+function render() {
+  createVNode("div", hoisted, user.name)
+}
+```
+
+### 预字符串化
+
+```vue
+<div class="menu-container">
+  <div class="logo">
+    <h1>logo</h1>
+  </div>
+  <ul class="nav">
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+  </ul>
+  <div class="user">
+    <span>{{ user.name }}</span>
+  </div>
+</div>
+```
+
+当编译器遇到大量连续的静态内容，会直接将其编译成一个普通字符串节点。
+
+> [!tip]
+>
+> 在 SSR 中作用非常明显，因为服务端会向客户端不断发送字符串，预字符串化后，只需要进行字符串拼接就行了。
+
+```ts
+const _hoisted_2 = _createStaticVNode("<div class=\"logo\"><h1>logo</h1></div><ul class=\"nav\">" +
+  "<li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li>" +
+  "<li><a href=\"\">menu</a></li><li><a href=\"\">menu</a></li></ul>")
+```
+
+### 缓存事件处理函数
+
+编译器会对事件处理函数进行缓存，可以减少事件函数的创建。
+
+```vue
+<button @click="count++">plus</button>
+```
+
+```ts
+// Vue2
+function render(ctx) {
+  return createVNode("button", {
+    onClick: function($event) {
+      ctx.count++
+    }
+  })
+}
+
+// Vue3
+function render(ctx, _cache) {
+  return createVNode("button", {
+    onClick: cache[0] || (cache[0] = ($event) => (ctx.count++))
+  })
+}
+```
+
+### Block Tree
+
+Vue2 在对比新旧树的时候，并不知道哪些节点是静态的，哪些是动态的，因此只能一层一层比较，这就浪费了大部分时间在比较静态节点树上。
+
+Vue3 会把所有动态节点提取到根（Block）节点上，对比的时候只需要比较根节点。
+
+```vue
+<form>
+  <div>
+    <label>账号：</label>
+    <input v-model="form.username" />
+  </div>
+  <div>
+    <label>密码：</label>
+    <input v-model="form.password" />
+  </div>
+</form>
+```
+
+### PatchFlag
+
+Vue2 在对比每一个节点时，并不知道这些节点哪些信息会发生变化，因此只能将所有信息依次比较。
+
+Vue3 会对静态节点和动态节点进行标记，只需要比较这些标记。
+
+下列模板中，Vue2 会比较元素的类型、属性，并递归比较子节点，而 Vue3 只会比较元素的内容。
+
+```vue
+<div class="menu-container">
+  <div class="logo">
+    <h1>logo</h1>
+  </div>
+  <ul class="nav">
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+    <li><a href="">menu</a></li>
+  </ul>
+  <div class="user" :class="user.class">
+    <span :class="active">{{ user.name }}</span>
+  </div>
+</div>
+```
+
+```ts
+function render(_ctx, _cache) {
+  return (_openBlock(), _createBlock("div", _hoisted_1, [
+    _hoisted_2,
+    _createVNode("div", {
+      class: ["user", _ctx.user.class]
+    }, [
+      _createVNode("span", {
+        class: _ctx.active
+      }, _toDisplayString(_ctx.user.name), 3 /* TEXT CLASS */)
+    ], 2 /* CLASS */)
+  ]))
 }
 ```
 

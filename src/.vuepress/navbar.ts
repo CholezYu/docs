@@ -43,7 +43,7 @@ export default navbar([
           },
           {
             text: "Webpack",
-            icon: "waline",
+            icon: "webpack",
             link: "Webpack"
           },
           {
@@ -67,6 +67,11 @@ export default navbar([
             link: "CSS"
           },
           {
+            text: "Bootstrap",
+            icon: "bootstrap",
+            link: "Bootstrap"
+          },
+          {
             text: "Wxapp",
             icon: "wechat",
             link: "Wxapp"
@@ -81,28 +86,28 @@ export default navbar([
         children: [
           {
             text: "Dayjs",
-            icon: "date",
+            icon: "dayjs",
             link: "Dayjs"
           },
           {
-            text: "ECharts",
-            icon: "typescript",
-            link: "ECharts"
-          },
-          {
-            text: "Exceljs",
-            icon: "table",
-            link: "Exceljs"
-          },
-          {
             text: "Lodash",
-            icon: "function",
+            icon: "lodash",
             link: "Lodash"
           },
           {
+            text: "Exceljs",
+            icon: "exceljs",
+            link: "Exceljs"
+          },
+          {
             text: "VueUse",
-            icon: "valine",
+            icon: "vueuse",
             link: "VueUse"
+          },
+          {
+            text: "ECharts",
+            icon: "echarts",
+            link: "ECharts"
           }
         ]
       }
