@@ -2,7 +2,6 @@
 title: Java
 icon: java
 date: 2023-12-14
-lang: zh-CN
 description: Java
 ---
 

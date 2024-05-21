@@ -1,8 +1,7 @@
 ---
 title: HTML5
 icon: html
-lang: zh-CN
-description: HTML5
+description: HTML
 ---
 
 ## 语义化标签

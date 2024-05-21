@@ -2,7 +2,6 @@
 title: Wxapp
 icon: wechat
 date: 2024-04-22
-lang: zh-CN
 description: 微信小程序
 ---
 

@@ -2,7 +2,6 @@
 title: Nodejs
 icon: nodeJS
 date: 2024-05-04
-lang: zh-CN
 description: Nodejs
 ---
 

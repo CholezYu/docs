@@ -2,7 +2,6 @@
 title: TypeScript
 icon: typescript
 date: 2024-04-13
-lang: zh-CN
 description: TypeScript
 ---
 

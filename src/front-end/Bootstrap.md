@@ -1,7 +1,6 @@
 ---
 title: Bootstrap
 icon: bootstrap
-lang: zh-CN
 description: Bootstrap
 ---
 

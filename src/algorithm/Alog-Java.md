@@ -1,8 +1,7 @@
 ---
 title: Alog-Java
 icon: keyboard
-lang: zh-CN
-description: 数据结构与算法-Java
+description: 数据结构与算法
 ---
 
 ## 算法概述

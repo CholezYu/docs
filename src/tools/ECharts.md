@@ -1,7 +1,6 @@
 ---
 title: ECharts
 icon: echarts
-lang: zh-CN
 description: ECharts
 ---
 

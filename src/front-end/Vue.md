@@ -2,7 +2,6 @@
 title: Vue
 icon: vue
 date: 2024-05-13
-lang: zh-CN
 description: Vue
 ---
 

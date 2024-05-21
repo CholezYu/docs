@@ -1,7 +1,6 @@
 ---
 title: WebGL
 icon: webgl
-lang: zh-CN
 description: WebGL
 ---
 

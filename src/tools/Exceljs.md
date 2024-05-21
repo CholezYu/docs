@@ -2,7 +2,6 @@
 title: Exceljs
 icon: exceljs
 date: 2024-01-14
-lang: zh-CN
 description: Exceljs
 ---
 
