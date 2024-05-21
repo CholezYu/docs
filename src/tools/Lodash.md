@@ -2,6 +2,8 @@
 title: Lodash
 icon: lodash
 date: 2024-05-12
+lang: zh-CN
+description: Lodash
 ---
 
 ## 数组方法

@@ -1,6 +1,8 @@
 ---
 title: ECharts
 icon: echarts
+lang: zh-CN
+description: ECharts
 ---
 
 ## 基本配置

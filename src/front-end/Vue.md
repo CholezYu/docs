@@ -2,6 +2,8 @@
 title: Vue
 icon: vue
 date: 2024-05-13
+lang: zh-CN
+description: Vue
 ---
 
 > [!tip]
@@ -1110,7 +1112,7 @@ const patchKeyedChildren = (
 }
 ```
 
-## 渲染效率优化
+## 性能优化
 
 > [!tip]
 >

@@ -2,6 +2,8 @@
 title: JavaScript
 icon: javascript
 date: 2024-05-11
+lang: zh-CN
+description: JavaScript
 ---
 
 ## 布尔判定

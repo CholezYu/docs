@@ -1,6 +1,8 @@
 ---
 title: Python
 icon: python
+lang: zh-CN
+description: Python
 ---
 
 ## 数据类型

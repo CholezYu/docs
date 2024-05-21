@@ -2,6 +2,8 @@
 title: Vue
 icon: vue
 date: 2024-04-22
+lang: zh-CN
+description: Vue2
 ---
 
 > [!caution]

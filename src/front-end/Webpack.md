@@ -2,6 +2,8 @@
 title: Webpack
 icon: webpack
 date: 2024-04-23
+lang: zh-CN
+description: Webpack
 ---
 
 ## 基本配置

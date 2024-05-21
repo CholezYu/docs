@@ -1,6 +1,8 @@
 ---
 title: CSS
 icon: css
+lang: zh-CN
+description: CSS
 ---
 
 ## 选择器

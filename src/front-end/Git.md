@@ -2,6 +2,8 @@
 title: Git
 icon: git
 date: 2024-05-06
+lang: zh-CN
+description: Git
 ---
 
 ## 基本操作

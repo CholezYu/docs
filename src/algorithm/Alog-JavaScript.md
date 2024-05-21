@@ -2,6 +2,8 @@
 title: Alog-JavaScript
 icon: keyboard
 date: 2024-05-19
+lang: zh-CN
+description: 数据结构与算法-JavaScript
 ---
 
 > [!tip]

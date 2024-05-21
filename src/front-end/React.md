@@ -2,6 +2,8 @@
 title: React
 icon: react
 date: 2024-01-26
+lang: zh-CN
+description: React
 ---
 
 ## Hooks

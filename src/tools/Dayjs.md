@@ -2,6 +2,8 @@
 title: Dayjs
 icon: dayjs
 date: 2024-05-12
+lang: zh-CN
+description: Dayjs
 ---
 
 ## 常用日期

@@ -2,6 +2,8 @@
 title: VueUse
 icon: vueuse
 date: 2024-04-22
+lang: zh-CN
+description: VueUse
 ---
 
 ## useStorage

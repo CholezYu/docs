@@ -1,6 +1,8 @@
 ---
 title: Bootstrap
 icon: bootstrap
+lang: zh-CN
+description: Bootstrap
 ---
 
 ## 栅格系统

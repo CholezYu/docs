@@ -2,6 +2,8 @@
 title: Nginx
 icon: nginx
 date: 2024-05-09
+lang: zh-CN
+description: Nginx
 ---
 
 ## 部署前端项目
