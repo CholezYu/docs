@@ -1,7 +1,12 @@
 import { navbar } from "vuepress-theme-hope"
 
 export default navbar([
-  "/",
+  {
+    text: "主页",
+    icon: "home",
+    link: "/"
+  },
+  
   {
     text: "导航",
     icon: "context",
@@ -113,8 +118,14 @@ export default navbar([
       }
     ]
   },
+  
   {
     text: "深入解析 Vue.js ",
     link: "http://vapor.yuwenjian.com"
+  },
+  
+  {
+    text: "我的时刻",
+    link: "http://moments.yuwenjian.com"
   }
 ])

@@ -1,7 +1,7 @@
 ---
 home: true
 icon: home
-title: 主页
+title: Web Docs
 description: Cholez Web Docs
 heroImage: /icon/icon.svg
 bgImage: https://theme-hope-assets.vuejs.press/bg/9-light.svg

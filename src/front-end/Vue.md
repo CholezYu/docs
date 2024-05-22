@@ -1,5 +1,5 @@
 ---
-title: Vue
+title: Vue 3
 icon: vue
 date: 2024-05-13
 description: Vue
