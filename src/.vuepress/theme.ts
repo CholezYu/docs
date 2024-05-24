@@ -3,7 +3,12 @@ import navbar from "./navbar.js"
 import sidebar from "./sidebar.js"
 
 export default hopeTheme({
-  hostname: "http://docs.yuwenjian.com", // http://121.41.85.87:5001
+  hostname: "http://docs.yuwenjian.com",
+  
+  // 仓库配置，用于在导航栏中显示仓库链接
+  repo: "choIez/docs",
+  
+  docsDir: "src",
   
   author: {
     name: "俞文健",
@@ -14,24 +19,19 @@ export default hopeTheme({
   
   sidebar,
   
+  // iconPrefix: "icon-",
+  
+  iconAssets: "iconfont",
+  
+  logo: "/icon/米饭.svg",
+  
+  favicon: "favicon.ico",
+  
   // 全屏
   fullscreen: false,
   
   // 深色模式
   darkmode: "disable",
-  
-  // iconPrefix: "icon-",
-  
-  iconAssets: "iconfont",
-  
-  logo: "/icon/icon.svg",
-  
-  favicon: "favicon.ico",
-  
-  // 仓库配置，用于在导航栏中显示仓库链接
-  repo: "choIez/docs",
-  
-  docsDir: "src",
   
   // copyright: false,
   
