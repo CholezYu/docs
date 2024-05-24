@@ -125,6 +125,11 @@ export default sidebar({
       collapsible: true,
       children: [
         {
+          text: "Algorithm",
+          icon: "keyboard",
+          link: "Algorithm"
+        },
+        {
           text: "WebGL",
           icon: "webgl",
           link: "WebGL"
@@ -167,25 +172,6 @@ export default sidebar({
           text: "Nginx",
           icon: "nginx",
           link: "Nginx"
-        }
-      ]
-    },
-    
-    {
-      text: "算法",
-      icon: "keyboard",
-      prefix: "algorithm/",
-      collapsible: true,
-      children: [
-        {
-          text: "Alog-JavaScript",
-          icon: "javascript",
-          link: "Alog-JavaScript"
-        },
-        {
-          text: "Alog-Java",
-          icon: "java",
-          link: "Alog-Java"
         }
       ]
     },

@@ -1,5 +1,5 @@
 ---
-title: Alog-JavaScript
+title: Algorithm
 icon: keyboard
 date: 2024-05-19
 description: 数据结构与算法
@@ -18,6 +18,10 @@ description: 数据结构与算法
 ![栈的先入后出规则](../.vuepress/public/image/stack_operations.png)
 
 使用数组实现栈，可以将数组的尾部作为栈顶。入栈就是向数组尾部添加元素，出栈就是删除数组尾部的元素。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class Stack<T> {
@@ -81,6 +85,8 @@ class Stack<T> {
 }
 ```
 
+:::
+
 ### 队列 Queue
 
 队列是一种遵循先进先出（FIFO，First In First Out）的线性数据结构。向队尾添加元素称为 “入队”，移除队首元素称为 “出队”。队列也可以通过 “数组” 或 “链表” 来实现，所以**队列也可以视为一种受限的数组或链表**。
@@ -88,6 +94,10 @@ class Stack<T> {
 ![队列的先入先出规则](../.vuepress/public/image/queue_operations.png)
 
 使用数组实现队列，可以将数组的尾部作为队尾，将数组的头部作为队首。入队就是向数组尾部添加元素，出队就是移除数组头部的元素。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class Queue<T> {
@@ -151,9 +161,15 @@ class Queue<T> {
 }
 ```
 
+:::
+
 ### 优先级队列
 
 优先级队列在插入操作时，需要比较元素的优先级，而不是先进先出，其他操作与普通队列相同。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class QueueNode<T> {
@@ -202,6 +218,8 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 }
 ```
 
+:::
+
 ## 数组与链表
 
 ### 数组 Array List
@@ -219,6 +237,10 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 - 数组的长度是不可变的，如果要扩容数组，需要建立一个更大的数组，把原数组元素依次复制到新数组。
 
 - 数组的存储空间是连续的，当数组较大时，如果空间碎片较多，内存可能无法提供足够大的连续空间。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class ArrayList extends Array {
@@ -256,6 +278,8 @@ class ArrayList extends Array {
 }
 ```
 
+:::
+
 ### 链表 Linked List
 
 链表是一种线性数据结构，链表的每个元素都是一个节点对象，各节点通过 “指针” 连接，指针指向下一个节点的内存地址，通过指针可以访问下一个节点。在链表中插入与删除节点非常方便，只需要改变指针的指向即可，所以链表插入与删除元素的效率非常高。链表的元素节点被分散存储在内存空间中，它们的内存地址无须连续，所以不用担心空间碎片的问题。
@@ -267,6 +291,10 @@ class ArrayList extends Array {
 - 访问效率低：链表需要从头节点开始，向后遍历，直到找到目标节点。
 
 - 占用内存大：链表除了需要存储节点值，还要存储节点指针。如果节点数据越多，指针的内存影响就越小。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class LinkedNode<T> {
@@ -396,9 +424,15 @@ class LinkedList<T> {
 }
 ```
 
+:::
+
 ### 双向链表
 
 双向链表每个元素节点都有两个指针，分别指向上一个节点和下一个节点。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class DoubleLinkedListNode<T> {
@@ -564,6 +598,8 @@ class DoubleLinkedList<T> {
 }
 ```
 
+:::
+
 ## 哈希表
 
 ### 哈希函数
@@ -643,6 +679,10 @@ index = hash(key) % capacity
 
 链式地址和开放寻址**只能保证哈希表可以在发生冲突时正常工作，而无法减少哈希冲突的发生**。所以，我们需要设计一种哈希算法去降低哈希冲突的发生概率。一个优秀的哈希算法需要使用霍纳算法并与质数进行运算。
 
+::: tabs#code
+
+@tab TS
+
 ```ts
 const hash = (key: string, capacity: number) => {
   let hashCode = 0
@@ -657,11 +697,17 @@ const hash = (key: string, capacity: number) => {
 }
 ```
 
+:::
+
 然而，这类简单的算法远远没有达到哈希算法的设计目标。在实际中，我们通常会用一些标准哈希算法，例如 MD5、SHA-1、SHA-2 和 SHA-3 等。它们可以将任意长度的输入数据映射到恒定长度的哈希值。
 
 ### 哈希表 Hash Map
 
 **真实开发中链式地址的使用情况更多**。所以我们使用链式地址来封装一个哈希表。
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 class Pair {
@@ -842,11 +888,27 @@ class HashMap {
 }
 ```
 
-## 树 Tree
+:::
 
-### 二叉树
+## 树
 
+### 二叉树 Binary Tree
 
+树是一种非线性数据结构。如果一种树中每个节点最多只有两个子节点，那么我们将它称为 “二叉树”。二叉树的每个节点包含节点值、左子节点引用和右子节点引用。
+
+二叉树的常用术语如图所示：
+
+- 根节点：二叉树的顶层节点。
+
+- 叶节点：没有子节点的节点，即度为 2。
+
+- 边：连接两个节点的线段
+
+![二叉树的常用术语](../.vuepress/public/image/binary_tree_terminology.png)
+
+```
+度为2的节点数 + 1 = 叶节点数
+```
 
 ### 平衡树
 
@@ -872,13 +934,45 @@ class HashMap {
 
 ## 查找算法
 
+### 时间复杂度
+
+比较次数与数组长度 n 的关系。
+
+$O(1)$ < $O(log_2n)$ < $O(n)$ < $O(nlog_2n)$ < $O(n^2)$ < $O(n^3)$ < $O(2^n)$ < $O(n!)$ < $O(n^n)$
+
+### 空间复杂度
+
+消耗内存与数组长度 n 的关系。
+
+### 稳定性
+
+如果 A 和 B 的值相等，但排序后 A、B 的次序保持不变，则这种算法是稳定的。
+
 ### 二分查找
 
 
 
 ## 排序算法
 
+| 排序方式 | 时间复杂度（平均） | 时间复杂度（最坏） | 时间复杂度（最好） | 空间复杂度   | 稳定性 |
+| -------- | ------------------ | ------------------ | ------------------ | ------------ | ------ |
+| 插入排序 | $O(n^2)$           | $O(n^2)$           | $O(n)$             | $O(1)$       | 稳定   |
+| 希尔排序 | $O(n^{1.3})$       | $O(n^2)$           | $O(n)$             | $O(1)$       | 不稳定 |
+| 选择排序 | $O(n^2)$           | $O(n^2)$           | $O(n^2)$           | $O(1)$       | 不稳定 |
+| 堆排序   | $O(nlog_2n)$       | $O(nlog_2n)$       | $O(nlog_2n)$       | $O(1)$       | 不稳定 |
+| 冒泡排序 | $O(n^2)$           | $O(n^2)$           | $O(n)$             | $O(1)$       | 稳定   |
+| 快速排序 | $O(nlog_2n)$       | $O(n^2)$           | $O(nlog_2n)$       | $O(nlog_2n)$ | 不稳定 |
+| 归并排序 | $O(nlog_2n)$       | $O(nlog_2n)$       | $O(nlog_2n)$       | $O(n)$       | 稳定   |
+|          |                    |                    |                    |              |        |
+| 计数排序 | $O(n+k)$           | $O(n+k)$           | $O(n+k)$           | $O(n+k)$     | 稳定   |
+| 桶排序   | $O(n+k)$           | $O(n^2)$           | $O(n)$             | $O(n+k)$     | 稳定   |
+| 基数排序 | $O(n*k)$           | $O(n*k)$           | $O(n*k)$           | $O(n+k)$     | 稳定   |
+
 ### 冒泡排序
+
+::: tabs#code
+
+@tab TS
 
 ```ts
 ArrayList.prototype.bubbleSort = function () {
@@ -894,6 +988,32 @@ ArrayList.prototype.bubbleSort = function () {
   }
 }
 ```
+
+@tab Java
+
+```java
+int[] arr = { 34, 54, 3, 2, 84, 65, 7, 19, 5, 76, 67 };
+
+for (int i = 0; i < arr.length - 1; i++) {
+  boolean flag = true;
+  
+  for (int j = 1; j < arr.length - i; j++) {
+    if (arr[j - 1] > arr[j]) {
+      int temp = arr[j - 1];
+      arr[j - 1] = arr[j];
+      arr[j] = temp;
+      
+      flag = false;
+    }
+  }
+  
+  if (flag) {
+    break;
+  }
+}
+```
+
+:::
 
 ### 选择排序
 
