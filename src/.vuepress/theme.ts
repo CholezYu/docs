@@ -23,7 +23,7 @@ export default hopeTheme({
   
   iconAssets: "iconfont",
   
-  logo: "/icon/米饭.svg",
+  logo: "/icon/icon.svg",
   
   favicon: "favicon.ico",
   

@@ -16,6 +16,6 @@ actions:
     link: https://github.com/choIez/docs
   - text: 开始使用
     icon: markdown
-    link: ./overview/
+    link: ./overview
     type: primary
 ---

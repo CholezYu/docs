@@ -5,8 +5,7 @@ export default sidebar({
     {
       text: "概览",
       icon: "guide",
-      prefix: "overview/",
-      link: "overview/",
+      link: "overview",
       collapsible: true
     },
     
@@ -125,11 +124,6 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "Algorithm",
-          icon: "keyboard",
-          link: "Algorithm"
-        },
-        {
           text: "WebGL",
           icon: "webgl",
           link: "WebGL"
@@ -174,6 +168,12 @@ export default sidebar({
           link: "Nginx"
         }
       ]
+    },
+    
+    {
+      text: "算法",
+      icon: "hot",
+      link: "algorithm/算法"
     },
     
     {
