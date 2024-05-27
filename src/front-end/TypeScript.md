@@ -1,7 +1,6 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-04-13
 description: TypeScript
 ---
 

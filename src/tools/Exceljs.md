@@ -1,7 +1,6 @@
 ---
 title: Exceljs
 icon: exceljs
-date: 2024-01-14
 description: Exceljs
 ---
 

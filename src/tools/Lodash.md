@@ -1,7 +1,6 @@
 ---
 title: Lodash
 icon: lodash
-date: 2024-05-12
 description: Lodash
 ---
 

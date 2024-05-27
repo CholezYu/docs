@@ -1,7 +1,6 @@
 ---
 title: Git
 icon: git
-date: 2024-05-06
 description: Git
 ---
 

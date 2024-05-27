@@ -1,7 +1,6 @@
 ---
 title: Dayjs
 icon: dayjs
-date: 2024-05-12
 description: Dayjs
 ---
 

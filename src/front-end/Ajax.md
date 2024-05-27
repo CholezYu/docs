@@ -1,8 +1,6 @@
 ---
 title: Ajax
 icon: ajax
-date: 2024-05-03
-
 description: Ajax
 ---
 

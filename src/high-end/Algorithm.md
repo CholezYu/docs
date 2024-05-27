@@ -1,7 +1,6 @@
 ---
 title: Algorithm
 icon: keyboard
-date: 2024-05-24
 description: 数据结构与算法
 ---
 
@@ -11,7 +10,7 @@ description: 数据结构与算法
 
 ## 栈与队列
 
-### 栈 Stack
+### 栈
 
 栈是一种遵循后进先出（LIFO，Last In First Out）的线性数据结构。将元素添加到栈顶称为 “入栈”，移除栈顶元素称为 “出栈”。栈可以通过 “数组” 或 “链表” 来实现，然而数组和链表可以在任意位置添加或删除元素，但是栈遵循后进先出（或先进后出）的原则，所以**栈可以视为一种受限的数组或链表**。
 
@@ -34,7 +33,7 @@ class Stack<T> {
   /**
    * 获取栈的值
    */
-  get value() {
+  get val() {
     return this.stack
   }
   
@@ -54,10 +53,10 @@ class Stack<T> {
   
   /**
    * 入栈（向栈顶添加元素）
-   * @param value - 入栈的元素
+   * @param val - 入栈的元素
    */
-  push(value: T) {
-    this.stack.push(value)
+  push(val: T) {
+    this.stack.push(val)
   }
   
   /**
@@ -77,7 +76,7 @@ class Stack<T> {
   /**
    * 遍历栈
    */
-  each(callback: (value: T, index: number) => void) {
+  each(callback: (val: T, index: number) => void) {
     for (let i = 0; i < this.stack.length; i++) {
       callback(this.stack[i], i)
     }
@@ -87,7 +86,7 @@ class Stack<T> {
 
 :::
 
-### 队列 Queue
+### 队列
 
 队列是一种遵循先进先出（FIFO，First In First Out）的线性数据结构。向队尾添加元素称为 “入队”，移除队首元素称为 “出队”。队列也可以通过 “数组” 或 “链表” 来实现，所以**队列也可以视为一种受限的数组或链表**。
 
@@ -110,7 +109,7 @@ class Queue<T> {
   /**
    * 获取队列的值
    */
-  get value() {
+  get val() {
     return this.queue
   }
   
@@ -130,10 +129,10 @@ class Queue<T> {
   
   /**
    * 入队（向队尾添加元素）
-   * @param value - 入队的元素
+   * @param val - 入队的元素
    */
-  enqueue(value: T) {
-    this.queue.push(value)
+  enqueue(val: T) {
+    this.queue.push(val)
   }
   
   /**
@@ -153,7 +152,7 @@ class Queue<T> {
   /**
    * 遍历队列
    */
-  each(callback: (value: T, index: number) => void) {
+  each(callback: (val: T, index: number) => void) {
     for (let i = 0; i < this.queue.length; i++) {
       callback(this.queue[i], i)
     }
@@ -173,12 +172,12 @@ class Queue<T> {
 
 ```ts
 class QueueNode<T> {
-  value: T
-  priority: number
+  val: T
+  num: number
   
-  constructor(value: T, priority: number) {
-    this.value = value
-    this.priority = priority
+  constructor(val: T, num: number) {
+    this.val = val
+    this.num = num
   }
 }
 
@@ -192,18 +191,17 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
    * @param node - 插入的元素
    */
   enqueue(node: QueueNode<T>) {
-    const { value, priority } = node
-    const queueNode = new QueueNode(value, priority)
+    const newNode = new QueueNode(node.val, node.num)
     
-    if (this.value.length === 0) {
-      this.value.push(queueNode)
+    if (this.val.length === 0) {
+      this.val.push(newNode)
     }
     else {
       // 标记节点的优先级是否最低
       let lowest = true
-      for (let i = 0; i < this.value.length; i++) {
-        if (queueNode.priority < this.value[i].priority) {
-          this.value.splice(i, 0, queueNode)
+      for (let i = 0; i < this.val.length; i++) {
+        if (newNode.num < this.val[i].num) {
+          this.val.splice(i, 0, newNode)
           // 优先级不是最低
           lowest = false
           break
@@ -211,7 +209,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
       }
       if (lowest) {
         // 优先级最低，插入到最后
-        this.value.push(queueNode)
+        this.val.push(newNode)
       }
     }
   }
@@ -222,7 +220,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
 
 ## 数组与链表
 
-### 数组 Array List
+### 数组
 
 数组是一种线性数据结构。数组元素被存储在连续的内存空间中，根据数组内存地址（首元素内存地址）和索引可以计算出元素的内存地址。**索引本质上是内存地址的偏移量**，也就是说通过**索引**可以直接访问数组元素，所以数组访问元素的效率非常高。
 
@@ -280,7 +278,7 @@ class ArrayList extends Array {
 
 :::
 
-### 链表 Linked List
+### 链表
 
 链表是一种线性数据结构，链表的每个元素都是一个节点对象，各节点通过 “指针” 连接，指针指向下一个节点的内存地址，通过指针可以访问下一个节点。在链表中插入与删除节点非常方便，只需要改变指针的指向即可，所以链表插入与删除元素的效率非常高。链表的元素节点被分散存储在内存空间中，它们的内存地址无须连续，所以不用担心空间碎片的问题。
 
@@ -298,30 +296,30 @@ class ArrayList extends Array {
 
 ```ts
 class LinkedNode<T> {
+  val: T
   next: LinkedNode<T> | null
-  value: T
   
-  constructor(value: T) {
-    this.value = value
+  constructor(val: T) {
+    this.val = val
     this.next = null
   }
 }
 
 class LinkedList<T> {
   head: LinkedNode<T> | null
-  length: number
+  size: number
   
   constructor() {
     this.head = null
-    this.length = 0
+    this.size = 0
   }
   
   /**
    * 向链表尾部添加节点
-   * @param value - 添加的节点值
+   * @param val - 添加的节点值
    */
-  append(value: T) {
-    const node = new LinkedNode(value)
+  append(val: T) {
+    const node = new LinkedNode(val)
     if (!this.head) {
       this.head = node
     }
@@ -332,33 +330,33 @@ class LinkedList<T> {
       }
       current.next = node
     }
-    this.length++
+    this.size++
   }
   
   /**
    * 向链表指定位置插入节点
    * @param index - 索引值
-   * @param value - 插入的节点值
+   * @param val - 插入的节点值
    */
-  insert(index: number, value: T) {
-    if (index < 0 || index > this.length) throw new Error("out of range")
+  insert(index: number, val: T) {
+    if (index < 0 || index > this.size) throw new Error("out of range")
     
-    const node = new LinkedNode(value)
+    const node = new LinkedNode(val)
     if (index === 0) {
       node.next = this.head
       this.head = node
     }
     else {
       let current = this.head
-      let previous: LinkedNode<T> | null = null
+      let prev: LinkedNode<T> | null = null
       for (let i = 0; i < index; i++) {
-        previous = current
+        prev = current
         current = current!.next
       }
-      previous!.next = node
+      prev!.next = node
       node.next = current
     }
-    this.length++
+    this.size++
   }
   
   /**
@@ -366,7 +364,7 @@ class LinkedList<T> {
    * @param index - 索引值
    */
   find(index: number) {
-    if (index < 0 || index > this.length) throw new Error("out of range")
+    if (index < 0 || index > this.size) throw new Error("out of range")
     
     let current = this.head
     for (let i = 0; i < index; i++) {
@@ -378,11 +376,11 @@ class LinkedList<T> {
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
-   * @param value - 修改的节点值
+   * @param val - 修改的节点值
    */
-  update(index: number, value: T) {
+  update(index: number, val: T) {
     const node = this.find(index)
-    node!.value = value
+    node!.val = val
   }
   
   /**
@@ -390,35 +388,35 @@ class LinkedList<T> {
    * @param index - 索引值
    */
   remove(index: number) {
-    if (index < 0 || index >= this.length) throw new Error("out of range")
+    if (index < 0 || index >= this.size) throw new Error("out of range")
     
     let current = this.head
-    let previous: LinkedNode<T> | null = null
+    let prev: LinkedNode<T> | null = null
     if (index === 0) {
       this.head = current!.next
       current = null
     }
     else {
       for (let i = 0; i < index; i++) {
-        previous = current
+        prev = current
         current = current!.next
       }
-      previous!.next = current!.next
+      prev!.next = current!.next
       current = null
     }
-    this.length--
+    this.size--
   }
   
   /**
    * 遍历链表
    */
-  each(callback: (value: T, index: number) => void) {
+  each(callback: (val: T, index: number) => void) {
     let current = this.head
     let index = 0
-    callback(current!.value, index++)
+    callback(current!.val, index++)
     while (current!.next) {
       current = current!.next
-      callback(current.value, index++)
+      callback(current.val, index++)
     }
   }
 }
@@ -435,35 +433,35 @@ class LinkedList<T> {
 @tab TS
 
 ```ts
-class DoubleLinkedListNode<T> {
-  value: T
-  prev: DoubleLinkedListNode<T> | null
-  next: DoubleLinkedListNode<T> | null
+class LinkedNode<T> {
+  val: T
+  prev: LinkedNode<T> | null
+  next: LinkedNode<T> | null
   
-  constructor(value: T) {
-    this.value = value
+  constructor(val: T) {
+    this.val = val
     this.prev = null
     this.next = null
   }
 }
 
 class DoubleLinkedList<T> {
-  head: DoubleLinkedListNode<T> | null
-  tail: DoubleLinkedListNode<T> | null
-  length: number
+  head: LinkedNode<T> | null
+  tail: LinkedNode<T> | null
+  size: number
   
   constructor() {
     this.head = null
     this.tail = null
-    this.length = 0
+    this.size = 0
   }
   
   /**
    * 向链表尾部添加节点
-   * @param value - 添加的节点值
+   * @param val - 添加的节点值
    */
-  append(value: T) {
-    const node = new DoubleLinkedListNode(value)
+  append(val: T) {
+    const node = new LinkedNode(val)
     if (!this.head) {
       this.head = node
       this.tail = node
@@ -473,19 +471,19 @@ class DoubleLinkedList<T> {
       node.prev = this.tail
       this.tail = node
     }
-    this.length++
+    this.size++
   }
   
   /**
    * 向链表指定位置插入节点
    * @param index - 索引值
-   * @param value - 插入的节点值
+   * @param val - 插入的节点值
    */
-  insert(index: number, value: T) {
-    if (index < 0 || index > this.length) throw new Error("out of range")
+  insert(index: number, val: T) {
+    if (index < 0 || index > this.size) throw new Error("out of range")
     
-    const node = new DoubleLinkedListNode(value)
-    if (this.length === 0) {
+    const node = new LinkedNode(val)
+    if (this.size === 0) {
       this.head = node
       this.tail = node
     }
@@ -495,7 +493,7 @@ class DoubleLinkedList<T> {
         node.next = this.head
         this.head = node
       }
-      else if (index === this.length) {
+      else if (index === this.size) {
         this.tail!.next = node
         node.prev = this.tail
         this.tail = node
@@ -511,7 +509,7 @@ class DoubleLinkedList<T> {
         current!.prev = node
       }
     }
-    this.length++
+    this.size++
   }
   
   /**
@@ -519,10 +517,10 @@ class DoubleLinkedList<T> {
    * @param index - 索引值
    */
   find(index: number) {
-    if (index < 0 || index > this.length) throw new Error("out of range")
+    if (index < 0 || index > this.size) throw new Error("out of range")
     
     // 从前往后
-    if (this.length / 2 > index) {
+    if (this.size / 2 > index) {
       let current = this.head
       for (let i = 0; i < index; i++) {
         current = current!.next
@@ -532,7 +530,7 @@ class DoubleLinkedList<T> {
     // 从后往前
     else {
       let current = this.tail
-      for (let i = this.length - 1; i > index; i--) {
+      for (let i = this.size - 1; i > index; i--) {
         current = current!.prev
       }
       return current
@@ -542,11 +540,11 @@ class DoubleLinkedList<T> {
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
-   * @param value - 修改的节点值
+   * @param val - 修改的节点值
    */
-  update(index: number, value: T) {
+  update(index: number, val: T) {
     const node = this.find(index)
-    node!.value = value
+    node!.val = val
   }
   
   /**
@@ -554,10 +552,10 @@ class DoubleLinkedList<T> {
    * @param index - 索引值
    */
   remove(index: number) {
-    if (index < 0 || index >= this.length) throw new Error("out of range")
+    if (index < 0 || index >= this.size) throw new Error("out of range")
     
     let current = this.head
-    if (this.length === 1) {
+    if (this.size === 1) {
       this.head = null
       this.tail = null
     }
@@ -566,7 +564,7 @@ class DoubleLinkedList<T> {
         this.head!.next!.prev = null
         this.head = this.head!.next
       }
-      else if (index === this.length - 1) {
+      else if (index === this.size - 1) {
         current = this.tail
         this.tail!.prev!.next = null
         this.tail = this.tail!.prev
@@ -579,20 +577,20 @@ class DoubleLinkedList<T> {
         current!.next!.prev = current!.prev
       }
     }
-    this.length--
-    return current!.value
+    this.size--
+    return current!.val
   }
   
   /**
    * 遍历链表
    */
-  each(callback: (value: T, index: number) => void) {
+  each(callback: (val: T, index: number) => void) {
     let current = this.head
     let index = 0
-    callback(current!.value, index++)
+    callback(current!.val, index++)
     while (current!.next) {
       current = current!.next
-      callback(current.value, index++)
+      callback(current.val, index++)
     }
   }
 }
@@ -701,7 +699,7 @@ const hash = (key: string, capacity: number) => {
 
 然而，这类简单的算法远远没有达到哈希算法的设计目标。在实际中，我们通常会用一些标准哈希算法，例如 MD5、SHA-1、SHA-2 和 SHA-3 等。它们可以将任意长度的输入数据映射到恒定长度的哈希值。
 
-### 哈希表 Hash Map
+### 哈希表
 
 **真实开发中链式地址的使用情况更多**。所以我们使用链式地址来封装一个哈希表。
 
@@ -755,7 +753,7 @@ class HashMap {
   /**
    * 获取哈希表的值
    */
-  get value() {
+  get val() {
     return this.buckets
   }
   
@@ -926,9 +924,7 @@ class HashMap {
 
 - 对于非空二叉树，如果叶节点（度为 0）数为 $n0$，度为 2 的非叶节点数为 $n2$，则满足关系：$n0$ = $n2$ + 1。
 
-
-
-### 二叉搜索树 Binary Tree
+### 二叉搜索树
 
 
 
@@ -999,10 +995,10 @@ $O(1)$ < $O(log_2n)$ < $O(n)$ < $O(nlog_2n)$ < $O(n^2)$ < $O(n^3)$ < $O(2^n)$ < 
 ```ts
 ArrayList.prototype.bubbleSort = function () {
   let flag = true
-  for (let i = 0; i < this.value.length - 1; i++) {
-    for (let j = 1; j < this.value.length - i; j++) {
-      if (this.value[j - 1] > this.value[j]) {
-        [this.value[j - 1], this.value[j]] = [this.value[j], this.value[j - 1]]
+  for (let i = 0; i < this.val.length - 1; i++) {
+    for (let j = 1; j < this.val.length - i; j++) {
+      if (this.val[j - 1] > this.val[j]) {
+        [this.val[j - 1], this.val[j]] = [this.val[j], this.val[j - 1]]
         flag = false
       }
     }

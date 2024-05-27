@@ -1,7 +1,6 @@
 ---
 title: Nginx
 icon: nginx
-date: 2024-05-09
 description: Nginx
 ---
 

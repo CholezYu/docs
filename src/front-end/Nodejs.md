@@ -1,7 +1,6 @@
 ---
 title: Nodejs
 icon: nodeJS
-date: 2024-05-04
 description: Nodejs
 ---
 
