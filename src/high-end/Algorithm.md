@@ -1,6 +1,7 @@
 ---
 title: Algorithm
 icon: keyboard
+date: 2024-05-24
 description: 数据结构与算法
 ---
 

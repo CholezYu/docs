@@ -1,6 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
+date: 2024-05-11
 description: JavaScript
 ---
 
