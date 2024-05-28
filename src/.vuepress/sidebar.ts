@@ -86,7 +86,7 @@ export default sidebar({
     {
       text: "工具",
       icon: "tool",
-      prefix: "tools/",
+      prefix: "library/",
       collapsible: true,
       children: [
         {
@@ -173,7 +173,7 @@ export default sidebar({
     {
       text: "算法",
       icon: "hot",
-      link: "algorithm/算法"
+      link: "high-end/Algorithm"
     },
     
     {

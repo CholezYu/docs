@@ -80,7 +80,7 @@ export default navbar([
       {
         text: "工具",
         icon: "tool",
-        prefix: "tools/",
+        prefix: "library/",
         children: [
           {
             text: "Dayjs",
@@ -115,7 +115,7 @@ export default navbar([
   {
     text: "算法",
     icon: "hot",
-    link: "algorithm/算法"
+    link: "high-end/Algorithm"
   },
   
   {
