@@ -46,13 +46,6 @@ class Stack<T> {
   }
   
   /**
-   * 判断栈是否为空
-   */
-  isEmpty() {
-    return this.stack.length === 0
-  }
-  
-  /**
    * 入栈（向栈顶添加元素）
    * @param val - 入栈的元素
    */
@@ -122,13 +115,6 @@ class Queue<T> {
   }
   
   /**
-   * 判断队列是否为空
-   */
-  isEmpty() {
-    return this.queue.length === 0
-  }
-  
-  /**
    * 入队（向队尾添加元素）
    * @param val - 入队的元素
    */
@@ -174,35 +160,39 @@ class Queue<T> {
 ```ts
 class QueueNode<T> {
   val: T
-  num: number
+  priority: number
   
-  constructor(val: T, num: number) {
+  constructor(val: T, priority: number) {
     this.val = val
-    this.num = num
+    this.priority = priority
   }
 }
 
 class PriorityQueue<T> extends Queue<QueueNode<T>> {
-  constructor() {
+  constructor(node?: QueueNode<T>) {
     super()
+    if (node && node.val && node.priority) {
+      this.insert(node.val, node.priority)
+    }
   }
   
   /**
    * 向队列中插入元素
-   * @param node - 插入的元素
+   * @param val - 元素值
+   * @param priority - 元素优先级
    */
-  enqueue(node: QueueNode<T>) {
-    const newNode = new QueueNode(node.val, node.num)
+  insert(val: T, priority: number) {
+    const node = new QueueNode(val, priority)
     
     if (this.val.length === 0) {
-      this.val.push(newNode)
+      this.val.push(node)
     }
     else {
       // 标记节点的优先级是否最低
       let lowest = true
       for (let i = 0; i < this.val.length; i++) {
-        if (newNode.num < this.val[i].num) {
-          this.val.splice(i, 0, newNode)
+        if (node.priority < this.val[i].priority) {
+          this.val.splice(i, 0, node)
           // 优先级不是最低
           lowest = false
           break
@@ -210,7 +200,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
       }
       if (lowest) {
         // 优先级最低，插入到最后
-        this.val.push(newNode)
+        this.val.push(node)
       }
     }
   }
@@ -310,14 +300,17 @@ class LinkedList<T> {
   head: LinkedNode<T> | null
   size: number
   
-  constructor() {
+  constructor(val?: T) {
     this.head = null
     this.size = 0
+    if (val) {
+      this.append(val)
+    }
   }
   
   /**
    * 向链表尾部添加节点
-   * @param val - 添加的节点值
+   * @param val - 节点值
    */
   append(val: T) {
     const node = new LinkedNode(val)
@@ -335,9 +328,9 @@ class LinkedList<T> {
   }
   
   /**
-   * 向链表指定位置插入节点
+   * 向链表中插入节点
    * @param index - 索引值
-   * @param val - 插入的节点值
+   * @param val - 节点值
    */
   insert(index: number, val: T) {
     if (index < 0 || index > this.size) throw new Error("out of range")
@@ -377,7 +370,7 @@ class LinkedList<T> {
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
-   * @param val - 修改的节点值
+   * @param val - 节点值
    */
   update(index: number, val: T) {
     const node = this.find(index)
@@ -451,15 +444,18 @@ class DoubleLinkedList<T> {
   tail: LinkedNode<T> | null
   size: number
   
-  constructor() {
+  constructor(val?: T) {
     this.head = null
     this.tail = null
     this.size = 0
+    if (val) {
+      this.append(val)
+    }
   }
   
   /**
    * 向链表尾部添加节点
-   * @param val - 添加的节点值
+   * @param val - 节点值
    */
   append(val: T) {
     const node = new LinkedNode(val)
@@ -476,9 +472,9 @@ class DoubleLinkedList<T> {
   }
   
   /**
-   * 向链表指定位置插入节点
+   * 向链表中插入节点
    * @param index - 索引值
-   * @param val - 插入的节点值
+   * @param val - 节点值
    */
   insert(index: number, val: T) {
     if (index < 0 || index > this.size) throw new Error("out of range")
@@ -541,7 +537,7 @@ class DoubleLinkedList<T> {
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
-   * @param val - 修改的节点值
+   * @param val - 节点值
    */
   update(index: number, val: T) {
     const node = this.find(index)
@@ -672,7 +668,7 @@ index = hash(key) % capacity
 
 ### 负载因子
 
-负载因子表示**哈希表元素的数量**和**哈希表容量**的比值，用于衡量哈希冲突的严重程度，也常作为**哈希表扩容的触发条件**。链式地址的平均探测步长与负载因子的比值呈线性增长；而开放寻址的平均探测步长与负载因子的比值呈指数增长。由此可见，在链式地址中负载因子的增加对平均探测步长的影响更平缓。
+负载因子表示**哈希表的元素数量**和**哈希表容量**的比值，用于衡量哈希冲突的严重程度，也常作为**哈希表扩容的触发条件**。链式地址的平均探测步长与负载因子的比值呈线性增长；而开放寻址的平均探测步长与负载因子的比值呈指数增长。由此可见，在链式地址中负载因子的增加对平均探测步长的影响更平缓。
 
 ### 哈希算法
 
@@ -709,17 +705,17 @@ const hash = (key: string, capacity: number) => {
 @tab TS
 
 ```ts
-class Pair {
-  public key: string
-  public val: any
+class Pair<T> {
+  key: string
+  val: T
   
-  constructor(key: string, val: any) {
+  constructor(key: string, val: T) {
     this.key = key
     this.val = val
   }
 }
 
-class HashMap {
+class HashMap<T> {
   /**
    * 哈希表容量
    */
@@ -728,20 +724,23 @@ class HashMap {
   /**
    * 所有的桶
    */
-  private buckets: (Pair[] | null)[]
+  private buckets: (Pair<T>[] | null)[]
   
   /**
-   * 元素的数量
+   * 元素数量
    */
   private length = 0
   
-  constructor() {
+  constructor(pair?: Pair<T>) {
     this.buckets = new Array(this.capacity).fill(null)
+    if (pair && pair.key && pair.val) {
+      this.set(pair.key, pair.val)
+    }
   }
   
   /**
    * 哈希函数
-   * @param {string} key - 键
+   * @param key - 键
    */
   private hash(key: string) {
     let hashCode = 0
@@ -752,21 +751,21 @@ class HashMap {
   }
   
   /**
-   * 获取哈希表的值
+   * 哈希表的值
    */
   get val() {
     return this.buckets
   }
   
   /**
-   * 获取哈希表的元素数量
+   * 哈希表的元素数量
    */
   get size() {
     return this.length
   }
   
   /**
-   * 计算负载因子
+   * 负载因子
    */
   private get loadFactor() {
     return this.length / this.capacity
@@ -774,7 +773,7 @@ class HashMap {
   
   /**
    * 查找元素
-   * @param {string} key - 键
+   * @param key - 键
    */
   get(key: string) {
     const index = this.hash(key)
@@ -783,9 +782,7 @@ class HashMap {
     if (!bucket) return null
     // 如果桶中存在目标元素，直接返回
     for (const pair of bucket) {
-      if (pair.key === key) {
-        return pair
-      }
+      if (pair.key === key) return pair
     }
     // 目标元素不存在
     return null
@@ -793,10 +790,10 @@ class HashMap {
   
   /**
    * 插入或修改元素
-   * @param {string} key - 键
+   * @param key - 键
    * @param val - 值
    */
-  set(key: string, val: any) {
+  set(key: string, val: T) {
     const index = this.hash(key)
     // 如果桶为 null，就初始化为一个空数组
     const bucket = this.buckets[index] ?? []
@@ -819,7 +816,7 @@ class HashMap {
   
   /**
    * 删除元素
-   * @param {string} key - 键
+   * @param key - 键
    */
   del(key: string) {
     const index = this.hash(key)
@@ -862,21 +859,19 @@ class HashMap {
   
   /**
    * 判断是否为质数
-   * @param {number} n - 任意数字
+   * @param n - 任意数字
    */
   private isPrime(n: number) {
     if (n <= 1) return false
     for (let i = 2; i * i <= n; i++) {
-      if (n % i === 0) {
-        return false
-      }
+      if (n % i === 0) return false
     }
     return true
   }
   
   /**
    * 获取 >= n 的下一个质数
-   * @param {number} n - 任意数字
+   * @param n - 任意数字
    */
   private nextPrime(n: number) {
     while (true) {
@@ -925,9 +920,131 @@ class HashMap {
 
 - 对于非空二叉树，如果叶节点（度为 0）数为 $n0$，度为 2 的非叶节点数为 $n2$，则满足关系：$n0$ = $n2$ + 1。
 
+### 二叉树遍历
+
+二叉树常见的遍历方式有前序遍历、中序遍历和后序遍历等，它们都属于**深度优先遍历**。就像是绕着整棵二叉树的外围走一圈，在每个节点都会遇到三个位置，分别对应前序遍历、中序遍历和后序遍历。
+
+![二叉搜索树的前序、中序、后序遍历](../.vuepress/public/image/binary_tree_dfs.png)
+
+深度优先搜索通常基于递归实现。通过代码分析，遍历开始后，先递归访问左子节点，如果左子节点为 null，再访问右子节点，如果右子节点不为 null，继续递归访问其左子节点；否则，执行结束，当前函数出栈。在上一层执行栈中，访问右子节点。
+
+::: tabs#code
+
+@tab TS
+
+```ts
+class Pair<T> {
+  key: number
+  val: T
+  
+  constructor(key: number, val: T) {
+    this.key = key
+    this.val = val
+  }
+}
+
+class TreeNode<T> {
+  pair: Pair<T>
+  left: TreeNode<T> | null
+  right: TreeNode<T> | null
+  
+  constructor(pair: Pair<T>) {
+    this.pair = pair
+    this.left = null
+    this.right = null
+  }
+}
+
+type NodeType = "root" | "left" | "right"
+
+class BinaryTree<T> {
+  root: TreeNode<T> | null
+  
+  constructor(root?: Pair<T>) {
+    this.root = root ? new TreeNode(root) : null
+  }
+  
+  /**
+   * 前序遍历
+   */
+  preTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
+    recursion(this.root, "root")
+    
+    /**
+     * 递归遍历节点
+     * @param target - 目标节点
+     * @param type - 节点类型（根节点、左子节点、右子节点）
+     */
+    function recursion(target: TreeNode<T> | null, type: NodeType) {
+      if (!target) return
+      // 1. 访问目标节点
+      callback(target, type)
+      // 2. 递归处理左子节点
+      recursion(target.left, "left")
+      // 3. 递归处理右子节点
+      recursion(target.right, "right")
+    }
+  }
+  
+  /**
+   * 中序遍历
+   */
+  syncTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
+    recursion(this.root, "root")
+    
+    /**
+     * 递归遍历节点
+     * @param target - 目标节点
+     * @param type - 节点类型（根节点、左子节点、右子节点）
+     */
+    function recursion(target: TreeNode<T> | null, type: NodeType) {
+      if (!target) return
+      // 1. 递归处理左子节点
+      recursion(target.left, "left")
+      // 2. 访问目标节点
+      callback(target, type)
+      // 3. 递归处理右子节点
+      recursion(target.right, "right")
+    }
+  }
+  
+  /**
+   * 后序遍历
+   */
+  postTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
+    recursion(this.root, "root")
+    
+    /**
+     * 递归遍历节点
+     * @param target - 目标节点
+     * @param type - 节点类型（根节点、左子节点、右子节点）
+     */
+    function recursion(target: TreeNode<T> | null, type: NodeType) {
+      if (!target) return
+      // 1. 递归处理左子节点
+      recursion(target.left, "left")
+      // 2. 递归处理右子节点
+      recursion(target.right, "right")
+      // 3. 访问目标节点
+      callback(target, type)
+    }
+  }
+}
+```
+
+:::
+
 ### 二叉搜索树
 
+::: tabs#code
 
+@tab TS
+
+```ts
+
+```
+
+:::
 
 ### 平衡树
 
