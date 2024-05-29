@@ -5,6 +5,7 @@
   "description": "Cholez Web Docs",
   "license": "MIT",
   "type": "module",
+  "packageManager": "yarn@4.2.2",
   "scripts": {
     "clean-dev": "vuepress dev src --clean-cache",
     "dev": "vuepress dev src",
@@ -20,6 +21,5 @@
     "vue": "^3.3.9",
     "vuepress": "2.0.0-rc.0",
     "vuepress-theme-hope": "2.0.0-rc.1"
-  },
-  "packageManager": "yarn@4.2.2"
+  }
 }
