@@ -1,7 +1,7 @@
 ---
 home: true
 icon: home
-title: Web Docs
+title: Cholez Web Docs
 description: Cholez Web Docs
 heroImage: /icon/icon.svg
 bgImage: https://theme-hope-assets.vuejs.press/bg/9-light.svg
@@ -11,11 +11,12 @@ bgImageStyle:
 heroText: Cholez Web Docs
 tagline: 练习前端两年半。
 actions:
-  - text: GitHub
-    icon: github
-    link: https://github.com/choIez/docs
-  - text: 开始使用
+  - text: 开始阅读
     icon: markdown
     link: ./overview
     type: primary
+  
+  - text: GitHub
+    icon: github
+    link: https://github.com/choIez/docs
 ---
