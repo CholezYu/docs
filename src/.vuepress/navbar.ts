@@ -193,8 +193,8 @@ export default navbar([
   },
   
   {
-    text: "我的博客",
-    icon: "/icon/blog.svg",
-    link: "http://blog.yuwenjian.com"
+    text: "Cholez",
+    icon: "/icon/cholez.svg",
+    link: "http://yuwenjian.com"
   }
 ])
