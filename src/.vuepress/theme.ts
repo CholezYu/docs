@@ -46,7 +46,9 @@ export default hopeTheme({
   },
   
   plugins: {
-    // git: true,
+    git: {
+      contributors: false
+    },
     
     // You should generate and use your own comment service
     comment: {
