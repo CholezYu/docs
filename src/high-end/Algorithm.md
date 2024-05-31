@@ -894,7 +894,7 @@ class HashMap<T> {
 
 - 根节点：二叉树的顶层节点。
 
-- 叶节点：没有子节点的节点，即度为 2。
+- 叶节点：没有子节点的节点，即度为 0。
 
 - 边：连接两个节点的线段。
 
@@ -926,7 +926,9 @@ class HashMap<T> {
 
 ![二叉搜索树的前序、中序、后序遍历](../.vuepress/public/image/binary_tree_dfs.png)
 
-深度优先搜索通常基于递归实现。通过代码分析，遍历开始后，先递归访问左子节点，如果左子节点为 null，再访问右子节点，如果右子节点不为 null，继续递归访问其左子节点；否则，执行结束，当前函数出栈。在上一层执行栈中，访问右子节点。
+深度优先遍历通常基于递归实现。通过代码分析，遍历开始后，先递归访问左子节点，如果左子节点为 null，再访问右子节点，如果右子节点不为 null，继续递归访问其左子节点；否则，执行结束，当前函数出栈。在上一层执行栈中，访问右子节点。
+
+前序遍历、中序遍历和后序遍历的区别在于，它们的访问时机不同：前序遍历的访问时机是在递归处理左子节点之前；中序遍历的访问时机是在递归处理左子节点和访问上一层的右子节点之间，即递归处理左子节点的函数出栈后；后序遍历的访问时机是在递归处理右子节点之后，即递归处理右子节点的函数出栈后。
 
 ::: tabs#code
 
@@ -1041,7 +1043,103 @@ class BinaryTree<T> {
 @tab TS
 
 ```ts
-
+class BinarySearchTree<T> extends BinaryTree<T> {
+  constructor(root?: Pair<T>) {
+    super(root)
+  }
+  
+  /**
+   * 向树中插入节点
+   * @param pair - 节点
+   */
+  insert(pair: Pair<T>) {
+    const node = new TreeNode(pair)
+    // 根节点为 null，直接插入到根节点
+    if (!this.root) return this.root = node
+    recursion(node, this.root)
+    
+    /**
+     * 递归比较节点
+     * @param current - 当前节点
+     * @param target - 目标节点
+     */
+    function recursion(current: TreeNode<T>, target: TreeNode<T>) {
+      if (current.pair.key < target.pair.key) { // 目标节点更大，向左子树插入
+        // 左子树为 null，直接插入
+        if (!target.left) target.left = current
+        // 左子树存在节点，继续比较
+        else recursion(current, target.left)
+      }
+      else { // 目标节点小于需要插入的节点，向右子树插入
+        // 右子树为 null，直接插入
+        if (!target.right) target.right = current
+        // 右子树存在节点，继续比较
+        else recursion(current, target.right)
+      }
+    }
+  }
+  
+  /**
+   * 查找节点
+   * @param key - 关键字
+   */
+  search(key: number) {
+    let current = this.root
+    return recursion(current, key)
+    
+    /**
+     * 递归查找节点
+     * @param current - 当前节点
+     * @param key - 目标关键字
+     */
+    function recursion(current: TreeNode<T> | null, key: number) {
+      if (!current) return null
+      if (current.pair.key > key) return recursion(current.left, key)
+      else if (current.pair.key < key) return recursion(current.right, key)
+      else return current.pair
+    }
+    
+    // while (current) {
+    //   if (current.pair.key > key) current = current.left
+    //   else if (current.pair.key < key) current = current.right
+    //   else return current.pair
+    // }
+    // return null
+  }
+  
+  /**
+   * 移除节点
+   */
+  remove() {
+  
+  }
+  
+  /**
+   * 最大值
+   * @description 一直向右查找子节点
+   */
+  get max() {
+    if (!this.root) return null
+    let node = this.root
+    while (node.right) {
+      node = node.right
+    }
+    return node.pair
+  }
+  
+  /**
+   * 最小值
+   * @description 一直向左查找子节点
+   */
+  get min() {
+    if (!this.root) return null
+    let node = this.root
+    while (node.left) {
+      node = node.left
+    }
+    return node.pair
+  }
+}
 ```
 
 :::
