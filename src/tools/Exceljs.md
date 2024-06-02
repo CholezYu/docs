@@ -188,7 +188,7 @@ interface FillGradientPath {
 导出表格，第一列为序号，第二列为图片。
 
 ```js
-import { Workbook } from "src/library/Exceljs"
+import { Workbook } from "exceljs"
 import { saveAs } from "file-saver/dist/FileSaver"
 import { urlToBase64 } from "@/utils/urlToBase64"
 

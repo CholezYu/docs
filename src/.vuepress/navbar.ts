@@ -78,34 +78,29 @@ export default navbar([
       },
       
       {
-        text: "工具",
-        icon: "tool",
-        prefix: "library/",
+        text: "后端",
+        icon: "back-stage",
+        prefix: "after-end/",
         children: [
           {
-            text: "Dayjs",
-            icon: "dayjs",
-            link: "Dayjs"
+            text: "Java",
+            icon: "java",
+            link: "Java"
           },
           {
-            text: "Lodash",
-            icon: "lodash",
-            link: "Lodash"
+            text: "Python",
+            icon: "python",
+            link: "Python"
           },
           {
-            text: "Exceljs",
-            icon: "exceljs",
-            link: "Exceljs"
+            text: "MySQL",
+            icon: "mysql",
+            link: "MySQL"
           },
           {
-            text: "VueUse",
-            icon: "vueuse",
-            link: "VueUse"
-          },
-          {
-            text: "ECharts",
-            icon: "echarts",
-            link: "ECharts"
+            text: "Nginx",
+            icon: "nginx",
+            link: "Nginx"
           }
         ]
       }
@@ -115,79 +110,36 @@ export default navbar([
   {
     text: "算法",
     icon: "hot",
-    link: "high-end/Algorithm"
+    link: "/algorithm/算法"
   },
   
   {
-    text: "Vue 生态",
-    icon: "vue",
+    text: "随笔",
+    icon: "write",
+    prefix: "notes/",
     children: [
       {
-        text: "Element UI",
-        link: "https://element.eleme.cn/#/zh-CN"
+        text: "面试集锦",
+        icon: "markdown",
+        link: "面试集锦"
       },
+      
       {
-        text: "Element Plus",
-        link: "https://element-plus.org/zh-CN"
+        text: "代码规范",
+        icon: "markdown",
+        link: "代码规范"
       },
+      
       {
-        text: "Arco Design",
-        link: "https://arco.design"
+        text: "报错处理",
+        icon: "markdown",
+        link: "报错处理"
       },
+      
       {
-        text: "Arco Design Pro",
-        link: "https://pro.arco.design"
-      },
-      {
-        text: "Vuetify",
-        link: "https://vuetifyjs.com/zh-Hans"
-      },
-      {
-        text: "VueUse",
-        link: "https://vueuse.org"
-      },
-      {
-        text: "Nuxt",
-        link: "https://nuxt.com"
-      },
-      {
-        text: "Nuxt UI",
-        link: "https://ui.nuxt.com"
-      },
-      {
-        text: "Vben",
-        link: "https://github.com/vbenjs/vue-vben-admin"
-      }
-    ]
-  },
-  
-  {
-    text: "React 生态",
-    icon: "react",
-    children: [
-      {
-        text: "Ant Design",
-        link: "https://ant.design/index-cn"
-      },
-      {
-        text: "Ant Design Pro",
-        link: "https://pro.ant.design/zh-CN"
-      },
-      {
-        text: "Shadcn UI",
-        link: "https://ui.shadcn.com"
-      },
-      {
-        text: "Zustand",
-        link: "https://zustand-demo.pmnd.rs"
-      },
-      {
-        text: "Next",
-        link: "https://nextjs.org"
-      },
-      {
-        text: "Next UI",
-        link: "https://nextui.org"
+        text: "心得体会",
+        icon: "markdown",
+        link: "心得体会"
       }
     ]
   },

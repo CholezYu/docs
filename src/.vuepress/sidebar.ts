@@ -84,64 +84,6 @@ export default sidebar({
     },
     
     {
-      text: "工具",
-      icon: "tool",
-      prefix: "library/",
-      collapsible: true,
-      children: [
-        {
-          text: "Dayjs",
-          icon: "dayjs",
-          link: "Dayjs"
-        },
-        {
-          text: "Lodash",
-          icon: "lodash",
-          link: "Lodash"
-        },
-        {
-          text: "Exceljs",
-          icon: "exceljs",
-          link: "Exceljs"
-        },
-        {
-          text: "VueUse",
-          icon: "vueuse",
-          link: "VueUse"
-        },
-        {
-          text: "ECharts",
-          icon: "echarts",
-          link: "ECharts"
-        }
-      ]
-    },
-    
-    {
-      text: "高级",
-      icon: "launch",
-      prefix: "high-end/",
-      collapsible: true,
-      children: [
-        {
-          text: "WebGL",
-          icon: "webgl",
-          link: "WebGL"
-        },
-        {
-          text: "Threejs",
-          icon: "threejs",
-          link: "Threejs"
-        },
-        {
-          text: "MicroFrontend",
-          icon: "microfrontend",
-          link: "MicroFrontend"
-        }
-      ]
-    },
-    
-    {
       text: "后端",
       icon: "back-stage",
       prefix: "after-end/",
@@ -171,38 +113,95 @@ export default sidebar({
     },
     
     {
-      text: "算法",
-      icon: "hot",
-      link: "high-end/Algorithm"
-    },
-    
-    {
-      text: "便笺",
-      icon: "list",
-      prefix: "notes/",
+      text: "工具",
+      icon: "tool",
+      prefix: "tools/",
       collapsible: true,
       children: [
         {
-          text: "面试集锦",
-          icon: "markdown",
-          link: "面试集锦"
+          text: "VueUse",
+          icon: "vueuse",
+          link: "VueUse"
         },
         {
-          text: "代码规范",
-          icon: "markdown",
-          link: "代码规范"
+          text: "ECharts",
+          icon: "echarts",
+          link: "ECharts"
         },
         {
-          text: "报错处理",
-          icon: "markdown",
-          link: "报错处理"
+          text: "Lodash",
+          icon: "lodash",
+          link: "Lodash"
         },
         {
-          text: "心得体会",
-          icon: "markdown",
-          link: "心得体会"
+          text: "Dayjs",
+          icon: "dayjs",
+          link: "Dayjs"
+        },
+        {
+          text: "Exceljs",
+          icon: "exceljs",
+          link: "Exceljs"
         }
       ]
+    },
+    
+    {
+      text: "高级",
+      icon: "launch",
+      prefix: "high-end/",
+      collapsible: true,
+      children: [
+        {
+          text: "WebGL",
+          icon: "webgl",
+          link: "WebGL"
+        },
+        {
+          text: "Threejs",
+          icon: "threejs",
+          link: "Threejs"
+        },
+        {
+          text: "MicroFrontend",
+          icon: "microfrontend",
+          link: "MicroFrontend"
+        }
+      ]
+    }
+  ],
+  
+  "/algorithm": [
+    {
+      text: "算法",
+      icon: "hot",
+      link: "算法"
+    }
+  ],
+  
+  "/notes": [
+    {
+      text: "面试集锦",
+      icon: "markdown",
+      link: "面试集锦"
+    },
+    
+    {
+      text: "代码规范",
+      icon: "markdown",
+      link: "代码规范"
+    },
+    
+    {
+      text: "报错处理",
+      icon: "markdown",
+      link: "报错处理"
+    },
+    
+    {
+      text: "心得体会",
+      icon: "markdown",
+      link: "心得体会"
     }
   ]
 })
