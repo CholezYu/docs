@@ -11,12 +11,16 @@ bgImageStyle:
 heroText: Cholez Web Docs
 tagline: 练习前端两年半。
 actions:
+  - text: 开始阅读
+    icon: markdown
+    link: overview
+    type: primary
+  
+  - text: 算法
+    icon: hot
+    link: algorithm/
+  
   - text: GitHub
     icon: github
     link: https://github.com/CholezYu/docs
-  
-  - text: 开始阅读
-    icon: markdown
-    link: ./overview
-    type: primary
 ---

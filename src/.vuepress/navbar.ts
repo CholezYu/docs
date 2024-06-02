@@ -110,7 +110,7 @@ export default navbar([
   {
     text: "算法",
     icon: "hot",
-    link: "/algorithm/算法"
+    link: "algorithm/"
   },
   
   {
@@ -119,9 +119,9 @@ export default navbar([
     prefix: "notes/",
     children: [
       {
-        text: "面试集锦",
+        text: "面试重点",
         icon: "markdown",
-        link: "面试集锦"
+        link: "面试重点"
       },
       
       {

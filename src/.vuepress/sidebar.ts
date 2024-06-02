@@ -173,17 +173,47 @@ export default sidebar({
   
   "/algorithm": [
     {
-      text: "算法",
+      text: "介绍",
       icon: "hot",
-      link: "算法"
+      link: "README"
+    },
+    {
+      text: "栈与队列",
+      icon: "stack",
+      link: "Stack_Queue"
+    },
+    {
+      text: "数组与链表",
+      icon: "extend",
+      link: "Array_Linked"
+    },
+    {
+      text: "哈希表",
+      icon: "map",
+      link: "HashMap"
+    },
+    {
+      text: "树",
+      icon: "tree",
+      link: "Tree"
+    },
+    {
+      text: "查找算法",
+      icon: "search",
+      link: "Search"
+    },
+    {
+      text: "排序算法",
+      icon: "sort",
+      link: "Sort"
     }
   ],
   
   "/notes": [
     {
-      text: "面试集锦",
+      text: "面试重点",
       icon: "markdown",
-      link: "面试集锦"
+      link: "面试重点"
     },
     
     {
