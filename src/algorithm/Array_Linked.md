@@ -1,6 +1,6 @@
 ---
 title: 数组与链表
-icon: array
+icon: extend
 date: 2024-05-24
 description: 数组与链表
 ---
