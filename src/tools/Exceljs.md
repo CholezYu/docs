@@ -192,8 +192,7 @@ import { Workbook } from "exceljs"
 import { saveAs } from "file-saver/dist/FileSaver"
 import { urlToBase64 } from "@/utils/urlToBase64"
 
-
-export async function toExcel(data, headers, title) {
+async function toExcel(data, headers, title) {
   const workbook = new Workbook()
   const sheet = workbook.addWorksheet("sheet")
   
