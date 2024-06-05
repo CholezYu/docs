@@ -31,6 +31,11 @@ export default sidebar({
           link: "React"
         },
         {
+          text: "React Native",
+          icon: "react",
+          link: "ReactNative"
+        },
+        {
           text: "JavaScript",
           icon: "javascript",
           link: "JavaScript"
