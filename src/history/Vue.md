@@ -5,10 +5,6 @@ date: 2024-04-22
 description: Vue
 ---
 
-> [!caution]
->
-> 您正在浏览的是 Vue 2 文档，官方已经终止支持且不再维护。**请查看 [Vue 3](../front-end/Vue.md) 文档**。
-
 ## 响应式原理
 
 ### 数据代理

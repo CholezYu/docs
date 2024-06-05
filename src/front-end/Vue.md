@@ -5,11 +5,6 @@ date: 2024-05-13
 description: Vue
 ---
 
-> [!tip]
->
-> 你正在阅读的是 Vue 3 文档！Vue 2 已于 **2023 年 12 月 31 日**停止维护。详见 [Vue 2](../history/Vue.md)。
->
-
 ## 响应式：核心
 
 ### Ref
