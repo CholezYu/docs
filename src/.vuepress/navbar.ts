@@ -157,6 +157,6 @@ export default navbar([
   {
     text: "Cholez",
     icon: "/icon/cholez.svg",
-    link: "http://yuwenjian.com"
+    link: "http://cholez.cn"
   }
 ])
