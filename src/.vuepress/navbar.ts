@@ -17,12 +17,17 @@ export default navbar([
           {
             text: "Vue 2",
             icon: "vue",
-            link: "/history/Vue"
+            link: "history/Vue"
           },
           {
-            text: "React",
+            text: "React 18",
             icon: "react",
             link: "React"
+          },
+          {
+            text: "React 16",
+            icon: "react",
+            link: "history/React"
           },
           {
             text: "React Native",
