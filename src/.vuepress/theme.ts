@@ -12,7 +12,7 @@ export default hopeTheme({
   
   author: {
     name: "俞文健",
-    url: "https://github.com/CholezYu/docs"
+    url: "https://github.com/CholezYu"
   },
   
   navbar,
@@ -46,9 +46,9 @@ export default hopeTheme({
   },
   
   plugins: {
-    git: {
-      contributors: false
-    },
+    // git: {
+    //   contributors: false
+    // },
     
     // You should generate and use your own comment service
     comment: {
