@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-01-26
+date: 2024-06-07
 description: React
 ---
 
@@ -9,49 +9,39 @@ description: React
 
 ### useState
 
-> useState 会触发组件的更新，并且 setState 是异步的，只能在组件更新之后才能获取最新的 state。
-
-```tsx
-import { useState } from "react"
-
-const App = () => {
-  const [count, setCount] = useState(0)
-  
-  return (
-    <>
-      <button onClick={() => setCount(count => count + 1)}>{count}</button>
-      {/* or */}
-      <button onClick={() => setCount(count + 1)}>{count}</button>
-    </>
-  )
-}
-```
-
-当 setState 的值为普通值时，执行多次相同的 setState 会被合并。
+setState 是异步的，只能在组件更新之后才能获取最新的 state。**不要试图在执行 setState 后，立即获取 state**。
 
 ```tsx
 const [count, setCount] = useState(0)
 
 const increment = () => {
-  setCount(count + 1) // 1
-  setCount(count + 1) // 1
-  setCount(count + 1) // 1
+  count // => 0
+  setCount(count + 1)
+  count // => 0
 }
 ```
 
-而当 setState 的值为函数时，执行多次相同的 setState 不会被合并。
-
-> 因为函数的返回值是未知的，只有执行才能确定结果，所以不会被合并；
->
-> 而普通值是已知的，所以会被合并。
+setState 会触发组件的更新。并且在一次事件中，如果多次执行相同的 setState，它们将会被合并，计算出最后的结果，再触发**一次**重新渲染。下列代码中，因为 setCount 是异步的，所以每次执行的时候 count 都为初始值 0。并且，触发一次 increment 事件，只会执行一次 render 函数。
 
 ```tsx
 const [count, setCount] = useState(0)
 
 const increment = () => {
-  setCount(count => count + 1) // 1
-  setCount(count => count + 1) // 2
-  setCount(count => count + 1) // 3
+  setCount(count + 1) // 0 + 1
+  setCount(count + 1) // 0 + 1
+  setCount(count + 1) // 0 + 1
+}
+```
+
+为了解决这个问题，可以将一个**更新函数**作为参数，更新函数的计算结果会作为下一个更新函数的状态传入。这样，执行多次相同的 setState 就不会被合并了。当然，这种写法也只会触发一次重新渲染。
+
+```tsx
+const [count, setCount] = useState(0)
+
+const increment = () => {
+  setCount(count => count + 1) // 0 + 1
+  setCount(count => count + 1) // 1 + 1
+  setCount(count => count + 1) // 2 + 1
 }
 ```
 
@@ -87,9 +77,9 @@ const App = () => {
 }
 ```
 
-> 生产环境下，useEffect 执行两次：
+> [!warning]
 >
-> 为了模拟组件创建、销毁、再创建的完整流程，及早暴露问题。
+> 生产环境下，useEffect 执行两次：为了模拟组件创建、销毁、再创建的完整流程，及早暴露问题。
 
 ### useRef
 
