@@ -19,9 +19,9 @@ const App = () => {
   
   return (
     <>
-      <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
-      { /* or */ }
-      <button onClick={ () => setCount(count + 1) }>{ count }</button>
+      <button onClick={() => setCount(count => count + 1)}>{count}</button>
+      {/* or */}
+      <button onClick={() => setCount(count + 1)}>{count}</button>
     </>
   )
 }
@@ -30,16 +30,12 @@ const App = () => {
 当 setState 的值为普通值时，执行多次相同的 setState 会被合并。
 
 ```tsx
-const App = () => {
-  const [count, setCount] = useState(0)
-  
-  const increment = () => {
-    setCount(count + 1) // 1
-    setCount(count + 1) // 1
-    setCount(count + 1) // 1
-  }
-  
-  return <button onClick={ increment }>{ count }</button>
+const [count, setCount] = useState(0)
+
+const increment = () => {
+  setCount(count + 1) // 1
+  setCount(count + 1) // 1
+  setCount(count + 1) // 1
 }
 ```
 
@@ -50,16 +46,12 @@ const App = () => {
 > 而普通值是已知的，所以会被合并。
 
 ```tsx
-const App = () => {
-  const [count, setCount] = useState(0)
-  
-  const increment = () => {
-    setCount(count =>  count + 1) // 1
-    setCount(count =>  count + 1) // 2
-    setCount(count =>  count + 1) // 3
-  }
-  
-  return <button onClick={ increment }>{ count }</button>
+const [count, setCount] = useState(0)
+
+const increment = () => {
+  setCount(count => count + 1) // 1
+  setCount(count => count + 1) // 2
+  setCount(count => count + 1) // 3
 }
 ```
 
@@ -91,7 +83,7 @@ const App = () => {
     }
   }, [count])
   
-  return <button onClick={ () => setCount(count => count + 1) }>{ count }</button>
+  return <button onClick={() => setCount(count => count + 1)}>{count}</button>
 }
 ```
 
@@ -113,7 +105,7 @@ const App = () => {
     console.log(inputRef.current)
   }
   
-  return <input ref={ inputRef } onChange={ showInput } />
+  return <input ref={inputRef} onChange={showInput} />
 }
 ```
 
@@ -144,8 +136,8 @@ const App = () => {
   return (
     <>
       { /* click 5 */ }
-      <button onClick={ () => setCount(count => count + 1) }>累加</button>
-      <button onClick={ delayConsole }>打印</button>
+      <button onClick={() => setCount(count => count + 1)}>累加</button>
+      <button onClick={delayConsole}>打印</button>
     </>
   )
 }
@@ -186,7 +178,7 @@ import { AppContext } from "@/App.tsx"
 const MyComponent = () => {
   const { text, setText } = useContext(AppContext)
   
-  return <input value={ text } onChange={ event => setText(event.target.value) } />
+  return <input value={text} onChange={event => setText(event.target.value)} />
 }
 ```
 
@@ -213,10 +205,10 @@ const App = () => {
   
   return (
     <>
-      <p>{ state.count }</p>
+      <p>{state.count}</p>
     
-      <button onClick={ () => dispatch({ type: "increment", payload: { count: 1 } }) }> +1 </button>
-      <button onClick={ () => dispatch({ type: "decrement", payload: { count: 1 } }) }> -1 </button>
+      <button onClick={() => dispatch({ type: "increment", payload: { count: 1 } })}> +1 </button>
+      <button onClick={() => dispatch({ type: "decrement", payload: { count: 1 } })}> -1 </button>
     </>
   )
 }
@@ -237,8 +229,8 @@ const App = () => {
   
   return (
     <>
-      <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
-      <input value={ text } onChange={ event => setText(event.target.value) } />
+      <button onClick={() => setCount(count => count + 1)}>{double}</button>
+      <input value={text} onChange={event => setText(event.target.value)} />
     </>
   )
 }
@@ -261,8 +253,8 @@ const App = () => {
   
   return (
     <>
-      <button onClick={ () => setCount(count => count + 1) }>{ double }</button>
-      <input value={ text } onChange={ event => setText(event.target.value) } />
+      <button onClick={() => setCount(count => count + 1)}>{ double }</button>
+      <input value={text} onChange={event => setText(event.target.value)} />
     </>
   )
 }
@@ -345,8 +337,8 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/home" element={ <Home /> }></Route>
-        <Route path="/user" element={ <User /> }></Route>
+        <Route path="/home" element={<Home />} />
+        <Route path="/user" element={<User />} />
       </Routes>
     </>
   )
@@ -385,7 +377,7 @@ import { useRoutes } from "react-router-dom"
 import router from "@/router"
 
 const App = () => {
-  return <div>{ useRoutes(router) }</div>
+  return <div>{useRoutes(router)}</div>
 }
 ```
 
@@ -440,10 +432,10 @@ const Layout = () => {
       </div>
       
       <div>
-        <NavLink to="/home" className={ ({ isActive }) => isActive ? "active" : "" }>
+        <NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
           Home
         </NavLink>
-        <NavLink to="/user" className={ ({ isActive }) => isActive ? "active" : "" }>
+        <NavLink to="/user" className={({ isActive }) => isActive ? "active" : ""}>
           User
         </NavLink>
       </div>
@@ -465,13 +457,13 @@ const Home = () => {
   return (
     <div>
       <div>
-        <button onClick={ () => navigate("/home") }>Home</button>
-        <button onClick={ () => navigate("/user") }>User</button>
+        <button onClick={() => navigate("/home")}>Home</button>
+        <button onClick={() => navigate("/user")}>User</button>
       </div>
       
       <div>
-        <button onClick={ () => navigate(-1) }>返回</button>
-        <button onClick={ () => navigate(+1) }>前进</button>
+        <button onClick={() => navigate(-1)}>返回</button>
+        <button onClick={() => navigate(+1)}>前进</button>
       </div>
       
       <Outlet />
@@ -495,8 +487,8 @@ const User = () => {
   return (
     <div>
       <Link to="/user/profile?id=1">用户信息</Link>
-      { /* or */ }
-      <button onClick={ () => navigate({ pathname: "/user/profile", search: "id=2" }) }>
+      {/* or */}
+      <button onClick={() => navigate({ pathname: "/user/profile", search: "id=2" })}>
         用户信息
       </button>
       
@@ -572,8 +564,8 @@ const User = () => {
   
   return (
     <div>
-      <button onClick={ navigate("/user/profile", { state: { id: 1 } }) }>用户信息</button>
-      <button onClick={ navigate("/user/profile", { state: { id: 2 } }) }>用户信息</button>
+      <button onClick={navigate("/user/profile", { state: { id: 1 } })}>用户信息</button>
+      <button onClick={navigate("/user/profile", { state: { id: 2 } })}>用户信息</button>
       
       <Outlet />
     </div>
@@ -605,7 +597,7 @@ import Loading from "@/components/Loading"
 
 function load(Component) {
   return (
-    <Suspense fallback={ <Loading /> }>
+    <Suspense fallback={<Loading />}>
       <Component />
     </Suspense>
   )
@@ -786,15 +778,15 @@ const Home = () => {
   
   return (
     <>
-      <p>{ counter.count }</p>
+      <p>{counter.count}</p>
       
-      <button onClick={ () => dispatch({ type: "counter/increment", payload }) }> +1 </button>
-      <button onClick={ () => dispatch({ type: "counter/decrement", payload }) }> -1 </button>
-              
-      { /* or */ }
+      <button onClick={() => dispatch({ type: "counter/increment", payload })}> +1 </button>
+      <button onClick={() => dispatch({ type: "counter/decrement", payload })}> -1 </button>
       
-      <button onClick={ () => dispatch(increment(payload)) }> +1 </button>
-      <button onClick={ () => dispatch(decrement(payload)) }> -1 </button>
+      {/* or */}
+      
+      <button onClick={() => dispatch(increment(payload))}> +1 </button>
+      <button onClick={() => dispatch(decrement(payload))}> -1 </button>
     </>
   )
 }
@@ -810,7 +802,6 @@ import axios from "axios"
 
 const getMovie = createAsyncThunk("movie/getMovie", async () => {
   const result = await axios.get(url)
-
   return result.data.data.list
 })
 
@@ -861,14 +852,14 @@ import { getMovie } from "@/store/slice/movieSlice.tsx"
 
 export default function Home() {
   const movie = useSelector(state => state.movie.movieList)
-
+  
   const dispatch = useDispatch()
-
+  
   return (
     <div>
       <div>
         <button onClick={ () => dispatch(getMovie()) }></button>
-
+        
         <ul>
           { movie.map(item => <li key={ item.tvId }>{ item.albumName }</li>) }
         </ul>
