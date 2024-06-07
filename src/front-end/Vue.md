@@ -7,7 +7,7 @@ description: Vue
 
 ## 响应式：核心
 
-### Ref
+### ref
 
 接受任意值（基本类型、引用类型）作为参数，返回一个响应式的 ref 对象。通过 `.value` 可以访问这个数据。
 
@@ -78,7 +78,7 @@ class RefImpl<T> {
 }
 ```
 
-### Reactive
+### reactive
 
 只能接受**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
 
@@ -163,7 +163,7 @@ function createReactiveObject(
 }
 ```
 
-### Computed
+### computed
 
 **函数式写法**。接受一个 getter 函数，返回一个只读的 ref 对象。
 
@@ -286,7 +286,7 @@ class ComputedRefImpl<T> {
 }
 ```
 
-### Watch
+### watch
 
 > [!warning]
 >
@@ -558,7 +558,7 @@ function doWatch(
 
 ## 响应式：进阶
 
-### ToRaw
+### toRaw
 
 它会返回 Proxy 的原始对象。用于让 reactive 退出响应式，合理使用可以减少代理访问、降低跟踪开销。
 
@@ -573,7 +573,7 @@ toRaw(state) // { foo: 1, bar: 2 }
 toRaw(state) === origin // true
 ```
 
-### ToRef
+### toRef
 
 **对象属性签名**。基于响应式对象的一个属性，创建一个对应的 ref，它与源属性保持同步。
 
@@ -616,7 +616,7 @@ toRef(() => props.foo)
 toRef(1)
 ```
 
-### ToRefs
+### toRefs
 
 将一个响应式对象转换为普通对象，这个普通对象的每个属性都是指向源对象相应属性的 ref。
 
@@ -638,7 +638,7 @@ bar // Ref<2>
 
 ## 响应式原理
 
-### Effect
+### effect
 
 用于触发视图更新。在全局环境下创建一个 weakMap 容器，用于存储并建立 target 与 depsMap 之间的关系。
 
@@ -662,7 +662,7 @@ type DepsMap = Map<any, Deps>
 const targetMap = new WeakMap<object, DepsMap>()
 ```
 
-### Track
+### track
 
 用于收集依赖，触发时将副作用函数存到 deps 中，等待将来触发依赖更新时执行。
 
@@ -686,7 +686,7 @@ const track = (target: object, key: unknown) => {
 }
 ```
 
-### Trigger
+### trigger
 
 用于更新依赖，将 deps 中的副作用函数取出执行。
 
@@ -704,7 +704,7 @@ const trigger = (target: object, key: unknown) => {
 }
 ```
 
-### Reactive
+### reactive
 
 **数据代理**。使用 Proxy 进行数据代理，并通过递归实现深度代理。访问数据时执行 track 收集依赖，修改数据时执行 trigger 更新依赖。
 
@@ -1278,7 +1278,7 @@ function render(_ctx, _cache) {
 
 ## 组件通信
 
-### DefineProps
+### defineProps
 
 接受父组件传递的数据。
 
@@ -1298,7 +1298,7 @@ withDefaults(defineProps<{
 })
 ```
 
-### DefineEmits
+### defineEmits
 
 接受父组件传递的事件（可以传递原生事件）。
 
@@ -1318,7 +1318,7 @@ emits("update", "message")
 emits("change", 24)
 ```
 
-### DefineExpose
+### defineExpose
 
 暴露一些数据给父组件。
 
@@ -1351,7 +1351,7 @@ defineExpose({
 </template>
 ```
 
-### DefineModel (3.4+)
+### defineModel <Badge text="3.4+" type="tip" />
 
 `defineModel` 是一个编译宏，它会返回一个允许被修改的 ref，编译器会将其展开为以下内容：
 
@@ -1410,7 +1410,7 @@ defineExpose({
 </template>
 ```
 
-### Provide & Inject
+### provide & inject
 
 Provide 可以给后代组件提供数据。
 
@@ -1435,7 +1435,7 @@ count!.value++
 inject("count", ref(1))
 ```
 
-### UseAttrs
+### useAttrs
 
 `useAttrs()` 会返回一个 Proxy 对象，它包含了父组件传递的数据和事件。可以通过 `v-bind` 批量传递给内部组件。
 
