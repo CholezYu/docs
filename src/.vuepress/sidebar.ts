@@ -31,11 +31,6 @@ export default sidebar({
           link: "React"
         },
         {
-          text: "React 16",
-          icon: "react",
-          link: "history/React"
-        },
-        {
           text: "React Native",
           icon: "react",
           link: "ReactNative"
