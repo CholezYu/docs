@@ -46,6 +46,12 @@ export default hopeTheme({
   },
   
   plugins: {
+    components: {
+      components: [
+        "Badge"
+      ]
+    },
+    
     git: {
       contributors: false
     },
