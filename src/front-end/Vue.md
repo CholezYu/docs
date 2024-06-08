@@ -14,8 +14,6 @@ description: Vue
 在模板中 ref 会自动解包，不需要通过 `.value` 访问。
 
 ```ts
-import { ref } from "vue"
-
 const count = ref(0)
 
 count // Ref<0>
@@ -83,8 +81,6 @@ class RefImpl<T> {
 只能接受**引用类型**作为参数，返回一个响应式的代理对象。可以直接访问这个代理对象上的属性。
 
 ```ts
-import { reactive } from "vue"
-
 const state = reactive({ count: 0 })
 
 state // Reactive<{ count: 0 }>
@@ -168,8 +164,6 @@ function createReactiveObject(
 **函数式写法**。接受一个 getter 函数，返回一个只读的 ref 对象。
 
 ```ts
-import { ref, computed } from "vue"
-
 const count = ref(1)
 
 const double = computed(() => count.value * 2)
@@ -178,8 +172,6 @@ const double = computed(() => count.value * 2)
 **选项式写法**。接受一个带有 `get` 和 `set` 函数的对象，返回一个可写的 ref 对象。
 
 ```ts
-import { ref, computed } from "vue"
-
 const first = ref("Even")
 const last = ref("You")
 
@@ -295,8 +287,6 @@ class ComputedRefImpl<T> {
 监听 ref（基本类型）。
 
 ```ts
-import { ref, watch } from "vue"
-
 const count = ref(0)
 
 watch(count, (value, oldValue) => {
@@ -315,8 +305,6 @@ watch([fooRef, barRef], ([foo, bar], [oldFoo, oldBar]) => {
 监听 ref（引用类型）。如果需要监听对象内部结构的改变，需要开启深度监听。
 
 ```ts
-import { ref, watch } from "vue"
-
 const state = ref({ count: 0 })
 
 watch(state, (value, oldValue) => {
@@ -329,8 +317,6 @@ watch(state, (value, oldValue) => {
 监听 `ref.value`（基本类型）。需要使用 getter 函数。
 
 ```ts
-import { ref, watch } from "vue"
-
 const count = ref(0)
 
 watch(() => count.value, (value, oldValue) => {
@@ -341,8 +327,6 @@ watch(() => count.value, (value, oldValue) => {
 监听 `ref.value`（引用类型）。不需要使用 getter 函数，并且默认开启深度监听。
 
 ```ts
-import { ref, watch } from "vue"
-
 const state = ref({ count: 0 })
 
 watch(state.value, (value, oldValue) => {
@@ -353,8 +337,6 @@ watch(state.value, (value, oldValue) => {
 监听 reactive，默认开启深度监听。
 
 ```ts
-import { reactive, watch } from "vue"
-
 const state = reactive({ count: 0 })
 
 watch(state, (value, oldValue) => {
@@ -563,8 +545,6 @@ function doWatch(
 它会返回 Proxy 的原始对象。用于让 reactive 退出响应式，合理使用可以减少代理访问、降低跟踪开销。
 
 ```ts
-import { reactive, toRaw } from "vue"
-
 const origin = { foo: 1, bar: 2 }
 const state = reactive(origin)
 
@@ -582,8 +562,6 @@ toRaw(state) === origin // true
 > `toRef()` 传入的值必须本身是响应式的！
 
 ```ts
-import { reactive, toRef } from "vue"
-
 const state = reactive({ foo: 1, bar: 2 })
 
 // 双向 ref，会与源属性同步
@@ -627,8 +605,6 @@ toRef(1)
 > 每个单独的 ref 都是使用 `toRef()` 创建的。可以看作是多个 `toRef()` 的语法糖。
 
 ```ts
-import { ref, toRefs } from "vue"
-
 const state = ref({ foo: 1, bar: 2 })
 
 const { foo, bar } = toRefs(state.value)
@@ -711,8 +687,6 @@ const trigger = (target: object, key: unknown) => {
 ```ts
 /* reactive.ts */
 
-import { track, trigger } from "./effect.js"
-
 const isObject = (target: any) => Object.prototype.toString.call(target) === "[object Object]"
 
 const reactive = <T extends object>(target: T): T => {
@@ -737,9 +711,6 @@ const reactive = <T extends object>(target: T): T => {
 
 ```ts
 /* main.ts */
-
-import { reactive } from "./reactive.js"
-import { effect } from "./effect.js"
 
 const app: HTMLDivElement = document.querySelector("#app")!
 
@@ -1337,9 +1308,6 @@ defineExpose({
 
 ```vue
 <script setup lang="ts">
-  import { ref } from "vue"
-  import { ElForm } from "element-plus"
-  
   const formRef = ref<InstanceType<typeof ElForm>>()
   
   const validate = () => formRef.value?.validate() // 触发表单校验
@@ -1366,8 +1334,6 @@ defineExpose({
 ```vue
 <!-- 父组件 -->
 <script setup lang="ts">
-  import { ref } from "vue"
-  
   const value = ref(0)
   const count = ref(1)
 </script>
@@ -1415,10 +1381,10 @@ defineExpose({
 Provide 可以给后代组件提供数据。
 
 ```ts
-import { ref, provide, readonly } from "vue"
-
 const count = ref(0)
+
 provide("count", count)
+
 // 如果希望提供的数据不能被后代组件修改，可以使用 `readonly()` 来包装
 provide("read-only-count", readonly(count))
 ```
@@ -1426,11 +1392,11 @@ provide("read-only-count", readonly(count))
 Inject 可以注入上层组件提供的数据，并且这些数据是可以**直接修改**的。
 
 ```ts
-import { ref, inject, type Ref } from "vue"
-
 const count = inject<Ref<number>>("count")
+
 // 没有设置默认值，可能为 undefined，所以需要非空断言
 count!.value++
+
 // 设置默认值，可以推断类型
 inject("count", ref(1))
 ```
@@ -1444,13 +1410,13 @@ inject("count", ref(1))
 > 不包含被 defineProps 接受的数据和被 defineEmits 接受的事件。
 
 ```vue
-<MyComponent v-bind="attrs" />
-```
+<script setup lang="ts">
+  const attrs = useAttrs()
+</script>
 
-```ts
-import { useAttrs } from "vue"
-
-const attrs = useAttrs()
+<template>
+  <MyComponent v-bind="attrs" />
+</template>
 ```
 
 ## 深入组件
