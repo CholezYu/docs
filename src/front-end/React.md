@@ -9,7 +9,7 @@ description: React
 
 ### useState
 
-setState 会触发组件的更新。并且 setState 是异步的，如果在执行 setState 后立即获取 state，那么依然会得到旧值。所以应该在组件更新之后再获取最新的 state。
+setState 会触发组件的更新。并且 **setState 是异步的**，如果在执行 setState 后立即获取 state，那么依然会得到旧值。所以应该在组件更新之后再获取最新的 state。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -51,41 +51,40 @@ const increment = () => {
 
 ### useEffect
 
-当组件渲染完成或销毁时，setup 就会执行，并在下一次执行 useEffect 前执行 cleanup。
+当组件**渲染完成后**或销毁时，setup 就会执行，并在下一次执行 useEffect 前执行 cleanup。
 
-无论是否有依赖项，useEffect 都会在初始渲染完成后执行一次。
+setup 会在初始渲染完成后执行一次。然后根据依赖项，决定是否再次执行：
 
-- 依赖数组有值：当依赖项发生更新的时候，useEffect 才会再次执行。
+- 没有依赖数组：组件每次重新渲染的时候，setup 都会再次执行。
 
-- 依赖数组为空：useEffect 只在初始渲染后执行。
+- 依赖数组有值：当依赖项发生更新的时候，setup 才会再次执行。
 
-- 没有依赖数组：组件每次重新渲染的时候，useEffect 都会再次执行。
+- 依赖数组为空：setup 只在初始渲染完成后执行。
 
 ```tsx
-const [count, setCount] = useState(0)
+const [state, setState] = useState(0)
 
 useEffect(() => /* setup */ {
-  const timer = setTimeout(() => {
-    console.log(count)
+  let timer = setTimeout(() => {
+    // do something...
   }, 3000)
-
+  
   return () => /* cleanup */ {
     clearTimeout(timer)
+    timer = null
   }
-}, [count])
+}, [state])
 ```
 
 > [!warning]
 >
-> 生产环境下，useEffect 执行两次：为了模拟组件创建、销毁、再创建的完整流程，及早暴露问题。
+> 在开发环境下，如果开启了严格模式，useEffect 会执行两次，这是一个压力测试，为了模拟立即卸载组件和重新挂载组件，提前暴露问题。
 
 ### useRef
 
 用于操作 DOM 元素。为组件注册 ref，就可以通过 `ref.current` 获取这个元素。
 
 ```tsx
-import { useRef } from "react"
-
 const App = () => {
   const inputRef = useRef<HTMLInputElement>(null)
   
@@ -104,8 +103,6 @@ const App = () => {
 > 因为 count 是一个值，而 countRef 是一个引用类型。
 
 ```tsx
-import { useState, useRef, useEffect } from "react"
-
 const App = () => {
   const [count, setCount] = useState(5)
   const countRef = useRef(5)
@@ -123,7 +120,7 @@ const App = () => {
   
   return (
     <>
-      { /* click 5 */ }
+      {/* click 5 */}
       <button onClick={() => setCount(count => count + 1)}>累加</button>
       <button onClick={delayConsole}>打印</button>
     </>
