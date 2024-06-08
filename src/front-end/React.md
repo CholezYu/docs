@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-07
+date: 2024-06-08
 description: React
 ---
 
@@ -9,7 +9,7 @@ description: React
 
 ### useState
 
-setState 是异步的，只能在组件更新之后才能获取最新的 state。**不要试图在执行 setState 后，立即获取 state**。
+setState 会触发组件的更新。并且 setState 是异步的，如果在执行 setState 后立即获取 state，那么依然会得到旧值。所以应该在组件更新之后再获取最新的 state。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -21,7 +21,11 @@ const increment = () => {
 }
 ```
 
-setState 会触发组件的更新。并且在一次事件中，如果多次执行相同的 setState，它们将会被合并，计算出最后的结果，再触发**一次**重新渲染。下列代码中，因为 setCount 是异步的，所以每次执行的时候 count 都为初始值 0。并且，触发一次 increment 事件，只会执行一次 render 函数。
+> [!warning]
+>
+> 在一次事件中，如果多次执行相同的 setState，它们将会被批量处理，然后只触发**一次**重新渲染。
+
+下列代码中，因为 setCount 是异步的，所以每次执行的时候 count 都为 0。并且，触发一次 increment 事件，只会执行一次 render 函数。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -33,7 +37,7 @@ const increment = () => {
 }
 ```
 
-为了解决这个问题，可以将一个**更新函数**作为参数，更新函数的计算结果会作为下一个更新函数的状态传入。这样，执行多次相同的 setState 就不会被合并了。当然，这种写法也只会触发一次重新渲染。
+如果要解决这个问题，可以将一个更新函数作为参数，更新函数的计算结果会作为下一个更新函数的状态传入。当然，这种写法也只会触发一次重新渲染。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -51,30 +55,24 @@ const increment = () => {
 
 无论是否有依赖项，useEffect 都会在初始渲染完成后执行一次。
 
-- 依赖数组有值：当依赖项发生更新的时候，useEffect 才会再次执行；
+- 依赖数组有值：当依赖项发生更新的时候，useEffect 才会再次执行。
 
-- 依赖数组为空：useEffect 只在初始渲染后执行；
+- 依赖数组为空：useEffect 只在初始渲染后执行。
 
 - 没有依赖数组：组件每次重新渲染的时候，useEffect 都会再次执行。
 
 ```tsx
-import { useState, useEffect } from "react"
+const [count, setCount] = useState(0)
 
-const App = () => {
-  const [count, setCount] = useState(0)
-  
-  useEffect(() => /* setup */ {
-    const timer = setTimeout(() => {
-      console.log(count)
-    }, 3000)
-    
-    return () => /* cleanup */ {
-      clearTimeout(timer)
-    }
-  }, [count])
-  
-  return <button onClick={() => setCount(count => count + 1)}>{count}</button>
-}
+useEffect(() => /* setup */ {
+  const timer = setTimeout(() => {
+    console.log(count)
+  }, 3000)
+
+  return () => /* cleanup */ {
+    clearTimeout(timer)
+  }
+}, [count])
 ```
 
 > [!warning]
