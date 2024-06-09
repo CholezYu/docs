@@ -26,6 +26,11 @@ export default sidebar({
           link: "history/Vue"
         },
         {
+          text: "Nuxt",
+          icon: "nuxt",
+          link: "Nuxt"
+        },
+        {
           text: "React 18",
           icon: "react",
           link: "React"
@@ -34,6 +39,16 @@ export default sidebar({
           text: "React Native",
           icon: "react",
           link: "ReactNative"
+        },
+        {
+          text: "WeChat",
+          icon: "wechat",
+          link: "WeChat"
+        },
+        {
+          text: "UniApp",
+          icon: "uniapp",
+          link: "UniApp"
         },
         {
           text: "JavaScript",
@@ -46,20 +61,26 @@ export default sidebar({
           link: "TypeScript"
         },
         {
+          text: "Bootstrap",
+          icon: "bootstrap",
+          link: "Bootstrap"
+        },
+        {
           text: "Ajax",
           icon: "ajax",
           link: "Ajax"
-        },
-        {
-          text: "Webpack",
-          icon: "webpack",
-          link: "Webpack"
         },
         {
           text: "Nodejs",
           icon: "nodeJS",
           link: "Nodejs"
         },
+        {
+          text: "Webpack",
+          icon: "webpack",
+          link: "Webpack"
+        },
+        
         {
           text: "Git",
           icon: "git",
@@ -74,16 +95,6 @@ export default sidebar({
           text: "CSS",
           icon: "css",
           link: "CSS"
-        },
-        {
-          text: "Bootstrap",
-          icon: "bootstrap",
-          link: "Bootstrap"
-        },
-        {
-          text: "Wxapp",
-          icon: "wechat",
-          link: "Wxapp"
         }
       ]
     },
