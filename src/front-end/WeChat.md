@@ -1,5 +1,5 @@
 ---
-title: Wxapp
+title: WeChat
 icon: wechat
 date: 2024-04-22
 description: 微信小程序
