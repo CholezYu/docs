@@ -9,7 +9,7 @@ description: React
 
 ### useState
 
-setState 会触发组件的更新。并且 **setState 是异步的**，如果在执行 setState 后立即获取 state，那么依然会得到旧值。所以应该在组件更新之后再获取最新的 state。
+`setState` 会触发组件的更新。并且 **`setState` 是异步的**，如果在执行 `setState` 后立即获取 state，那么依然会得到旧值。所以应该在组件更新之后再获取最新的 state。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -23,9 +23,9 @@ const increment = () => {
 
 > [!warning]
 >
-> 在一次事件中，如果多次执行相同的 setState，它们将会被批量处理，然后只触发**一次**重新渲染。
+> 在一次事件中，如果多次执行相同的 `setState`，它们将会被批量处理，然后只触发**一次**重新渲染。
 
-下列代码中，因为 setCount 是异步的，所以每次执行的时候 count 都为 0。并且，触发一次 increment 事件，只会执行一次 render 函数。
+下列代码中，因为 `setCount` 是异步的，所以每次执行的时候 count 都为 0。并且，触发一次 increment 事件，只会执行一次 render 函数。
 
 ```tsx
 const [count, setCount] = useState(0)
@@ -51,7 +51,7 @@ const increment = () => {
 
 ### useEffect
 
-当组件**渲染完成后**或销毁时，setup 就会执行，并在下一次执行 useEffect 前执行 cleanup。
+当组件**渲染完成后**或销毁时，setup 就会执行，并在下一次执行 `useEffect` 前执行 cleanup。
 
 setup 会在初始渲染完成后执行一次。然后根据依赖项，决定是否再次执行：
 
@@ -78,7 +78,7 @@ useEffect(() => /* setup */ {
 
 > [!warning]
 >
-> 在开发环境下，如果开启了严格模式，useEffect 会执行两次，这是一个压力测试，为了模拟立即卸载组件和重新挂载组件，提前暴露问题。
+> 开发环境下，如果开启严格模式，`useEffect` 会执行两次，这是为了模拟立即卸载组件和重新挂载组件，提前暴露问题。
 
 ### useRef
 
@@ -132,7 +132,7 @@ const App = () => {
 
 创建共享对象，将需要使用共享数据的组件放入 `<WhatContext>` 组件中，并将共享数据注册到 value 属性中。
 
-类似于 provide。
+类似于 `provide`。
 
 ```tsx
 /* App.tsx */
@@ -152,13 +152,13 @@ const App = () => {
 }
 ```
 
-useContext 类似于 inject。子组件可以通过 useContext 接收共享数据。
+`useContext` 类似于 `inject`。子组件可以通过 `useContext` 接收共享数据。
 
 ```tsx
 /* MyComponent/index.tsx */
 
 import { useContext } from "react"
-import { AppContext } from "@/App.tsx"
+import { AppContext } from "./App.tsx"
 
 const MyComponent = () => {
   const { text, setText } = useContext(AppContext)
@@ -201,7 +201,7 @@ const App = () => {
 
 ### useMemo
 
-useMemo 类似于 computed，用于缓存 state，只有当依赖项发生改变时，才会重新计算。
+`useMemo` 类似于 `computed`，用于缓存 state，只有当依赖项发生改变时，才会重新计算。
 
 ```tsx
 import { useState, useMemo } from "react"
@@ -223,7 +223,7 @@ const App = () => {
 
 ### useCallback
 
-useCallback 与 useMemo 用法相似，useMemo 用于缓存一个计算结果，useCallback 用于缓存一个函数。
+`useCallback` 与 `useMemo` 用法相似，`useMemo` 用于缓存一个计算结果，`useCallback` 用于缓存一个函数。
 
 ```tsx
 import { useState, useCallback } from "react"
@@ -242,6 +242,58 @@ const App = () => {
       <input value={text} onChange={event => setText(event.target.value)} />
     </>
   )
+}
+```
+
+## HOC
+
+HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其实就可以看作是一个高阶函数，只不过 React 的组件都是用函数创建的，所以我们把它称为 “高阶组件”。
+
+高阶组件接受一个组件作为参数，并返回一个新的组件。这个新的组件会具有高阶组件的功能。
+
+下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和销毁，并输出日志。
+
+```tsx
+/* components/WithLog.tsx */
+
+const WithLog = (Component: FC) => {
+  return (props: any) => {
+    useEffect(() => {
+      console.log(`组件${Component.name}被挂载了 ${dayjs().format("HH:mm:ss")}`)
+      
+      return () => {
+        console.log(`组件${Component.name}被销毁了 ${dayjs().format("HH:mm:ss")}`)
+      }
+    }, [])
+    
+    return <Component {...props} />
+  }
+}
+```
+
+高阶组件可以赋予任何组件它的功能。以下一个最普通的 React 组件。
+
+```tsx
+/* components/MyComponent.tsx */
+
+const MyComponent = ({ title }: any) => {
+  return <h2>{title}</h2>
+}
+```
+
+将以上组件作为参数传递给高阶组件，会返回一个新的组件，它已经具有了输出日志的功能。
+
+> [!warning]
+>
+> 给高阶组件返回的新组件传递 props 时，其实是传递给了高阶组件，所以高阶组件需要将 props 批量传递给目标组件。
+
+```tsx
+/* App.tsx */
+
+const MyComponentLog = WithLog(MyComponent)
+
+const App = () => {
+  return <MyComponentLog title="Log" />
 }
 ```
 
@@ -269,7 +321,7 @@ const App = () => {
 
 - 同一类型的组件（元素），按照原策略（tree diff）进行深层次比较；
 
-- 不同类型的组件（元素），diffing 算法会将当前组件(元素)及其所有子节点全部删除，添加新的组件（元素）。
+- 不同类型的组件（元素），diffing 算法会将当前组件（元素）及其所有子节点全部删除，添加新的组件（元素）。
 
 > **策略三**
 
