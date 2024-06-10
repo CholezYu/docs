@@ -214,7 +214,7 @@ const delayConsole = () => {
 ```tsx
 /* App.tsx */
 
-import { createContext } from "react"
+import { createContext, useContext } from "react"
 
 const TextContext = createContext(null)
 
@@ -223,7 +223,7 @@ const App = () => {
   
   return (
     <TextContext.Provider value={{ text, setText }}>
-      <MyComponent />
+      <Text />
     </TextContext.Provider>
   )
 }
@@ -248,30 +248,47 @@ const Text = () => {
 简化版的 Redux。
 
 ```tsx
-import { useReducer } from "redux"
-
-const reducer = (state, { type, payload }) => {
-  switch (type) {
+const reducer = (state, action) => {
+  switch (action.type) {
     case "increment":
-      return { ...state, count: state.count + payload.count }
+      return { ...state, count: state.count + action.payload.count }
     case "decrement":
-      return { ...state, count: state.count - payload.count }
+      return { ...state, count: state.count - action.payload.count }
     default:
       return state
   }
 }
 
-const App = () => {
-  const [state, dispatch] = useReducer(reducer, { count: 1 })
+const [state, dispatch] = useReducer(reducer, { count: 1 })
+
+const increment = () => {
+  dispatch({ type: "increment", payload: { count: 1 } })
+}
+
+const decrement = () => {
+  dispatch({ type: "decrement", payload: { count: 1 } })
+}
+```
+
+简单实现一下 `useReducer`。
+
+```tsx
+interface Action<T = any> {
+  type: string
+  payload?: T
+}
+
+function useReducer<T = any>(
+  reducer: (state: T, action: Action<T>) => T,
+  initialState: T
+): [
+  state: T,
+  dispatch: (action: Action<T>) => void
+] {
+  const [state, setState] = useState(initialState)
+  const dispatch = (action: Action<T>) => setState(reducer(state, action))
   
-  return (
-    <>
-      <p>{state.count}</p>
-    
-      <button onClick={() => dispatch({ type: "increment", payload: { count: 1 } })}> +1 </button>
-      <button onClick={() => dispatch({ type: "decrement", payload: { count: 1 } })}> -1 </button>
-    </>
-  )
+  return [state, dispatch]
 }
 ```
 
