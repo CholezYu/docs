@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-08
+date: 2024-06-10
 description: React
 ---
 
@@ -67,7 +67,7 @@ const [state, setState] = useState(0)
 useEffect(() => /* setup */ {
   let timer = setTimeout(() => {
     // do something...
-  }, 3000)
+  }, 1000)
   
   return () => /* cleanup */ {
     clearTimeout(timer)
@@ -82,49 +82,126 @@ useEffect(() => /* setup */ {
 
 ### useRef
 
-用于操作 DOM 元素。为组件注册 ref，就可以通过 `ref.current` 获取这个元素。
+**引用一个值**
+
+`useRef` 可以创建一个不需要渲染的数据，通过 `ref.current` 可以访问它的值。与 state 不同，ref 是可变的，但是它的改变不会触发组件重新渲染。ref 仅仅是一个普通的 JavaScript 对象。
+
+我们可以使用 ref 存储一个定时器 ID。这样可以确保：
+
+- 在重新渲染时能够存储数据（如果使用普通变量存储，那么每次重新渲染都会重置）。
+
+- 如果组件被多次复用，ref 的改变并不会使他们之间相互影响，因为 ref 是每个组件内部特有的（而如果使用外部变量，那么它就会是共享的，它的改变会使其他复用的组件受到影响）。
 
 ```tsx
-const App = () => {
-  const inputRef = useRef<HTMLInputElement>(null)
-  
-  const showInput = () => {
-    console.log(inputRef.current)
-  }
-  
-  return <input ref={inputRef} onChange={showInput} />
+const timerRef = useRef(null)
+
+timerRef.current = setInterval(() => {
+  // do something...
+}, 1000)
+
+const stop = () => {
+  clearInterval(timerRef.current)
 }
 ```
 
-闭包陷阱：当异步函数获取 state 时，可能获取的不是最新的 state，需要使用 useRef 来解决。
+> [!warning]
+>
+> 因为 ref 的改变不会触发重新渲染，所以不推荐将它在页面中展示。如果有需要，应该使用 state 代替。
+
+下面是一个完整的计时器倒计时案例。
+
+```tsx
+const [count, setCount] = useState(10)
+const countRef = useRef(count)
+
+const timerRef = useRef(null)
+
+const start = () => {
+  timerRef.current = setInterval(() => {
+    countRef.current--
+    setCount(countRef.current)
+    if (countRef.current === 0) stop()
+  }, 1000)
+}
+
+const stop = () => {
+  clearInterval(timerRef.current)
+  timerRef.current = null
+}
+```
+
+**操作 DOM**
+
+为一个 HTML 元素注册 ref，就可以通过 `ref.current` 访问这个 DOM 元素。
+
+下面的案例中，我们通过 ref 调用了 `<input>` 元素的 `focus()` 方法。
+
+```tsx
+const inputRef = useRef(null)
+
+const focus = () => {
+  inputRef.current.focus()
+}
+
+return <input ref={inputRef} />
+```
+
+**获取自定义组件的 ref**
+
+如果像这样给自定义组件注册 ref，控制台可能会出现这样的错误：
+
+> [!caution]
+>
+> Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?
+>
+> 译：不能给函数组件提供 ref，你需要使用 `React.forwardRef()` 吗？
+
+```tsx
+const inputRef = useRef(null)
+
+return <MyInput ref={inputRef} />
+```
+
+默认情况下，自定义组件不会暴露它们内部 DOM 节点的 ref。
+
+我们需要使用 `forwardRef` 来包装自定义组件，这样就能将它的 ref 暴露给父组件。
+
+```tsx
+import { forwardRef, type ForwardedRef, type ChangeEventHandler } from "react"
+
+const MyInput = forwardRef(({ value, onChange }: {
+  value?: string | number
+  onChange?: ChangeEventHandler<HTMLInputElement>
+}, ref: ForwardedRef<HTMLInputElement>) => {
+  return <input value={value} onChange={onChange} ref={ref} />
+})
+```
+
+**闭包陷阱**
+
+当异步函数获取 state 时，可能获取的不是最新的 state，需要使用 useRef 来解决。
 
 如下，先点击一次打印按钮，再迅速点击五次累加按钮，最终结果为 `count: 5` `countRef.current: 10`。
 
-> 因为 count 是一个值，而 countRef 是一个引用类型。
+这是因为 count 是一个值，而 countRef 是一个引用类型。
 
 ```tsx
-const App = () => {
-  const [count, setCount] = useState(5)
-  const countRef = useRef(5)
-  
-  useEffect(() => {
-    countRef.current = count
-  }, [count])
-  
-  const delayConsole = () => {
-    setTimeout(() => {
-      console.log(count) // 5
-      console.log(countRef.current) // 10
-    }, 3000)
-  }
-  
-  return (
-    <>
-      {/* click 5 */}
-      <button onClick={() => setCount(count => count + 1)}>累加</button>
-      <button onClick={delayConsole}>打印</button>
-    </>
-  )
+const [count, setCount] = useState(5)
+const countRef = useRef(5)
+
+useEffect(() => {
+  countRef.current = count
+}, [count])
+
+// 累加
+const increment = () => setCount(count => count + 1)
+
+// 打印
+const delayConsole = () => {
+  setTimeout(() => {
+    count // => 5
+    countRef.current // => 10
+  }, 3000)
 }
 ```
 
@@ -251,7 +328,7 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 
 高阶组件接受一个组件作为参数，并返回一个新的组件。这个新的组件会具有高阶组件的功能。
 
-下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和销毁，并输出日志。
+下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和销毁，并打印日志。
 
 ```tsx
 /* components/WithLog.tsx */
@@ -281,7 +358,7 @@ const MyComponent = ({ title }: any) => {
 }
 ```
 
-将以上组件作为参数传递给高阶组件，会返回一个新的组件，它已经具有了输出日志的功能。
+将以上组件作为参数传递给高阶组件，会返回一个新的组件，它已经具有了打印日志的功能。
 
 > [!warning]
 >
