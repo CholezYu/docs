@@ -1384,7 +1384,6 @@ Provide 可以给后代组件提供数据。
 const count = ref(0)
 
 provide("count", count)
-
 // 如果希望提供的数据不能被后代组件修改，可以使用 `readonly()` 来包装
 provide("read-only-count", readonly(count))
 ```
