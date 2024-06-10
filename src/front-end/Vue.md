@@ -1487,7 +1487,7 @@ inject("count", ref(1))
 
 我们可以使用异步组件，将组件进行分包，需要的时候再加载这个组件：
 
-1. 通过 `defineAsyncComponent` 定义异步组件（可以搭配 `<suspense>` 组件使用），并使用动态 import 引入；
+1. 通过 `defineAsyncComponent` 定义异步组件（可以搭配 `<Suspense>` 组件使用），并使用动态 import 引入；
 
 2. 在打包的时候，vite / webpack 如果遇到 import 动态引入，会把引入的资源分开进行打包；
 
