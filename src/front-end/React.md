@@ -179,7 +179,7 @@ const MyInput = forwardRef(({ value, onChange }: {
 
 **闭包陷阱**
 
-当异步函数获取 state 时，可能获取的不是最新的 state，需要使用 useRef 来解决。
+当异步函数获取 state 时，可能获取的不是最新的 state，需要使用 `useRef` 来解决。
 
 如下，先点击一次打印按钮，再迅速点击五次累加按钮，最终结果为 `count: 5` `countRef.current: 10`。
 
@@ -207,38 +207,37 @@ const delayConsole = () => {
 
 ### useContext
 
-创建共享对象，将需要使用共享数据的组件放入 `<WhatContext>` 组件中，并将共享数据注册到 value 属性中。
+`useContext` 接受一个 context 对象作为参数，该对象由 `createContext` 创建。并返回一个对象，它包含了 `<Context.Provider>` 组件提供的数据。
 
-类似于 `provide`。
+`<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
 /* App.tsx */
 
 import { createContext } from "react"
 
-const AppContext = createContext("Hello React")
+const TextContext = createContext(null)
 
 const App = () => {
   const [text, setText] = useState("Hello React")
   
   return (
-    <AppContext.Provider value={{ text, setText }}>
+    <TextContext.Provider value={{ text, setText }}>
       <MyComponent />
-    </AppContext.Provider>
+    </TextContext.Provider>
   )
 }
 ```
 
-`useContext` 类似于 `inject`。子组件可以通过 `useContext` 接收共享数据。
+`useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
 
 ```tsx
-/* MyComponent/index.tsx */
+/* Text.tsx */
 
 import { useContext } from "react"
-import { AppContext } from "./App.tsx"
 
-const MyComponent = () => {
-  const { text, setText } = useContext(AppContext)
+const Text = () => {
+  const { text, setText } = useContext(TextContext)
   
   return <input value={text} onChange={event => setText(event.target.value)} />
 }
@@ -331,15 +330,15 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和销毁，并打印日志。
 
 ```tsx
-/* components/WithLog.tsx */
+/* WithLog.tsx */
 
 const WithLog = (Component: FC) => {
   return (props: any) => {
     useEffect(() => {
-      console.log(`组件${Component.name}被挂载了 ${dayjs().format("HH:mm:ss")}`)
+      console.log(`${Component.name} 组件已挂载 ${now()}`)
       
       return () => {
-        console.log(`组件${Component.name}被销毁了 ${dayjs().format("HH:mm:ss")}`)
+        console.log(`${Component.name} 组件已销毁 ${now()}`)
       }
     }, [])
     
@@ -351,9 +350,9 @@ const WithLog = (Component: FC) => {
 高阶组件可以赋予任何组件它的功能。以下一个最普通的 React 组件。
 
 ```tsx
-/* components/MyComponent.tsx */
+/* MyComponent.tsx */
 
-const MyComponent = ({ title }: any) => {
+const MyComponent = ({ title }) => {
   return <h2>{title}</h2>
 }
 ```
