@@ -1,5 +1,5 @@
 ---
-title: Nuxt
+title: Nuxt.js
 icon: nuxt
-description: Nuxt
+description: Nuxt.js
 ---

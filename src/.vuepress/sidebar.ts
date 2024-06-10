@@ -26,7 +26,7 @@ export default sidebar({
           link: "history/Vue"
         },
         {
-          text: "Nuxt",
+          text: "Nuxt.js",
           icon: "nuxt",
           link: "Nuxt"
         },
@@ -71,9 +71,9 @@ export default sidebar({
           link: "Ajax"
         },
         {
-          text: "Nodejs",
+          text: "Node.js",
           icon: "nodeJS",
-          link: "Nodejs"
+          link: "Node"
         },
         {
           text: "Webpack",

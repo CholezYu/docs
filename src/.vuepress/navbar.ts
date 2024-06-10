@@ -20,7 +20,7 @@ export default navbar([
             link: "history/Vue"
           },
           {
-            text: "Nuxt",
+            text: "Nuxt.js",
             icon: "nuxt",
             link: "Nuxt"
           },
@@ -65,9 +65,9 @@ export default navbar([
             link: "Ajax"
           },
           {
-            text: "Nodejs",
+            text: "Node.js",
             icon: "nodeJS",
-            link: "Nodejs"
+            link: "Node"
           },
           {
             text: "Webpack",
