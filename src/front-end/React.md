@@ -232,19 +232,15 @@ const delayConsole = () => {
 ```tsx
 /* App.tsx */
 
-import { createContext, useContext } from "react"
-
 const TextContext = createContext(null)
 
-const App = () => {
-  const [text, setText] = useState("Hello React")
-  
-  return (
-    <TextContext.Provider value={{ text, setText }}>
-      <Text />
-    </TextContext.Provider>
-  )
-}
+const [text, setText] = useState("Hello React")
+
+return (
+  <TextContext.Provider value={{ text, setText }}>
+    <Text />
+  </TextContext.Provider>
+)
 ```
 
 `useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
@@ -252,18 +248,21 @@ const App = () => {
 ```tsx
 /* Text.tsx */
 
-import { useContext } from "react"
+const { text, setText } = useContext(TextContext)
 
-const Text = () => {
-  const { text, setText } = useContext(TextContext)
-  
-  return <input value={text} onChange={event => setText(event.target.value)} />
-}
+return <input value={text} onChange={event => setText(event.target.value)} />
 ```
 
 ### useReducer
 
-简化版的 Redux。
+`useReducer` 就是简化版的 Redux。我们需要制定一套更新**状态**的规则，根据不同的事件类型，做出相应处理。我们将上述操作定义成一个 reducer 函数，它接受两个参数：
+
+- `state`：状态。
+- `action`：按照规范，它应该有两个参数。`type` 表示事件类型；`payload` 为一个包含额外参数的对象。
+
+最后，需要将处理后的数据返回。
+
+`useReducer` 需要接受一个 reducer 函数和一个初始的 state。它返回一个只读的 state 和 `dispatch` 函数。我们只能使用该函数来统一处理 state，而不是直接修改。
 
 ```tsx
 const reducer = (state, action) => {
