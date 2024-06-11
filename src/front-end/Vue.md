@@ -5,7 +5,7 @@ date: 2024-05-13
 description: Vue
 ---
 
-## 响应式：核心
+## 响应式 API
 
 ### ref
 
@@ -537,8 +537,6 @@ function doWatch(
   }
 }
 ```
-
-## 响应式：进阶
 
 ### toRaw
 
@@ -1077,7 +1075,7 @@ const patchKeyedChildren = (
 }
 ```
 
-## 性能优化
+## 性能提升
 
 > [!tip]
 >
