@@ -20,7 +20,7 @@ export default navbar([
             link: "history/Vue"
           },
           {
-            text: "Nuxt.js",
+            text: "Nuxt",
             icon: "nuxt",
             link: "Nuxt"
           },
@@ -40,9 +40,9 @@ export default navbar([
             link: "WeChat"
           },
           {
-            text: "UniApp",
-            icon: "uniapp",
-            link: "UniApp"
+            text: "uni-app",
+            icon: "uni-app",
+            link: "uni-app"
           },
           {
             text: "JavaScript",
@@ -67,7 +67,7 @@ export default navbar([
           {
             text: "Node.js",
             icon: "nodeJS",
-            link: "Node"
+            link: "Node.js"
           },
           {
             text: "Webpack",
