@@ -185,13 +185,14 @@ return <MyInput ref={inputRef} />
 我们需要使用 `forwardRef` 来包装自定义组件，这样就能将它的 ref 暴露给父组件。
 
 ```tsx
-import { forwardRef, type ForwardedRef, type ChangeEventHandler } from "react"
+import { forwardRef } from "react"
 
-const MyInput = forwardRef(({ value, onChange }: {
-  value?: string | number
-  onChange?: ChangeEventHandler<HTMLInputElement>
-}, ref: ForwardedRef<HTMLInputElement>) => {
-  return <input value={value} onChange={onChange} ref={ref} />
+// interface ForwardRefRenderFunction<T, P = {}> {
+//   (props: P, ref: ForwardedRef<T>): ReactNode
+// }
+
+const MyInput = forwardRef<HTMLInputElement, any>((props, ref) => {
+  return <Input ref={ref} {...props} />
 })
 ```
 
@@ -250,15 +251,18 @@ return (
 
 const { text, setText } = useContext(TextContext)
 
-return <input value={text} onChange={event => setText(event.target.value)} />
+return <input
+  value={content}
+  onChange={event => setContent(event.target.value)}
+/>
 ```
 
 ### useReducer
 
-`useReducer` 就是简化版的 Redux。我们需要制定一套更新**状态**的规则，根据不同的事件类型，做出相应处理。我们将上述操作定义成一个 reducer 函数，它接受两个参数：
+`useReducer` 就是简化版的 Redux。我们需要制定一套更新 state 的规则，根据不同事件类型，做出相应处理。我们将上述操作定义成一个 reducer 函数，它接受两个参数：
 
 - `state`：状态。
-- `action`：按照规范，它应该有两个参数。`type` 表示事件类型；`payload` 为一个包含额外参数的对象。
+- `action`：必须有一个 `type` 属性，标识事件类型。如果有额外的参数，通常写在 `payload` 中。
 
 最后，需要将处理后的数据返回。
 
@@ -311,48 +315,24 @@ function useReducer<T = any>(
 
 ### useMemo
 
-`useMemo` 类似于 `computed`，用于缓存 state，只有当依赖项发生改变时，才会重新计算。
+`useMemo` 类似于 `Vue Computed`，用于缓存一个计算结果，只有当依赖项发生改变时，才会重新计算。
 
 ```tsx
-import { useState, useMemo } from "react"
+const [count, setCount] = useState(1)
 
-const App = () => {
-  const [count, setCount] = useState(10)
-  const [text, setText] = useState("")
-  
-  const double = useMemo(() => count * 2, [count]) // 只有当 count 改变时，才会重新计算
-  
-  return (
-    <>
-      <button onClick={() => setCount(count => count + 1)}>{double}</button>
-      <input value={text} onChange={event => setText(event.target.value)} />
-    </>
-  )
-}
+const double = useMemo(() => count * 2, [count]) // 只有当 count 改变时，才会重新计算
 ```
 
 ### useCallback
 
-`useCallback` 与 `useMemo` 用法相似，`useMemo` 用于缓存一个计算结果，`useCallback` 用于缓存一个函数。
+`useCallback` 与 `useMemo` 用法相似，用于缓存一个函数。
 
 ```tsx
-import { useState, useCallback } from "react"
+const [count, setCount] = useState(1)
 
-const App = () => {
-  const [count, setCount] = useState(10)
-  const [text, setText] = useState("")
-  
-  const showCount = useCallback(() => {
-    console.log(count)
-  }, [count]) // 只有当 count 改变时，才会重新创建函数
-  
-  return (
-    <>
-      <button onClick={() => setCount(count => count + 1)}>{ double }</button>
-      <input value={text} onChange={event => setText(event.target.value)} />
-    </>
-  )
-}
+const showCount = () => console.log(count)
+
+const cachedShowCount = useCallback(showCount, [count]) // 只有当 count 改变时，才会重新创建函数
 ```
 
 ## HOC
@@ -413,29 +393,29 @@ const App = () => {
 
 - 当数据发生变化时，React 会生成新的虚拟 DOM，然后对新生成的虚拟 DOM 与当前虚拟 DOM 进行比较；
 
-- React 通过比较这两棵虚拟 DOM 树的差异，决定如何修改 DOM 结构。这种算法称为 diffing 算法；
+- React 通过比较这两棵虚拟 DOM 树的差异，决定如何修改 DOM 结构。这种算法称为 Diffing 算法；
 
-- diffing 算法可以提升 React 的渲染性能，计算出虚拟 DOM 中变化的部分，针对该部分进行 DOM 操作。
+- Diffing 算法可以提升 React 的渲染性能，计算出虚拟 DOM 中变化的部分，针对该部分进行 DOM 操作。
 
 ### 算法策略
 
-> **策略一**
+**策略一**
 
-- 两棵树只对同一层级的节点进行比较，若该节点不存在了，那么该节点及所有子节点将被删除，不再进行比较；
+- 两棵树只对同一层级的节点进行比较，若该节点不存在，则该节点及所有子节点将被删除，不再进行比较；
 
-- React diffing 只考虑同层级的节点的位置变换，若为跨层级的位置变换，则为删除节点和创建节点的操作；
+- React Diffing 只考虑同层级的节点的位置变换，若为跨层级的位置变换，则为删除节点和创建节点的操作；
 
 - React 官方建议不要进行 DOM 节点的跨层级操作。
 
->**策略二**
+**策略二**
 
-- 同一类型的组件（元素），按照原策略（tree diff）进行深层次比较；
+- 同类型组件，按照原策略（Tree Diff）进行深层次比较；
 
-- 不同类型的组件（元素），diffing 算法会将当前组件（元素）及其所有子节点全部删除，添加新的组件（元素）。
+- 不同类型组件，Diffing 算法会将当前组件、及其所有子节点全部删除，添加新的组件。
 
-> **策略三**
+**策略三**
 
-- 对于同一层级的节点，React diffing 提供了四种节点操作：插入，删除，移动，更新；
+- 对于同一层级的节点，React Diffing 提供了四种节点操作：插入，删除，移动，更新；
 
 - 插入：新的元素不在当前虚拟 DOM 中，而是全新的节点，则进行插入操作；
 
@@ -445,16 +425,16 @@ const App = () => {
 
 - 更新：元素只是属性发生了改变，则进行更新操作。
 
-### key
+### Key
 
-- 当某个节点添加了同级节点中唯一的 key 属性，当它在当前层级的位置发生变化后，diffing 算法通过比较之后，如果发现了 key 值相同的新旧节点，就会执行移动操作，而不会执行删除旧节点与创建新节点的操作；
+- 当某个节点添加了同级节点中唯一的 key 属性，当它在当前层级的位置发生变化后，Diffing 算法通过比较之后，如果发现了 key 值相同的新旧节点，就会执行移动操作，而不会执行删除旧节点与创建新节点的操作；
 
 - React 建议不要用遍历时的 index 作为节点的 key 值，因为每个元素的 index 会随结构的改变而发生变化。
 
 - key 的注意事项：
 
   - key 必须在当前列表具有唯一性；
-
+  
   - key 必须具有稳定性。
 
 ## Router
