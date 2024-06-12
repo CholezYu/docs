@@ -1824,7 +1824,7 @@ const KeepAliveImpl: ComponentOptions = {
 ```ts
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 
-const routes: Array<RouteRecordRaw> = [
+const routes: RouteRecordRaw[] = [
   {
     path: "/",
     redirect: "/Home"
@@ -1903,7 +1903,6 @@ history.pushState(null, null, "/home")
 ```js
 router.beforeEach(async (to, _from, next) => {
   NProgress.start()
-  useTitle(to.meta.title)
   
   // 有 Token
   if (userToken) {
