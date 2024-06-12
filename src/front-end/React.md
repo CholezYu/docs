@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-10
+date: 2024-06-13
 description: React
 ---
 
@@ -192,7 +192,7 @@ import { forwardRef } from "react"
 // }
 
 const MyInput = forwardRef<HTMLInputElement, any>((props, ref) => {
-  return <Input ref={ref} {...props} />
+  return <input ref={ref} {...props} />
 })
 ```
 
@@ -231,8 +231,6 @@ const delayConsole = () => {
 `<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
-/* App.tsx */
-
 const TextContext = createContext(null)
 
 const [text, setText] = useState("Hello React")
@@ -249,12 +247,15 @@ return (
 ```tsx
 /* Text.tsx */
 
+import type { ChangeEvent } from "react"
+
 const { text, setText } = useContext(TextContext)
 
-return <input
-  value={content}
-  onChange={event => setContent(event.target.value)}
-/>
+const changeText = (event: ChangeEvent<HTMLInputElement>) => {
+  setText(event.target.value)
+}
+
+return <input value={content} onChange={changeContent} />
 ```
 
 ### useReducer
@@ -437,169 +438,171 @@ const App = () => {
   
   - key 必须具有稳定性。
 
-## Router
+## Router <Badge text="v6" type="tip" />
 
-### 基本使用
+### 路由配置
 
-在 `<BrowserRouter>` 组件中使用 React 路由。
+v5 的写法，使用 `<Routes>` 和 `<Route>` 的组合写法。<Badge text="不推荐" type="warning" />
 
 ```tsx
-/* main.tsx */
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 
-import { BrowserRouter } from "react-router-dom"
-
-ReactDOM.createRoot(app).render(
+const App = () => (
   <BrowserRouter>
-    <App />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="home" element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Route>
+    </Routes>
   </BrowserRouter>
 )
 ```
 
-```tsx
-/* App.tsx */
-
-import { Routes, Route } from "react-router-dom"
-
-const App = () => {
-  return (
-    <>
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/user" element={<User />} />
-      </Routes>
-    </>
-  )
-}
-```
-
-`<Outlet>` 渲染处于活跃状态的路由。
+v6 提供了 `useRoutes`，可以定义 `Vue Router` 风格的路由。<Badge text="不推荐" type="warning" />
 
 ```tsx
-/* Layout.tsx */
+import { BrowserRouter, useRoutes } from "react-router-dom"
 
-import { Outlet, Link } from "react-router-dom"
-
-const Layout = () => {
-  return (
-    <>
-      <div>
-        <Link to="/home">Home</Link>
-        <Link to="/user">User</Link>
-      </div>
-      
-      <Outlet />
-    </>
-  )
-}
-```
-
-### 嵌套路由
-
-使用 `useRoutes` 解析路由配置。
-
-```tsx
-/* App.tsx */
-
-import { useRoutes } from "react-router-dom"
-import router from "@/router"
-
-const App = () => {
-  return <div>{useRoutes(router)}</div>
-}
-```
-
-路由配置，将嵌套的 `<Routes>` 与 `<Route>` 配置为对应的路由规则。
-
-```tsx
-/* router.tsx */
-
-import { Navigate } from "react-router-dom"
+const App = () => (
+  <BrowserRouter>
+    <Router />
+  </BrowserRouter>
+)
 
 const routes = [
   {
     path: "/",
     element: <Layout />,
     children: [
-      // 默认路由
       {
-        path: "/",
-        element: <Navigate to="/home" />
-      },
-      {
-        path: "/home",
+        path: "home",
         element: <Home />
       },
       {
-        path: "/user",
-        element: <User />
+        path: "about",
+        element: <About />
       }
     ]
-  },
-  // 任意路由
-  {
-    path: "/*",
-    element: <NotFound />
   }
 ]
+
+// `useRoutes` may be used only in the context of a <Router> component.
+const Router = () => {
+  return <>{useRoutes(routes)}</>
+}
+```
+
+v6 推荐将 `<BrowserRouter>` 迁移到 `<RouterProvider>` 。
+
+```tsx
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
+
+const App = () => {
+  return <RouterProvider router={router} />
+}
+
+const routes = [
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "home",
+        element: <Home />
+      },
+      {
+        path: "about",
+        element: <About />
+      }
+    ]
+  }
+]
+
+const router = createBrowserRouter(routes)
+```
+
+如果更喜欢 JSX 风格的路由，推荐使用 `createRoutesFromElements`。<Badge text="推荐" type="tip" />
+
+```tsx
+import {
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route
+} from "react-router-dom"
+
+const App = () => {
+  return <RouterProvider router={router} />
+}
+
+const router = createBrowserRouter(createRoutesFromElements(
+  <Route path="/" element={<Layout />}>
+    <Route path="home" element={<Home />} />
+    <Route path="about" element={<About />} />
+  </Route>
+))
 ```
 
 ### 声明式导航
 
-当路由匹配成功时，`<NavLink>` 会提供处于激活状态的类名，`<Link>` 则不会。
+`<NavLink>` 会给活跃的路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡，`<Link>` 则不会。
 
 ```tsx
-import { Outlet, Link, NavLink } from "react-router-dom"
+/* Layout.tsx */
 
-const Layout = () => {
-  return (
+import { NavLink, Link, Outlet } from "react-router-dom"
+
+return (
+  <>
     <div>
-      <div>
-        <Link to="/home">Home</Link>
-        <Link to="/user">User</Link>
-      </div>
-      
-      <div>
-        <NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
-          Home
-        </NavLink>
-        <NavLink to="/user" className={({ isActive }) => isActive ? "active" : ""}>
-          User
-        </NavLink>
-      </div>
-      
-      <Outlet />
+      <NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
+        Home
+      </NavLink>
+      <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
+        About
+      </NavLink>
     </div>
-  )
-}
+    
+    <div>
+      <Link to="/home">Home</Link>
+      <Link to="/about">About</Link>
+    </div>
+    
+    <Outlet />
+  </>
+)
 ```
 
 ### 编程式导航
 
 ```tsx
+/* Layout.tsx */
+
 import { Outlet, useNavigate } from "react-router-dom"
 
-const Home = () => {
-  const navigate = useNavigate()
-  
-  return (
+const navigate = useNavigate()
+
+return (
+  <>
     <div>
-      <div>
-        <button onClick={() => navigate("/home")}>Home</button>
-        <button onClick={() => navigate("/user")}>User</button>
-      </div>
-      
-      <div>
-        <button onClick={() => navigate(-1)}>返回</button>
-        <button onClick={() => navigate(+1)}>前进</button>
-      </div>
-      
-      <Outlet />
+      <button onClick={() => navigate("/home")}>Home</button>
+      <button onClick={() => navigate("/about")}>About</button>
     </div>
-  )
-}
+    
+    <div>
+      <button onClick={() => navigate(-1)}>back</button>
+      <button onClick={() => navigate(+1)}>forward</button>
+    </div>
+    
+    <Outlet />
+  </>
+)
 ```
 
-### 动态路由 - search
+### 动态路由传参
+
+####  search
 
 通过 search 传参。
 
@@ -644,7 +647,7 @@ const Profile = () => {
 }
 ```
 
-### 动态路由 - params
+#### params
 
 通过 params 传参。需要使用 ":" 占位。
 
@@ -677,7 +680,7 @@ const Profile = () => {
 }
 ```
 
-### 动态路由 - state
+#### state
 
 通过 state 传参。`navigate()` 第二个参数可以传入 state 对象。
 
@@ -736,8 +739,8 @@ const routes = [
     element: load(lazy(() => import("@/views/Home")))
   },
   {
-    path: "/user",
-    element: load(lazy(() => import("@/views/User")))
+    path: "/about",
+    element: load(lazy(() => import("@/views/About")))
   }
 ]
 ```
