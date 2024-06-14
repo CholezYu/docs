@@ -1,15 +1,15 @@
 {
   "name": "docs",
   "author": "Cholez.Yu",
-  "version": "24.6.13",
+  "version": "24.6.14",
   "description": "Cholez Web Docs",
   "license": "MIT",
   "type": "module",
   "packageManager": "yarn@4.2.2",
   "scripts": {
-    "clean-dev": "vuepress dev src --clean-cache",
     "dev": "vuepress dev src",
     "build": "vuepress build src",
+    "clean-dev": "vuepress dev src --clean-cache",
     "docs:update-package": "yarn dlx vp-update"
   },
   "devDependencies": {
