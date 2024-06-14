@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-13
+date: 2024-06-15
 description: React
 ---
 
@@ -347,7 +347,7 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 ```tsx
 /* WithLog.tsx */
 
-const WithLog = (Component: FC) => {
+const WithLog = (Component: FC<any>) => {
   return (props: any) => {
     useEffect(() => {
       console.log(`${Component.name} 组件已挂载 ${now()}`)
@@ -379,12 +379,12 @@ const MyComponent = ({ title }) => {
 > 给高阶组件返回的新组件传递 props 时，其实是传递给了高阶组件，所以高阶组件需要将 props 批量传递给目标组件。
 
 ```tsx
-/* App.tsx */
+/* About.tsx */
 
 const MyComponentLog = WithLog(MyComponent)
 
-const App = () => {
-  return <MyComponentLog title="Log" />
+const About = () => {
+  return <MyComponentLog title="About" />
 }
 ```
 
@@ -440,9 +440,9 @@ const App = () => {
 
 ## Router <Badge text="v6" type="tip" />
 
-### 路由配置
+### 基本配置
 
-v5 的写法，使用 `<Routes>` 和 `<Route>` 的组合写法。<Badge text="不推荐" type="warning" />
+使用 `<Routes>` 和 `<Route>` 的组合写法。
 
 ```tsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
@@ -460,7 +460,7 @@ const App = () => (
 )
 ```
 
-v6 提供了 `useRoutes`，可以定义 `Vue Router` 风格的路由。<Badge text="不推荐" type="warning" />
+v6 提供了 `useRoutes`，可以定义 `Vue Router` 风格的路由。
 
 ```tsx
 import { BrowserRouter, useRoutes, Navigate } from "react-router-dom"
@@ -470,6 +470,11 @@ const App = () => (
     <Router />
   </BrowserRouter>
 )
+
+// `useRoutes` may be used only in the context of a <Router> component.
+const Router = () => {
+  return useRoutes(routes)
+}
 
 const routes = [
   {
@@ -491,11 +496,6 @@ const routes = [
     ]
   }
 ]
-
-// `useRoutes` may be used only in the context of a <Router> component.
-const Router = () => {
-  return <>{useRoutes(routes)}</>
-}
 ```
 
 v6 推荐将 `<BrowserRouter>` 迁移到 `<RouterProvider>` 。
@@ -507,6 +507,8 @@ const App = () => {
   return <RouterProvider router={router} />
 }
 
+const router = createBrowserRouter(routes)
+
 const routes = [
   {
     path: "/",
@@ -527,11 +529,9 @@ const routes = [
     ]
   }
 ]
-
-const router = createBrowserRouter(routes)
 ```
 
-如果更喜欢 JSX 风格的路由，推荐使用 `createRoutesFromElements`。<Badge text="推荐" type="tip" />
+如果更喜欢 JSX 风格的路由，推荐使用 `createRoutesFromElements`。
 
 ```tsx
 import {
@@ -554,165 +554,194 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 ```
 
-### 声明式导航
+### Link & NavLink
 
-`<NavLink>` 会给活跃的路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡，`<Link>` 则不会。
+`<Link>` 是一种导航链接，当用户点击时会跳转到另一个页面。
+
+`<NavLink>` 是一种特殊的 `<Link>`，它会给活跃的路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡。我们可以根据它不同的状态，设置对应的样式。
 
 ```tsx
-/* Layout.tsx */
-
-import { NavLink, Link, Outlet } from "react-router-dom"
-
-return (
-  <>
-    <div>
+const Layout = () => {
+  return (
+    <>
       <NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
         Home
       </NavLink>
       <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
         About
       </NavLink>
-    </div>
-    
-    <div>
+      
       <Link to="/home">Home</Link>
       <Link to="/about">About</Link>
-    </div>
-    
-    <Outlet />
-  </>
-)
+    </>
+  )
+}
 ```
 
-### 编程式导航
+### useNavigate
+
+`useNavigate()` 会返回一个函数，通常命名为 `navigate`，它是一种编程式的导航。
+
+`navigate` 接受两个参数：
+
+- 第一个参数 `to` 与 `<Link to>` 的类型相同。可以是一个路径字符串，也可以是一个描述路径的对象。
+
+- 第二个参数 `options` 与 `<Link props>` 相似。常用的属性有 `state` `replace`。
+
+下面是 `navigate` 的类型声明。可以看出 `to.search` `to.hash` `options.state` 可以在导航跳转时携带参数。
+
+```ts
+declare function useNavigate(): NavigateFunction
+
+export interface NavigateFunction {
+  (to: To, options?: NavigateOptions): void
+  (delta: number): void
+}
+
+type To = string | Partial<Path>
+
+interface Path {
+  /**
+   * A URL pathname, beginning with a /.
+   */
+  pathname: string
+  
+  /**
+   * A URL search string, beginning with a ?.
+   */
+  search: string
+  
+  /**
+   * A URL fragment identifier, beginning with a #.
+   */
+  hash: string
+}
+
+interface NavigateOptions {
+  replace?: boolean
+  state?: any
+  preventScrollReset?: boolean
+  relative?: RelativeRoutingType
+  unstable_flushSync?: boolean
+  unstable_viewTransition?: boolean
+}
+```
+
+通过 `to.search` 传递 search 参数（query string）。
 
 ```tsx
-/* Layout.tsx */
-
-import { Outlet, useNavigate } from "react-router-dom"
-
 const navigate = useNavigate()
 
-return (
-  <>
-    <div>
-      <button onClick={() => navigate("/home")}>Home</button>
-      <button onClick={() => navigate("/about")}>About</button>
-    </div>
-    
-    <div>
-      <button onClick={() => navigate(-1)}>back</button>
-      <button onClick={() => navigate(+1)}>forward</button>
-    </div>
-    
-    <Outlet />
-  </>
-)
+const goto = () => {
+  navigate({ pathname: "/user", search: "?id=1&name=minji" })
+}
 ```
 
-### 动态路由传参
-
-####  search
-
-通过 search 传参。
+通过 `options.state` 传递 state 参数。
 
 ```tsx
-/* User.tsx */
-
-import { Link, Outlet, useNavigate } from "react-router-dom"
-
 const navigate = useNavigate()
 
-return (
-  <>
-    <Link to="/user/profile?id=1">用户信息</Link>
-    
-    {/* or */}
-    
-    <button onClick={() => navigate({ pathname: "/user/profile", search: "id=2" })}>
-      用户信息
-    </button>
-    
-    <Outlet />
-  </>
-)
+const goto = () => {
+  navigate("/user", { state: { id: 1, name: "minji" } })
+}
 ```
 
-获取 search 参数，或将 search 参数解析为对象。
+### useLocation
 
-```tsx
-/* User/Profile.tsx */
+`useLocation` 会返回一个 location 对象。下面是它的类型声明。
 
-import { useSearchParams, useLocation } from "react-router-dom"
-import qs from "qs"
+```ts
+declare function useLocation(): Location
 
-const [search] = useSearchParams()
-const id = search.get("id")
+interface Location<State = any> extends Path {
+  /**
+   * A value of arbitrary data associated with this location.
+   */
+  state: State
+  
+  /**
+   * A unique string associated with this location. May be used to safely store
+   * and retrieve data in some other storage API, like `localStorage`.
+   *
+   * Note: This value is always "default" on the initial location.
+   */
+  key: string
+}
 
-// or
-
-const { search } = useLocation()
-const { id } = qs.parse(search.slice(1)) // "?" => ""
+interface Path {
+  /**
+   * A URL pathname, beginning with a /.
+   */
+  pathname: string
+  
+  /**
+   * A URL search string, beginning with a ?.
+   */
+  search: string
+  
+  /**
+   * A URL fragment identifier, beginning with a #.
+   */
+  hash: string
+}
 ```
 
-#### params
-
-通过 params 传参。需要使用 ":" 占位。
+我们可以使用 `useLocation` 获取 search 参数，并对它进行解析。
 
 ```tsx
-/* User.tsx */
+import { useLocation } from "react-router-dom"
+import qs from "query-string"
 
-import { Link, Outlet } from "react-router-dom"
+const location = useLocation()
+/* {
+  hash: ""
+  key: "xlmnk210"
+  pathname: "/user"
+  search: "?id=1&name=minji"
+  state: null
+} */
 
-return (
-  <>
-    <Link to="/user/profile/1">用户信息</Link>
-    <Link to="/user/profile/2">用户信息</Link>
-
-    <Outlet />
-  </>
-)
+qs.parse(location.search) // { id: '1', name: 'minji' }
 ```
 
-获取 params 参数。
+`useLocation` 还扩展了一个 state 属性，它就是通过 `options.state` 传递的参数。
 
 ```tsx
-/* User/Profile.tsx */
+const location = useLocation()
 
+location.state // { id: '1', name: 'minji' }
+```
+
+### useSearchParams
+
+`useSearchParams` 类似于 `useState`，它返回 `[searchParams, setSearchParams]`，分别用来获取参数的值，和修改当前位置的 Query String，并且会触发组件的更新。
+
+```tsx
+import { useSearchParams } from "react-router-dom"
+
+const [searchParams, setSearchParams] = useSearchParams()
+
+searchParams.get("id") // 1
+searchParams.get("name") // minji
+```
+
+### useParams
+
+如果需要传递 params 参数，可以使用 `useParams`。**注意**：需要使用 ":" 占位。
+
+```tsx
+const goto = () => {
+  () => navigate("/user/1/minji")
+}
+```
+
+`useParams` 返回的就是 params 参数。
+
+```tsx
 import { useParams } from "react-router-dom"
 
-const { id } = useParams()
-```
-
-#### state
-
-通过 state 传参。`navigate()` 第二个参数可以传入 state 对象。
-
-```tsx
-/* User.tsx */
-
-import { Link, Outlet, useNavigate } from "react-router-dom"
-
-  const navigate = useNavigate()
-  
-return (
-  <>
-    <button onClick={navigate("/user/profile", { state: { id: 1 } })}>用户信息</button>
-    <button onClick={navigate("/user/profile", { state: { id: 2 } })}>用户信息</button>
-    
-    <Outlet />
-  </>
-)
-```
-
-获取 state 参数。
-
-```tsx
-/* User/Profile.tsx */
-
-import { useLocation } from "react-router-dom"
-
-const { id } = useLocation().state
+const params = useParams() // { id: '1', name: 'minji' }
 ```
 
 ### 路由懒加载
@@ -733,8 +762,8 @@ const load = (Component) => (
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<Layout />}>
-    <Route path="Home" element={load(lazy(() => import("@/views/Home")))} />
-    <Route path="About" element={load(lazy(() => import("@/views/About")))} />
+    <Route path="Home" element={load(lazy(() => import("@/pages/Home.tsx")))} />
+    <Route path="About" element={load(lazy(() => import("@/pages/About.tsx")))} />
   </Route>
 ))
 ```
