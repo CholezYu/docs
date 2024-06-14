@@ -1824,6 +1824,11 @@ const KeepAliveImpl: ComponentOptions = {
 ```ts
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+})
+
 const routes: RouteRecordRaw[] = [
   {
     path: "/",
@@ -1840,11 +1845,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/NotFound.vue")
   }
 ]
-
-const router = createRouter({
-  history: createWebHistory(),
-  routes
-})
 ```
 
 ### 路由模式
