@@ -18,32 +18,32 @@ export default sidebar({
         {
           text: "Vue 3",
           icon: "vue",
-          link: "Vue"
+          link: "vue"
         },
         {
           text: "Vue 2",
           icon: "vue",
-          link: "history/Vue"
+          link: "history/vue"
         },
         {
           text: "Nuxt",
           icon: "nuxt",
-          link: "Nuxt"
+          link: "nuxt"
         },
         {
           text: "React 18",
           icon: "react",
-          link: "React"
+          link: "react"
         },
         {
           text: "React Native",
           icon: "react",
-          link: "ReactNative"
+          link: "react-native"
         },
         {
           text: "WeChat",
           icon: "wechat",
-          link: "WeChat"
+          link: "wechat"
         },
         {
           text: "uni-app",
@@ -53,48 +53,47 @@ export default sidebar({
         {
           text: "JavaScript",
           icon: "javascript",
-          link: "JavaScript"
+          link: "javascript"
         },
         {
           text: "TypeScript",
           icon: "typescript",
-          link: "TypeScript"
-        },
-        {
-          text: "Bootstrap",
-          icon: "bootstrap",
-          link: "Bootstrap"
+          link: "typescript"
         },
         {
           text: "Ajax",
           icon: "ajax",
-          link: "Ajax"
+          link: "ajax"
         },
         {
           text: "Node.js",
           icon: "nodeJS",
-          link: "Node.js"
+          link: "nodejs"
         },
         {
           text: "Webpack",
           icon: "webpack",
-          link: "Webpack"
+          link: "webpack"
         },
-        
         {
           text: "Git",
           icon: "git",
-          link: "Git"
+          link: "git"
         },
         {
           text: "HTML5",
           icon: "html",
-          link: "HTML5"
+          link: "html5"
         },
         {
           text: "CSS",
           icon: "css",
-          link: "CSS"
+          link: "css"
+        },
+        {
+          text: "Bootstrap",
+          icon: "bootstrap",
+          link: "bootstrap"
         }
       ]
     },
@@ -108,22 +107,22 @@ export default sidebar({
         {
           text: "Java",
           icon: "java",
-          link: "Java"
+          link: "java"
         },
         {
           text: "Python",
           icon: "python",
-          link: "Python"
+          link: "python"
         },
         {
           text: "MySQL",
           icon: "mysql",
-          link: "MySQL"
+          link: "mysql"
         },
         {
           text: "Nginx",
           icon: "nginx",
-          link: "Nginx"
+          link: "nginx"
         }
       ]
     },
@@ -137,27 +136,27 @@ export default sidebar({
         {
           text: "VueUse",
           icon: "vueuse",
-          link: "VueUse"
+          link: "vueuse"
         },
         {
           text: "ECharts",
           icon: "echarts",
-          link: "ECharts"
+          link: "echarts"
         },
         {
           text: "Lodash",
           icon: "lodash",
-          link: "Lodash"
+          link: "lodash"
         },
         {
           text: "Dayjs",
           icon: "dayjs",
-          link: "Dayjs"
+          link: "dayjs"
         },
         {
           text: "Exceljs",
           icon: "exceljs",
-          link: "Exceljs"
+          link: "exceljs"
         }
       ]
     },
@@ -171,17 +170,17 @@ export default sidebar({
         {
           text: "WebGL",
           icon: "webgl",
-          link: "WebGL"
+          link: "webgl"
         },
         {
           text: "Threejs",
           icon: "threejs",
-          link: "Threejs"
+          link: "threejs"
         },
         {
           text: "MicroFrontend",
           icon: "microfrontend",
-          link: "MicroFrontend"
+          link: "microfrontend"
         }
       ]
     }
@@ -191,37 +190,37 @@ export default sidebar({
     {
       text: "介绍",
       icon: "hot",
-      link: "README"
+      link: "/algorithm/"
     },
     {
       text: "栈与队列",
       icon: "stack",
-      link: "Stack_Queue"
+      link: "stack_queue"
     },
     {
       text: "数组与链表",
       icon: "extend",
-      link: "Array_Linked"
+      link: "array_linked"
     },
     {
       text: "哈希表",
       icon: "map",
-      link: "HashMap"
+      link: "hashmap"
     },
     {
       text: "树",
       icon: "tree",
-      link: "Tree"
+      link: "tree"
     },
     {
       text: "查找算法",
       icon: "search",
-      link: "Search"
+      link: "search"
     },
     {
       text: "排序算法",
       icon: "sort",
-      link: "Sort"
+      link: "sort"
     }
   ],
   
