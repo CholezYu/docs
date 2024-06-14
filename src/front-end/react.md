@@ -231,6 +231,8 @@ const delayConsole = () => {
 `<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
+/* App.tsx */
+
 const TextContext = createContext(null)
 
 const [text, setText] = useState("Hello React")
@@ -246,8 +248,6 @@ return (
 
 ```tsx
 /* Text.tsx */
-
-import type { ChangeEvent } from "react"
 
 const { text, setText } = useContext(TextContext)
 
@@ -445,12 +445,13 @@ const App = () => {
 v5 的写法，使用 `<Routes>` 和 `<Route>` 的组合写法。<Badge text="不推荐" type="warning" />
 
 ```tsx
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 
 const App = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
         <Route path="about" element={<About />} />
       </Route>
@@ -462,7 +463,7 @@ const App = () => (
 v6 提供了 `useRoutes`，可以定义 `Vue Router` 风格的路由。<Badge text="不推荐" type="warning" />
 
 ```tsx
-import { BrowserRouter, useRoutes } from "react-router-dom"
+import { BrowserRouter, useRoutes, Navigate } from "react-router-dom"
 
 const App = () => (
   <BrowserRouter>
@@ -475,6 +476,10 @@ const routes = [
     path: "/",
     element: <Layout />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="home" />
+      },
       {
         path: "home",
         element: <Home />
@@ -496,7 +501,7 @@ const Router = () => {
 v6 推荐将 `<BrowserRouter>` 迁移到 `<RouterProvider>` 。
 
 ```tsx
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom"
 
 const App = () => {
   return <RouterProvider router={router} />
@@ -507,6 +512,10 @@ const routes = [
     path: "/",
     element: <Layout />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="home" />
+      },
       {
         path: "home",
         element: <Home />
@@ -538,6 +547,7 @@ const App = () => {
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<Layout />}>
+    <Route index element={<Navigate to="home" />} />
     <Route path="home" element={<Home />} />
     <Route path="about" element={<About />} />
   </Route>
@@ -607,44 +617,42 @@ return (
 通过 search 传参。
 
 ```tsx
-/* User/index.tsx */
+/* User.tsx */
 
-import { Outlet, Link, useNavigate } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 
-const User = () => {
-  const navigate = useNavigate()
-  
-  return (
-    <div>
-      <Link to="/user/profile?id=1">用户信息</Link>
-      {/* or */}
-      <button onClick={() => navigate({ pathname: "/user/profile", search: "id=2" })}>
-        用户信息
-      </button>
-      
-      <Outlet />
-    </div>
-  )
-}
+const navigate = useNavigate()
+
+return (
+  <>
+    <Link to="/user/profile?id=1">用户信息</Link>
+    
+    {/* or */}
+    
+    <button onClick={() => navigate({ pathname: "/user/profile", search: "id=2" })}>
+      用户信息
+    </button>
+    
+    <Outlet />
+  </>
+)
 ```
 
 获取 search 参数，或将 search 参数解析为对象。
 
 ```tsx
-/* User/Profile/index.tsx */
+/* User/Profile.tsx */
 
 import { useSearchParams, useLocation } from "react-router-dom"
 import qs from "qs"
 
-const Profile = () => {
-  const [search] = useSearchParams()
-  const id = search.get("id")
-  
-  // or
-  
-  const { search } = useLocation()
-  const { id } = qs.parse(search.slice(1)) // "?" => ""
-}
+const [search] = useSearchParams()
+const id = search.get("id")
+
+// or
+
+const { search } = useLocation()
+const { id } = qs.parse(search.slice(1)) // "?" => ""
 ```
 
 #### params
@@ -652,32 +660,28 @@ const Profile = () => {
 通过 params 传参。需要使用 ":" 占位。
 
 ```tsx
-/* User/index.tsx */
+/* User.tsx */
 
-import { Outlet, Link } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 
-const User = () => {
-  return (
-    <div>
-      <Link to="/user/profile/1">用户信息</Link>
-      <Link to="/user/profile/2">用户信息</Link>
-      
-      <Outlet />
-    </div>
-  )
-}
+return (
+  <>
+    <Link to="/user/profile/1">用户信息</Link>
+    <Link to="/user/profile/2">用户信息</Link>
+
+    <Outlet />
+  </>
+)
 ```
 
 获取 params 参数。
 
 ```tsx
-/* User/Profile/index.tsx */
+/* User/Profile.tsx */
 
 import { useParams } from "react-router-dom"
 
-const Profile = () => {
-  const { id } = useParams()
-}
+const { id } = useParams()
 ```
 
 #### state
@@ -685,34 +689,30 @@ const Profile = () => {
 通过 state 传参。`navigate()` 第二个参数可以传入 state 对象。
 
 ```tsx
-/* User/index.tsx */
+/* User.tsx */
 
-import { Outlet, Link, useNavigate } from "react-router-dom"
+import { Link, Outlet, useNavigate } from "react-router-dom"
 
-const User = () => {
   const navigate = useNavigate()
   
-  return (
-    <div>
-      <button onClick={navigate("/user/profile", { state: { id: 1 } })}>用户信息</button>
-      <button onClick={navigate("/user/profile", { state: { id: 2 } })}>用户信息</button>
-      
-      <Outlet />
-    </div>
-  )
-}
+return (
+  <>
+    <button onClick={navigate("/user/profile", { state: { id: 1 } })}>用户信息</button>
+    <button onClick={navigate("/user/profile", { state: { id: 2 } })}>用户信息</button>
+    
+    <Outlet />
+  </>
+)
 ```
 
 获取 state 参数。
 
 ```tsx
-/* User/Profile/index.tsx */
+/* User/Profile.tsx */
 
 import { useLocation } from "react-router-dom"
 
-const Profile = () => {
-  const { id } = useLocation().state
-}
+const { id } = useLocation().state
 ```
 
 ### 路由懒加载
@@ -723,26 +723,20 @@ const Profile = () => {
 /* router.tsx */
 
 import { lazy, Suspense } from "react"
-import Loading from "@/components/Loading"
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom"
 
-function load(Component) {
-  return (
-    <Suspense fallback={<Loading />}>
-      <Component />
-    </Suspense>
-  )
-}
+const load = (Component) => (
+  <Suspense fallback={<Loading />}>
+    <Component />
+  </Suspense>
+)
 
-const routes = [
-  {
-    path: "/home",
-    element: load(lazy(() => import("@/views/Home")))
-  },
-  {
-    path: "/about",
-    element: load(lazy(() => import("@/views/About")))
-  }
-]
+const router = createBrowserRouter(createRoutesFromElements(
+  <Route path="/" element={<Layout />}>
+    <Route path="Home" element={load(lazy(() => import("@/views/Home")))} />
+    <Route path="About" element={load(lazy(() => import("@/views/About")))} />
+  </Route>
+))
 ```
 
 ## Redux
