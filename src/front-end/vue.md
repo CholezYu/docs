@@ -1496,14 +1496,14 @@ inject("count", ref(1))
 <script setup lang="ts">
   import { defineAsyncComponent } from "vue"
   
-  const SyncVue = defineAsyncComponent(() => import("@/components/sync.vue"))
+  const SyncComponent = defineAsyncComponent(() => import("@/components/sync.vue"))
 </script>
 
 <template>
   <Suspense>
     <!-- 异步组件 -->
     <template #default>
-      <SyncVue />
+      <SyncComponent />
     </template>
     
     <!-- 在等待异步组件加载时，渲染一个加载状态 -->
