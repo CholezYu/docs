@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-15
+date: 2024-06-16
 description: React
 ---
 
@@ -231,7 +231,7 @@ const delayConsole = () => {
 `<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
-/* App.tsx */
+/* app.tsx */
 
 const TextContext = createContext(null)
 
@@ -247,7 +247,7 @@ return (
 `useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
 
 ```tsx
-/* Text.tsx */
+/* text.tsx */
 
 const { text, setText } = useContext(TextContext)
 
@@ -255,7 +255,7 @@ const changeText = (event: ChangeEvent<HTMLInputElement>) => {
   setText(event.target.value)
 }
 
-return <input value={content} onChange={changeContent} />
+return <input value={text} onChange={changeText} />
 ```
 
 ### useReducer
@@ -345,7 +345,7 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和卸载，并打印日志。
 
 ```tsx
-/* WithLog.tsx */
+/* withLog.tsx */
 
 const WithLog = (Component: FC<any>) => {
   return (props: any) => {
@@ -365,9 +365,9 @@ const WithLog = (Component: FC<any>) => {
 高阶组件可以赋予任何组件它的功能。以下一个最普通的 React 组件。
 
 ```tsx
-/* MyComponent.tsx */
+/* title.tsx */
 
-const MyComponent = ({ title }) => {
+const Title = ({ title }) => {
   return <h2>{title}</h2>
 }
 ```
@@ -379,12 +379,12 @@ const MyComponent = ({ title }) => {
 > 给高阶组件返回的新组件传递 props 时，其实是传递给了高阶组件，所以高阶组件需要将 props 批量传递给目标组件。
 
 ```tsx
-/* About.tsx */
+/* about.tsx */
 
-const MyComponentLog = WithLog(MyComponent)
+const TitleLog = WithLog(Title)
 
 const About = () => {
-  return <MyComponentLog title="About" />
+  return <TitleLog title="about" />
 }
 ```
 
@@ -603,7 +603,7 @@ const Layout = () => {
 ```ts
 declare function useNavigate(): NavigateFunction
 
-export interface NavigateFunction {
+interface NavigateFunction {
   (to: To, options?: NavigateOptions): void
   (delta: number): void
 }
@@ -920,7 +920,7 @@ ReactDOM.createRoot(app).render(
 在组件中，使用 useSelector 获取 store 中的数据，使用 useDispatch 生成 dispatch 方法。
 
 ```tsx
-/* Home/index.tsx */
+/* home.tsx */
 
 import { useSelector, useDispatch } from "react-redux"
 import { increment, decrement } from "@/store/slice/counter.tsx"
@@ -1002,7 +1002,7 @@ export default store
 ```
 
 ```tsx
-/* components/Home/index.tsx */
+/* home.tsx */
 
 import { useSelector, useDispatch } from "react-redux"
 import { getMovie } from "@/store/slice/movieSlice.tsx"
@@ -1027,3 +1027,246 @@ export default function Home() {
 ```
 
 ### RTK Query
+
+
+
+## CSS 解决方案
+
+### CSS Modules
+
+使用 Sass 定义样式。注意：后缀名必须为 `*.module.css`。
+
+```scss
+/* layout.module.scss */
+
+.menu {
+  width: 240px;
+  height: 100%;
+  background: #344156;
+  
+  .menu-item {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    background: #222d3d;
+    color: #c1cbd9;
+    text-align: center;
+    cursor: pointer;
+    
+    &:hover {
+      background: #051528;
+    }
+  }
+  
+  .active {
+    .menu-item {
+      background-color: #051528;
+    }
+  }
+}
+```
+
+使用 classnames + CSS Modules 在 React 中优雅地引入 CSS。
+
+```tsx
+/* layout.tsx */
+
+import classNames from "classnames"
+import styles from "./layout.module.scss"
+
+type NavLinkRenderProps = {
+  isActive: boolean
+  isPending: boolean
+  isTransitioning: boolean
+}
+
+const menuClassName = classNames(styles["menu"])
+const menuItemClassName = classNames(styles["menu-item"])
+const activeClassName = ({ isActive }: NavLinkRenderProps) => classNames({
+  [styles["active"]]: isActive
+})
+
+return (
+  <div className={menuClassName}>
+    {routes.map(route => (
+      <NavLink
+        to={route.path}
+        key={route.path}
+        className={activeClassName}
+      >
+        <div className={menuItemClassName}>
+          {route.path}
+        </div>
+      </NavLink>
+    ))}
+  </div>
+)
+```
+
+### CSS in JS
+
+使用 `styled components` 定义样式，它会返回一个组件，这个组件已经包含了我们定义的样式。
+
+详见 [styled-components](https://styled-components.com)。
+
+```tsx
+import styled, { css } from "styled-components"
+
+type ButtonProps = {
+  $primary?: boolean;
+}
+
+const Button = styled.button<ButtonProps>`
+  margin: 0.5em 1em;
+  padding: 0.25em 1em;
+  background: transparent;
+  color: #bf4f74;
+  border-radius: 3px;
+  border: 2px solid #bf4f74;
+  cursor: pointer;
+  
+  ${props => props.$primary && css`
+    background: #bf4f74;
+    color: white;
+  `}
+`
+
+const ButtonGroup = styled.div`
+  text-align: center;
+`
+
+return (
+  <ButtonGroup>
+    <Button>Normal Button</Button>
+    <Button $primary>Primary Button</Button>
+  </ButtonGroup>
+)
+```
+
+### CSS 原子化
+
+#### Tailwind
+
+首先需要对 Tailwind 进行一些配置 [Install Tailwind CSS using PostCSS - Tailwind CSS](https://tailwindcss.com/docs/installation/using-postcss)。
+
+我们将上面 CSS in JS 的案例进行重写。
+
+```tsx
+<div className="text-center">
+  <button
+    className="mx-[1em] my-[0.5em] px-[1em] py-[0.25em] rounded-[3px] bg-transparent text-[#bf4f74]
+      border-[2px] border-solid border-[#bf4f74]"
+  >
+    Normal Button
+  </button>
+  <button
+    className="mx-[1em] my-[0.5em] px-[1em] py-[0.25em] rounded-[3px] bg-[#bf4f74] text-white
+      border-[2px] border-solid border-[#bf4f74]"
+  >
+    Primary Button
+  </button>
+</div>
+```
+
+可以看到，对于边距、背景、文本等样式，Tailwind 是很方便的，但是要实现复合属性就比较繁琐。
+
+#### UnoCSS
+
+UnoCSS 基于 Tailwind，但是它更加强大。
+
+当然，如果需要使用一些扩展的功能，也是需要进行配置的。
+
+```ts
+/* uno.config.ts */
+
+import {
+  defineConfig,
+  presetUno,
+  presetAttributify,
+  presetTagify,
+  transformerDirectives
+} from "unocss"
+
+export default defineConfig({
+  shortcuts: [
+    { "flex-center": "flex justify-center items-center" },
+    { pointer: "cursor-pointer" }
+  ],
+  rules: [
+    [/^m-([.\d]+)$/, ([_, num]) => ({ margin: `${ num }px` })],
+    [/^mx-([.\d]+)$/, ([_, num]) => ({ "margin-left": `${ num }px`, "margin-right": `${ num }px` })],
+    [/^my-([.\d]+)$/, ([_, num]) => ({ "margin-top": `${ num }px`, "margin-bottom": `${ num }px` })],
+    [/^p-([.\d]+)$/, ([_, num]) => ({ padding: `${ num }px` })],
+    [/^px-([.\d]+)$/, ([_, num]) => ({ "padding-left": `${ num }px`, "padding-right": `${ num }px` })],
+    [/^py-([.\d]+)$/, ([_, num]) => ({ "padding-top": `${ num }px`, "padding-bottom": `${ num }px` })],
+    [/^rounded-([.\d]+)$/, ([_, num]) => ({ "border-radius": `${ num }px` })],
+    // ...
+  ],
+  presets: [
+    presetUno(), // default
+    presetAttributify(), // class to prop
+    presetTagify({
+      // prefix: "un-"
+    })
+  ],
+  transformers: [
+    transformerDirectives() // @apply
+  ]
+})
+```
+
+再次对上面的案例进行重写。
+
+```tsx
+<div className="text-center">
+  <button
+    m="x-1em y-0.5em"
+    p="x-1em y-0.25em"
+    border="2px solid #bf4f74"
+    className="rounded-3 bg-transparent text-#bf4f74"
+  >
+    Normal Button
+  </button>
+  <button
+    m="x-1em y-0.5em"
+    p="x-1em y-0.25em"
+    border="2px solid #bf4f74"
+    className="rounded-3 bg-#bf4f74 text-white"
+  >
+    Primary Button
+  </button>
+</div>
+```
+
+不难看出，我们可以对 CSS 进行 “分类”，并且使用复合属性也变得简单了。
+
+但是仍然有大量重复的样式，我们需要进行抽离与复用，`@apply` 指令可以帮助我们完成这一点。
+
+```css
+.custom {
+  @apply mx-1em my-0.5em px-1em py-0.25em border-2 border-solid border-#bf4f74 rounded-3;
+}
+
+.normal {
+  @apply bg-transparent text-#bf4f74;
+}
+
+.primary {
+  @apply bg-#bf4f74 text-white;
+}
+```
+
+```tsx
+<div className="text-center">
+  <button className="custom normal">
+    Normal Button
+  </button>
+  <button className="custom primary">
+    Primary Button
+  </button>
+</div>
+```
+
+这样似乎又回到了最原始的写法，在 CSS 文件中定义样式，然后使用类名。
+
+但是它们是不一样的。如果有很多相同的样式，使用传统的写法会产生大量重复的 CSS 代码；而使用 `@apply` 的好处是，它只会生成一次代码，然后进行多次复用。这样可以在一定程度减小文件的体积。
