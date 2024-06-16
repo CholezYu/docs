@@ -263,7 +263,7 @@ return <input value={content} onChange={changeContent} />
 `useReducer` 就是简化版的 Redux。我们需要制定一套更新 state 的规则，根据不同事件类型，做出相应处理。我们将上述操作定义成一个 reducer 函数，它接受两个参数：
 
 - `state`：状态。
-- `action`：必须有一个 `type` 属性，标识事件类型。如果有额外的参数，通常写在 `payload` 中。
+- `action`：必须有一个 `type` 属性，表示事件类型。如果有额外的参数，通常写在 `payload` 中。
 
 最后，需要将处理后的数据返回。
 
@@ -440,7 +440,7 @@ const About = () => {
 
 ## Router <Badge text="v6" type="tip" />
 
-### 基本配置
+### 路由配置
 
 使用 `<Routes>` 和 `<Route>` 的组合写法。
 
@@ -454,13 +454,14 @@ const App = () => (
         <Route index element={<Navigate to="home" />} />
         <Route path="home" element={<Home />} />
         <Route path="about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   </BrowserRouter>
 )
 ```
 
-v6 提供了 `useRoutes`，可以定义 `Vue Router` 风格的路由。
+v6 提供了 `useRoutes`，支持 `Vue Router` 风格的路由。
 
 ```tsx
 import { BrowserRouter, useRoutes, Navigate } from "react-router-dom"
@@ -492,6 +493,10 @@ const routes = [
       {
         path: "about",
         element: <About />
+      },
+      {
+        path: "*",
+        element: <NotFound />
       }
     ]
   }
@@ -525,13 +530,17 @@ const routes = [
       {
         path: "about",
         element: <About />
+      },
+      {
+        path: "*",
+        element: <NotFound />
       }
     ]
   }
 ]
 ```
 
-如果更喜欢 JSX 风格的路由，推荐使用 `createRoutesFromElements`。
+如果更喜欢 JSX 风格的路由，可以使用 `createRoutesFromElements`。
 
 ```tsx
 import {
@@ -550,6 +559,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route index element={<Navigate to="home" />} />
     <Route path="home" element={<Home />} />
     <Route path="about" element={<About />} />
+    <Route path="*" element={<NotFound />} />
   </Route>
 ))
 ```
@@ -580,7 +590,7 @@ const Layout = () => {
 
 ### useNavigate
 
-`useNavigate()` 会返回一个函数，通常命名为 `navigate`，它是一种编程式的导航。
+`useNavigate` 会返回一个函数，通常命名为 `navigate`，它是一种编程式的导航。
 
 `navigate` 接受两个参数：
 
@@ -588,7 +598,7 @@ const Layout = () => {
 
 - 第二个参数 `options` 与 `<Link props>` 相似。常用的属性有 `state` `replace`。
 
-下面是 `navigate` 的类型声明。可以看出 `to.search` `to.hash` `options.state` 可以在导航跳转时携带参数。
+下面是 `navigate` 的类型声明。可以看出 `to.search` `to.hash` `options.state` 用于在导航跳转时携带参数。
 
 ```ts
 declare function useNavigate(): NavigateFunction
@@ -632,9 +642,7 @@ interface NavigateOptions {
 ```tsx
 const navigate = useNavigate()
 
-const goto = () => {
-  navigate({ pathname: "/user", search: "?id=1&name=minji" })
-}
+navigate({ pathname: "/user", search: "?id=1&name=minji" })
 ```
 
 通过 `options.state` 传递 state 参数。
@@ -642,9 +650,18 @@ const goto = () => {
 ```tsx
 const navigate = useNavigate()
 
-const goto = () => {
-  navigate("/user", { state: { id: 1, name: "minji" } })
-}
+navigate("/user", { state: { id: 1, name: "minji" } })
+```
+
+使用动态路径传递 params 参数。
+
+```tsx
+const navigate = useNavigate()
+
+navigate("/user/1/minji")
+
+// 动态路由参数
+return <Route path="user/:id/:name" />
 ```
 
 ### useLocation
@@ -694,18 +711,11 @@ import { useLocation } from "react-router-dom"
 import qs from "query-string"
 
 const location = useLocation()
-/* {
-  hash: ""
-  key: "xlmnk210"
-  pathname: "/user"
-  search: "?id=1&name=minji"
-  state: null
-} */
 
 qs.parse(location.search) // { id: '1', name: 'minji' }
 ```
 
-`useLocation` 还扩展了一个 state 属性，它就是通过 `options.state` 传递的参数。
+也可以使用 `useLocation` 获取 state 参数。
 
 ```tsx
 const location = useLocation()
@@ -715,7 +725,9 @@ location.state // { id: '1', name: 'minji' }
 
 ### useSearchParams
 
-`useSearchParams` 类似于 `useState`，它返回 `[searchParams, setSearchParams]`，分别用来获取参数的值，和修改当前位置的 Query String，并且会触发组件的更新。
+`useSearchParams` 类似于 `useState`，它返回 `[searchParams, setSearchParams]`。
+
+`searchParams` 用来获取 search 参数的值、`setSearchParams` 可以修改当前的 search 参数，并触发组件更新。
 
 ```tsx
 import { useSearchParams } from "react-router-dom"
@@ -728,15 +740,7 @@ searchParams.get("name") // minji
 
 ### useParams
 
-如果需要传递 params 参数，可以使用 `useParams`。**注意**：需要使用 ":" 占位。
-
-```tsx
-const goto = () => {
-  () => navigate("/user/1/minji")
-}
-```
-
-`useParams` 返回的就是 params 参数。
+`useParams` 返回 params 参数。
 
 ```tsx
 import { useParams } from "react-router-dom"
@@ -746,7 +750,7 @@ const params = useParams() // { id: '1', name: 'minji' }
 
 ### 路由懒加载
 
-`<Suspense>` 用于在加载过程中作为替换的临时组件。`fallback` 属性可以指定临时替换的组件。
+`<Suspense>` 用于在加载过程中临时替换组件，用 `fallback` 指定被替换的组件。
 
 ```tsx
 /* router.tsx */
@@ -762,8 +766,8 @@ const load = (Component) => (
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path="/" element={<Layout />}>
-    <Route path="Home" element={load(lazy(() => import("@/pages/Home.tsx")))} />
-    <Route path="About" element={load(lazy(() => import("@/pages/About.tsx")))} />
+    <Route path="home" element={load(lazy(() => import("@/pages/home.tsx")))} />
+    <Route path="about" element={load(lazy(() => import("@/pages/about.tsx")))} />
   </Route>
 ))
 ```
