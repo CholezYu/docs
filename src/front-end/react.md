@@ -568,7 +568,7 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 `<Link>` 是一种导航链接，当用户点击时会跳转到另一个页面。
 
-`<NavLink>` 是一种特殊的 `<Link>`，它会给活跃的路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡。我们可以根据它不同的状态，设置对应的样式。
+`<NavLink>` 是一种特殊的 `<Link>`，它会给路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡。我们可以根据它不同的状态，设置对应的样式。
 
 ```tsx
 const Layout = () => {
@@ -1066,7 +1066,7 @@ export default function Home() {
 }
 ```
 
-使用 classnames + CSS Modules 在 React 中优雅地引入 CSS。
+使用 `classnames` + CSS Modules 在 React 中优雅地引入 CSS。
 
 ```tsx
 /* layout.tsx */
@@ -1193,13 +1193,13 @@ export default defineConfig({
     { pointer: "cursor-pointer" }
   ],
   rules: [
-    [/^m-([.\d]+)$/, ([_, num]) => ({ margin: `${ num }px` })],
-    [/^mx-([.\d]+)$/, ([_, num]) => ({ "margin-left": `${ num }px`, "margin-right": `${ num }px` })],
-    [/^my-([.\d]+)$/, ([_, num]) => ({ "margin-top": `${ num }px`, "margin-bottom": `${ num }px` })],
-    [/^p-([.\d]+)$/, ([_, num]) => ({ padding: `${ num }px` })],
-    [/^px-([.\d]+)$/, ([_, num]) => ({ "padding-left": `${ num }px`, "padding-right": `${ num }px` })],
-    [/^py-([.\d]+)$/, ([_, num]) => ({ "padding-top": `${ num }px`, "padding-bottom": `${ num }px` })],
-    [/^rounded-([.\d]+)$/, ([_, num]) => ({ "border-radius": `${ num }px` })],
+    [/^m-([.\d]+)$/, ([_, num]) => ({ margin: `${num}px` })],
+    [/^mx-([.\d]+)$/, ([_, num]) => ({ "margin-left": `${num}px`, "margin-right": `${num}px` })],
+    [/^my-([.\d]+)$/, ([_, num]) => ({ "margin-top": `${num}px`, "margin-bottom": `${num}px` })],
+    [/^p-([.\d]+)$/, ([_, num]) => ({ padding: `${num}px` })],
+    [/^px-([.\d]+)$/, ([_, num]) => ({ "padding-left": `${num}px`, "padding-right": `${num}px` })],
+    [/^py-([.\d]+)$/, ([_, num]) => ({ "padding-top": `${num}px`, "padding-bottom": `${num}px` })],
+    [/^rounded-([.\d]+)$/, ([_, num]) => ({ "border-radius": `${num}px` })]
     // ...
   ],
   presets: [
@@ -1269,4 +1269,4 @@ export default defineConfig({
 
 这样似乎又回到了最原始的写法，在 CSS 文件中定义样式，然后使用类名。
 
-但是它们是不一样的。如果有很多相同的样式，使用传统的写法会产生大量重复的 CSS 代码；而使用 `@apply` 的好处是，它只会生成一次代码，然后进行多次复用。这样可以在一定程度减小文件的体积。
+但是它们是不一样的。如果有很多相同的样式，使用传统的写法会产生大量重复的 CSS 代码；而使用 `@apply` 的好处是，它只会生成一次代码，然后进行多次复用。这样可以在一定程度上减小文件的体积。
