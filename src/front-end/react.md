@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-16
+date: 2024-06-18
 description: React
 ---
 
@@ -231,8 +231,6 @@ const delayConsole = () => {
 `<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
-/* app.tsx */
-
 const TextContext = createContext(null)
 
 const [text, setText] = useState("Hello React")
@@ -267,15 +265,15 @@ return <input value={text} onChange={changeText} />
 
 最后，需要将处理后的数据返回。
 
-`useReducer` 需要接受一个 reducer 函数和一个初始的 state。它返回一个只读的 state 和 `dispatch` 函数。我们只能使用该函数来统一处理 state，而不是直接修改。
+`useReducer` 需要接受一个 reducer 函数和初始的 state。它会返回一个只读的 state 和 dispatch 函数。我们只能使用该函数来统一处理 state，而不是直接修改。
 
 ```tsx
-const reducer = (state, action) => {
-  switch (action.type) {
+const reducer = (state, { type, payload }) => {
+  switch (type) {
     case "increment":
-      return { ...state, count: state.count + action.payload.count }
+      return { ...state, count: state.count + payload.count }
     case "decrement":
-      return { ...state, count: state.count - action.payload.count }
+      return { ...state, count: state.count - payload.count }
     default:
       return state
   }
@@ -295,7 +293,7 @@ const decrement = () => {
 简单实现一下 `useReducer`。
 
 ```tsx
-interface Action<T = any> {
+type Action<T = any> = {
   type: string
   payload?: T
 }
@@ -438,7 +436,7 @@ const About = () => {
   
   - key 必须具有稳定性。
 
-## Router <Badge text="v6" type="tip" />
+## Router
 
 ### 路由配置
 
@@ -590,7 +588,7 @@ const Layout = () => {
 
 ### useNavigate
 
-`useNavigate` 会返回一个函数，通常命名为 `navigate`，它是一种编程式的导航。
+`useNavigate` 会返回一个 `navigate` 函数，它是一种编程式的导航。
 
 `navigate` 接受两个参数：
 
@@ -598,7 +596,7 @@ const Layout = () => {
 
 - 第二个参数 `options` 与 `<Link props>` 相似。常用的属性有 `state` `replace`。
 
-下面是 `navigate` 的类型声明。可以看出 `to.search` `to.hash` `options.state` 用于在导航跳转时携带参数。
+下面是 `navigate` 的类型声明。
 
 ```ts
 declare function useNavigate(): NavigateFunction
@@ -637,97 +635,38 @@ interface NavigateOptions {
 }
 ```
 
-通过 `to.search` 传递 search 参数（query string）。
+我们可以使用 `useNavigate` 传递三种路由参数：search (query string)、params、state。
 
 ```tsx
+import { useNavigate } from "react-router-dom"
+
 const navigate = useNavigate()
 
+// 传递 search 参数
 navigate({ pathname: "/user", search: "?id=1&name=minji" })
-```
 
-通过 `options.state` 传递 state 参数。
+//传递 params 参数，需要设置动态路径
+navigate("/user/1/minji") // <Route path="user/:id/:name" />
 
-```tsx
-const navigate = useNavigate()
-
+// 传递 state 参数
 navigate("/user", { state: { id: 1, name: "minji" } })
 ```
 
-使用动态路径传递 params 参数。
+### search
 
-```tsx
-const navigate = useNavigate()
-
-navigate("/user/1/minji")
-
-// 动态路由参数
-return <Route path="user/:id/:name" />
-```
-
-### useLocation
-
-`useLocation` 会返回一个 location 对象。下面是它的类型声明。
+使用 `useLocation` 获取 search 参数，并对它进行解析。
 
 ```ts
-declare function useLocation(): Location
-
-interface Location<State = any> extends Path {
-  /**
-   * A value of arbitrary data associated with this location.
-   */
-  state: State
-  
-  /**
-   * A unique string associated with this location. May be used to safely store
-   * and retrieve data in some other storage API, like `localStorage`.
-   *
-   * Note: This value is always "default" on the initial location.
-   */
-  key: string
-}
-
-interface Path {
-  /**
-   * A URL pathname, beginning with a /.
-   */
-  pathname: string
-  
-  /**
-   * A URL search string, beginning with a ?.
-   */
-  search: string
-  
-  /**
-   * A URL fragment identifier, beginning with a #.
-   */
-  hash: string
-}
-```
-
-我们可以使用 `useLocation` 获取 search 参数，并对它进行解析。
-
-```tsx
 import { useLocation } from "react-router-dom"
 import qs from "query-string"
 
 const location = useLocation()
 
+location.search // ?id=1&name=minji
 qs.parse(location.search) // { id: '1', name: 'minji' }
 ```
 
-也可以使用 `useLocation` 获取 state 参数。
-
-```tsx
-const location = useLocation()
-
-location.state // { id: '1', name: 'minji' }
-```
-
-### useSearchParams
-
-`useSearchParams` 类似于 `useState`，它返回 `[searchParams, setSearchParams]`。
-
-`searchParams` 用来获取 search 参数的值、`setSearchParams` 可以修改当前的 search 参数，并触发组件更新。
+使用 `useSearchParams` 获取 search 参数。
 
 ```tsx
 import { useSearchParams } from "react-router-dom"
@@ -738,9 +677,9 @@ searchParams.get("id") // 1
 searchParams.get("name") // minji
 ```
 
-### useParams
+### params
 
-`useParams` 返回 params 参数。
+使用 `useParams` 获取 params 参数。
 
 ```tsx
 import { useParams } from "react-router-dom"
@@ -748,17 +687,27 @@ import { useParams } from "react-router-dom"
 const params = useParams() // { id: '1', name: 'minji' }
 ```
 
+### state
+
+使用 `useLocation` 获取 state 参数。
+
+```tsx
+import { useLocation } from "react-router-dom"
+
+const location = useLocation()
+
+location.state // { id: '1', name: 'minji' }
+```
+
 ### 路由懒加载
 
 `<Suspense>` 用于在加载过程中临时替换组件，用 `fallback` 指定被替换的组件。
 
 ```tsx
-/* router.tsx */
-
-import { lazy, Suspense } from "react"
+import { type FC, Suspense, lazy } from "react"
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom"
 
-const load = (Component) => (
+const load = (Component: FC) => (
   <Suspense fallback={<Loading />}>
     <Component />
   </Suspense>
@@ -772,263 +721,148 @@ const router = createBrowserRouter(createRoutesFromElements(
 ))
 ```
 
-## Redux
-
-### 工作流程
-
-`dispatch(action)` => Store == `(state, action)` => Reducers == `return state` => Store
-
-### 基本使用
-
-```tsx
-import { createStore, combineReducers } from "redux"
-
-// 1. 创建 reducer 整合函数，根据指令操作数据
-const countReducer = (state = { value: 0 } /* init or update */, action) => {
-  switch (action.type) {
-    case "count/increment":
-      return { ...state, value: state.value + action.payload }
-    case "count/decrement":
-      return { ...state, value: state.value - action.payload }
-    default:
-      return state
-  }
-}
-
-const reducers = combineReducers({
-  count: countReducer
-})
-
-// 2. 通过 reducers 对象创建 store
-const store = createStore(reducers)
-
-// 3. 订阅 store 的更新
-store.subscribe(() => root.render(<App />))
-
-// 4. 通过 dispatch 派发 action 命令
-store.dispatch({ type: "count/increment", payload: 1 })
-store.dispatch({ type: "count/decrement", payload: 1 })
-```
-
-### 异步操作
-
-> [pcw-api.iqiyi.com/search/recommend/list?channel_id=1&data_type=1&mode=11&page_id=2&ret_num=48&session=b9fd987164f6aa47fad266f57dffaa6a](https://pcw-api.iqiyi.com/search/recommend/list?channel_id=1&data_type=1&mode=11&page_id=2&ret_num=48&session=b9fd987164f6aa47fad266f57dffaa6a)
-
-```tsx
-import { createStore, combineReducers, applyMiddleware } from "redux"
-import thunk from "redux-thunk" // 检测如果 dispatch(action) 返回的是一个函数, 直接调用
-
-function movieReducer(state = { movieList: [] }, action) {
-  switch (action.type) {
-    case "movie/setMovie":
-      state.movieList = action.payload
-      return state
-  }
-}
-
-const reducers = combineReducers({
-  movie: movieReducer
-})
-
-const store = createStore(reducers, applyMiddleware(thunk))
-
-store.subscribe(() => root.render(<App />))
-
-function getMovieList() {
-  return async dispatch => {
-    const result = await axios.get(url)
-    dispatch({ type: "movie/setMovie", payload: result.data.data.list })
-  }
-}
-
-store.dispatch(getMovieList())
-```
-
 ## Redux Toolkit
 
-### 基本使用
+### 创建 Store
 
-slice 文件用于创建 actions 和生成 reducer。
+使用 `createSlice` 创建一个 slice。
 
 ```tsx
-/* store/slice/counter.tsx */
+/* slice/counter.ts */
 
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
-export interface StateType {
-  count: number
+type CounterState = {
+  value: number
 }
 
-const initialState: StateType = {
-  count: 0
+type CounterAction = PayloadAction<CounterState>
+
+const initialState: CounterState = {
+  value: 0
 }
 
-const countSlice = createSlice({
+const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
-    increment(state, { payload }) {
-      state.count += payload.count
+    increment(state, { payload }: CounterAction) {
+      state.value += payload.value
     },
-    decrement(state, { payload }) {
-      state.count -= payload.count
+    decrement(state, { payload }: CounterAction) {
+      state.value -= payload.value
     }
   }
 })
 
-export const { increment, decrement } = countSlice.actions
+export const { increment, decrement } = counterSlice.actions
 
-export const countReducer = countSlice.reducer
+export default counterSlice.reducer
 ```
 
-一个 store 中可能会有多个 slice。所以需要整合所有 slice，集中管理数据。
+一个 store 中可能会有多个 slice，所以需要整合所有 slice，集中管理数据。
 
 ```tsx
-/* store/index.tsx */
+/* store.ts */
 
 import { configureStore } from "@reduxjs/toolkit"
-import { countReducer } from "./slice/count.tsx"
+import counterReducer from "./slice/counter"
 
 const store = configureStore({
   reducer: {
-    counter: countReducer
+    counter: counterReducer,
   }
 })
 
+// 订阅 store 的更新
+store.subscribe(() => console.log(store.getState()))
+
+// 推导 state 的类型
 export type RootState = ReturnType<typeof store.getState>
 
+// 推导 dispatch 的类型
 export type AppDispatch = typeof store.dispatch
 
 export default store
 ```
 
-使用 `<Provider>` 组件注册 store，在其内部的组件都能访问 store 中的数据。
+### 在组件中使用
 
 ```tsx
-/* main.tsx */
-
-import { Provider } from "react-redux"
-import store from "@/store"
-
-ReactDOM.createRoot(app).render(
-  <Provider store={ store }>
-    <App />
-  </Provider>
-)
-```
-
-在组件中，使用 useSelector 获取 store 中的数据，使用 useDispatch 生成 dispatch 方法。
-
-```tsx
-/* home.tsx */
-
 import { useSelector, useDispatch } from "react-redux"
-import { increment, decrement } from "@/store/slice/counter.tsx"
 import type { RootState, AppDispatch } from "@/store"
 
-const Home = () => {
-  const counter = useSelector((state: RootState) => state.counter)
-  
-  const dispatch: AppDispatch = useDispatch()
-  
-  const payload = { count: 1 }
-  
-  return (
-    <>
-      <p>{counter.count}</p>
-      
-      <button onClick={() => dispatch({ type: "counter/increment", payload })}> +1 </button>
-      <button onClick={() => dispatch({ type: "counter/decrement", payload })}> -1 </button>
-      
-      {/* or */}
-      
-      <button onClick={() => dispatch(increment(payload))}> +1 </button>
-      <button onClick={() => dispatch(decrement(payload))}> -1 </button>
-    </>
-  )
+const counterState = useSelector((state: RootState) => state.counter)
+
+const dispatch: AppDispatch = useDispatch()
+
+const increase = () => {
+  dispatch(increment({ value: 1 }))
 }
+
+const decrease = () => {
+  dispatch(decrement({ value: 1 }))
+}
+```
+
+直接使用 `useSelector` 和 `useDispatch` 会导致每次使用 Store 都需要引入类型，写很多重复的代码。
+
+我们可以创建 “预输入” 的 hooks，让它们在使用前就已经具有类型。
+
+```ts
+import { useSelector, useDispatch } from "react-redux"
+import type { RootState, AppDispatch } from "@/store"
+
+export const useAppSelector = useSelector.withTypes<RootState>()
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
+```
+
+在组件中使用新的 hooks，就不需要再关注类型了。
+
+```tsx
+import { useAppSelector, useAppDispatch } from "@/store/hooks"
+import { increment, decrement } from "@/store/slice/counter"
+
+const counterState = useAppSelector(state => state.counter) // { value: 0 }
+
+const dispatch = useAppDispatch()
 ```
 
 ### 异步操作
 
 ```tsx
-/* store/slice/movieSlice.tsx */
+/* slice/movie.ts */
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import axios from "axios"
 
-const getMovie = createAsyncThunk("movie/getMovie", async () => {
-  const result = await axios.get(url)
-  return result.data.data.list
+const request = createAsyncThunk("movie/list", async () => {
+  const result = await apiGet(url)
+  return result.data
 })
 
 const movieSlice = createSlice({
   name: "movie",
   initialState: {
-    movieList: []
+    list: []
   },
   reducers: {},
   extraReducers: {
-    [getMovie.fulfilled](state, { payload }) {
-      state.movieList = payload
+    [request.fulfilled](state, { payload }) {
+      state.list = payload.list
     },
-    [getMovie.rejected]() {
+    [request.rejected]() {
       console.log("rejected")
     },
-    [getMovie.pending]() {
+    [request.pending]() {
       console.log("pending")
     }
   }
 })
 
-export { getMovie }
+export { request }
 
-export const movieReducer = movieSlice.reducer
+export default movieSlice.reducer
 ```
-
-```tsx
-/* store/index.tsx */
-
-import { configureStore } from "@reduxjs/toolkit"
-import { movieReducer } from "./slice/movieSlice.tsx"
-
-const store = configureStore({
-  reducer: {
-    movie: movieReducer
-  }
-})
-
-export default store
-```
-
-```tsx
-/* home.tsx */
-
-import { useSelector, useDispatch } from "react-redux"
-import { getMovie } from "@/store/slice/movieSlice.tsx"
-
-export default function Home() {
-  const movie = useSelector(state => state.movie.movieList)
-  
-  const dispatch = useDispatch()
-  
-  return (
-    <div>
-      <div>
-        <button onClick={ () => dispatch(getMovie()) }></button>
-        
-        <ul>
-          { movie.map(item => <li key={ item.tvId }>{ item.albumName }</li>) }
-        </ul>
-      </div>
-    </div>
-  )
-}
-```
-
-### RTK Query
-
-
 
 ## CSS 解决方案
 
