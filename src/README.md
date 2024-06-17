@@ -17,6 +17,6 @@ actions:
   
   - text: 开始阅读
     icon: markdown
-    link: overview
+    link: overview/
     type: primary
 ---

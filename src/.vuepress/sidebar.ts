@@ -5,7 +5,7 @@ export default sidebar({
     {
       text: "概览",
       icon: "guide",
-      link: "overview",
+      link: "overview/",
       collapsible: true
     },
     
