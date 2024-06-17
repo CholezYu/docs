@@ -188,33 +188,29 @@ interface FillGradientPath {
 导出表格，第一列为序号，第二列为图片。
 
 ```js
-import { Workbook } from "exceljs"
-import { saveAs } from "file-saver/dist/FileSaver"
-import { urlToBase64 } from "@/utils/urlToBase64"
+import ExcelJS from "exceljs"
+import FileSaver from "file-saver"
+import urlToBase64 from "@/utils"
 
 async function toExcel(data, headers, title) {
-  const workbook = new Workbook()
+  const workbook = new ExcelJS.Workbook()
   const sheet = workbook.addWorksheet("sheet")
-  
   sheet.columns = headers
   sheet.addRows(data)
   
   for (let i = 1; i <= headers.length; i++) { // 列
     for (let j = 1; j <= data.length + 1; j++) { // 行
       if (j > 1) sheet.getRow(j).height = 120
-      
       sheet.getRow(j).getCell(i).alignment = {
         vertical: "middle",
         horizontal: "center",
         wrapText: true
       }
-      
       sheet.getRow(j).getCell(i).font = {
         name: "Arial Unicode MS",
         size: 10
       }
     }
-    
     sheet.getRow(1).getCell(i).font.bold = true
   }
   
@@ -224,14 +220,13 @@ async function toExcel(data, headers, title) {
   await (async function () {
     for (let row = 1; row <= urls.length; row++) {
       const base64 = await urlToBase64(urls[row - 1])
-      
       const imageId = workbook.addImage({
         base64: base64.toString(),
         extension: "jpeg"
       })
       
       // 清空 url 文本，只显示图片
-      sheet.getCell(`B${ row + 1 }`).value = ""
+      sheet.getCell(`B${row + 1}`).value = ""
       
       sheet.addImage(imageId, {
         tl: { row, col: 1 },
@@ -242,7 +237,7 @@ async function toExcel(data, headers, title) {
   
   await workbook.xlsx.writeBuffer().then(buffer => {
     const _file = new Blob([buffer], { type: "application/octet-stream" })
-    saveAs(_file, `${ title }.xlsx`)
+    FileSaver.saveAs(_file, `${title}.xlsx`)
   })
 }
 ```
@@ -252,7 +247,7 @@ async function toExcel(data, headers, title) {
 传入配置，表头的 key 必须与表格数据的字段一一对应。
 
 ```js
-const toExcelData = [
+const data = [
   {
     index: 1,
     banner: "https://avatars.githubusercontent.com/u/88796382?v=4",
@@ -287,7 +282,7 @@ const headers = [
   { header: "物流体验分", key: "logistics", width: 32 }
 ]
 
-await toExcel(toExcelData, headers, "产品信息表")
+await toExcel(data, headers, "产品信息表")
 
 Message({
   message: "导出成功",
