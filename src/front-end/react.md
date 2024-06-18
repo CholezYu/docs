@@ -825,7 +825,7 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 
 ```tsx
 import { useAppSelector, useAppDispatch } from "@/store/hooks"
-1
+
 const counterState = useAppSelector(state => state.counter) // { value: 0 }
 
 const dispatch = useAppDispatch()
