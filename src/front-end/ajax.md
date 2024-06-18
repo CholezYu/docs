@@ -325,9 +325,9 @@ Promise 风格。
 const request = (url: string) => {
   // Get 请求
   fetch(url)
-    .then(result => result.json())
-    .then(result => {
-      result.data
+    .then(response => response.json())
+    .then(response => {
+      response.data
     })
   
   // Post 请求
@@ -347,8 +347,7 @@ async & await 风格。
 
 ```js
 const request = async (url: string) => {
-  const result = await fetch(url)
-  const response = await result.json()
+  const response = await (await fetch(url)).json()
   response.data
 }
 ```
@@ -358,9 +357,9 @@ const request = async (url: string) => {
 ```ts
 const request = (url: string) => {
   fetch(url)
-    .then(async result => {
+    .then(async response => {
       // 拷贝一份，用于计算上传进度
-      const response = result.clone()
+      const response = response.clone()
       
       // 流
       const reader = response.body.getReader()
@@ -377,10 +376,10 @@ const request = (url: string) => {
         loaded += value.length
       }
       
-      return result.json()
+      return response.json()
     })
-    .then(result => {
-      result.data
+    .then(response => {
+      response.data
     })
 }
 ```
@@ -438,7 +437,6 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     config.headers["Token"] = storage.get(STORAGE_KEY.TOKEN)
-    
     return config
   }
 )
