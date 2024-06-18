@@ -113,7 +113,7 @@ description: Git
 
   - 查看历史记录：`git log`
 
-  - 重置到指定版本：`git reset –soft [commit(id)]`
+  - 重置到指定版本：`git reset –-soft [commit(id)]`
 
   - 强制提交：`git push origin master --force`
 
