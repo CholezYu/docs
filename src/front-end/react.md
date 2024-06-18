@@ -831,37 +831,67 @@ const dispatch = useAppDispatch()
 ### 异步操作
 
 ```tsx
-/* slice/movie.ts */
+/* slice/user.ts */
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit"
+import type { LoginParams } from "@/api/user"
 
-const request = createAsyncThunk("movie/list", async () => {
-  const result = await apiGet(url)
-  return result.data
+type UserState = {
+  token: string
+  userInfo: {
+    id: number
+    name: string
+  }
+}
+
+type LoginAction = PayloadAction<Pick<UserState, "token">>
+
+type UserInfoAction = PayloadAction<Pick<UserState, "userInfo">>
+
+const initialState: UserState = {
+  token: "",
+  userInfo: null
+}
+
+export const fetchLogin = createAsyncThunk("fetchLogin", async (data: LoginParams) => {
+  const response = await (await fetch("/api/login", {
+    method: "post",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })).json()
+  return response.data // response.data => { "token": "rhcvbzsdrhtgmner" }
 })
 
-const movieSlice = createSlice({
-  name: "movie",
-  initialState: {
-    list: []
-  },
+export const fetchUserInfo = createAsyncThunk("fetchUserInfo", async () => {
+  const response = await (await fetch("/api/user")).json()
+  return { userInfo: response.data } // response.data => { "id": 1, "name": "minji" }
+})
+
+const userSlice = createSlice({
+  name: "user",
+  initialState,
   reducers: {},
-  extraReducers: {
-    [request.fulfilled](state, { payload }) {
-      state.list = payload.list
-    },
-    [request.rejected]() {
-      console.log("rejected")
-    },
-    [request.pending]() {
-      console.log("pending")
-    }
+  extraReducers(builder) {
+    builder
+      .addCase(fetchLogin.fulfilled, (state, { payload }: LoginAction) => {
+        state.token = payload.token
+      })
+      .addCase(fetchLogin.rejected, () => {
+        console.log("login rejected")
+      })
+      
+      .addCase(fetchUserInfo.fulfilled, (state, { payload }: UserInfoAction) => {
+        state.userInfo = payload.userInfo
+      })
+      .addCase(fetchUserInfo.pending, () => {
+        console.log("userInfo pending")
+      })
   }
 })
 
-export { request }
-
-export default movieSlice.reducer
+export default userSlice.reducer
 ```
 
 ## CSS 解决方案
