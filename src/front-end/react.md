@@ -231,29 +231,32 @@ const delayConsole = () => {
 `<Context.Provider>` 类似于 `Vue Provider`，可以给后代组件提供数据。
 
 ```tsx
-const TextContext = createContext(null)
+const InputContext = createContext(null)
 
-const [text, setText] = useState("Hello React")
+const [content, setContent] = useState("Hello React")
+
+const inputModel = {
+  value: content,
+  onChange: (event: ChangeEvent<HTMLInputElement>) => {
+    setContent(event.target.value)
+  }
+}
 
 return (
-  <TextContext.Provider value={{ text, setText }}>
-    <Text />
-  </TextContext.Provider>
+  <InputContext.Provider value={inputModel}>
+    <Input />
+  </InputContext.Provider>
 )
 ```
 
 `useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
 
 ```tsx
-/* text.tsx */
+/* input.tsx */
 
-const { text, setText } = useContext(TextContext)
+const inputModel = useContext(InputContext)
 
-const changeText = (event: ChangeEvent<HTMLInputElement>) => {
-  setText(event.target.value)
-}
-
-return <input value={text} onChange={changeText} />
+return <input {...inputModel} />
 ```
 
 ### useReducer
@@ -780,7 +783,7 @@ store.subscribe(() => console.log(store.getState()))
 // 推导 state 的类型
 export type RootState = ReturnType<typeof store.getState>
 
-// 推导 dispatch 的类型
+// 推导 action 的类型
 export type AppDispatch = typeof store.dispatch
 
 export default store
@@ -791,6 +794,7 @@ export default store
 ```tsx
 import { useSelector, useDispatch } from "react-redux"
 import type { RootState, AppDispatch } from "@/store"
+import { increment, decrement } from "@/store/slice/counter"
 
 const counterState = useSelector((state: RootState) => state.counter)
 
@@ -821,8 +825,7 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>()
 
 ```tsx
 import { useAppSelector, useAppDispatch } from "@/store/hooks"
-import { increment, decrement } from "@/store/slice/counter"
-
+1
 const counterState = useAppSelector(state => state.counter) // { value: 0 }
 
 const dispatch = useAppDispatch()
