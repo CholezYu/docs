@@ -548,7 +548,8 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
-  Route
+  Route,
+  Navigate
 } from "react-router-dom"
 
 const App = () => {
