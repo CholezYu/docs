@@ -1,7 +1,7 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-18
+date: 2024-06-19
 description: React
 ---
 
@@ -895,6 +895,169 @@ const userSlice = createSlice({
 })
 
 export default userSlice.reducer
+```
+
+## Zustand
+
+### 创建 Store
+
+相比于 Redux，Zustand 在 store 中添加 actions 非常简单。
+
+```ts
+import { create } from "zustand"
+
+type CounterState = {
+  count: number
+}
+
+type CounterAction = {
+  increment: () => void
+  decrement: () => void
+  update: (value: number) => void
+  reset: () => void
+}
+
+const useCounterStore = create<CounterState & CounterAction>(set => ({
+  count: 0,
+  increment: () => {
+    set(state => ({ count: state.count + 1 }))
+  },
+  decrement: () => {
+    set(state => ({ count: state.count - 1 }))
+  },
+  update: value => {
+    set({ count: value })
+  },
+  reset: () => {
+    set({ count: 0 })
+  }
+}))
+```
+
+### 在组件中使用
+
+Zustand 与 Pinia 非常相似，只需要把 state 和 actions 解构出来就可以直接使用了。
+
+```tsx
+import useCounterStore from "@/store/counterStore"
+
+const { count, increment, decrement, update, reset } = useCounterStore()
+
+const random = Math.ceil(Math.random() * 100)
+
+return (
+  <>
+    <button onClick={increment}>increment</button>
+    <button onClick={decrement}>decrement</button>
+    <button onClick={() => update(random)}>update</button>
+    <button onClick={reset}>reset</Button>
+  </>
+)
+```
+
+### 异步操作
+
+Zustand 处理异步操作不需要进行特殊处理，与同步操作没有区别。
+
+```ts
+import { create } from "zustand"
+
+interface LoginParams {
+  username: string
+  password: number
+}
+
+type UserState = {
+  token: string
+  userInfo: { id: number, name: string }
+}
+
+type UserAction = {
+  fetchLogin: (data: LoginParams) => void
+  fetchUserInfo: () => void
+}
+
+const useUserStore = create<UserState & UserAction>(set => ({
+  userInfo: null,
+  token: "",
+  fetchLogin: async data => {
+    const response = await (await fetch("/api/login", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })).json()
+    set({ token: response.data.token })
+  },
+  fetchUserInfo: async () => {
+    const response = await (await fetch("/api/user")).json()
+    set({ userInfo: response.data })
+  }
+}))
+```
+
+在组件中依然是解构之后就可以直接使用。
+
+```tsx
+import useUserStore from "@/store/userStore"
+
+const { token, userInfo, fetchLogin, fetchUserInfo } = useUserStore()
+
+const login = () => fetchLogin({
+  username: "root",
+  password: 1234
+})
+
+return (
+  <>
+    <button onClick={login}>login</button>
+    <button onClick={fetchUserInfo}>user</button>
+  </>
+)
+```
+
+### 切片模式
+
+上面的案例中，我们创建了两个 store，它们是独立的。现在我们将其整合成一个 store，并以切片的形式拆分。
+
+```ts
+import { create, type StateCreator } from "zustand"
+
+type CounterSlice = {
+  count: number
+  increment: () => void
+  decrement: () => void
+  update: (value: number) => void
+  reset: () => void
+}
+
+const createCounterStore: StateCreator<CounterSlice> = set => ({
+  count: 0,
+  increment: () => {/* do something... */},
+  decrement: () => {/* do something... */},
+  update: value => {/* do something... */},
+  reset: () => {/* do something... */}
+})
+
+type UserSlice = {
+  token: string
+  userInfo: { id: number, name: string }
+  fetchLogin: (data: LoginParams) => void
+  fetchUserInfo: () => void
+}
+
+const createUserStore: StateCreator<UserSlice> = set => ({
+  userInfo: null,
+  token: "",
+  fetchLogin: async data => {/* do something... */},
+  fetchUserInfo: async () => {/* do something... */}
+})
+
+const useStore = create<CounterSlice & UserSlice>((...args) => ({
+  ...createCounterStore(...args),
+  ...createUserStore(...args)
+}))
 ```
 
 ## CSS 解决方案
