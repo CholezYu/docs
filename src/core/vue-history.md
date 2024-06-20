@@ -2,7 +2,7 @@
 title: Vue 2
 icon: vue
 date: 2024-04-22
-description: Vue
+description: Vue 2
 ---
 
 ## 响应式原理

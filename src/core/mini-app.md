@@ -1,6 +1,6 @@
 ---
-title: WeChat
-icon: wechat
+title: Mini Program
+icon: mini-app
 date: 2024-04-22
 description: 微信小程序
 ---

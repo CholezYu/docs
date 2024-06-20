@@ -2,7 +2,7 @@
 title: Vue 3
 icon: vue
 date: 2024-05-13
-description: Vue
+description: Vue 3
 ---
 
 ## 响应式 API

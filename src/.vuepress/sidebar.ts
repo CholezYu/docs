@@ -10,76 +10,11 @@ export default sidebar({
     },
     
     {
-      text: "前端",
-      icon: "network",
-      prefix: "front-end/",
+      text: "基础",
+      icon: "module",
+      prefix: "base/",
       collapsible: true,
       children: [
-        {
-          text: "Vue 3",
-          icon: "vue",
-          link: "vue"
-        },
-        {
-          text: "Vue 2",
-          icon: "vue",
-          link: "history/vue"
-        },
-        {
-          text: "Nuxt",
-          icon: "nuxt",
-          link: "nuxt"
-        },
-        {
-          text: "React 18",
-          icon: "react",
-          link: "react"
-        },
-        {
-          text: "React Native",
-          icon: "react",
-          link: "react-native"
-        },
-        {
-          text: "WeChat",
-          icon: "wechat",
-          link: "wechat"
-        },
-        {
-          text: "uni-app",
-          icon: "uni-app",
-          link: "uni-app"
-        },
-        {
-          text: "JavaScript",
-          icon: "javascript",
-          link: "javascript"
-        },
-        {
-          text: "TypeScript",
-          icon: "typescript",
-          link: "typescript"
-        },
-        {
-          text: "Ajax",
-          icon: "ajax",
-          link: "ajax"
-        },
-        {
-          text: "Node.js",
-          icon: "nodeJS",
-          link: "nodejs"
-        },
-        {
-          text: "Webpack",
-          icon: "webpack",
-          link: "webpack"
-        },
-        {
-          text: "Git",
-          icon: "git",
-          link: "git"
-        },
         {
           text: "HTML5",
           icon: "html",
@@ -99,37 +34,91 @@ export default sidebar({
     },
     
     {
-      text: "后端",
-      icon: "back-stage",
-      prefix: "after-end/",
+      text: "核心",
+      icon: "chrome",
+      prefix: "core/",
       collapsible: true,
       children: [
         {
-          text: "Java",
-          icon: "java",
-          link: "java"
+          text: "Vue 3",
+          icon: "vue",
+          link: "vue"
         },
         {
-          text: "Python",
-          icon: "python",
-          link: "python"
+          text: "Vue 2",
+          icon: "vue",
+          link: "vue-history"
         },
         {
-          text: "MySQL",
-          icon: "mysql",
-          link: "mysql"
+          text: "Nuxt.js",
+          icon: "nuxtjs",
+          link: "nuxtjs"
         },
         {
-          text: "Nginx",
-          icon: "nginx",
-          link: "nginx"
+          text: "React 18",
+          icon: "react",
+          link: "react"
+        },
+        {
+          text: "React Native",
+          icon: "react",
+          link: "react-native"
+        },
+        {
+          text: "Next.js",
+          icon: "nextjs",
+          link: "nextjs"
+        },
+        {
+          text: "Mini Program",
+          icon: "mini-app",
+          link: "mini-app"
+        },
+        {
+          text: "JavaScript",
+          icon: "javascript",
+          link: "javascript"
+        },
+        {
+          text: "TypeScript",
+          icon: "typescript",
+          link: "typescript"
         }
       ]
     },
     
     {
-      text: "工具",
-      icon: "tool",
+      text: "工程化",
+      icon: "operate",
+      prefix: "project/",
+      collapsible: true,
+      children: [
+        {
+          text: "Ajax",
+          icon: "ajax",
+          link: "ajax"
+        },
+        {
+          text: "Node.js",
+          icon: "nodeJS",
+          link: "nodejs"
+        },
+        {
+          text: "Webpack",
+          icon: "webpack",
+          link: "webpack"
+        },
+        {
+          text: "Git",
+          icon: "git",
+          link: "git"
+        }
+      ]
+    },
+    
+    {
+      text: "工具库",
+      icon: "plugin",
       prefix: "tools/",
       collapsible: true,
       children: [
@@ -157,6 +146,35 @@ export default sidebar({
           text: "Exceljs",
           icon: "exceljs",
           link: "exceljs"
+        }
+      ]
+    },
+    
+    {
+      text: "服务端",
+      icon: "back-stage",
+      prefix: "after-end/",
+      collapsible: true,
+      children: [
+        {
+          text: "Java",
+          icon: "java",
+          link: "java"
+        },
+        {
+          text: "Python",
+          icon: "python",
+          link: "python"
+        },
+        {
+          text: "MySQL",
+          icon: "mysql",
+          link: "mysql"
+        },
+        {
+          text: "Nginx",
+          icon: "nginx",
+          link: "nginx"
         }
       ]
     },
@@ -192,31 +210,37 @@ export default sidebar({
       icon: "hot",
       link: "/algorithm/"
     },
+    
     {
       text: "栈与队列",
       icon: "stack",
       link: "stack_queue"
     },
+    
     {
       text: "数组与链表",
       icon: "extend",
       link: "array_linked"
     },
+    
     {
       text: "哈希表",
       icon: "map",
       link: "hashmap"
     },
+    
     {
       text: "树",
       icon: "tree",
       link: "tree"
     },
+    
     {
       text: "查找算法",
       icon: "search",
       link: "search"
     },
+    
     {
       text: "排序算法",
       icon: "sort",
