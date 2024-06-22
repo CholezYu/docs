@@ -29,6 +29,11 @@ export default sidebar({
           text: "Bootstrap",
           icon: "bootstrap",
           link: "bootstrap"
+        },
+        {
+          text: "JavaScript",
+          icon: "javascript",
+          link: "javascript"
         }
       ]
     },
@@ -50,11 +55,6 @@ export default sidebar({
           link: "vue-history"
         },
         {
-          text: "Nuxt.js",
-          icon: "nuxtjs",
-          link: "nuxtjs"
-        },
-        {
           text: "React 18",
           icon: "react",
           link: "react"
@@ -65,6 +65,11 @@ export default sidebar({
           link: "react-native"
         },
         {
+          text: "Nuxt.js",
+          icon: "nuxtjs",
+          link: "nuxtjs"
+        },
+        {
           text: "Next.js",
           icon: "nextjs",
           link: "nextjs"
@@ -73,11 +78,6 @@ export default sidebar({
           text: "Mini Program",
           icon: "mini-app",
           link: "mini-app"
-        },
-        {
-          text: "JavaScript",
-          icon: "javascript",
-          link: "javascript"
         },
         {
           text: "TypeScript",

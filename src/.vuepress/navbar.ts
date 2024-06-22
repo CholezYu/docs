@@ -6,11 +6,33 @@ export default navbar([
     icon: "guide",
     link: "overview/"
   },
-  
+
   {
     text: "导航",
     icon: "context",
     children: [
+      {
+        text: "基础",
+        prefix: "base/",
+        children: [
+          {
+            text: "HTML5",
+            icon: "html",
+            link: "html5"
+          },
+          {
+            text: "CSS",
+            icon: "css",
+            link: "css"
+          },
+          {
+            text: "JavaScript",
+            icon: "javascript",
+            link: "javascript"
+          }
+        ]
+      },
+
       {
         text: "核心",
         prefix: "core/",
@@ -24,20 +46,10 @@ export default navbar([
             text: "React 18",
             icon: "react",
             link: "react"
-          },
-          {
-            text: "JavaScript",
-            icon: "javascript",
-            link: "javascript"
-          },
-          {
-            text: "TypeScript",
-            icon: "typescript",
-            link: "typescript"
           }
         ]
       },
-      
+
       {
         text: "动态",
         children: [
@@ -50,13 +62,13 @@ export default navbar([
       }
     ]
   },
-  
+
   {
     text: "算法",
     icon: "hot",
     link: "algorithm/"
   },
-  
+
   {
     text: "随笔",
     icon: "write",
@@ -67,19 +79,19 @@ export default navbar([
         icon: "markdown",
         link: "面试重点"
       },
-      
+
       {
         text: "代码规范",
         icon: "markdown",
         link: "代码规范"
       },
-      
+
       {
         text: "报错处理",
         icon: "markdown",
         link: "报错处理"
       },
-      
+
       {
         text: "心得体会",
         icon: "markdown",
