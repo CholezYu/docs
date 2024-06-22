@@ -1,7 +1,7 @@
 ---
 title: React Native
 icon: react
-date: 2024-06-22
+date: 2024-06-23
 description: React Native
 ---
 
@@ -168,4 +168,39 @@ const data = [
   renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
   keyExtractor={(item, index) => item + index}
 />
+```
+
+## Expo SDK
+
+### ImagePicker
+
+访问相册并选择图片。
+
+```tsx
+import * as ImagePicker from "expo-image-picker"
+
+const selectImage = async () => {
+  // 询问用户权限
+  const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
+  if (!permission.granted) return alert("拒绝访问！")
+  
+  // 从相册获取图片
+  const picker = await ImagePicker.launchImageLibraryAsync()
+  if (picker.canceled) return alert("取消选择图片")
+  
+  setUri(picker.assets?.[0].uri!)
+}
+```
+
+### Sharing
+
+分享文件。
+
+```tsx
+import * as Sharing from "expo-sharing"
+
+const share = async () => {
+  if (Platform.OS === "web") return alert("平台不支持分享")
+  await Sharing.shareAsync(uri)
+}
 ```
