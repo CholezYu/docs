@@ -1,44 +1,171 @@
 ---
 title: React Native
 icon: react
-date: 2024-06-05
+date: 2024-06-22
 description: React Native
 ---
 
-## 基本组件
+## UI 与交互
 
-### Button
+### StyleSheet
 
-> [!warning]
->
-> Android 和 iOS 会呈现不同的样式。推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
+StyleSheet 是类似于 CSS 样式表的抽象。RN 建议使用  `StyleSheet.create` 来集中定义组件的样式。
 
 ```tsx
-<Button title="reset" onPress={() => setText("Hello React Native")} />
-```
+const styles = StyleSheet.create({
+  container: {
+    flex: 1 // 在 React Native 中，flex 主轴默认垂直向下
+  },
+  title: {
+    backgroundColor: "#ebc",
+    color: "#fff",
+    fontSize: 32,
+    textAlign: "center"
+  }
+})
 
-### Pressable
-
-```tsx
-<Pressable
-  onPressIn={() => console.log("按压开始")}
-  onPressOut={() => console.log("按压结束")}
-  onPress={() => console.log("按压结束后")}
-  onLongPress={() => console.log("长按触发")}
->
-  <Text style={{ textAlign: "center", lineHeight: 32 }}>Press</Text>
-</Pressable>
-```
-
-### TextInput
-
-```tsx
-<TextInput value={text} onChangeText={setText} />
+<View style={styles.container}>
+  <Text style={styles.title}>React Native</Text>
+</View>
 ```
 
 ### Image
+
+图片。可以引入静态图片、网络图片、本地相册等不同类型的图片。静态图片不需要设置图片的尺寸。
 
 ```tsx
 <Image source={require("@/assets/images/react-logo.png")} />
 ```
 
+> [!caution]
+>
+> `require` 是在编译时期执行，而不是运行时期。所以必须使用静态字符串！
+
+```tsx
+// 正确
+const icon = active
+  ? require("@/assets/images/icon.png")
+  : require("@/assets/images/icon.png")
+<Image source={icon} />
+
+// 编译错误
+const icon = active
+  ? "@/assets/images/icon.png"
+  : "@/assets/images/icon.png"
+<Image source={require(icon)} />
+```
+
+引用网络或 base64 数据的图片时，需要使用 `uri` 指定资源地址或 base64 编码，并手动设置尺寸。
+
+```tsx
+// 正确
+<Image
+  source={{ uri: "http://cholez.cn/icon.png" }}
+  style={{ width: 400, height: 400 }}
+/>
+
+// base64
+<Image
+  source={{ uri: "data:image/jpeg;base64..." }}
+  style={{ width: 32, height: 32 }}
+/>
+
+// 错误，未设置尺寸
+<Image source={{ uri: "http://cholez.cn/icon.png" }} />
+```
+
+### TextInput
+
+文本输入框。
+
+```tsx
+const [text, setText] = useState("hello react-native")
+
+<TextInput value={text} onChangeText={setText} />
+```
+
+### Button
+
+按钮。在 Android 和 iOS 会呈现不同的样式。推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
+
+```tsx
+<Button title="Button" onPress={onPressFn} />
+```
+
+### Pressable
+
+`<Pressable>` 用于响应用户的按压行为，它有两种触发情况：
+
+- 轻按：`onPressIn` => `onPressOut` => `onPress`
+- 长按：`onPressIn` => `onLongPress` => `onPressOut`
+
+`<Pressable>` 默认会撑满整个屏幕宽度，设置 `alignSelf: center` 可以让它被内容撑开。而 `<Button>` 只能给父元素设置 `alignItems: center` 来达到这种效果，因为它不接受 style 属性。
+
+```tsx
+<Pressable
+  onPressIn={/* 按压 */}
+  onPressOut={/* 按压结束 */}
+  onPress={/* 按压结束后 */}
+  onLongPress={/* 长按 */}
+>
+  <Text style={styles.button}>Button</Text>
+</Pressable>
+```
+
+### ScrollView
+
+滚动视图。在 Web App 中，想要实现这个效果，需要借助第三方库。RN 直接提供了这样的组件。
+
+```tsx
+<ScrollView>
+  <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Image source={logo} />
+  <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+</ScrollView>
+```
+
+### FlatList
+
+长列表。`<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。所以它也称为**虚拟长列表**。
+
+```tsx
+<FlatList
+  data={[
+    { name: "Devin" },
+    { name: "Dan" },
+    { name: "James" },
+    { name: "Joel" },
+    { name: "John" }
+  ]}
+  renderItem={({ item }) => <Text>{item.name}</Text>}
+  keyExtractor={(item, index) => item.name + index}
+/>
+```
+
+### SectionList
+
+（分组）长列表。`<SectionList>` 可以渲染一个标题，便于对数据进行分组。
+
+```tsx
+const data = [
+  { title: "D", data: ["Devin", "Dan", "Dominic"] },
+  { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
+]
+
+<SectionList
+  sections={data}
+  renderItem={({ item }) => <Text>{item}</Text>}
+  renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+  keyExtractor={(item, index) => item + index}
+/>
+```
