@@ -161,7 +161,7 @@ const focus = () => {
   inputRef.current.focus()
 }
 
-return <input ref={inputRef} />
+<input ref={inputRef} />
 ```
 
 **获取自定义组件的 ref**
@@ -177,7 +177,7 @@ return <input ref={inputRef} />
 ```tsx
 const inputRef = useRef(null)
 
-return <MyInput ref={inputRef} />
+<MyInput ref={inputRef} />
 ```
 
 默认情况下，自定义组件不会暴露它们内部 DOM 节点的 ref。
@@ -242,11 +242,9 @@ const inputModel = {
   }
 }
 
-return (
-  <InputContext.Provider value={inputModel}>
-    <Input />
-  </InputContext.Provider>
-)
+<InputContext.Provider value={inputModel}>
+  <Input />
+</InputContext.Provider>
 ```
 
 `useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
@@ -256,7 +254,7 @@ return (
 
 const inputModel = useContext(InputContext)
 
-return <input {...inputModel} />
+<input {...inputModel} />
 ```
 
 ### useReducer
@@ -346,8 +344,6 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和卸载，并打印日志。
 
 ```tsx
-/* withLog.tsx */
-
 const WithLog = (Component: FC<any>) => {
   return (props: any) => {
     useEffect(() => {
@@ -363,30 +359,14 @@ const WithLog = (Component: FC<any>) => {
 }
 ```
 
-高阶组件可以赋予任何组件它的功能。以下一个最普通的 React 组件。
+将任意组件作为参数传递给高阶组件，会返回的一个新的组件，并且它已经具有了打印日志的功能。
 
 ```tsx
-/* title.tsx */
+const TitleLog = WithLog(({ title }) => (
+  <h2>{title}</h2>
+))
 
-const Title = ({ title }) => {
-  return <h2>{title}</h2>
-}
-```
-
-将以上组件作为参数传递给高阶组件，会返回一个新的组件，它已经具有了打印日志的功能。
-
-> [!warning]
->
-> 给高阶组件返回的新组件传递 props 时，其实是传递给了高阶组件，所以高阶组件需要将 props 批量传递给目标组件。
-
-```tsx
-/* about.tsx */
-
-const TitleLog = WithLog(Title)
-
-const About = () => {
-  return <TitleLog title="about" />
-}
+<TitleLog title="hello react" />
 ```
 
 ## Diffing
@@ -573,21 +553,15 @@ const router = createBrowserRouter(createRoutesFromElements(
 `<NavLink>` 是一种特殊的 `<Link>`，它会给路由提供三种状态：`isActive` 激活、`isPending` 加载、`isTransitioning` 过渡。我们可以根据它不同的状态，设置对应的样式。
 
 ```tsx
-const Layout = () => {
-  return (
-    <>
-      <NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
-        Home
-      </NavLink>
-      <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
-        About
-      </NavLink>
-      
-      <Link to="/home">Home</Link>
-      <Link to="/about">About</Link>
-    </>
-  )
-}
+<NavLink to="/home" className={({ isActive }) => isActive ? "active" : ""}>
+  Home
+</NavLink>
+<NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>
+  About
+</NavLink>
+
+<Link to="/home">Home</Link>
+<Link to="/about">About</Link>
 ```
 
 ### useNavigate
@@ -946,14 +920,10 @@ const { count, increment, decrement, update, reset } = useCounterStore()
 
 const random = Math.ceil(Math.random() * 100)
 
-return (
-  <>
-    <button onClick={increment}>increment</button>
-    <button onClick={decrement}>decrement</button>
-    <button onClick={() => update(random)}>update</button>
-    <button onClick={reset}>reset</Button>
-  </>
-)
+<button onClick={increment}>increment</button>
+<button onClick={decrement}>decrement</button>
+<button onClick={() => update(random)}>update</button>
+<button onClick={reset}>reset</Button>
 ```
 
 ### 异步操作
@@ -1010,12 +980,8 @@ const login = () => fetchLogin({
   password: 1234
 })
 
-return (
-  <>
-    <button onClick={login}>login</button>
-    <button onClick={fetchUserInfo}>user</button>
-  </>
-)
+<button onClick={login}>login</button>
+<button onClick={fetchUserInfo}>user</button>
 ```
 
 ### 切片模式
@@ -1117,21 +1083,19 @@ const activeClassName = ({ isActive }: NavLinkRenderProps) => classNames({
   [styles["active"]]: isActive
 })
 
-return (
-  <div className={menuClassName}>
-    {routes.map(route => (
-      <NavLink
-        to={route.path}
-        key={route.path}
-        className={activeClassName}
-      >
-        <div className={menuItemClassName}>
-          {route.path}
-        </div>
-      </NavLink>
-    ))}
-  </div>
-)
+<div className={menuClassName}>
+  {routes.map(route => (
+    <NavLink
+      to={route.path}
+      key={route.path}
+      className={activeClassName}
+    >
+      <div className={menuItemClassName}>
+        {route.path}
+      </div>
+    </NavLink>
+  ))}
+</div>
 ```
 
 ### CSS in JS
@@ -1166,12 +1130,10 @@ const ButtonGroup = styled.div`
   text-align: center;
 `
 
-return (
-  <ButtonGroup>
-    <Button>Normal Button</Button>
-    <Button $primary>Primary Button</Button>
-  </ButtonGroup>
-)
+<ButtonGroup>
+  <Button>Normal Button</Button>
+  <Button $primary>Primary Button</Button>
+</ButtonGroup>
 ```
 
 ### CSS 原子化
