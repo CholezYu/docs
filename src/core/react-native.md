@@ -97,7 +97,7 @@ return <TextInput value={text} onChangeText={setText} />
 - 轻按：`onPressIn` => `onPressOut` => `onPress`
 - 长按：`onPressIn` => `onLongPress` => `onPressOut`
 
-`<Pressable>` 默认会撑满整个屏幕宽度，设置 `alignSelf: center` 可以让它被内容撑开。而 `<Button>` 只能给父元素设置 `alignItems: center` 来达到这种效果，因为它不接受 style 属性。
+`<Pressable>` 默认会撑满整个屏幕宽度，设置 `alignSelf: center` 可以让它被内容撑开。
 
 ```tsx
 <Pressable
@@ -166,9 +166,53 @@ return <SectionList
 />
 ```
 
-## 核心组件
+## Image
 
+### resizeMode
 
+设置图片的显示模式。
+
+- `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
+
+- `contain`：保持宽高比，完全显示图片。容器可能有空白。
+
+- `stretch`：不保持宽高比，图片会被拉伸到刚好填满容器。
+
+- `repeat`：保持原尺寸，图片会平铺直至填满容器。
+
+- `center`：居中不拉伸。
+
+## TextInput
+
+### keyboardType
+
+设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
+
+- `default`：默认键盘。
+
+- `number-pad`：数字键盘。
+
+- `decimal-pad`：数字键盘。
+
+- `numeric`：数字键盘。
+
+- `email-address`：英文键盘（电子邮件）。
+
+- `phone-pad`：数字键盘（电话号码）。
+
+### returnKeyType
+
+设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
+
+- `done`：完成。
+
+- `go`：转到 / 开始。
+
+- `next`：下一步。
+
+- `search`：搜索。
+
+- `send`：发送。
 
 ## Expo SDK
 
