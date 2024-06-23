@@ -161,7 +161,7 @@ const focus = () => {
   inputRef.current.focus()
 }
 
-<input ref={inputRef} />
+return <input ref={inputRef} />
 ```
 
 **获取自定义组件的 ref**
@@ -177,7 +177,7 @@ const focus = () => {
 ```tsx
 const inputRef = useRef(null)
 
-<MyInput ref={inputRef} />
+return <MyInput ref={inputRef} />
 ```
 
 默认情况下，自定义组件不会暴露它们内部 DOM 节点的 ref。
@@ -242,9 +242,11 @@ const inputModel = {
   }
 }
 
-<InputContext.Provider value={inputModel}>
-  <Input />
-</InputContext.Provider>
+return (
+  <InputContext.Provider value={inputModel}>
+    <Input />
+  </InputContext.Provider>
+)
 ```
 
 `useContext` 类似于 `Vue Inject`，可以注入上层组件提供的数据。
@@ -254,7 +256,7 @@ const inputModel = {
 
 const inputModel = useContext(InputContext)
 
-<input {...inputModel} />
+return <input {...inputModel} />
 ```
 
 ### useReducer
@@ -366,7 +368,7 @@ const TitleLog = WithLog(({ title }) => (
   <h2>{title}</h2>
 ))
 
-<TitleLog title="hello react" />
+return <TitleLog title="hello react" />
 ```
 
 ## Diffing
@@ -920,10 +922,12 @@ const { count, increment, decrement, update, reset } = useCounterStore()
 
 const random = Math.ceil(Math.random() * 100)
 
-<button onClick={increment}>increment</button>
-<button onClick={decrement}>decrement</button>
-<button onClick={() => update(random)}>update</button>
-<button onClick={reset}>reset</Button>
+return <>
+  <button onClick={increment}>increment</button>
+  <button onClick={decrement}>decrement</button>
+  <button onClick={() => update(random)}>update</button>
+  <button onClick={reset}>reset</button>
+</>
 ```
 
 ### 异步操作
@@ -980,8 +984,10 @@ const login = () => fetchLogin({
   password: 1234
 })
 
-<button onClick={login}>login</button>
-<button onClick={fetchUserInfo}>user</button>
+return <>
+  <button onClick={login}>login</button>
+  <button onClick={fetchUserInfo}>user</button>
+</>
 ```
 
 ### 切片模式
@@ -1083,7 +1089,7 @@ const activeClassName = ({ isActive }: NavLinkRenderProps) => classNames({
   [styles["active"]]: isActive
 })
 
-<div className={menuClassName}>
+return <div className={menuClassName}>
   {routes.map(route => (
     <NavLink
       to={route.path}
@@ -1130,10 +1136,12 @@ const ButtonGroup = styled.div`
   text-align: center;
 `
 
-<ButtonGroup>
-  <Button>Normal Button</Button>
-  <Button $primary>Primary Button</Button>
-</ButtonGroup>
+return (
+  <ButtonGroup>
+    <Button>Normal Button</Button>
+    <Button $primary>Primary Button</Button>
+  </ButtonGroup>
+)
 ```
 
 ### CSS 原子化
