@@ -24,9 +24,11 @@ const styles = StyleSheet.create({
   }
 })
 
-<View style={styles.container}>
-  <Text style={styles.title}>React Native</Text>
-</View>
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>React Native</Text>
+  </View>
+)
 ```
 
 ### Image
@@ -46,13 +48,13 @@ const styles = StyleSheet.create({
 const icon = active
   ? require("@/assets/images/icon.png")
   : require("@/assets/images/icon.png")
-<Image source={icon} />
+return <Image source={icon} />
 
 // 编译错误
 const icon = active
   ? "@/assets/images/icon.png"
   : "@/assets/images/icon.png"
-<Image source={require(icon)} />
+return <Image source={require(icon)} />
 ```
 
 引用网络或 base64 数据的图片时，需要使用 `uri` 指定资源地址或 base64 编码，并手动设置尺寸。
@@ -81,7 +83,7 @@ const icon = active
 ```tsx
 const [text, setText] = useState("hello react-native")
 
-<TextInput value={text} onChangeText={setText} />
+return <TextInput value={text} onChangeText={setText} />
 ```
 
 ### Button
@@ -162,7 +164,7 @@ const data = [
   { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
 ]
 
-<SectionList
+return <SectionList
   sections={data}
   renderItem={({ item }) => <Text>{item}</Text>}
   renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
