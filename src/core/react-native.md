@@ -7,7 +7,7 @@ description: React Native
 
 ## UI 与交互
 
-### StyleSheet
+### 样式表
 
 StyleSheet 是类似于 CSS 样式表的抽象。RN 建议使用  `StyleSheet.create` 来集中定义组件的样式。
 
@@ -31,9 +31,9 @@ return (
 )
 ```
 
-### Image
+### 图片
 
-图片。可以引入静态图片、网络图片、本地相册等不同类型的图片。静态图片不需要设置图片的尺寸。
+`<Image>` 可以引入静态图片、网络图片、本地相册等不同类型的图片。静态图片不需要设置图片的尺寸。
 
 ```tsx
 <Image source={require("@/assets/images/react-logo.png")} />
@@ -76,9 +76,7 @@ return <Image source={require(icon)} />
 <Image source={{ uri: "http://cholez.cn/icon.png" }} />
 ```
 
-### TextInput
-
-文本输入框。
+### 文本输入框
 
 ```tsx
 const [text, setText] = useState("hello react-native")
@@ -86,15 +84,13 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-### Button
+### 按钮
 
-按钮。在 Android 和 iOS 会呈现不同的样式。推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
+`<Button>` 在 Android 和 iOS 会呈现不同的样式。推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
 
 ```tsx
 <Button title="Button" onPress={onPressFn} />
 ```
-
-### Pressable
 
 `<Pressable>` 用于响应用户的按压行为，它有两种触发情况：
 
@@ -114,9 +110,9 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-### ScrollView
+### 滚动视图
 
-滚动视图。在 Web App 中，想要实现这个效果，需要借助第三方库。RN 直接提供了这样的组件。
+在 Web App 中，想要实现滚动视图的效果，需要借助第三方库。RN 直接提供了 `<ScrollView>` 组件。
 
 ```tsx
 <ScrollView>
@@ -136,9 +132,9 @@ return <TextInput value={text} onChangeText={setText} />
 </ScrollView>
 ```
 
-### FlatList
+### 长列表
 
-长列表。`<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。所以它也称为**虚拟长列表**。
+`<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。所以它也称为**虚拟长列表**。
 
 ```tsx
 <FlatList
@@ -154,9 +150,7 @@ return <TextInput value={text} onChangeText={setText} />
 />
 ```
 
-### SectionList
-
-（分组）长列表。`<SectionList>` 可以渲染一个标题，便于对数据进行分组。
+`<SectionList>` 可以渲染一个标题，便于对数据进行分组。
 
 ```tsx
 const data = [
@@ -171,6 +165,10 @@ return <SectionList
   keyExtractor={(item, index) => item + index}
 />
 ```
+
+## 核心组件
+
+
 
 ## Expo SDK
 
