@@ -166,9 +166,11 @@ return <SectionList
 />
 ```
 
-## Image
+## 核心组件
 
-### resizeMode
+### Image
+
+#### resizeMode
 
 设置图片的显示模式。
 
@@ -182,9 +184,9 @@ return <SectionList
 
 - `center`：居中不拉伸。
 
-## TextInput
+### TextInput
 
-### keyboardType
+#### keyboardType
 
 设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
 
@@ -200,7 +202,7 @@ return <SectionList
 
 - `phone-pad`：数字键盘（电话号码）。
 
-### returnKeyType
+#### returnKeyType
 
 设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
 
@@ -213,6 +215,31 @@ return <SectionList
 - `search`：搜索。
 
 - `send`：发送。
+
+### Pressable
+
+#### style
+
+可以接受一个函数，它会提供 “按压状态”。我们可以根据按钮是否处于按压状态，设置不同的样式。
+
+```tsx
+<Pressable style={state => state.pressed ? styles.pressed : styles.button}>
+  {state => state.pressed
+    ? <Text style={styles.pressedText}>Pressed</Text>
+    : <Text style={styles.buttonText}>Button</Text>
+  }
+</Pressable>
+```
+
+#### hitSlop
+
+由于手指的精准度有限，用户可能不会准确按压触发区域。可以设置 `hitSlop` 扩大触发范围，优化用户体验。
+
+```tsx
+<Pressable hitSlop={{ top: 20, bottom: 30 }}>
+  <Text>Button</Text>
+</Pressable>
+```
 
 ## Expo SDK
 
