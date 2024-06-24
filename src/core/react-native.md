@@ -1,13 +1,13 @@
 ---
 title: React Native
 icon: react
-date: 2024-06-23
+date: 2024-06-24
 description: React Native
 ---
 
-## UI 与交互
+## 样式表
 
-### 样式表
+### StyleSheet
 
 StyleSheet 是类似于 CSS 样式表的抽象。RN 建议使用  `StyleSheet.create` 来集中定义组件的样式。
 
@@ -31,7 +31,9 @@ return (
 )
 ```
 
-### 图片
+## 图片
+
+### Image
 
 `<Image>` 可以引入静态图片、网络图片、本地相册等不同类型的图片。静态图片不需要设置图片的尺寸。
 
@@ -76,7 +78,23 @@ return <Image source={require(icon)} />
 <Image source={{ uri: "http://cholez.cn/icon.png" }} />
 ```
 
-### 文本输入框
+### Prop: resizeMode
+
+设置图片的显示模式。
+
+- `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
+
+- `contain`：保持宽高比，完全显示图片。容器可能有空白。
+
+- `stretch`：不保持宽高比，图片会被拉伸到刚好填满容器。
+
+- `repeat`：保持原尺寸，图片会平铺直至填满容器。
+
+- `center`：居中不拉伸。
+
+## 文本输入框
+
+### TextInput
 
 ```tsx
 const [text, setText] = useState("hello react-native")
@@ -84,9 +102,41 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-### 按钮
+### Prop: keyboardType
 
-`<Button>` 在 Android 和 iOS 会呈现不同的样式。推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
+设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
+
+- `default`：默认键盘。
+
+- `number-pad`：数字键盘。
+
+- `decimal-pad`：数字键盘。
+
+- `numeric`：数字键盘。
+
+- `email-address`：英文键盘（电子邮件）。
+
+- `phone-pad`：数字键盘（电话号码）。
+
+### Prop: returnKeyType
+
+设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
+
+- `done`：完成。
+
+- `go`：转到 / 开始。
+
+- `next`：下一步。
+
+- `search`：搜索。
+
+- `send`：发送。
+
+## 按钮
+
+### Pressable
+
+`<Button>` 在 Android 和 iOS 会呈现不同的样式。RN 推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
 
 ```tsx
 <Button title="Button" onPress={onPressFn} />
@@ -110,7 +160,30 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-### 滚动视图
+### Prop: style
+
+可以接受一个函数，它会提供 “按压状态”。我们可以根据按钮是否处于按压状态，设置不同的样式。
+
+```tsx
+<Pressable style={state => state.pressed ? styles.pressed : styles.button}>
+  {state => state.pressed
+    ? <Text style={styles.pressedText}>Pressed</Text>
+    : <Text style={styles.buttonText}>Button</Text>
+  }
+</Pressable>
+```
+
+### Prop: hitSlop
+
+由于手指的精准度有限，用户可能不会准确按压触发区域。可以设置 `hitSlop` 扩大触发范围，优化用户体验。
+
+```tsx
+<Pressable hitSlop={{ top: 20, bottom: 30 }}>
+```
+
+## 滚动视图
+
+### ScrollView
 
 在 Web App 中，想要实现滚动视图的效果，需要借助第三方库。RN 直接提供了 `<ScrollView>` 组件。
 
@@ -132,7 +205,9 @@ return <TextInput value={text} onChangeText={setText} />
 </ScrollView>
 ```
 
-### 长列表
+## 长列表
+
+### FlatList
 
 `<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。所以它也称为**虚拟长列表**。
 
@@ -150,95 +225,75 @@ return <TextInput value={text} onChangeText={setText} />
 />
 ```
 
+### SectionList
+
 `<SectionList>` 可以渲染一个标题，便于对数据进行分组。
 
 ```tsx
-const data = [
-  { title: "D", data: ["Devin", "Dan", "Dominic"] },
-  { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
-]
-
-return <SectionList
-  sections={data}
+<SectionList
+  sections={[
+    { title: "D", data: ["Devin", "Dan", "Dominic"] },
+    { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
+  ]}
   renderItem={({ item }) => <Text>{item}</Text>}
   renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
   keyExtractor={(item, index) => item + index}
 />
 ```
 
-## 核心组件
+### 下拉刷新
 
-### Image
-
-#### resizeMode
-
-设置图片的显示模式。
-
-- `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
-
-- `contain`：保持宽高比，完全显示图片。容器可能有空白。
-
-- `stretch`：不保持宽高比，图片会被拉伸到刚好填满容器。
-
-- `repeat`：保持原尺寸，图片会平铺直至填满容器。
-
-- `center`：居中不拉伸。
-
-### TextInput
-
-#### keyboardType
-
-设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
-
-- `default`：默认键盘。
-
-- `number-pad`：数字键盘。
-
-- `decimal-pad`：数字键盘。
-
-- `numeric`：数字键盘。
-
-- `email-address`：英文键盘（电子邮件）。
-
-- `phone-pad`：数字键盘（电话号码）。
-
-#### returnKeyType
-
-设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
-
-- `done`：完成。
-
-- `go`：转到 / 开始。
-
-- `next`：下一步。
-
-- `search`：搜索。
-
-- `send`：发送。
-
-### Pressable
-
-#### style
-
-可以接受一个函数，它会提供 “按压状态”。我们可以根据按钮是否处于按压状态，设置不同的样式。
+`onRefresh` Prop 会提供一个 `<RefreshControl>` 组件，能够直接实现 “下拉刷新” 功能。但是必须同时设置 `refreshing` Prop。
 
 ```tsx
-<Pressable style={state => state.pressed ? styles.pressed : styles.button}>
-  {state => state.pressed
-    ? <Text style={styles.pressedText}>Pressed</Text>
-    : <Text style={styles.buttonText}>Button</Text>
-  }
-</Pressable>
+const [list, setList] = useState(initialList)
+
+const [isFreshing, setFreshing] = useState(false)
+
+const refresh = async () => {
+  setFreshing(true)
+  const response = await (await fetch(url)).json()
+  setList(response.data)
+  setFreshing(false)
+}
+
+return <FlatList
+  data={list}
+  renderItem={({ item }) => <Text>{item.desc}</Text>}
+  keyExtractor={item => item.id}
+  onRefresh={refresh}
+  refreshing={isFreshing}
+/>
 ```
 
-#### hitSlop
+### 上拉加载
 
-由于手指的精准度有限，用户可能不会准确按压触发区域。可以设置 `hitSlop` 扩大触发范围，优化用户体验。
+当视图接近底部时，会触发 `onEndReached` 事件。设置 `onEndReachedThreshold` Prop 可以改变触发距离。
 
 ```tsx
-<Pressable hitSlop={{ top: 20, bottom: 30 }}>
-  <Text>Button</Text>
-</Pressable>
+const [list, setList] = useState(initialList)
+
+const [isReached, setReached] = useState(false)
+
+const reach = async () => {
+  setReached(true)
+  const response = await (await fetch(url)).json()
+  setList([...list, ...response.data])
+  setReached(false)
+}
+
+return (
+  <View>
+    <FlatList
+      data={list}
+      renderItem={({ item }) => <Text>{item.desc}</Text>}
+      keyExtractor={item => item.id}
+      onEndReached={reach}
+      onEndReachedThreshold={0.1}
+    />
+    {isReached && <ActivityIndicator />}
+  </View>
+)
 ```
 
 ## Expo SDK
