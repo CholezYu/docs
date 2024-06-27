@@ -90,7 +90,7 @@ export default sidebar({
     {
       text: "工程化",
       icon: "operate",
-      prefix: "engineering/",
+      prefix: "project/",
       collapsible: true,
       children: [
         {
