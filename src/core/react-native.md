@@ -1,41 +1,15 @@
 ---
 title: React Native
 icon: react
-date: 2024-06-24
+date: 2024-06-27
 description: React Native
 ---
 
-## 样式表
-
-### StyleSheet
-
-StyleSheet 是类似于 CSS 样式表的抽象。RN 建议使用  `StyleSheet.create` 来集中定义组件的样式。
-
-```tsx
-const styles = StyleSheet.create({
-  container: {
-    flex: 1 // 在 React Native 中，flex 主轴默认垂直向下
-  },
-  title: {
-    backgroundColor: "#ebc",
-    color: "#fff",
-    fontSize: 32,
-    textAlign: "center"
-  }
-})
-
-return (
-  <View style={styles.container}>
-    <Text style={styles.title}>React Native</Text>
-  </View>
-)
-```
-
-## 图片
+## 核心组件
 
 ### Image
 
-`<Image>` 可以引入静态图片、网络图片、本地相册等不同类型的图片。静态图片不需要设置图片的尺寸。
+**图片**。支持静态图片、网络图片、本地相册等不同类型的图片。另外静态图片不需要设置图片的尺寸。
 
 ```tsx
 <Image source={require("@/assets/images/react-logo.png")} />
@@ -78,7 +52,7 @@ return <Image source={require(icon)} />
 <Image source={{ uri: "http://cholez.cn/icon.png" }} />
 ```
 
-### Prop: resizeMode
+#### Prop: resizeMode
 
 设置图片的显示模式。
 
@@ -92,9 +66,9 @@ return <Image source={require(icon)} />
 
 - `center`：居中不拉伸。
 
-## 文本输入框
-
 ### TextInput
+
+**文本输入框**。
 
 ```tsx
 const [text, setText] = useState("hello react-native")
@@ -102,7 +76,7 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-### Prop: keyboardType
+#### Prop: keyboardType
 
 设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
 
@@ -118,7 +92,7 @@ return <TextInput value={text} onChangeText={setText} />
 
 - `phone-pad`：数字键盘（电话号码）。
 
-### Prop: returnKeyType
+#### Prop: returnKeyType
 
 设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
 
@@ -132,19 +106,20 @@ return <TextInput value={text} onChangeText={setText} />
 
 - `send`：发送。
 
-## 按钮
+### Button *
 
-### Pressable
-
-`<Button>` 在 Android 和 iOS 会呈现不同的样式。RN 推荐使用 `<Pressable>` 组件，可以定制按钮的样式。
+**按钮**。在 Android 和 iOS 会呈现不同的样式，**不推荐使用**。
 
 ```tsx
 <Button title="Button" onPress={onPressFn} />
 ```
 
-`<Pressable>` 用于响应用户的按压行为，它有两种触发情况：
+### Pressable
+
+**按钮**。RN 推荐使用 `<Pressable>`，可以自定义样式。它有两种触发情况：
 
 - 轻按：`onPressIn` => `onPressOut` => `onPress`
+
 - 长按：`onPressIn` => `onLongPress` => `onPressOut`
 
 `<Pressable>` 默认会撑满整个屏幕宽度，设置 `alignSelf: center` 可以让它被内容撑开。
@@ -160,7 +135,7 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-### Prop: style
+#### Prop: style
 
 可以接受一个函数，它会提供 “按压状态”。我们可以根据按钮是否处于按压状态，设置不同的样式。
 
@@ -173,7 +148,7 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-### Prop: hitSlop
+#### Prop: hitSlop
 
 由于手指的精准度有限，用户可能不会准确按压触发区域。可以设置 `hitSlop` 扩大触发范围，优化用户体验。
 
@@ -181,11 +156,9 @@ return <TextInput value={text} onChangeText={setText} />
 <Pressable hitSlop={{ top: 20, bottom: 30 }}>
 ```
 
-## 滚动视图
-
 ### ScrollView
 
-在 Web App 中，想要实现滚动视图的效果，需要借助第三方库。RN 直接提供了 `<ScrollView>` 组件。
+**滚动视图**。在 Web App 中，想要实现滚动视图的效果，需要借助第三方库。RN 直接提供了这样的组件。
 
 ```tsx
 <ScrollView>
@@ -195,21 +168,13 @@ return <TextInput value={text} onChangeText={setText} />
   <Image source={logo} />
   <Image source={logo} />
   <Image source={logo} />
-  <Text style={{ fontSize: 96 }}>Scrolling down</Text>
-  <Image source={logo} />
-  <Image source={logo} />
-  <Image source={logo} />
-  <Image source={logo} />
-  <Image source={logo} />
-  <Text style={{ fontSize: 96 }}>Scrolling down</Text>
+  {/* repeat ... */}
 </ScrollView>
 ```
 
-## 长列表
-
 ### FlatList
 
-`<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。所以它也称为**虚拟长列表**。
+**长列表**。`<FlatList>` 优先渲染屏幕上可见的元素，而不是所有元素。
 
 ```tsx
 <FlatList
@@ -225,25 +190,9 @@ return <TextInput value={text} onChangeText={setText} />
 />
 ```
 
-### SectionList
+#### 下拉刷新
 
-`<SectionList>` 可以渲染一个标题，便于对数据进行分组。
-
-```tsx
-<SectionList
-  sections={[
-    { title: "D", data: ["Devin", "Dan", "Dominic"] },
-    { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
-  ]}
-  renderItem={({ item }) => <Text>{item}</Text>}
-  renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
-  keyExtractor={(item, index) => item + index}
-/>
-```
-
-### 下拉刷新
-
-`onRefresh` Prop 会提供一个 `<RefreshControl>` 组件，能够直接实现 “下拉刷新” 功能。但是必须同时设置 `refreshing` Prop。
+`onRefresh` 会自动添加 `<RefreshControl>` 组件，以便实现 “下拉刷新” 功能。但是必须同时设置 `refreshing`。
 
 ```tsx
 const [list, setList] = useState(initialList)
@@ -266,7 +215,7 @@ return <FlatList
 />
 ```
 
-### 上拉加载
+#### 上拉加载
 
 当视图接近底部时，会触发 `onEndReached` 事件。设置 `onEndReachedThreshold` Prop 可以改变触发距离。
 
@@ -294,6 +243,173 @@ return (
     {isReached && <ActivityIndicator />}
   </View>
 )
+```
+
+### SectionList
+
+**分组长列表**。`<SectionList>` 可以渲染一个标题，便于对数据进行分组。
+
+```tsx
+<SectionList
+  sections={[
+    { title: "D", data: ["Devin", "Dan", "Dominic"] },
+    { title: "J", data: ["Jackson", "James", "Jillian", "Jimmy"] }
+  ]}
+  renderSectionHeader={({ section }) => <Text>{section.title}</Text>}
+  renderItem={({ item }) => <Text>{item}</Text>}
+  keyExtractor={(item, index) => item + index}
+/>
+```
+
+## 核心 API
+
+### StyleSheet
+
+**样式表**。StyleSheet 是类似于 CSS 样式表的抽象。RN 建议使用 `StyleSheet.create` 来集中定义组件的样式。
+
+```tsx
+const styles = StyleSheet.create({
+  container: {
+    flex: 1 // 在 React Native 中，flex 主轴默认垂直向下
+  },
+  title: {
+    backgroundColor: "#ebc",
+    color: "#fff",
+    fontSize: 32,
+    textAlign: "center"
+  }
+})
+
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>React Native</Text>
+  </View>
+)
+```
+
+### Alert
+
+**对话框**。可以自定义样式与功能。
+
+> [!warning]
+>
+> Android 只能显示静态的提示框，iOS 支持文本输入框。
+
+```tsx
+const alert = () => {
+  Alert.alert("Alert", "Hello React-Native!", [
+    {
+      text: "No",
+      onPress: () => console.log("cancel")
+    },
+    {
+      text: "Yes",
+      onPress: () => console.log("confirm")
+    }
+  ])
+}
+```
+
+### Keyboard
+
+**键盘事件**。可以监听键盘行为，并做出响应。
+
+```tsx
+useEffect(() => {
+  const keyboardShowListener = Keyboard.addListener("keyboardDidShow", () => {
+    console.log("Keyboard Show")
+  })
+  const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
+    console.log("Keyboard Hide")
+  })
+  
+  return () => {
+    keyboardShowListener.remove()
+    keyboardHideListener.remove()
+  }
+}, [])
+
+return <TextInput onSubmitEditing={Keyboard.dismiss} />
+```
+
+### AppState
+
+**应用状态**。可以读取应用的运行状态，或监听状态的变化。
+
+- `active`：前台运行。
+
+- `background`：后台运行。
+
+```tsx
+useEffect(() => {
+  const listener = AppState.addEventListener("change", state => {
+    AppState.currentState // => 'active' or 'background'
+    AppState.currentState === state // => true
+  })
+  
+  return listener.remove
+}, [])
+```
+
+## 设备 API
+
+### Platform
+
+**设备信息**。可以获取设备的相关信息。
+
+```tsx
+// 系统名称
+Platform.OS // android
+
+// 系统版本
+Platform.Version // 34
+
+// 设备品牌
+Platform.constants.Brand // samsung
+
+// 设备型号
+Platform.constants.Model // SM-G9960
+
+// 是否是 iPad
+Platform.isPad // false
+
+// 是否是 TV
+Platform.isTV // false
+```
+
+### Appearance
+
+**外观偏好**。可以获取或修改主题色模式。
+
+```tsx
+// 主题色模式
+Appearance.getColorScheme() // light
+
+// 修改主题色模式
+Appearance.setColorScheme("dark")
+```
+
+### Dimensions
+
+**屏幕尺寸**。可以获取屏幕的宽高和缩放系数。
+
+```tsx
+const { width, height, scale } = Dimensions.get("window")
+```
+
+### PixelRatio
+
+**像素比例**。可以获取像素密度和字体缩放比例。
+
+```tsx
+// 像素密度
+PixelRatio.get() // 2.8125 (Galaxy21+)
+
+// 字体缩放比例
+PixelRatio.getFontScale() // 1
+
+// 将布局尺寸(dp)转换为像素尺寸(px)
+PixelRatio.getPixelSizeForLayoutSize(100) // 281
 ```
 
 ## Expo SDK
