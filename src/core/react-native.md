@@ -412,6 +412,8 @@ PixelRatio.getFontScale() // 1
 PixelRatio.getPixelSizeForLayoutSize(100) // 281
 ```
 
+## 动画 API
+
 ## Expo SDK
 
 ### ImagePicker
