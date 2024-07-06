@@ -9,11 +9,30 @@ description: React Native
 
 ### Image
 
-**图片**。支持静态图片、网络图片、本地相册等不同类型的图片。另外静态图片不需要设置图片的尺寸。
+**图片**。支持网络图片、静态图片、相册图片。
 
 ```tsx
-<Image source={require("@/assets/images/react-logo.png")} />
+<Image
+  source={require("@/assets/images/react-logo.png")}
+  resizeMode="cover"
+/>
 ```
+
+:::important Props
+
+- `resizeMode`：设置图片的显示模式。
+
+  - `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
+  
+  - `contain`：保持宽高比，完全显示图片。容器可能有空白。
+  
+  - `stretch`：不保持宽高比，图片会被拉伸到刚好填满容器。
+  
+  - `repeat`：保持原尺寸，图片会平铺直至填满容器。
+  
+  - `center`：居中不拉伸。
+
+:::
 
 > [!caution]
 >
@@ -33,7 +52,7 @@ const icon = active
 return <Image source={require(icon)} />
 ```
 
-引用网络或 base64 数据的图片时，需要使用 `uri` 指定资源地址或 base64 编码，并手动设置尺寸。
+引用网络或 base64 数据的图片时，需要使用 `uri` 指定资源地址或 base64 编码，并设置尺寸。
 
 ```tsx
 // 正确
@@ -52,20 +71,6 @@ return <Image source={require(icon)} />
 <Image source={{ uri: "http://cholez.cn/icon.png" }} />
 ```
 
-#### Prop: resizeMode
-
-设置图片的显示模式。
-
-- `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
-
-- `contain`：保持宽高比，完全显示图片。容器可能有空白。
-
-- `stretch`：不保持宽高比，图片会被拉伸到刚好填满容器。
-
-- `repeat`：保持原尺寸，图片会平铺直至填满容器。
-
-- `center`：居中不拉伸。
-
 ### TextInput
 
 **文本输入框**。
@@ -76,35 +81,35 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-#### Prop: keyboardType
+:::important Props
 
-设置键盘的类型。详见 [React Native TextInput keyboardType prop values | Michael Lefkowitz](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
+- `keyboardType`：设置键盘的类型。详见 [React Native TextInput keyboardType](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
 
-- `default`：默认键盘。
+  - `default`：默认键盘。
 
-- `number-pad`：数字键盘。
+  - `number-pad`：数字键盘。
 
-- `decimal-pad`：数字键盘。
+  - `decimal-pad`：数字键盘。
 
-- `numeric`：数字键盘。
+  - `numeric`：数字键盘。
 
-- `email-address`：英文键盘（电子邮件）。
+  - `email-address`：英文键盘（电子邮件）。
 
-- `phone-pad`：数字键盘（电话号码）。
+  - `phone-pad`：数字键盘（电话号码）。
 
-#### Prop: returnKeyType
+- `returnKeyType`：设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
 
-设置 “确定” 按钮显示的内容（三星 & 搜狗键盘）。
+  - `done`：完成。
 
-- `done`：完成。
+  - `go`：转到 / 开始。
 
-- `go`：转到 / 开始。
+  - `next`：下一步。
 
-- `next`：下一步。
+  - `search`：搜索。
 
-- `search`：搜索。
+  - `send`：发送。
 
-- `send`：发送。
+:::
 
 ### Button *
 
@@ -130,17 +135,9 @@ return <TextInput value={text} onChangeText={setText} />
   onPressOut={/* 按压结束 */}
   onPress={/* 按压结束后 */}
   onLongPress={/* 长按 */}
+  style={state => state.pressed ? styles.pressed : styles.button}
+  hitSlop={{ top: 20, bottom: 30 }}
 >
-  <Text style={styles.button}>Button</Text>
-</Pressable>
-```
-
-#### Prop: style
-
-可以接受一个函数，它会提供 “按压状态”。我们可以根据按钮是否处于按压状态，设置不同的样式。
-
-```tsx
-<Pressable style={state => state.pressed ? styles.pressed : styles.button}>
   {state => state.pressed
     ? <Text style={styles.pressedText}>Pressed</Text>
     : <Text style={styles.buttonText}>Button</Text>
@@ -148,13 +145,13 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-#### Prop: hitSlop
+:::important Props
 
-由于手指的精准度有限，用户可能不会准确按压触发区域。可以设置 `hitSlop` 扩大触发范围，优化用户体验。
+- `style`：接受一个提供 “按压状态” 的函数。我们可以根据按钮是否处于按压状态，设置不同的样式。
 
-```tsx
-<Pressable hitSlop={{ top: 20, bottom: 30 }}>
-```
+- `hitSlop`：扩大触发范围，优化用户体验（用户可能不会准确按压触发区域）。
+
+:::
 
 ### ScrollView
 
@@ -190,7 +187,7 @@ return <TextInput value={text} onChangeText={setText} />
 />
 ```
 
-#### 下拉刷新
+**下拉刷新**
 
 `onRefresh` 会自动添加 `<RefreshControl>` 组件，以便实现 “下拉刷新” 功能。但是必须同时设置 `refreshing`。
 
@@ -215,7 +212,7 @@ return <FlatList
 />
 ```
 
-#### 上拉加载
+**上拉加载**
 
 当视图接近底部时，会触发 `onEndReached` 事件。设置 `onEndReachedThreshold` Prop 可以改变触发距离。
 
@@ -414,6 +411,20 @@ PixelRatio.getPixelSizeForLayoutSize(100) // 281
 
 ## 动画 API
 
+### LayoutAnimation
+
+**布局动画**。当布局
+
+```tsx
+// 在 Android 上使用此动画，需要启用
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true)
+}
+```
+
 ## Expo SDK
 
 ### ImagePicker
@@ -423,7 +434,7 @@ PixelRatio.getPixelSizeForLayoutSize(100) // 281
 ```tsx
 import * as ImagePicker from "expo-image-picker"
 
-const selectImage = async () => {
+const pickImage = async () => {
   // 询问用户权限
   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
   if (!permission.granted) return alert("拒绝访问！")
