@@ -65,14 +65,14 @@ export default sidebar({
           link: "react-native"
         },
         {
-          text: "Nuxt.js",
-          icon: "nuxtjs",
-          link: "nuxtjs"
+          text: "Nuxt",
+          icon: "nuxt",
+          link: "nuxt"
         },
         {
-          text: "Next.js",
-          icon: "nextjs",
-          link: "nextjs"
+          text: "Next",
+          icon: "next",
+          link: "next"
         },
         {
           text: "Mini Program",
