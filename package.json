@@ -5,7 +5,7 @@
   "description": "Cholez Web Docs",
   "license": "MIT",
   "type": "module",
-  "packageManager": "yarn@4.2.2",
+  "packageManager": "yarn@4.3.1",
   "scripts": {
     "dev": "vuepress dev src",
     "build": "vuepress build src",
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@vuepress/client": "2.0.0-rc.0",
-    "katex": "^0.16.9",
+    "katex": "^0.16.10",
     "sass": "^1.69.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3",
