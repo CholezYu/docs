@@ -1538,7 +1538,7 @@ inject("count", ref(1))
 
 初始化函数：返回一个 `render` 函数，它首先会读取插槽的默认值，也就是 `<KeepAlive>` 的默认插槽，并且判断如果子节点大于 1，就会报错，说明 `<KeepAlive>` 内部只能有一个插槽，也就是只会渲染单个组件。最后返回的其实还是它的内部组件（默认插槽），因为 `<KeepAlive>` 是一个抽象组件，它本身并不会被渲染。
 
-缓存策略：首先会在 `onMounted` 中执行缓存函数 `cacheSubtree`，因为缓存标记 `pendingCacheKey` 初始为 null，并且它是在 `render` 函数中进行赋值的，所以缓存函数首次执行是不会缓存的。执行 `render` 函数时，将 `vnode.key` 赋值给缓存标记。之后在 `ononUpdated` 中再执行缓存函数时，缓存标记就不为 null 了，就会把缓存组件添加到缓存容器 `cache` 中。再根据 `vnode.key` 去缓存容器中查找是否存在缓存组件（是否被缓存过）。如果缓存组件存在，则继承组件实例，并将 `vnode` 标记为 `COMPONENT_KEPT_ALIVE`，这样渲染器就不会执行销毁和重新创建操作，然后使用 **LRU 算法**更新缓存队列 `keys`（删除不活跃的 key，添加新 key）；如果缓存组件不存在，则直接将 `vnode.key` 添加到 `keys` 中。
+缓存策略：首先会在 `onMounted` 中执行缓存函数 `cacheSubtree`，因为缓存标记 `pendingCacheKey` 初始为 null，并且它是在 `render` 函数中进行赋值的，所以缓存函数首次执行是不会缓存的。执行 `render` 函数时，将 `vnode.key` 赋值给缓存标记。之后在 `onUpdated` 中再执行缓存函数时，缓存标记就不为 null 了，就会把缓存组件添加到缓存容器 `cache` 中。再根据 `vnode.key` 去缓存容器中查找是否存在缓存组件（是否被缓存过）。如果缓存组件存在，则继承组件实例，并将 `vnode` 标记为 `COMPONENT_KEPT_ALIVE`，这样渲染器就不会执行销毁和重新创建操作，然后使用 **LRU 算法**更新缓存队列 `keys`（删除不活跃的 key，添加新 key）；如果缓存组件不存在，则直接将 `vnode.key` 添加到 `keys` 中。
 
 **如果与 include 和 exclude 的规则不匹配，则不进行缓存**。
 
