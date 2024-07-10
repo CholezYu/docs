@@ -186,6 +186,43 @@ ctx.fillStyle = "red"
 ctx.fillRect(10, 10, 100, 100)
 ```
 
+### File
+
+允许网页访问用户的文件系统，读取文件内容。适用于文件上传、读取本地文件等功能。
+
+```ts
+document.getElementById("file").addEventListener("change", event => {
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.addEventListener("load", event => {
+    const content = event.target.result
+  })
+  // 读取文件内容
+  reader.readAsText(file)
+})
+```
+
+### History
+
+允许操作浏览器历史记录。包括 `popstate` 事件和 `pushState`、`replaceState` 方法。
+
+> [!tip]
+>
+> Vue Router 的 History Mode 是基于此实现的。
+
+```ts
+// 监听浏览器历史记录改变
+addEventListener("popstate", event => { /* ... */ })
+
+// 向浏览器历史记录中添加一个新状态，实现无刷新跳转
+// => router.push("/home")
+history.pushState(null, null, "/home")
+
+// 替换当前的历史记录状态
+// => router.replace("/home")
+history.replaceState(null, null, "/home")
+```
+
 ### WebSocket
 
 提供双向通信通道，用于实时数据传输。常用于聊天室、游戏等需要实时更新的应用。
@@ -198,7 +235,7 @@ socket.addEventListener("open", event => { /* 初始化操作 */ })
 
 // 接收消息
 socket.addEventListener("message", event => {
-  console.log(event.data)
+  const content = event.data
 })
 
 // 断开连接
@@ -220,14 +257,14 @@ worker.postMessage({ num1: 5, num2: 10 })
 
 // 接收 Worker 的消息
 worker.addEventListener("message", event => {
-  console.log(event.data)
+  const content = event.data
 })
 ```
 
 Worker 文件。
 
 ```js
-self.onmessage = function(event) {
+self.addEventListener("message", event => {
   const num1 = event.data.num1
   const num2 = event.data.num2
   
@@ -236,7 +273,7 @@ self.onmessage = function(event) {
   
   // 向主线程发送消息
   self.postMessage(result)
-}
+})
 ```
 
 ### Service Worker
@@ -321,60 +358,60 @@ performance.measure("custom_measure", "start", "end")
 const measures = performance.getEntriesByType("measure")
 ```
 
-### File
+### RequestAnimationFrame
 
-允许网页访问用户的文件系统，读取文件内容。适用于文件上传、读取本地文件等功能。
-
-```ts
-document.getElementById("file").addEventListener("change", event => {
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.addEventListener("load", event => {
-    console.log(event.target.result)
-  })
-  // 读取文件内容为文本
-  reader.readAsText(file)
-})
-```
-
-### History
-
-允许操作浏览器历史记录。包括 `popstate` 事件和 `pushState`、`replaceState` 方法。
-
-> [!tip]
->
-> Vue Router 的 History Mode 是基于此实现的。
+以更好的性能执行动画。适合用于实现高效和平滑的动画效果。
 
 ```ts
-// 监听浏览器历史记录改变
-addEventListener("popstate", event => { /* ... */ })
-
-// 向浏览器历史记录中添加一个新状态，实现无刷新跳转
-// => router.push("/home")
-history.pushState(null, null, "/home")
-
-// 替换当前的历史记录状态
-// => router.replace("/home")
-history.replaceState(null, null, "/home")
-```
-
-### Clipboard
-
-读写剪贴板的内容。适用于实现复制、粘贴功能。
-
-```ts
-if (navigator.clipboard) {
-  await navigator.clipboard.writeText("Hello World!")
-}
 // 兼容处理
-else {
-  const textarea = document.createElement("textarea")
-  document.body.appendChild(textarea)
-  textarea.value = "Hello World!"
-  textarea.select()
-  document.execCommand("copy")
-  document.body.removeChild(textarea)
+const rAF = window.requestAnimationFrame || (func => setTimeout(func, 16))
+
+let animationId = null
+
+const scrollToTop = () => {
+  const cubic = (value: number) => Math.pow(value, 3)
+  const easeInOutCubic = (value: number) => value < 0.5
+    ? cubic(value * 2) / 2
+    : 1 - cubic((1 - value) * 2) / 2
+  
+  const el = document.documentElement
+  
+  const beginTime = Date.now()
+  const beginValue = el.scrollTop
+  const animate = () => {
+    const progress = (Date.now() - beginTime) / 500
+    if (progress < 1) {
+      el.scrollTop = beginValue * (1 - easeInOutCubic(progress))
+      // `animate` 会在每一帧被调用，用于更新动画状态和绘制新的动画帧，然后请求下一帧
+      animationId = rAF(animate)
+    }
+    else {
+      el.scrollTop = 0
+    }
+  }
+  // 开始动画
+  animationId = rAF(animate)
 }
+
+const stopAnimation = () => {
+  // 取消动画
+  cancelAnimationFrame(animationId)
+}
+```
+
+### Animations
+
+直接控制 CSS 动画和 SVG 动画。提供更高的动画性能和控制。
+
+```ts
+// 创建一个动画
+document.getElementById('animation').animate([
+  { transform: "translateY(0px)" },
+  { transform: "translateY(100px)" }
+], {
+  duration: 1000,
+  easing: "ease-out"
+})
 ```
 
 ### MutationObserver
@@ -417,48 +454,23 @@ const observer = new IntersectionObserver(entries => {
 observer.observe(document.getElementById("obElement"))
 ```
 
-### RequestAnimationFrame
+### Clipboard
 
-以更好的性能执行动画。适合用于实现高效和平滑的动画效果。
-
-在下面这个例子中，`animate` 函数会在每一帧被调用，用于更新动画状态和绘制新的动画帧。
+读写剪贴板的内容。适用于实现复制、粘贴功能。
 
 ```ts
+if (navigator.clipboard) {
+  await navigator.clipboard.writeText("Hello World!")
+}
 // 兼容处理
-const rAF = window.requestAnimationFrame || (func => setTimeout(func, 16))
-
-let animationId = null
-
-const startAnimation = () => {
-  const animate = () => {
-    // 更新动画状态
-    // 绘制动画帧
-    // 请求下一帧
-    animationId = rAF(animate)
-  }
-  // 开始动画
-  animationId = rAF(animate)
+else {
+  const textarea = document.createElement("textarea")
+  document.body.appendChild(textarea)
+  textarea.value = "Hello World!"
+  textarea.select()
+  document.execCommand("copy")
+  document.body.removeChild(textarea)
 }
-
-const stopAnimation = () => {
-  // 取消动画
-  cancelAnimationFrame(animationId)
-}
-```
-
-### Animations
-
-直接控制 CSS 动画和 SVG 动画。提供更高的动画性能和控制。
-
-```ts
-// 创建一个动画
-document.getElementById('animation').animate([
-  { transform: "translateY(0px)" },
-  { transform: "translateY(100px)" }
-], {
-  duration: 1000,
-  easing: "ease-out"
-})
 ```
 
 ### IndexedDB
@@ -969,12 +981,14 @@ if (window.AmbientLightSensor) {
 ```ts
 // 获取网络连接信息
 const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection
-console.log("Effective connection type: ", connection.effectiveType)
-console.log("Downlink speed: ", connection.downlink)
+// 有效连接类型
+let effectiveConnectionType = connection.effectiveType
+// 传输速度
+let downlinkSpeed = connection.downlink
 
 // 监听网络状态变化事件
 connection.addEventListener("change", () => {
-  console.log("Network connection type changed to: ", connection.effectiveType)
+  effectiveConnectionType = connection.effectiveType
 })
 ```
 
@@ -986,14 +1000,14 @@ connection.addEventListener("change", () => {
 // 监听游戏控制器连接事件
 addEventListener("gamepadconnected", event => {
   const gamepad = event.gamepad
-  console.log(gamepad.id)
+  const gamepadId = gamepad.id
 })
 
 // 检测游戏控制器按键状态
-function checkGamepad() {
+const checkGamepad = () => {
   const gamepads = navigator.getGamepads()
   if (gamepads[0]) {
-    console.log("Button 0 pressed: ", gamepads[0].buttons[0].pressed)
+    const firstButtonPressed = gamepads[0].buttons[0].pressed
   }
   requestAnimationFrame(checkGamepad)
 }
