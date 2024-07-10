@@ -46,7 +46,14 @@ export default navbar([
             text: "React 18",
             icon: "react",
             link: "react"
-          },
+          }
+        ]
+      },
+      
+      {
+        text: "移动端",
+        prefix: "hybrid/",
+        children: [
           {
             text: "React Native",
             icon: "react",
@@ -56,11 +63,6 @@ export default navbar([
             text: "Mini Program",
             icon: "mini-app",
             link: "mini-app"
-          },
-          {
-            text: "TypeScript",
-            icon: "typescript",
-            link: "typescript"
           }
         ]
       }

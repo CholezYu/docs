@@ -60,11 +60,6 @@ export default sidebar({
           link: "react"
         },
         {
-          text: "React Native",
-          icon: "react",
-          link: "react-native"
-        },
-        {
           text: "Nuxt",
           icon: "nuxt",
           link: "nuxt"
@@ -75,24 +70,10 @@ export default sidebar({
           link: "next"
         },
         {
-          text: "Mini Program",
-          icon: "mini-app",
-          link: "mini-app"
-        },
-        {
           text: "TypeScript",
           icon: "typescript",
           link: "typescript"
-        }
-      ]
-    },
-    
-    {
-      text: "工程化",
-      icon: "operate",
-      prefix: "project/",
-      collapsible: true,
-      children: [
+        },
         {
           text: "Ajax",
           icon: "ajax",
@@ -112,6 +93,35 @@ export default sidebar({
           text: "Git",
           icon: "git",
           link: "git"
+        }
+      ]
+    },
+    
+    {
+      text: "移动端",
+      icon: "hybrid",
+      prefix: "hybrid/",
+      collapsible: true,
+      children: [
+        {
+          text: "React Native",
+          icon: "react",
+          link: "react-native"
+        },
+        {
+          text: "Flutter",
+          icon: "flutter",
+          link: "Flutter"
+        },
+        {
+          text: "Kotlin",
+          icon: "kotlin",
+          link: "Kotlin"
+        },
+        {
+          text: "Mini Program",
+          icon: "mini-app",
+          link: "mini-app"
         }
       ]
     },
