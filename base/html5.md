@@ -224,6 +224,40 @@ socket.addEventListener("close", event => { /* 重新连接 */ })
 socket.addEventListener("error", event => { /* 检查网络 */ })
 ```
 
+### Service Workers
+
+提供一种在后台处理网络请求、缓存资源和执行其他任务的能力。适用于构建离线 Web 应用和提高性能。
+
+```ts
+if ("serviceWorker" in navigator) {
+  const registration = await navigator.serviceWorker.register("service-worker.ts")
+  console.log(registration.scope)
+}
+```
+
+### Performance
+
+提供对 Web 应用性能的访问和分析。包括 `Performance.now`、`Performance.mark`、`Performance.measure` 等。
+
+```ts
+// 标记一个性能测量点
+performance.mark("start")
+
+// 进行一些（耗时）操作
+for (let i = 0; i < 1000000; i++) { /* ... */ }
+
+// 标记结束点
+performance.mark("end")
+
+// 测量从开始到结束的时间
+performance.measure("MyOperation", "start", "end")
+
+// 获取所有性能测量
+const measures = performance.getEntriesByType("measure")
+
+console.log(measures)
+```
+
 ### File
 
 允许网页访问用户的文件系统，读取文件内容。适用于文件上传、读取本地文件等功能。
@@ -290,17 +324,6 @@ const copyText = (text: string) => {
 }
 ```
 
-### Service Workers
-
-提供一种在后台处理网络请求、缓存资源和执行其他任务的能力。适用于构建离线 Web 应用和提高性能。
-
-```ts
-if ("serviceWorker" in navigator) {
-  const registration = await navigator.serviceWorker.register("service-worker.ts")
-  console.log(registration.scope)
-}
-```
-
 ### Mutation Observer
 
 监测 DOM 树中的更改。比传统的 DOM 事件监听更高效，适用于复杂的 DOM 操作。
@@ -308,7 +331,7 @@ if ("serviceWorker" in navigator) {
 ```ts
 const observer = new MutationObserver(mutations => {
   mutations.forEach(mutation => {
-    console.log("Mutation observed: ", mutation);
+    console.log("Mutation observed: ", mutation)
   })
 })
 
@@ -334,54 +357,6 @@ const observer = new IntersectionObserver(entries => {
 
 // 观察一个元素
 observer.observe(document.getElementById("obElement"))
-```
-
-### Performance
-
-提供对 Web 应用性能的访问和分析。包括 `Performance.now`、`Performance.mark`、`Performance.measure` 等。
-
-```ts
-// 标记一个性能测量点
-performance.mark("start")
-
-// 进行一些（耗时）操作
-for (let i = 0; i < 1000000; i++) { /* ... */ }
-
-// 标记结束点
-performance.mark("end")
-
-// 测量从开始到结束的时间
-performance.measure("MyOperation", "start", "end")
-
-// 获取所有性能测量
-const measures = performance.getEntriesByType("measure")
-
-console.log(measures)
-```
-
-### IndexedDB
-
-提供一个低级 API，用于客户端持久化存储大量结构化数据。适用于离线应用和复杂的数据存储需求。
-
-```ts
-// 打开一个名为 "my-db" 的 IndexedDB 数据库
-const request = indexedDB.open("my-db", 1)
-
-// 数据库升级时的回调函数
-request.addEventListener("upgradeneeded", event => {
-  const db = event.target.result
-  // 创建一个名为 "users" 的对象存储
-  db.createObjectStore("users", { keyPath: "id" })
-})
-
-// 数据库打开成功时的回调函数
-request.addEventListener("success", event => {
-  const db = event.target.result
-  const transaction = db.transaction(["users"], "readwrite")
-  const store = transaction.objectStore("users")
-  // 添加一个用户对象
-  store.add({ id: 1, name: "John Doe" })
-})
 ```
 
 ### RequestAnimationFrame
@@ -425,6 +400,31 @@ document.getElementById('animation').animate([
 ], {
   duration: 1000,
   iterations: Infinity
+})
+```
+
+### IndexedDB
+
+提供一个低级 API，用于客户端持久化存储大量结构化数据。适用于离线应用和复杂的数据存储需求。
+
+```ts
+// 打开一个名为 "my-db" 的 IndexedDB 数据库
+const request = indexedDB.open("my-db", 1)
+
+// 数据库升级时的回调函数
+request.addEventListener("upgradeneeded", event => {
+  const db = event.target.result
+  // 创建一个名为 "users" 的对象存储
+  db.createObjectStore("users", { keyPath: "id" })
+})
+
+// 数据库打开成功时的回调函数
+request.addEventListener("success", event => {
+  const db = event.target.result
+  const transaction = db.transaction(["users"], "readwrite")
+  const store = transaction.objectStore("users")
+  // 添加一个用户对象
+  store.add({ id: 1, name: "John Doe" })
 })
 ```
 
@@ -521,7 +521,7 @@ const permission = Notification.requestPermission()
 
 if (permission === "granted") {
   // 显示通知
-  new Notification('Hello, world!')
+  new Notification("Hello, world!")
 }
 ```
 
