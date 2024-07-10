@@ -359,20 +359,17 @@ const request = (url: string) => {
   fetch(url)
     .then(async response => {
       // 拷贝一份，用于计算上传进度
-      const response = response.clone()
+      const _response = response.clone()
       
       // 流
-      const reader = response.body.getReader()
+      const reader = _response.body.getReader()
       // 总字节
-      const total = response.headers.get("Content-Length")
+      const total = _response.headers.get("Content-Length")
       // 记录完成的进度
       let loaded = 0
-      
       while (true) {
         const { done, value } = await reader.read()
-        if (done) {
-          break
-        }
+        if (done) break
         loaded += value.length
       }
       
