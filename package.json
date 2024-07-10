@@ -7,9 +7,9 @@
   "type": "module",
   "packageManager": "yarn@4.3.1",
   "scripts": {
-    "dev": "vuepress dev src",
-    "build": "vuepress build src",
-    "clean-dev": "vuepress dev src --clean-cache",
+    "dev": "vuepress dev",
+    "build": "vuepress build",
+    "clean-dev": "vuepress dev --clean-cache",
     "docs:update-package": "yarn dlx vp-update"
   },
   "devDependencies": {

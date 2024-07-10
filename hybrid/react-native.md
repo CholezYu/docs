@@ -258,7 +258,7 @@ return (
 />
 ```
 
-## 核心 API
+## 基础 API
 
 ### StyleSheet
 
@@ -413,7 +413,7 @@ PixelRatio.getPixelSizeForLayoutSize(100) // 281
 
 ### LayoutAnimation
 
-**布局动画**。当布局
+**布局动画**。动画会在下一次渲染或布局周期运行。用于透明度渐变、缩放。
 
 ```tsx
 // 在 Android 上使用此动画，需要启用
@@ -423,7 +423,18 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true)
 }
+
+return <Button
+  title="Click"
+  onPress={() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+  }}
+/>
 ```
+
+### Animated
+
+**更精细的动画**。
 
 ## Expo SDK
 
