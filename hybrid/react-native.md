@@ -1,7 +1,7 @@
 ---
 title: React Native
 icon: react
-date: 2024-06-27
+date: 2024-07-10
 description: React Native
 ---
 
@@ -426,15 +426,51 @@ if (
 
 return <Button
   title="Click"
-  onPress={() => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-  }}
+  onPress={() => LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)}
 />
 ```
 
 ### Animated
 
 **更精细的动画**。
+
+> [!warning]
+>
+> 不要直接修改动画值！可以将动画值赋给 `ref.current`。
+
+```tsx
+const fadeValue = useRef(new Animated.Value(0)).current
+
+const fadeIn = () => {
+  // Will change fadeValue to 1 in 5 seconds
+  Animated.timing(fadeValue, {
+    toValue: 1,
+    duration: 5000,
+    useNativeDriver: true
+  }).start()
+}
+
+const fadeOut = () => {
+  // Will change fadeValue to 0 in 3 seconds
+  Animated.timing(fadeValue, {
+    toValue: 0,
+    duration: 3000,
+    useNativeDriver: true
+  }).start()
+}
+
+return (
+  <SafeAreaView>
+    <Animated.View style={{ opacity: fadeValue }}>
+      <Text>Fading View!</Text>
+    </Animated.View>
+    <View>
+      <Button title="Fade In View" onPress={fadeIn} />
+      <Button title="Fade Out View" onPress={fadeOut} />
+    </View>
+  </SafeAreaView>
+)
+```
 
 ## Expo SDK
 
