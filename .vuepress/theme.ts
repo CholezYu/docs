@@ -8,7 +8,7 @@ export default hopeTheme({
   // 仓库配置，用于在导航栏中显示仓库链接
   repo: "CholezYu/docs",
   
-  docsDir: "src",
+  docsDir: "",
   
   author: {
     name: "俞文健",
