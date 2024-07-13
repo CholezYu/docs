@@ -1,161 +1,49 @@
 ---
 title: HTML5
 icon: html
-date: 2024-07-10
+date: 2024-07-11
 description: HTML5
 ---
 
-## 语义化标签
+## Canvas
 
-### 布局标签
+```ts
+const canvas = document.getElementById("canvas")
+const ctx = canvas.getContext("2d")
 
-```html
-<!-- 头部 -->
-<header></header>
+// 确定起点
+ctx.moveTo(100, 100)
 
-<!-- 导航 -->
-<nav></nav>
+// 移动到新的位置
+ctx.lineTo(200, 100)
+ctx.lineTo(200, 200)
 
-<!-- 主体 -->
-<main></main>
+// 移动到起点
+ctx.closePath()
 
-<!-- 分区 -->
-<section></section>
+// 设置填充颜色
+ctx.fillStyle = "red"
+// 填充
+ctx.fill()
 
-<!-- 文章、评论等 -->
-<article></article>
-
-<!-- 侧边栏 -->
-<aside></aside>
-
-<!-- 底部 -->
-<footer></footer>
+// 绘制
+ctx.stroke()
 ```
 
-### 其他标签
+```ts
+const canvas = document.getElementById("canvas")
+const ctx = canvas.getContext("2d")
 
-```html
-<!-- 手机电量 -->
-<meter max="100" min="0" low="20" high="80" value="90"></meter>
+// 设置填充颜色为红色
+ctx.fillStyle = "red"
 
-<!-- 进度条 -->
-<progress max="100" value="30"></progress>
-
-<!-- 搜索框 -->
-<datalist>
-  <option value=""></option>
-</datalist>
-
-<!-- 标记文本 -->
-<mark></mark>
+// 在画布上绘制一个红色的矩形
+ctx.fillRect(10, 10, 100, 100)
 ```
 
-## 表单控件
+## Svg
 
-### 表单标签
 
-```html
-<!-- 调色板 -->
-<input type="color">
-
-<!-- 日期控件(年/月/日) -->
-<input type="date">
-
-<!-- 日期控件(年/月) -->
-<input type="month">
-
-<!-- 日期控件(年/周) -->
-<input type="week">
-
-<!-- 时间控件(时/分) -->
-<input type="time">
-
-<!-- 文本框(按邮箱格式校验) -->
-<input type="email">
-
-<!-- 文本框(按 url 格式校验) -->
-<input type="url">
-
-<!-- 文本框(只能输入数字) -->
-<input type="tel">
-
-<!-- 搜索框(清除按钮) -->
-<input type="search">
-
-<!-- 文本框(加减按钮) -->
-<input type="number">
-
-<!-- 滚动条 -->
-<input type="range">
-```
-
-### 表单属性
-
-- autocomplete：显示历史输入（必须设置 name 属性才会生效）
-
-  - on：开启（默认）
-
-  - off：关闭
-
-- autofocus：自动获取输入框的焦点（无属性值）
-
-- required：输入框不能为空（无属性值）
-
-- readonly：输入框中的值是只读的，不能被修改（无属性值）
-
-- multiple：可以选择多个 option（无属性值）
-
-- `<input type="file" accept="image/*">`：接受的图片格式
-
-- `<input type="file" capture="camera">`：调用相机权限
-
-- `<input type="file" capture="photo">`：调用相册权限
-
-## 媒体标签
-
-### 音频标签
-
-```html
-<!-- 音频 -->
-<audio src=""></audio>
-```
-
-- src：音频路径（必要）
-
-- controls：允许用户控制播放（无属性值）
-
-- autoplay：自动播放（无属性值）
-
-- muted：静音（无属性值）
-
-- loop：循环播放（无属性值）
-
-### 视频标签
-
-```html
-<!-- 视频 -->
-<video src=""></video>
-```
-
-- src：视频路径（必要）
-
-- controls：允许用户控制播放进度条（无属性值）
-
-- autoplay：自动播放（无属性值，必须静音）
-
-- muted：静音（无属性值）
-
-- loop：循环播放（无属性值）
-
-- poster：海报帧的路径，显示视频封面（值为图片地址）
-
-- preload：视频预加载模式
-
-  - none：不进行预加载
-
-  - metadata：加载部分视频信息
-
-  - auto：预加载
 
 ## Web API
 
@@ -170,37 +58,6 @@ description: HTML5
 现代网络请求方式。
 
 [Fetch API | Ajax](/core/ajax.md#fetch)
-
-### Canvas
-
-允许在 `<canvas>` 元素上绘制 2D 图形。包括绘制矩形、路径、文本、图像等。
-
-```ts
-const canvas = document.getElementById("canvas")
-const ctx = canvas.getContext("2d")
-
-// 设置填充颜色为红色
-ctx.fillStyle = "red"
-
-// 在画布上绘制一个红色的矩形
-ctx.fillRect(10, 10, 100, 100)
-```
-
-### File
-
-允许网页访问用户的文件系统，读取文件内容。适用于文件上传、读取本地文件等功能。
-
-```ts
-document.getElementById("file").addEventListener("change", event => {
-  const file = event.target.files[0]
-  const reader = new FileReader()
-  reader.addEventListener("load", event => {
-    const content = event.target.result
-  })
-  // 读取文件内容
-  reader.readAsText(file)
-})
-```
 
 ### History
 
@@ -223,6 +80,22 @@ history.pushState(null, null, "/home")
 history.replaceState(null, null, "/home")
 ```
 
+### FileReader
+
+允许网页访问用户的文件系统，读取、预览文件内容。适用于文件上传、读取本地文件等功能。
+
+```ts
+document.getElementById("file").addEventListener("change", event => {
+  const file = event.target.files[0]
+  const reader = new FileReader()
+  reader.addEventListener("load", event => {
+    const result = event.target.result
+  })
+  // 读取文件内容
+  reader.readAsText(file)
+})
+```
+
 ### WebSocket
 
 提供双向通信通道，用于实时数据传输。常用于聊天室、游戏等需要实时更新的应用。
@@ -235,7 +108,7 @@ socket.addEventListener("open", event => { /* 初始化操作 */ })
 
 // 接收消息
 socket.addEventListener("message", event => {
-  const content = event.data
+  const result = event.data
 })
 
 // 断开连接
@@ -253,11 +126,11 @@ socket.addEventListener("error", event => { /* 检查网络 */ })
 const worker = new Worker("worker.js")
 
 // 向 Worker 发送消息
-worker.postMessage({ num1: 5, num2: 10 })
+worker.postMessage({ sum: 0 })
 
 // 接收 Worker 的消息
 worker.addEventListener("message", event => {
-  const content = event.data
+  const { result, time } = event.data
 })
 ```
 
@@ -265,14 +138,17 @@ Worker 文件。
 
 ```js
 self.addEventListener("message", event => {
-  const num1 = event.data.num1
-  const num2 = event.data.num2
-  
+  let start = Date.now()
+  let result = event.data.sum
   // 执行计算任务
-  const result = num1 * num2
-  
+  for (let i = 0; i < 100000000; i++) {
+   result += i
+  }
   // 向主线程发送消息
-  self.postMessage(result)
+  self.postMessage({
+    result,
+    time: Date.now() - start
+  })
 })
 ```
 
