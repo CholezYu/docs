@@ -119,7 +119,7 @@ export default sidebar({
           link: "Kotlin"
         },
         {
-          text: "Mini Program",
+          text: "微信小程序",
           icon: "mini-app",
           link: "mini-app"
         }

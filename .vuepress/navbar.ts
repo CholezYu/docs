@@ -60,7 +60,7 @@ export default navbar([
             link: "react-native"
           },
           {
-            text: "Mini Program",
+            text: "微信小程序",
             icon: "mini-app",
             link: "mini-app"
           }
