@@ -625,7 +625,7 @@ const navigate = useNavigate()
 // 传递 search 参数
 navigate({ pathname: "/user", search: "?id=1&name=minji" })
 
-//传递 params 参数，需要设置动态路径
+// 传递 params 参数，需要设置动态路径
 navigate("/user/1/minji") // <Route path="user/:id/:name" />
 
 // 传递 state 参数
