@@ -1,9 +1,14 @@
 ---
 title: Nuxt
 icon: nuxt
-date: 2024-07-13
+date: 2024-07-14
 description: Nuxt 
 ---
+
+<script setup>
+  import Ts from "@source/components/Icons/Ts.vue"
+  import Vue from "@source/components/Icons/Vue.vue"
+</script>
 
 ## 目录
 
@@ -18,11 +23,11 @@ description: Nuxt
 ├── pages                  页面
 ├── plugins                插件
 ├── public                 静态资源
-├── server                 服务器程序
+├── server                 服务器
 ├── utils                  工具函数
 ├── .env                   环境变量
 ├── app.vue                主文件
-├── app.config.ts          响应式配置
+├── app.config.ts          应用配置
 ├── nuxt.config.ts         脚手架配置
 ├── package.json           依赖管理
 └── tsconfig.json          TS 配置
@@ -34,7 +39,7 @@ description: Nuxt
 
 显示 `layouts` 中的布局。
 
-在 `app.vue` 中显示 `layouts/default.vue` 布局。
+默认显示 `layouts/default.vue` 布局。
 
 ```vue
 <!-- app.vue -->
@@ -74,7 +79,7 @@ description: Nuxt
 
 ::: tabs#definePageMeta
 
-@tab <FontIcon icon="vue" /> pages/login.vue
+@tab <Vue /> pages/login.vue
 
 ```vue
 <script setup lang="ts">
@@ -84,7 +89,7 @@ description: Nuxt
 </script>
 ```
 
-@tab <FontIcon icon="vue" /> layouts/default.vue
+@tab <Vue /> layouts/default.vue
 
 ```vue
 <template>
@@ -98,8 +103,101 @@ description: Nuxt
 
 ## 请求
 
+### useFetch
+
+请求数据。
+
+::: tabs#useFetch
+
+@tab <Ts /> utils/request.ts
+
+```ts
+import type { UseFetchOptions } from "nuxt/app"
+
+export default async function request<T>(
+  url: string,
+  options: UseFetchOptions<ResponseResult<T>>
+): Promise<T> {
+  // 设置请求头
+  // options.headers = ...
+  
+  const { data, pending, error, refresh } = await useFetch(url, options)
+  
+  return data.value && data.value.code === 200
+    ? data.value.data
+    : Promise.reject(error.value || data.value!.message)
+}
+```
+
+@tab <Ts /> api/index.ts
+
+```ts
+import type { UseFetchOptions } from "nuxt/app"
+import request from "utils/request"
+
+const baseURL = import.meta.env.VITE_BASE_URL
+
+export const apiGet = <T>(
+  url: string,
+  options: UseFetchOptions<ResponseResult<T>> = {
+    method: "GET",
+    baseURL
+  }
+) => request(url, options)
+
+export const apiPost = <T>(
+  url: string,
+  body: any,
+  options: UseFetchOptions<ResponseResult<T>> = {
+    method: "POST",
+    body,
+    baseURL
+  }
+) => request(url, options)
+```
+
+@tab <Vue /> *.vue
+
 ```vue
 <script setup lang="ts">
-  const { data, pending, error, refresh } = await useFetch(url)
+  const categories = ref<Category[]>([])
+  categories.value = await apiGet<Category[]>(url)
 </script>
 ```
+
+:::
+
+## 服务
+
+### defineEventHandler
+
+注册 API 模拟数据。
+
+::: tabs#defineEventHandler
+
+@tab <Ts /> server/api/banners.ts
+
+```ts
+export default defineEventHandler(() => {
+  return {
+    code: 200,
+    data: [
+      { id: 1, imageUrl: "/images/banner1.jpg" },
+      { id: 2, imageUrl: "/images/banner2.jpg" },
+      { id: 3, imageUrl: "/images/banner3.jpg" }
+    ],
+    message: "ok",
+    success: true
+  }
+})
+```
+
+@tab <Vue /> *.vue
+
+```vue
+<script setup lang="ts">
+  const { data, error } = useFetch("/banners", { baseURL: "/api" })
+</script>
+```
+
+:::
