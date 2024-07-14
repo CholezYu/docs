@@ -39,22 +39,19 @@ description: Nuxt
 
 显示 `layouts` 中的布局。
 
-默认显示 `layouts/default.vue` 布局。
+::: tabs#NuxtLayout
+
+@tab <Vue /> app.vue
 
 ```vue
-<!-- app.vue -->
-<template>
-  <NuxtLayout />
-</template>
-```
+<!-- 默认显示 `layouts/default.vue` 布局 -->
+<NuxtLayout />
 
-也可以自定义布局文件的名称。
-
-显示 `layouts/custom.vue` 布局。
-
-```vue
+<!-- 自定义显示 `layouts/custom.vue` 布局 -->
 <NuxtLayout name="custom" />
 ```
+
+:::
 
 ## 页面
 
@@ -62,16 +59,19 @@ description: Nuxt
 
 显示 `pages` 中的页面。
 
-它是对 `<RouterView>` 的封装。
+::: tabs#NuxtPage
+
+@tab <Vue /> layouts/default.vue
 
 ```vue
-<!-- layouts/default.vue -->
 <template>
   <Header />
   <NuxtPage />
   <Footer />
 </template>
 ```
+
+:::
 
 ### definePageMeta
 
