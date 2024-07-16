@@ -1,7 +1,6 @@
 ---
 title: React Native
 icon: react
-date: 2024-07-10
 description: React Native
 ---
 

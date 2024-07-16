@@ -1,7 +1,6 @@
 ---
 title: 排序算法
 icon: sort
-date: 2024-05-24
 description: 排序算法
 ---
 

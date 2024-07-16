@@ -1,7 +1,6 @@
 ---
 title: HTML5
 icon: html
-date: 2024-07-11
 description: HTML5
 ---
 

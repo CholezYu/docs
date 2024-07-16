@@ -1,25 +1,8 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-04-22
 description: 微信小程序
 ---
-
-## 基本目录
-
-```
-├── app.js
-├── app.json
-├── pages
-│   └── index
-│       ├── index.js
-│       ├── index.json
-│       ├── index.wxml
-│       └── index.wxss
-├── project.config.json           工程配置
-├── project.private.config.json   工程配置（不提交到仓库）
-└── sitemap.json                  站点地图
-```
 
 ## 全局配置
 

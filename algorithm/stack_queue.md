@@ -1,7 +1,6 @@
 ---
 title: 栈与队列
 icon: stack
-date: 2024-05-24
 description: 栈与队列
 ---
 

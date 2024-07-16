@@ -1,7 +1,6 @@
 ---
 title: Nuxt
 icon: nuxt
-date: 2024-07-14
 description: Nuxt 
 ---
 
