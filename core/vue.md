@@ -1349,8 +1349,8 @@ defineExpose({
   const modelValue = defineModel({ default: 0 }) // 默认为 modelValue
   const modelCount = defineModel("count", { default: 1 })
   
-  const updateValue = () => modelValue++ // 触发 "update:modelValue" 事件
-  const updateCount = () => modelCount++ // 触发 "update:count" 事件
+  const updateValue = () => modelValue.value++ // 触发 "update:modelValue" 事件
+  const updateCount = () => modelCount.value++ // 触发 "update:count" 事件
 </script>
 
 <template>
@@ -1880,6 +1880,30 @@ addEventListener("popstate", (event: Event) => {
 history.pushState(null, null, "/home")
 ```
 
+### 路由组件传参
+
+#### 布尔模式
+
+当 `props` 设置为 `true` 时，`route.params` 将被设置为组件的 props。
+
+#### 对象模式
+
+当 `props` 是一个对象时，对象中的静态属性将被设置为组件的 props。
+
+#### 函数模式
+
+当 props 为一个 getter 函数时，函数的返回值将被设置为组件的 props。
+
+```ts
+const routes = [
+  {
+    path: "/search/:id",
+    component: Search,
+    props: route => ({ params: route.params, query: route.query, a: 1 })
+  }
+]
+```
+
 ### 缓存路由
 
 `<KeepAlive>` 内部的路由组件会在初始创建的时候被缓存。
@@ -1900,7 +1924,7 @@ history.pushState(null, null, "/home")
 
 在路由跳转前触发。常用于路由鉴权。
 
-```js
+```ts
 router.beforeEach(async (to, _from, next) => {
   NProgress.start()
   
@@ -1964,7 +1988,7 @@ router.afterEach((_to, _from) => {
 
 进入指定路由前触发。
 
-```js
+```ts
 const routes = [
   {
     path: "/user",

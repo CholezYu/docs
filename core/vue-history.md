@@ -460,109 +460,7 @@ VueRouter.prototype.push = function (
 </keep-alive>
 ```
 
-### 动态路由传参
-
-#### Params
-
-在路由配置中使用 ":" 占位。当匹配到路由时，参数会被设置到 `$route.params` 中。
-
-```vue
-<!-- 字符串写法 -->
-<router-link to="/user/1" />
-
-<!-- 对象写法，params 参数只支持 name -->
-<router-link :to="{ name: 'User', params: { id: 1 } }" />
-```
-
-#### Query
-
-如果 URL 中存在查询参数，参数会被设置到 `$router.query` 中。
-
-```vue
-<!-- 字符串写法 -->
-<router-link to="/user?id=1" />
-
-<!-- 对象写法 -->
-<router-link :to="{ path: '/user', query: { id: 1 } }" />
-<router-link :to="{ name: 'User', query: { id: 1 } }" />
-```
-
-### 路由组件传参
-
-#### 布尔模式
-
-将路由中所有 params 参数以 props 的形式传递给组件。
-
-**注意**：只能传递 params 参数。
-
-```js
-const routes = [
-  {
-    path: "/user/:name",
-    component: () => import("@/views/User"),
-    props: true
-  }
-]
-```
-
-#### 对象模式
-
-将对象中所有静态属性以 props 的形式传递给组件。
-
-**注意**：只能传递静态参数。
-
-```js
-const routes = [
-  {
-    path: "/user/:name",
-    component: () => import("@/views/User"),
-    props: { a: 1, b: 2 }
-  }
-]
-```
-
-#### 函数模式
-
-将 getter 函数返回的对象中的所有属性以 props 的形式传递给组件。
-
-**注意**：可以接受 `$route`，既能传递 params 参数，又能传递 query 参数，又能传递静态参数。
-
-```js
-const routes = [
-  {
-    path: "/user/:name",
-    component: () => import("@/views/User"),
-    props: $route => ({ ...$route.params, ...$route.query })
-  }
-]
-```
-
 ## Vuex
-
-### 工作流程
-
-Vuex 是一个状态（数据）管理插件，对所有组件的共享状态进行集中式管理。
-
-![](https://vuex.vuejs.org/vuex.png)
-
-同步：`commit(type, payload)` => mutations => state
-
-异步：`dispatch(type, payload)` => actions == `commit(type, payload)` => mutations => state
-
-### 全局注入
-
-在创建 Vue 实例时配置 store 选项，可以为所有内部组件都注入一个 `$store` 属性。
-
-```js
-import store from "@/store"
-
-const app = new Vue({
-  render: h => h(App),
-  store
-})
-
-app.$mount("#app")
-```
 
 ### State
 
@@ -575,12 +473,14 @@ app.$mount("#app")
 所以我们一般使用计算属性获取 store 中的数据。
 
 ```js
-computed: {
-  count() {
-    return this.$store.state.count
-  },
-  message() {
-    return this.$store.state.message
+export default {
+  computed: {
+    count() {
+      return this.$store.state.count
+    },
+    message() {
+      return this.$store.state.message
+    }
   }
 }
 ```
@@ -592,18 +492,22 @@ Vuex 为我们提供了一种简便方法，我们可以使用 mapState 辅助�
 ```js
 import { mapState } from "vuex"
 
-computed: {
-  ...mapState({
-    count: "count" // this.$store.state.count => "count"
-  })
+export default {
+  computed: {
+    ...mapState({
+      count: "count" // this.$store.state.count => "count"
+    })
+  }
 }
 ```
 
 当计算属性与状态同名时，可以给 mapState 传入一个字符串数组。
 
 ```js
-computed: {
-  ...mapState(["count"])
+export default {
+  computed: {
+    ...mapState(["count"])
+  }
 }
 ```
 
@@ -614,13 +518,15 @@ computed: {
 `commit(type, payload)`，推荐提交的载荷（payload）为一个对象。
 
 ```js
-methods: {
-  increment() {
-    // 以载荷形式提交
-    this.$store.commit("increment", { n: 2 })
-    
-    // 以对象形式提交
-    this.$store.commit({ type: "increment", n: 2 })
+export default {
+  methods: {
+    increment() {
+      // 以载荷形式提交
+      this.$store.commit("increment", { n: 2 })
+      
+      // 以对象形式提交
+      this.$store.commit({ type: "increment", n: 2 })
+    }
   }
 }
 ```
@@ -634,12 +540,13 @@ methods: {
 - payload：载荷（可选）
 
 ```js
-/* store */
-mutations: {
-  increment(state, { n }) {
-    state.count += n
+new Vuex.Store({
+  mutations: {
+    increment(state, { n }) {
+      state.count += n
+    }
   }
-}
+})
 ```
 
 #### mapMutations
@@ -649,8 +556,10 @@ mutations: {
 ```js
 import { mapMutations } from "vuex"
 
-methods: {
-  ...mapMutations(["increment"]) // this.$store.commit("increment") => "increment"
+export default {
+  methods: {
+    ...mapMutations(["increment"]) // this.$store.commit("increment") => "increment"
+  }
 }
 ```
 
@@ -665,18 +574,21 @@ methods: {
 - getters：其他 getter（可选）
 
 ```js
-/* store */
-getters: {
-  total: state => state.count * 100
-}
+new Vuex.Store({
+  getters: {
+    total: state => state.count * 100
+  }
+})
 ```
 
 我们可以在组件中使用它。
 
 ```js
-computed: {
-  total() {
-    return this.$store.getters.total
+export default {
+  computed: {
+    total() {
+      return this.$store.getters.total
+    }
   }
 }
 ```
@@ -688,8 +600,10 @@ computed: {
 ```js
 import { mapGetters } from "vuex"
 
-computed: {
-  ...mapGetters(["total"]) // this.$store.getters.total => "total"
+export default {
+  computed: {
+    ...mapGetters(["total"]) // this.$store.getters.total => "total"
+  }
 }
 ```
 
@@ -700,9 +614,11 @@ computed: {
 `dispatch(type, payload)`
 
 ```js
-methods: {
-  increment() {
-    this.$store.dispatch("increment", { n: 1 })
+export default {
+  methods: {
+    increment() {
+      this.$store.dispatch("increment", { n: 1 })
+    }
   }
 }
 ```
@@ -716,19 +632,20 @@ methods: {
 - payload：载荷（可选）
 
 ```js
-/* store */
-actions: {
-  increment(context, payload) {
-    setTimeout(() => {
-      context.commit("incrementCount", payload)
-    }, 1000)
+new Vuex.Store({
+  actions: {
+    increment(context, payload) {
+      setTimeout(() => {
+        context.commit("incrementCount", payload)
+      }, 1000)
+    }
+  },
+  mutations: {
+    incrementCount(state, { n }) {
+      state.count += n
+    }
   }
-},
-mutations: {
-  incrementCount(state, { n }) {
-    state.count += n
-  }
-}
+})
 ```
 
 #### mapActions
@@ -738,8 +655,10 @@ mutations: {
 ```js
 import { mapActions } from "vuex"
 
-methods: {
-  ...mapActions(["increment"]) // this.$store.dispatch("increment") => "increment"
+export default {
+  methods: {
+    ...mapActions(["increment"]) // this.$store.dispatch("increment") => "increment"
+  }
 }
 ```
 
@@ -800,10 +719,12 @@ new Vuex.Store({
 this.$store.state.countModule.count
 this.$store.state.movieModule.movie
 
+export default {
 // mapState
-computed: {
-  ...mapState("countModule", ["count"]),
-  ...mapState("movieModule", ["movie"])
+  computed: {
+    ...mapState("countModule", ["count"]),
+    ...mapState("movieModule", ["movie"])
+  }
 }
 ```
 
@@ -814,10 +735,12 @@ computed: {
 this.$store.state.countModule.countPlus
 this.$store.state.movieModule.movieList
 
-// mapGetters
-computed: {
-  ...mapGetters("countModule", ["countPlus"]),
-  ...mapGetters("movieModule", ["movieList"])
+export default {
+  // mapGetters
+  computed: {
+    ...mapGetters("countModule", ["countPlus"]),
+    ...mapGetters("movieModule", ["movieList"])
+  }
 }
 ```
 
@@ -828,15 +751,17 @@ computed: {
 this.$store.dispatch("countModule/increment", payload)
 this.$store.dispatch("movieModule/getmovies", payload)
 
-// mapActions
-methods: {
-  // 对象写法
-  ...mapActions({ increment: "countModule/increment" }),
-  ...mapActions({ getmovies: "movieModule/getmovies" })
-  
-  // 数组写法
-  ...mapActions("countModule", ["increment"]),
-  ...mapActions("movieModule", ["getmovies"])
+export default {
+  // mapActions
+  methods: {
+    // 对象写法
+    ...mapActions({ increment: "countModule/increment" }),
+    ...mapActions({ getmovies: "movieModule/getmovies" }),
+    
+    // 数组写法
+    ...mapActions("countModule", ["increment"]),
+    ...mapActions("movieModule", ["getmovies"])
+  }
 }
 ```
 
@@ -847,14 +772,16 @@ methods: {
 this.$store.commit("countModule/increment", payload)
 this.$store.commit("movieModule/getmovies", payload)
 
-// mapMutations
-methods: {
-  // 对象写法
-  ...mapMutations({ increment: "countModule/increment" }),
-  ...mapMutations({ getmovies: "movieModule/getmovies" })
-  
-  // 数组写法
-  ...mapMutations("countModule", ["increment"]),
-  ...mapMutations("movieModule", ["getmovies"])
+export default {
+  // mapMutations
+  methods: {
+    // 对象写法
+    ...mapMutations({ increment: "countModule/increment" }),
+    ...mapMutations({ getmovies: "movieModule/getmovies" }),
+    
+    // 数组写法
+    ...mapMutations("countModule", ["increment"]),
+    ...mapMutations("movieModule", ["getmovies"])
+  }
 }
 ```
