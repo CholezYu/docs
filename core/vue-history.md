@@ -1,6 +1,7 @@
 ---
 title: Vue 2
 icon: vue
+date: 2024-07-16
 description: Vue 2
 ---
 

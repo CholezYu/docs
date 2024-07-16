@@ -1,6 +1,7 @@
 ---
 title: Vue 3
 icon: vue
+date: 2024-07-16
 description: Vue 3
 ---
 

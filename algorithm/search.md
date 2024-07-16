@@ -1,6 +1,7 @@
 ---
 title: 查找算法
 icon: search
+date: 2024-05-24
 description: 查找算法
 ---
 
