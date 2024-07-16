@@ -1,51 +1,65 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-04-22
+date: 2024-07-16
 description: 微信小程序
 ---
 
+<script setup>
+  import Json from "@source/components/Icons/Json.vue"
+  import Js from "@source/components/Icons/Js.vue"
+</script>
+
+
 ## 全局配置
 
-[小程序配置 / 全局配置 (qq.com)](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)
+详见 [小程序配置 / 全局配置](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)。
+
+::: tabs#app_config
+
+@tab <Json /> app.json
 
 ```json
-/* app.json */
 {
+  /* 页面路径 */
   "pages": [
     "pages/index/index",
     "pages/about/about"
   ],
   
-  /* 全局页面窗口配置 */
+  /* 全局页面窗口 */
   "window": {
-    "navigationBarBackgroundColor": "#ff0000", // 导航栏背景颜色
-    "navigationBarTextStyle": "white", // 导航栏标题颜色
-    "navigationBarTitleText": "Weapp", //导航栏标题内容
-    "navigationStyle": "default", // 导航栏样式（default | custom）
-    "backgroundColor": "ff0000", // 窗口背景色（下拉窗口可见）
+    "navigationBarTitleText": "Mini App",       // 导航栏标题
+    "navigationBarTextStyle": "white",          // 导航栏标题颜色 [black | white]
+    "navigationBarBackgroundColor": "#ff0000",  // 导航栏背景颜色
+    "navigationStyle": "default",               // 导航栏样式 [default | custom]
+    "enablePullDownRefresh": true,              // 开启下拉刷新
+    "backgroundColor": "#ff0000",               // 下拉窗口背景颜色
+    "backgroundTextStyle": "dark"               // 下拉 loading 样式 [dark | light]
   },
   
-  /* 全局页面底部导航栏配置 */
+  /* 底部 Tab */
   "tabBar": {
-    "color": "#000", // 文本颜色
-    "selectedColor": "#ff0000", // 选中时的文本颜色
-    "list": [
-      // 至少两个
+    "color": "#000",             // 文本颜色
+    "selectedColor": "#ff0000",  // 选中时的文本颜色
+    "backgroundColor": "#fff",   // 背景颜色
+    "list": [                    // Tab 列表，最少 2 个，最多 5 个
       {
-        "pagePath": "pages/index/index", // 页面路径
-        "text": "首页", // 按钮文本
-        "iconPath": "static/tabbar/home.png", // 图片路径
-        "selectedIconPath": "static/tabbar/home-selected.png" // 选中时的图片路径
+        "pagePath": "pages/index/index",        // 页面路径
+        "text": "Home",                         // 文本内容
+        "iconPath": "static/home.png",          // 图片路径 [81px * 81px, size < 40kb]
+        "selectedIconPath": "static/home-s.png" // 选中时的图片路径
       },
       {
         "pagePath": "pages/about/about",
-        "text": "关于"
+        "text": "About"
       }
     ]
   }
 }
 ```
+
+:::
 
 ## 页面配置
 
