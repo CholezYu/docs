@@ -1,9 +1,14 @@
 ---
 title: React 18
 icon: react
-date: 2024-06-19
+date: 2024-07-16
 description: React
 ---
+
+<script setup>
+  import Tsx from "@source/components/Icons/Tsx.vue"
+  import Ts from "@source/components/Icons/Ts.vue"
+</script>
 
 ## Hooks
 
@@ -343,10 +348,14 @@ HOC 并不是 React 的 API，而是一种实现逻辑复用的技术。HOC 其�
 
 高阶组件接受一个组件作为参数，并返回一个新的组件。这个新的组件会具有高阶组件的功能。
 
+::: tabs#hoc
+
+@tab <Tsx /> withLog.tsx
+
 下面是一个简单的案例。通过 `useEffect` 模拟组件挂载和卸载，并打印日志。
 
 ```tsx
-const WithLog = (Component: FC<any>) => {
+const withLog = (Component: FC<any>) => {
   return (props: any) => {
     useEffect(() => {
       console.log(`${Component.name} 组件已挂载 ${now()}`)
@@ -361,15 +370,19 @@ const WithLog = (Component: FC<any>) => {
 }
 ```
 
+@tab <Tsx /> *.tsx
+
 将任意组件作为参数传递给高阶组件，会返回的一个新的组件，并且它已经具有了打印日志的功能。
 
 ```tsx
-const TitleLog = WithLog(({ title }) => (
+const TitleLog = withLog(({ title }) => (
   <h2>{title}</h2>
 ))
 
 return <TitleLog title="hello react" />
 ```
+
+:::
 
 ## Diffing
 
@@ -705,11 +718,13 @@ const router = createBrowserRouter(createRoutesFromElements(
 
 ### 创建 Store
 
+::: tabs#createStore
+
+@tab <Ts /> slice/counter.ts
+
 使用 `createSlice` 创建一个 slice。
 
 ```tsx
-/* slice/counter.ts */
-
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
 
 type CounterState = {
@@ -740,11 +755,11 @@ export const { increment, decrement } = counterSlice.actions
 export default counterSlice.reducer
 ```
 
+@tab <Ts /> store.ts
+
 一个 store 中可能会有多个 slice，所以需要整合所有 slice，集中管理数据。
 
 ```tsx
-/* store.ts */
-
 import { configureStore } from "@reduxjs/toolkit"
 import counterReducer from "./slice/counter"
 
@@ -765,6 +780,8 @@ export type AppDispatch = typeof store.dispatch
 
 export default store
 ```
+
+:::
 
 ### 在组件中使用
 
@@ -810,9 +827,11 @@ const dispatch = useAppDispatch()
 
 ### 异步操作
 
-```tsx
-/* slice/user.ts */
+::: tabs#async
 
+@tab <Ts /> slice/user.ts
+
+```tsx
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit"
 import type { LoginParams } from "@/api/user"
 
@@ -873,6 +892,8 @@ const userSlice = createSlice({
 
 export default userSlice.reducer
 ```
+
+:::
 
 ## Zustand
 
