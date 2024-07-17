@@ -1,0 +1,1 @@
+import{_ as c}from"./plugin-vue_export-helper-x3n3nnut.js";import{r as n,o as e,f as r}from"./app-jJmlLDEM.js";const t={};function s(_,a){const o=n("FontIcon");return e(),r(o,{icon:"ts",color:"#007acc"})}const p=c(t,[["render",s],["__file","Ts.vue"]]);export{p as T};
