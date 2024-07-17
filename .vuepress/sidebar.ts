@@ -11,7 +11,7 @@ export default sidebar({
     
     {
       text: "基础",
-      icon: "network",
+      icon: "module",
       prefix: "base/",
       collapsible: true,
       children: [
@@ -123,8 +123,8 @@ export default sidebar({
     
     {
       text: "工具库",
-      icon: "module",
-      prefix: "modules/",
+      icon: "plugin",
+      prefix: "tools/",
       collapsible: true,
       children: [
         {
