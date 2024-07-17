@@ -1,0 +1,1 @@
+import{_ as e}from"./plugin-vue_export-helper-x3n3nnut.js";import{r as n,o as c,f as r}from"./app-5dODai1J.js";const t={};function _(s,a){const o=n("FontIcon");return c(),r(o,{icon:"vue",color:"#42b883"})}const p=e(t,[["render",_],["__file","Vue.vue"]]);export{p as V};
