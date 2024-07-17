@@ -94,8 +94,8 @@ export default sidebar({
     
     {
       text: "移动端",
-      icon: "hybrid",
-      prefix: "hybrid/",
+      icon: "mobile",
+      prefix: "mobile/",
       collapsible: true,
       children: [
         {

@@ -7,6 +7,7 @@ description: 微信小程序
 
 <script setup>
   import Json from "@source/components/Icons/Json.vue"
+  import Ts from "@source/components/Icons/Ts.vue"
   import Js from "@source/components/Icons/Js.vue"
 </script>
 
@@ -63,11 +64,11 @@ description: 微信小程序
 
 ## 页面配置
 
-[小程序配置 / 页面配置 (qq.com)](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html)
+详见 [小程序配置 / 页面配置](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/page.html)。
 
 会覆盖 `app.json` 中相同的配置项。
 
-## 应用声明周期
+## 应用生命周期
 
 - `onLaunch` 小程序初始化。鉴权★
 

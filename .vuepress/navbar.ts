@@ -52,7 +52,7 @@ export default navbar([
       
       {
         text: "移动端",
-        prefix: "hybrid/",
+        prefix: "mobile/",
         children: [
           {
             text: "React Native",
