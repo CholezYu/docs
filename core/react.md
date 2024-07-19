@@ -5,10 +5,6 @@ date: 2024-07-16
 description: React
 ---
 
-<script setup>
-  import Tsx from "@source/components/Icons/Tsx.vue"
-  import Ts from "@source/components/Icons/Ts.vue"
-</script>
 
 ## Hooks
 

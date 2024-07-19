@@ -5,10 +5,6 @@ date: 2024-07-16
 description: Exceljs
 ---
 
-<script setup>
-  import Ts from "@source/components/Icons/Ts.vue"
-  import Vue from "@source/components/Icons/Vue.vue"
-</script>
 
 ## 单元格样式
 
