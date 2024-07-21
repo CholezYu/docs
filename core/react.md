@@ -1050,7 +1050,7 @@ const useStore = create<CounterSlice & UserSlice>((...args) => ({
 }))
 ```
 
-## CSS 解决方案
+## CSS in React
 
 ### CSS Modules
 
