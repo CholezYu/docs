@@ -1,3 +1,3 @@
 <template>
-  <FontIcon icon="js" color="#eede50" />
+  <FontIcon icon="js" color="#ffd463" />
 </template>
