@@ -99,9 +99,14 @@ export default sidebar({
       collapsible: true,
       children: [
         {
-          text: "React Native",
-          icon: "react",
-          link: "react-native"
+          text: "Kotlin",
+          icon: "kotlin",
+          link: "Kotlin"
+        },
+        {
+          text: "Dart",
+          icon: "dart",
+          link: "Dart"
         },
         {
           text: "Flutter",
@@ -109,9 +114,9 @@ export default sidebar({
           link: "Flutter"
         },
         {
-          text: "Kotlin",
-          icon: "kotlin",
-          link: "Kotlin"
+          text: "React Native",
+          icon: "react",
+          link: "react-native"
         },
         {
           text: "微信小程序",

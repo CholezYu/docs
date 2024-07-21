@@ -18,9 +18,9 @@ description: React Native
 />
 ```
 
-::: tabs#Image
+::: tabs
 
-@tab Props
+@tab <Prop /> Props
 
 - `resizeMode`：设置图片的显示模式。
 
@@ -83,9 +83,9 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-::: tabs#TextInput
+::: tabs
 
-@tab Props
+@tab <Prop /> Props
 
 - `keyboardType`：设置键盘的类型。详见 [React Native TextInput keyboardType](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
 
@@ -149,9 +149,9 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-::: tabs#Pressable
+::: tabs
 
-@tab Props
+@tab <Prop /> Props
 
 - `style`：接受一个提供 “按压状态” 的函数。我们可以根据按钮是否处于按压状态，设置不同的样式。
 
