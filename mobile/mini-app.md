@@ -1,22 +1,17 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-07-18
+date: 2024-07-22
 description: 微信小程序
 ---
 
-<script setup>
-  import Json from "@source/components/Icons/Json.vue"
-  import Ts from "@source/components/Icons/Ts.vue"
-  import Js from "@source/components/Icons/Js.vue"
-</script>
 ## 配置
 
 ### 全局配置
 
 详见 [小程序配置 / 全局配置](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)。
 
-::: tabs#app_config
+::: tabs
 
 @tab <Json /> app.json
 
@@ -87,9 +82,9 @@ description: 微信小程序
 
 **图片**。默认尺寸为 320px * 240px。
 
-::: tabs#image
+::: tabs
 
-@tab 属性
+@tab <Prop /> 属性
 
 - `mode`：图片裁剪模式。
 
@@ -113,18 +108,31 @@ description: 微信小程序
 
 **输入框**。
 
-::: tabs#input
+::: tabs
 
-@tab 属性
+@tab <Prop /> 属性
 
-- `type`：键盘类型：
+- `type`：键盘类型。
+
   - `text`：文本键盘。
 
   - `number`：数字键盘。
 
 - `password`：密码框。
 
-@tab 事件
+- `confirm-type`：设置 “确定” 按钮显示的内容。
+
+  - `done`：完成。
+
+  - `go`：前往。
+
+  - `next`：下一个。
+
+  - `search`：搜索。
+
+  - `send`：发送。
+
+@tab <Event /> 事件
 
 - `bindinput`：键盘输入时触发。`event.detail = { value, cursor, keyCode }`
 
@@ -140,9 +148,9 @@ description: 微信小程序
 
 **轮播图**。
 
-::: tabs#swiper
+::: tabs
 
-@tab 属性
+@tab <Prop /> 属性
 
 - `autoplay`：是否自动切换。
 
@@ -162,11 +170,11 @@ description: 微信小程序
 
 **导航**。
 
-::: tabs#navigator
+::: tabs
 
-@tab 通用属性
+@tab <Prop /> 属性
 
-- `open-type`：跳转方式：
+- `open-type`：跳转方式。
 
   - `navigate`：跳转到非 tabbar 页面。保留当前页面，可返回上一页。
 
@@ -174,7 +182,7 @@ description: 微信小程序
 
   - `switchTab`：切换到 tabbar 页面。
 
-  - `reLaunch`：重定向到任意页面。关闭所有页面，不能返回。
+  - `reLaunch`：重定向到任意页面。关闭所有页面，不能返回上一页。
 
   - `navigateBack`：返回上一页。关闭当前页面。
 
@@ -222,95 +230,96 @@ description: 微信小程序
 
 ### 应用生命周期
 
-- `onLaunch` 小程序初始化。鉴权★
+::: tabs
 
-- `onShow` 小程序启动或切前台★
-
-- `onHide` 小程序切后台★
-
-### 页面生命周期
+@tab <Js /> app.js
 
 ```js
-// index.js
-Page({
+App({
   /**
-   * 页面的初始数据
+   * 小程序初始化完成时触发（冷启动）
    */
-  data: {},
-  
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLaunch() {
   
   },
   
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 小程序启动、或切入前台时触发
    */
-  onReady: function () {
+  onShow(options) {
   
   },
   
   /**
-   * 生命周期函数--监听页面显示
+   * 小程序切入后台时触发
    */
-  onShow: function () {
+  onHide() {
   
   },
   
   /**
-   * 生命周期函数--监听页面隐藏
+   * 小程序发生脚本错误、或 api 调用失败时触发
    */
-  onHide: function () {
-  
-  },
-  
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-  
-  /**
-   * 生命周期函数--监听页面滚动
-   */
-  onPageScroll: function () {
-  
-  },
-  
-  /**
-   * 生命周期函数--监听页面尺寸变化
-   */
-  onResize: function () {
-  
-  },
-  
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-  
-  /**
-   * 页面相关事件处理函数--监听页面上拉触底
-   */
-  onReachBottom: function () {
-  
-  },
-  
-  /**
-   * 页面相关事件处理函数--用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  onError(msg) {
   
   }
 })
 ```
 
+:::
+
+### 页面生命周期
+
+::: tabs
+
+@tab <Js /> pages/*.js
+
+```js
+Page({
+  /**
+   * 页面加载完成时触发（冷启动）
+   */
+  onLoad(options) {
+  
+  },
+  
+  /**
+   * 页面初次渲染完成时触发
+   */
+  onReady() {
+  
+  },
+  
+  /**
+   * 页面显示（Tab 切换）、或切入前台时触发
+   */
+  onShow() {
+  
+  },
+  
+  /**
+   * 页面隐藏（Tab 切换）、或切入后台时触发
+   */
+  onHide() {
+  
+  },
+  
+  /**
+   * 页面卸载时触发（重定向跳转）
+   */
+  onUnload() {
+  
+  }
+})
+```
+
+:::
+
 ### 组件生命周期
+
+::: tabs
+
+@tab <Js /> components/*.js
 
 组件自身生命周期
 
@@ -332,6 +341,131 @@ Page({
 
 - `resize` 组件所在页面尺寸变化时执行
 
+:::
+
+## 网络 API
+
+### wx.request
+
+**网络请求**。
+
+```js
+wx.request({
+  url: "/api",
+  method: "GET",
+  data: { /* 请求参数 */ },
+  header: { /* 请求头 */ },
+  success: response => {
+    /* 成功 */
+    this.setData({ list: response.data.data })
+  },
+  fail: error => { /* 失败 */ },
+  complete: () => { /* 完成 */ }
+})
+```
+
+## 交互 API
+
+### wx.showLoading
+
+**加载状态**。
+
+```js
+wx.showLoading({
+  title: "正在请求数据",
+  mask: true
+})
+
+wx.request({
+  // ...
+  complete: () => {
+    wx.hideLoading()
+  }
+})
+```
+
+### wx.showModal
+
+**模态对话框**。
+
+```js
+const { confirm } = await wx.showModal({
+  title: "提示",
+  content: "是否删除？"
+})
+
+if (confirm) {
+  // wx.request ...
+}
+```
+
+### wx.showToast
+
+**消息提示框**。
+
+```js
+wx.showToast({
+  title: "删除成功",
+  icon: "success",
+  duration: 3000
+})
+```
+
+## 缓存 API
+
+
+
+## 路由 API
+
+
+
+## 页面处理函数
+
+::: tabs
+
+@tab <Js /> pages/*.js
+
+```js
+Page({
+  /**
+   * 页面滚动时触发
+   */
+  onPageScroll() {
+  
+  },
+  
+  /**
+   * 页面尺寸变化时触发
+   */
+  onResize() {
+  
+  },
+  
+  /**
+   * 用于触发下拉刷新
+   */
+  onPullDownRefresh() {
+  
+  },
+  
+  /**
+   * 用于触发上拉加载
+   */
+  onReachBottom() {
+  
+  },
+  
+  /**
+   * 用户分享时触发
+   */
+  onShareAppMessage() {
+  
+  }
+})
+```
+
+:::
+
 ## 小程序分包
 
 小程序有体积的限制（2M），如果需要让小程序体积更大功能更多，就需要进行分包（20M）。分包只在使用时加载。
@@ -352,18 +486,43 @@ Page({
 
 ## 登录流程
 
-首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取
-token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
+首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取 token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
 
 ## 支付流程
 
-提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment`
-传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
+提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment` 传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
 
 ## 上线流程
 
 将代码上传到微信平台；点击提交审核；审核通过就上线了。
 
-## 同步最新版本
+## 更新流程
 
-判断小程序版本是否支持更新机制；创建一个 updateManager 实例，通过这个实例监听检测版本更新事件，如果有新的版本，小程序就会自动在后台下载新版本，然后监听小程序新版本下载完成事件，下载完成后就会重启小程序。
+::: tabs
+
+@tab <Js/> app.js
+
+```js
+App({
+  onLaunch() {
+    // 创建 updateManager 实例，用于管理更新
+    const updateManager = wx.getUpdateManager()
+    
+    // 监听是否有新版本，如果有的话会主动触发下载
+    updateManager.onUpdateReady(() => {
+      wx.showModal({
+        title: "更新提示",
+        content: "新版本已经准备好，是否重启应用？",
+        success(res) {
+          if (res.confirm) {
+            // 强制小程序重启并使用新版本
+            updateManager.applyUpdate()
+          }
+        }
+      })
+    })
+  }
+})
+```
+
+:::
