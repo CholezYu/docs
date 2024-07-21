@@ -94,7 +94,7 @@ export default sidebar({
     
     {
       text: "移动端",
-      icon: "mobile",
+      icon: "phone",
       prefix: "mobile/",
       collapsible: true,
       children: [
