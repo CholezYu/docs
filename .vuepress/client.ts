@@ -4,8 +4,6 @@ import Ts from "./components/Icons/Ts.vue"
 import Tsx from "./components/Icons/Tsx.vue"
 import Js from "./components/Icons/JS.vue"
 import Json from "./components/Icons/Json.vue"
-import Prop from "./components/Icons/Prop.vue"
-import Event from "./components/Icons/Event.vue"
 
 export default defineClientConfig({
   enhance: ({ app }) => {
@@ -14,7 +12,5 @@ export default defineClientConfig({
     app.component("Tsx", Tsx)
     app.component("Js", Js)
     app.component("Json", Json)
-    app.component("Prop", Prop)
-    app.component("Event", Event)
   }
 })
