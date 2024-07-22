@@ -18,10 +18,6 @@ description: React Native
 />
 ```
 
-::: tabs
-
-@tab <Prop /> Props
-
 - `resizeMode`：设置图片的显示模式。
 
   - `cover`：（默认）保持宽高比，不留空白。图片可能完全覆盖或者超出容器。
@@ -33,8 +29,6 @@ description: React Native
   - `repeat`：保持原尺寸，图片会平铺直至填满容器。
   
   - `center`：居中不拉伸。
-
-:::
 
 > [!caution]
 >
@@ -83,10 +77,6 @@ const [text, setText] = useState("hello react-native")
 return <TextInput value={text} onChangeText={setText} />
 ```
 
-::: tabs
-
-@tab <Prop /> Props
-
 - `keyboardType`：设置键盘的类型。详见 [React Native TextInput keyboardType](https://www.lefkowitz.me/visual-guide-to-react-native-textinput-keyboardtype-options/)。
 
   - `default`：默认键盘。
@@ -112,8 +102,6 @@ return <TextInput value={text} onChangeText={setText} />
   - `search`：搜索。
 
   - `send`：发送。
-
-:::
 
 ### Button *
 
@@ -149,15 +137,9 @@ return <TextInput value={text} onChangeText={setText} />
 </Pressable>
 ```
 
-::: tabs
-
-@tab <Prop /> Props
-
 - `style`：接受一个提供 “按压状态” 的函数。我们可以根据按钮是否处于按压状态，设置不同的样式。
 
 - `hitSlop`：扩大触发范围，优化用户体验（用户可能不会准确按压触发区域）。
-
-:::
 
 ### ScrollView
 
