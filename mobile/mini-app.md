@@ -11,10 +11,6 @@ description: 微信小程序
 
 详见 [小程序配置 / 全局配置](https://developers.weixin.qq.com/miniprogram/dev/reference/configuration/app.html)。
 
-::: tabs
-
-@tab <Json /> app.json
-
 ```json
 {
   /* 页面路径 */
@@ -24,40 +20,26 @@ description: 微信小程序
   ],
   /* 全局页面窗口 */
   "window": {
-    "navigationBarTitleText": "Mini App",
-    // 导航栏标题
-    "navigationBarTextStyle": "white",
-    // 导航栏标题颜色 [black | white]
-    "navigationBarBackgroundColor": "#ff0000",
-    // 导航栏背景颜色
-    "navigationStyle": "default",
-    // 导航栏样式 [default | custom]
-    "enablePullDownRefresh": true,
-    // 开启下拉刷新
-    "backgroundColor": "#ff0000",
-    // 下拉窗口背景颜色
-    "backgroundTextStyle": "dark"
-    // 下拉 loading 样式 [dark | light]
+    "navigationBarTitleText": "Mini App",       // 导航栏标题
+    "navigationBarTextStyle": "white",          // 导航栏标题颜色 [black | white]
+    "navigationBarBackgroundColor": "#ff0000",  // 导航栏背景颜色
+    "navigationStyle": "default",               // 导航栏样式 [default | custom]
+    
+    "enablePullDownRefresh": true,              // 开启下拉刷新
+    "backgroundColor": "#ff0000",               // 下拉窗口背景颜色
+    "backgroundTextStyle": "dark"               // 下拉 loading 样式 [dark | light]
   },
   /* 底部 Tab */
   "tabBar": {
-    "color": "#000",
-    // 文本颜色
-    "selectedColor": "#ff0000",
-    // 选中时的文本颜色
-    "backgroundColor": "#fff",
-    // 背景颜色
-    "list": [
-      // Tab 列表，最少 2 个，最多 5 个
+    "color": "#000",             // 文本颜色
+    "selectedColor": "#ff0000",  // 选中时的文本颜色
+    "backgroundColor": "#fff",   // 背景颜色
+    "list": [                    // Tab 列表，最少 2 个，最多 5 个
       {
-        "pagePath": "pages/index/index",
-        // 页面路径
-        "text": "Home",
-        // 文本内容
-        "iconPath": "static/home.png",
-        // 图片路径 [81px * 81px, size < 40kb]
-        "selectedIconPath": "static/home-s.png"
-        // 选中时的图片路径
+        "pagePath": "pages/index/index",         // 页面路径
+        "text": "Home",                          // 文本内容
+        "iconPath": "static/home.png",           // 图片路径 [81px * 81px, size < 40kb]
+        "selectedIconPath": "static/home-s.png"  // 选中时的图片路径
       },
       {
         "pagePath": "pages/about/about",
@@ -67,8 +49,6 @@ description: 微信小程序
   }
 }
 ```
-
-:::
 
 ### 页面配置
 
@@ -81,10 +61,6 @@ description: 微信小程序
 ### image
 
 **图片**。默认尺寸为 320px * 240px。
-
-::: tabs
-
-@tab <Prop /> 属性
 
 - `mode`：图片裁剪模式。
 
@@ -102,37 +78,16 @@ description: 微信小程序
 
 - `lazy-load`：图片懒加载。
 
-:::
-
 ### input
 
 **输入框**。
-
-::: tabs
-
-@tab <Prop /> 属性
 
 - `type`：键盘类型。
 
   - `text`：文本键盘。
 
   - `number`：数字键盘。
-
 - `password`：密码框。
-
-- `confirm-type`：设置 “确定” 按钮显示的内容。
-
-  - `done`：完成。
-
-  - `go`：前往。
-
-  - `next`：下一个。
-
-  - `search`：搜索。
-
-  - `send`：发送。
-
-@tab <Event /> 事件
 
 - `bindinput`：键盘输入时触发。`event.detail = { value, cursor, keyCode }`
 
@@ -142,15 +97,9 @@ description: 微信小程序
 
 - `bindconfirm`：点击 “完成” 按钮时触发。
 
-:::
-
 ### swiper
 
 **轮播图**。
-
-::: tabs
-
-@tab <Prop /> 属性
 
 - `autoplay`：是否自动切换。
 
@@ -164,15 +113,9 @@ description: 微信小程序
 
 - `indicator-active-color`：当前指示点颜色。
 
-:::
-
 ### navigator
 
 **导航**。
-
-::: tabs
-
-@tab <Prop /> 属性
 
 - `open-type`：跳转方式。
 
@@ -187,8 +130,6 @@ description: 微信小程序
   - `navigateBack`：返回上一页。关闭当前页面。
 
 - `delta`：`navigateBack` 的回退层数。
-
-:::
 
 ## 事件
 
@@ -230,10 +171,6 @@ description: 微信小程序
 
 ### 应用生命周期
 
-::: tabs
-
-@tab <Js /> app.js
-
 ```js
 App({
   /**
@@ -266,13 +203,7 @@ App({
 })
 ```
 
-:::
-
 ### 页面生命周期
-
-::: tabs
-
-@tab <Js /> pages/*.js
 
 ```js
 Page({
@@ -291,14 +222,14 @@ Page({
   },
   
   /**
-   * 页面显示（Tab 切换）、或切入前台时触发
+   * 页面显示、或切入前台时触发
    */
   onShow() {
   
   },
   
   /**
-   * 页面隐藏（Tab 切换）、或切入后台时触发
+   * 页面隐藏、或切入后台时触发
    */
   onHide() {
   
@@ -313,117 +244,7 @@ Page({
 })
 ```
 
-:::
-
-### 组件生命周期
-
-::: tabs
-
-@tab <Js /> components/*.js
-
-组件自身生命周期
-
-- `created` 组件实例被创建时执行
-
-- `attached` 组件实例进入页面节点树时执行
-
-- `detached` 组件实例被从页面节点树移除时执行
-
-- `ready` 组件在视图层布局完成后执行
-
-- `moved` 组件实例被移动到节点树另一个位置时执行
-
-组件所在页面生命周期
-
-- `show` 组件所在页面显示时执行
-
-- `hide` 组件所在页面隐藏时执行
-
-- `resize` 组件所在页面尺寸变化时执行
-
-:::
-
-## 网络 API
-
-### wx.request
-
-**网络请求**。
-
-```js
-wx.request({
-  url: "/api",
-  method: "GET",
-  data: { /* 请求参数 */ },
-  header: { /* 请求头 */ },
-  success: response => {
-    /* 成功 */
-    this.setData({ list: response.data.data })
-  },
-  fail: error => { /* 失败 */ },
-  complete: () => { /* 完成 */ }
-})
-```
-
-## 交互 API
-
-### wx.showLoading
-
-**加载状态**。
-
-```js
-wx.showLoading({
-  title: "正在请求数据",
-  mask: true
-})
-
-wx.request({
-  // ...
-  complete: () => {
-    wx.hideLoading()
-  }
-})
-```
-
-### wx.showModal
-
-**模态对话框**。
-
-```js
-const { confirm } = await wx.showModal({
-  title: "提示",
-  content: "是否删除？"
-})
-
-if (confirm) {
-  // wx.request ...
-}
-```
-
-### wx.showToast
-
-**消息提示框**。
-
-```js
-wx.showToast({
-  title: "删除成功",
-  icon: "success",
-  duration: 3000
-})
-```
-
-## 缓存 API
-
-
-
-## 路由 API
-
-
-
-## 页面处理函数
-
-::: tabs
-
-@tab <Js /> pages/*.js
+### 页面处理函数
 
 ```js
 Page({
@@ -464,7 +285,181 @@ Page({
 })
 ```
 
-:::
+## 自定义组件
+
+### 基本选项
+
+```js
+Component({
+  // 配置项
+  options: {
+  
+  },
+  
+  // 属性
+  properties: {
+  
+  },
+  
+  // 组件的数据
+  data: {
+  
+  },
+  
+  // 组件的方法
+  methods: {
+  
+  }
+})
+```
+
+### 组件注册
+
+在 `app.json` 中注册就是全局组件；在 `pages/*.json` 中注册就是局部组件。
+
+```json
+{
+  "usingComponents": {
+    "custom-component": "/components/custom-component/custom-component"
+  }
+}
+```
+
+### 数据监听器
+
+使用 setData 改变 data 中的数据时，会触发数据监听器。
+
+```js
+Component({
+  data: {
+    time: "2024-07-22",
+    page: {
+      current: 1,
+      size: 10
+    }
+  },
+  observers: {
+    // 监听一个数据
+    time(value) {
+      wx.request({ /* ... */ })
+    },
+    // 监听多个数据
+    "page.current, page.size"(current, size) {
+      wx.request({ /* ... */ })
+    },
+    // 监听所有数据
+    "**"() {
+      wx.request({ /* ... */ })
+    }
+  }
+})
+```
+
+### 组件通信
+
+监听事件。
+
+```html
+<custom-component bind:update="updateFn" />
+```
+
+```js
+Page({
+  updateFn(event) {
+    event.detail // 触发事件时携带的额外参数
+  }
+})
+```
+
+触发事件。
+
+```js
+Component({
+  methods: {
+    updateEmit() {
+      this.triggerEvent("update", this.data.args /* datail */, {} /* option */)
+    }
+  }
+})
+```
+
+### 组件生命周期
+
+组件自身的生命周期。
+
+```js
+Component({
+  lifetimes: {
+    /**
+     * 组件实例创建完成时触发
+     */
+    created() {
+    
+    },
+    /**
+     * 组件实例挂载到页面时触发
+     */
+    attached() {
+    
+    },
+    /**
+     * 组件实例卸载时触发
+     */
+    detached() {
+    
+    },
+    /**
+     * 组件在视图层布局完成后触发
+     */
+    ready() {
+    
+    },
+    /**
+     * 组件被移动时触发
+     */
+    moved() {
+    
+    }
+  }
+})
+```
+
+组件所在页面的生命周期。
+
+```js
+Component({
+  pageLifetimes: {
+    /**
+     * 组件所在页面显示、或切入前台时触发
+     */
+    show() {
+    
+    },
+    /**
+     * 组件所在页面隐藏、或切入后台时触发
+     */
+    hide() {
+    
+    },
+    /**
+     * 组件所在页面尺寸变化时触发
+     */
+    resize() {
+    
+    }
+  }
+})
+```
+
+### 冷启动顺序
+
+`app.onLaunch` > `app.onShow` > `component.created` > `component.attached` > `page.onLoad` > `page.onShow` > `component.ready` > `page.onReady`
+
+### Behavious
+
+类似 mixin。
+
+详见 [自定义组件 / behaviors](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html)。
 
 ## 小程序分包
 
@@ -480,10 +475,6 @@ Page({
 
 独立分包不能使用主包中的任何内容。
 
-## 组件通信
-
-
-
 ## 登录流程
 
 首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取 token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
@@ -497,10 +488,6 @@ Page({
 将代码上传到微信平台；点击提交审核；审核通过就上线了。
 
 ## 更新流程
-
-::: tabs
-
-@tab <Js/> app.js
 
 ```js
 App({
@@ -524,5 +511,3 @@ App({
   }
 })
 ```
-
-:::
