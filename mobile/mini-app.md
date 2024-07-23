@@ -1,7 +1,7 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-07-23
+date: 2024-07-24
 description: 微信小程序
 ---
 
@@ -136,13 +136,13 @@ description: 微信小程序
 
 - `password`：密码框。
 
-- `bindinput`：键盘输入时触发。`event.detail = { value, cursor, keyCode }`
+- `bind:input`：键盘输入时触发。`event.detail = { value, cursor, keyCode }`
 
-- `bindfocus`：聚焦时触发。
+- `bind:focus`：聚焦时触发。
 
-- `bindblur`：失焦时触发。
+- `bind:blur`：失焦时触发。
 
-- `bindconfirm`：点击 “完成” 按钮时触发。
+- `bind:confirm`：点击 “完成” 按钮时触发。
 
 ### swiper
 
@@ -575,19 +575,113 @@ Component({
 
 ## 开放能力
 
-### 登录流程
+### 用户信息
+
+获取用户头像和昵称。
+
+```html
+<button open-type="chooseAvatar" 	bind:chooseavatar="chooseAvatar">
+  <image src="{{avatar}}" />
+</button>
+
+<form bind:submit="onSubmit">
+  <input type="nickname" name="nickname" />
+  <button form-type="submit">set username</button>
+</form>
+```
+
+```js
+Page({
+  data: {
+    avatar: "/static/default-avatar.jpg",
+    username: ""
+  },
+  
+  chooseAvatar(event) {
+    this.setData({
+      avatar: event.detail.avatarUrl
+    })
+  },
+  
+  onSubmit(event) {
+    this.setData({
+      username: event.detail.value.nickname
+    })
+  }
+})
+```
+
+### 转发
+
+声明 `onShareAppMessage` 事件，否则转发功能不可用。
+
+- 点击右上角三点转发。
+
+- 自定义按钮转发。会触发 `onShareAppMessage` 事件。
+
+```html
+<button open-type="share">Share</button>
+```
+
+```js
+Page({
+  onShareAppMessage(event) {
+    event /*
+      通过右上角三点转发 {form: "menu", target: undefined}
+      通过自定义按钮转发 {form: "button", target: {...}}
+    */
+    
+    // 自定义分享封面
+    return {
+      title: "Share the shop!",    // 封面标题
+      path: "/pages/shop/shop",    // 分享的页面，默认为当前页
+      imageUrl: "/static/shop.png" // 封面图像
+    }
+  }
+})
+```
+
+设置允许转发后，可以声明 `onShareTimeline` 事件，开启 “分享到朋友圈” 功能。
+
+只能点击右上角三点分享到朋友圈。
+
+```js
+Page({
+  onShareAppMessage(event) {
+    // ...
+  },
+  
+  onShareTimeline(event) {
+    event // {from: "menu", target: undefined}
+  }
+})
+```
+
+### 手机号验证
+
+将 `event.detail.code` 发送给后端，获得用户手机号。
+
+```html
+<!-- 手机号快速验证组件 -->
+<button open-type="getPhoneNumber" bind:getphonenumber="getPhoneNumber" />
+
+<!-- 手机号实时验证组件 -->
+<button open-type="getRealtimePhoneNumber" bind:getrealtimephonenumber="getRealtimePhoneNumber" />
+```
+
+## 登录流程
 
 首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取 token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
 
-### 支付流程
+## 支付流程
 
 提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment` 传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
 
-### 上线流程
+## 上线流程
 
 将代码上传到微信平台；点击提交审核；审核通过就上线了。
 
-## 更新流程
+## 更新机制
 
 ```js
 App({
