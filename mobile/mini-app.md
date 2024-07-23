@@ -5,7 +5,7 @@ date: 2024-07-23
 description: 微信小程序
 ---
 
-## 配置
+## 小程序配置
 
 ### 项目配置
 
@@ -49,8 +49,7 @@ description: 微信小程序
   "packOptions": {
     "ignore": [],
     "include": []
-  },
-  "appid": ""
+  }
 }
 ```
 
@@ -134,6 +133,7 @@ description: 微信小程序
   - `text`：文本键盘。
 
   - `number`：数字键盘。
+
 - `password`：密码框。
 
 - `bindinput`：键盘输入时触发。`event.detail = { value, cursor, keyCode }`
@@ -407,6 +407,7 @@ Component({
 监听事件。
 
 ```html
+<!-- vue: @update="updateFn" -->
 <custom-component bind:update="updateFn" />
 ```
 
@@ -424,6 +425,7 @@ Page({
 Component({
   methods: {
     updateEmit() {
+      // vue: emits("update", args)
       this.triggerEvent("update", this.data.args /* datail */, {} /* option */)
     }
   }
@@ -508,29 +510,80 @@ Component({
 
 详见 [自定义组件 / behaviors](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/behaviors.html)。
 
-## 小程序分包
+## 分包
 
-小程序有体积的限制（2M），如果需要让小程序体积更大功能更多，就需要进行分包（20M）。分包只在使用时加载。
+### 分包介绍
 
-每个分包小程序必须有一个主包，主包中有启动页面、TabBar 页面以及一些公共资源。
+分包可以让小程序容量更大、功能更多。分包在用户使用时按需加载，优化了小程序首次启动的下载时间。
 
-普通分包：将需要分包的文件单独放入一个文件夹，在 `app.json` 的 subpackages 字段中声明分包结构。
+每个使用分包的小程序必须有一个主包，主包中包含默认启动页面、TabBar 页面以及一些公共资源。
 
-普通分包可以使用主包中的公共资源，例如发送请求的函数、公共样式。
+小程序启动时，默认会下载主包并启动主包内的页面，当用户进入分包内某个页面时，客户端会按需下载分包。
 
-独立分包：和普通分包配置一样，需要再添加一个 independent 字段开启独立分包。
+小程序分包大小由以下限制：
 
-独立分包不能使用主包中的任何内容。
+- 小程序所有分包大小不能超过 20M。
 
-## 登录流程
+- 单个分包和主包大小不能超过 2M。
+
+### 普通分包
+
+将需要分包的文件单独放入一个文件夹，在 `app.json` 的 subPackages 字段中声明分包结构。
+
+```json
+{
+  "subPackages": [
+    {
+      "root": "packages",      // 分包根目录
+      "name": "normalPackage", // 分包别名
+      "pages": [               // 分包页面路径
+        "pages/shop/shop"
+      ]
+    }
+  ]
+}
+```
+
+> [!tip]
+>
+> 普通分包可以使用主包的公共资源，例如封装的请求方法、公共样式。
+
+### 独立分包
+
+独立分包不依赖主包和其他分包。我们可以将具有独立功能的页面配置到独立分包中。
+
+配置 `subPackages.independent` 字段开启独立分包，其他配置与普通分包相同。
+
+```json
+{
+  "subPackages": [
+    {
+      "root": "packages",
+      "name": "indepPackage",
+      "pages": [
+        "pages/cart/cart"
+      ],
+      "independent": true // 开启独立分包
+    }
+  ]
+}
+```
+
+> [!warning]
+>
+> 独立分包不能使用主包的任何内容，包括公共样式。
+
+## 开放能力
+
+### 登录流程
 
 首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取 token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
 
-## 支付流程
+### 支付流程
 
 提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment` 传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
 
-## 上线流程
+### 上线流程
 
 将代码上传到微信平台；点击提交审核；审核通过就上线了。
 
