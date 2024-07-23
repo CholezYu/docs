@@ -1,11 +1,58 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-07-22
+date: 2024-07-23
 description: 微信小程序
 ---
 
 ## 配置
+
+### 项目配置
+
+详见 [设置 / 项目配置文件](https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html)。
+
+```json
+{
+  "projectname": "mini-app",            // 项目名称
+  "compileType": "miniprogram",         // 编译类型
+  "miniprogramRoot": "miniprogram/",    // 小程序源码目录
+  "srcMiniprogramRoot": "miniprogram/", // 对应目录下的右键菜单快捷新建页面和组件文件
+  "libVersion": "3.4.10",               // 基础库版本
+  "setting": {
+    "coverView": true,                 // 使用工具渲染 CoverView
+    "es6": true,                       // 将 ES6 编译为 ES5
+    "postcss": true,                   // 上传代码时样式自动补全
+    "minified": true,                  // 自动压缩脚本文件
+    "enhance": true,                   // 开启增强编译
+    "showShadowRootInWxmlPanel": true, // 开启调试器 WXML 面板展示 shadow-root
+    "packNpmManually": true,           // 手动配置构建 npm 的路径
+    "packNpmRelationList": [
+      {
+        "packageJsonPath": "./package.json",     // package.json 的路径
+        "miniprogramNpmDistDir": "./miniprogram" // miniprogram_npm 的路径
+      }
+    ],
+    "useCompilerPlugins": [ // 插件配置，仅支持 typescript less sass
+      "sass"
+    ],
+    "babelSetting": {
+      "ignore": [],         // 跳过 Babel 编译的文件或目录
+      "outputPath": "",     // Babel 辅助函数的输出目录，默认为 @babel/runtime
+      "disablePlugins": []
+    }
+  },
+  "condition": {},
+  "editorSetting": {
+    "tabIndent": "insertSpaces",
+    "tabSize": 2
+  },
+  "packOptions": {
+    "ignore": [],
+    "include": []
+  },
+  "appid": ""
+}
+```
 
 ### 全局配置
 
