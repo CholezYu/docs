@@ -14,9 +14,9 @@ description: 微信小程序
 ```json
 {
   "projectname": "mini-app",            // 项目名称
-  "compileType": "miniprogram",         // 编译类型
   "miniprogramRoot": "miniprogram/",    // 小程序源码目录
   "srcMiniprogramRoot": "miniprogram/", // 对应目录下的右键菜单快捷新建页面和组件文件
+  "compileType": "miniprogram",         // 编译类型
   "libVersion": "3.4.10",               // 基础库版本
   "setting": {
     "coverView": true,                 // 使用工具渲染 CoverView
@@ -611,7 +611,7 @@ Page({
 })
 ```
 
-### 转发
+### 转发分享
 
 声明 `onShareAppMessage` 事件，否则转发功能不可用。
 
@@ -671,15 +671,27 @@ Page({
 
 ## 登录流程
 
-首先在 onLaunch 生命周期中进行登录鉴权，如果鉴权失败就跳转到登录页面。通过 `wx.login` 得到一个临时的授权码 code；然后把这个授权码发送给服务器获取 token；再携带 token 去向服务器请求用户数据。如果用户登录过就会得到用户数据，如果用户没有登录过就会随机生成一个用户名和头像。
+通过 `wx.login` 得到一个临时授权码 code。将授权码发送给服务器获取 token，再携带 token 请求用户信息。
+
+```js
+Page({
+  login() {
+    wx.login({
+      success: async ({ code }) => {
+        const { token } = await apiLogin(code)
+        wx.setStorageSync("TOKEN", token)
+        
+        const { userInfo } = await apiGetUserInfo()
+        wx.setStorageSync("USER_INFO", userInfo)
+      }
+    })
+  }
+})
+```
 
 ## 支付流程
 
 提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment` 传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
-
-## 上线流程
-
-将代码上传到微信平台；点击提交审核；审核通过就上线了。
 
 ## 更新机制
 
