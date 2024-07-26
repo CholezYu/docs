@@ -1,7 +1,7 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-07-24
+date: 2024-07-26
 description: 微信小程序
 ---
 
@@ -500,10 +500,6 @@ Component({
 })
 ```
 
-### 冷启动顺序
-
-`app.onLaunch` > `app.onShow` > `component.created` > `component.attached` > `page.onLoad` > `page.onShow` > `component.ready` > `page.onReady`
-
 ### Behavious
 
 类似 mixin。
@@ -678,10 +674,10 @@ Page({
   login() {
     wx.login({
       success: async ({ code }) => {
-        const { token } = await apiLogin(code)
+        const token = await apiLogin(code)
         wx.setStorageSync("TOKEN", token)
         
-        const { userInfo } = await apiGetUserInfo()
+        const userInfo = await apiGetUserInfo()
         wx.setStorageSync("USER_INFO", userInfo)
       }
     })
@@ -691,7 +687,29 @@ Page({
 
 ## 支付流程
 
-提交订单，将订单信息（商品数据、收件人信息等）发送给服务器，得到订单号；再将订单号发送给服务器，得到用于支付的参数（时间戳、ID、签名等）；然后调用 `wx.requestPayment` 传入支付参数，跳转到用户支付的页面；用户支付成功，跳转页面。
+提交订单，将订单信息发送给服务器，得到订单号。将订单号发送给服务器，得到 [支付参数](https://developers.weixin.qq.com/miniprogram/dev/api/payment/wx.requestPayment.html#参数)。然后调用 `wx.requestPayment` 传入支付参数，发起微信支付 。等待用户支付成功后，跳转到订单页面。
+
+```js
+Page({
+  async submitOrder() {
+    // 收集订单数据：商品、收件人
+    // 获取订单号
+    const orderCode = await apiSubmitOrder(orderForm)
+    // 获取支付参数：时间戳、支付ID、签名
+    const payParams = await apiGetPayParams(orderCode)
+    // 发起微信支付
+    const payInfo = await wx.requestPayment(payParams)
+    if (payInfo.errMsg === "requestPayment:ok") {
+      // 查询支付状态
+      const payStatus = await apiGetPayStatus(orderCode)
+      if (payStatus.code === 200) {
+        // 跳转到订单页面
+        wx.redirectTo({ url: "/pages/order/order" })
+      }
+    }
+  }
+})
+```
 
 ## 更新机制
 
@@ -706,7 +724,7 @@ App({
       wx.showModal({
         title: "更新提示",
         content: "新版本已经准备好，是否重启应用？",
-        success(res) {
+        success: res => {
           if (res.confirm) {
             // 强制小程序重启并使用新版本
             updateManager.applyUpdate()
