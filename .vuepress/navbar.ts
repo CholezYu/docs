@@ -98,21 +98,15 @@ export default navbar([
       },
       
       {
+        text: "解决问题",
+        icon: "markdown",
+        link: "解决问题"
+      },
+      
+      {
         text: "代码规范",
         icon: "markdown",
         link: "代码规范"
-      },
-      
-      {
-        text: "报错处理",
-        icon: "markdown",
-        link: "报错处理"
-      },
-      
-      {
-        text: "心得体会",
-        icon: "markdown",
-        link: "心得体会"
       }
     ]
   }
