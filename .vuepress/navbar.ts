@@ -92,15 +92,15 @@ export default navbar([
     prefix: "notes/",
     children: [
       {
-        text: "面试重点",
-        icon: "markdown",
-        link: "面试重点"
-      },
-      
-      {
         text: "解决问题",
         icon: "markdown",
         link: "解决问题"
+      },
+      
+      {
+        text: "面试重点",
+        icon: "markdown",
+        link: "面试重点"
       },
       
       {
