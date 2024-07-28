@@ -1,7 +1,7 @@
 ---
 title: Ajax
 icon: ajax
-date: 2024-07-28
+date: 2024-07-29
 description: Ajax
 ---
 
@@ -450,7 +450,7 @@ instance.interceptors.response.use(
 
 ### 监测上传进度
 
-``` ts
+```ts
 import axios, { type AxiosProgressEvent } from "axios"
 
 const request = (url: string) => {
@@ -597,49 +597,38 @@ server {
 }
 ```
 
-## 实时数据推送
+## SSE & WebSocket
 
-### Server-Send Events
+### SSE
 
 SSE（Server-Send Events）是一种用于实现服务器主动向客户端推送数据的技术，也被称为“事件流”。
 
 利用其长连接特性，在客户端与服务器之间建立持久化的连接，服务器可以向客户端实时推送数据。
 
-> [!warning]
->
-> SSE 的不足：它是单工通讯，只能服务器向客服端推送数据；只能接受 Get 请求。
-
 ```ts
-const sse = new EventSource(url, options)
+/* Client */
 
-sse.readyState // 连接状态：CONNECTING 正在连接，OPEN 已经连接，CLOSED 连接已关闭
-sse.close() // 断开SSE连接，停止接收服务器发送的数据
-sse.onopen // 监听服务器连接成功
-sse.onerror // 监听服务器连接失败或接收数据错误
-sse.onmessage // 监听服务器发送的数据（如果后端没有设置名称，默认为 message 事件）
-```
-
-::: tabs
-
-@tab <Ts /> Client
-
-```ts
 const sse = new EventSource("http://127.0.0.1:3000/api")
 
-// 监听默认的 message 事件
-sse.addEventListener("message", (event: Event) => {
+// 监听服务器发送的数据（如果后端没有设置名称，默认为 message 事件）
+sse.addEventListener("message", event => {
   event.data // 接收的数据
 })
 
 // 监听自定义的 stream 事件
-sse.addEventListener("stream", (event: Event) => {
+sse.addEventListener("stream", event => {
   event.data // 接收的数据
 })
+
+// sse.readyState // 连接状态：CONNECTING 正在连接，OPEN 已经连接，CLOSED 连接已关闭
+// sse.close() // 断开 SSE 连接，停止接收服务器发送的数据
+// sse.addEventListener("open", event => {}) // 监听服务器连接成功
+// sse.addEventListener("error", event => {}) // 监听服务器连接失败或接收数据错误
 ```
 
-@tab <Ts /> Server nodejs
-
 ```ts
+/* Server nodejs */
+
 import express from "express"
 
 const app = express()
@@ -666,182 +655,26 @@ app.get("/api", (req, res) => {
 app.listen(3000)
 ```
 
-:::
+> [!warning]
+>
+> SSE 的不足：它是单工通讯，只能服务器向客服端推送数据；只能接受 Get 请求。
 
 ### WebSocket
 
 WebSocket 是全双工通讯协议，服务器和客户端可以在任何时间向对方推送数据。
 
-:::tip 心跳监测
-
-客户端每隔一分钟向服务器发送一个 "ping" 信号；服务器要立即返回一个 "pong" 信号。客户端需要检测在 5 秒内是否收到信号，如果客户端收到了信号，说明连接没问题，开始下一次心跳检测；如果没有收到信号，说明连接有问题，进行重连。
-
-:::
-
-WebSocket 实现虚拟列表。
-
-::: tabs
-
-@tab <Ts /> useSocket.ts
-
 ```ts
-class Socket {
-  success = false // 心跳检测是否成功
-  
-  reconnectTimes = 0 // 当前重连次数
-  reconnectId?: NodeJS.Timeout
-  
-  url: string
-  ws: WebSocket
-  
-  callbacks: ((data: any) => void)[] = []
-  
-  constructor(url: string) {
-    this.url = url
-    this.ws = this.initSocket()
-  }
-  
-  initSocket() {
-    const ws = new WebSocket(this.url)
-    
-    // WebSocket 连接成功
-    ws.addEventListener("open", () => {
-      this.ws.addEventListener("message", event => {
-        if (event.data === "pong") {
-          this.success = true
-        }
-      })
-      
-      this.keepAlive() // 心跳检测
-      this.reconnectTimes = 0 // 重置重连次数
-    })
-    
-    // WebSocket 断开连接
-    ws.addEventListener("close", this.reconnect) // 开始重连
-    
-    ws.addEventListener("message", event => {
-      if (event.data === "pong") return
-      this.callbacks.forEach(cb => cb(JSON.parse(event.data)))
-    })
-    
-    return ws
-  }
-  
-  // 接收消息
-  onMessage<T>(cb: (data: T) => void) {
-    this.callbacks.push(cb)
-  }
-  
-  // 心跳检测
-  keepAlive() {
-    setTimeout(() => {
-      // 向服务器发送 ping 信号
-      this.ws.send("ping")
-      
-      // 在 5s 内检测是否接收到 pong 信号
-      setTimeout(() => {
-        if (this.success) {
-          this.success = false
-          this.keepAlive() // 开始下一次心跳检测
-        }
-        else {
-          this.ws.close() // 关闭 WebSocket
-          this.reconnect() // 开始重连
-        }
-      }, 5000 /* 心跳检测接收服务器信号时间 */)
-    }, 1000 /* 心跳检测间隔时间 */)
-  }
-  
-  // 断线重连
-  reconnect() {
-    // 超过次数限制，就不重连了
-    if (this.reconnectTimes >= 5 /* 最大重连次数 */) return
-    
-    clearTimeout(this.reconnectId)
-    this.reconnectId = setTimeout(() => {
-      this.reconnectTimes++
-      this.ws = this.initSocket()
-    }, 30000 /* 断线重连间隔时间 */)
-  }
-}
+const ws = new WebSocket("ws://localhost:3000")
 
-export default function useSocket(url: string) {
-  return new Socket(url)
-}
+// WebSocket 连接成功
+ws.addEventListener("open", event => {})
+
+// WebSocket 连接失败
+ws.addEventListener("error", event => {})
+
+// 接收数据
+ws.addEventListener("message", event => {})
+
+// WebSocket 断开连接
+ws.addEventListener("close", event => {})
 ```
-
-@tab <Vue /> VirtualList.vue
-
-```vue
-<script setup lang="ts">
-  import { ref, computed, onBeforeUnmount } from "vue"
-  import useSocket from "./useSocket.ts"
-  
-  const virtualList = ref<VirtualItem[]>([])
-  
-  const startIndex = ref(0)
-  
-  const endIndex = ref(20)
-  
-  const realList = computed(() => virtualList.value.slice(startIndex.value, endIndex.value))
-  
-  const socket = useSocket("ws://localhost:8000")
-  
-  socket.onMessage((data: VirtualItem[]) => {
-    virtualList.value.push(...data)
-    start()
-  })
-  
-  const top = ref(0)
-  
-  const timer = ref<NodeJS.Timeout>(null)
-  
-  const isMouseEnter = ref(false)
-  
-  const start = () => {
-    if (virtualList.value.length <= 20 || isMouseEnter.value) return
-    
-    clearInterval(timer.value)
-    timer.value = setInterval(() => {
-      top.value -= 0.6
-      
-      startIndex.value = Math.abs(Math.ceil(top.value / 30))
-      endIndex.value = startIndex.value + 20
-    }, 1000 / 60)
-  }
-  
-  onBeforeUnmount(() => {
-    clearInterval(timer.value)
-  })
-  
-  const onEnter = () => {
-    isMouseEnter.value = true
-    clearInterval(timer.value)
-  }
-  
-  const onLeave = () => {
-    isMouseEnter.value = false
-    start()
-  }
-</script>
-
-<template>
-  <div>
-    <div class="overflow-hidden">
-      <main @mouseenter="onEnter" @mouseleave="onLeave">
-        <div :style="{ transform: `translateY(${top}px)` }">
-          <div :style="{ height: startIndex * 30 + 'px' }"></div>
-          
-          <div v-for="{ id, date, address, number } in realList" :key="id" class="h-[30px]">
-            <div>{{ date }}</div>
-            <div>{{ address }}</div>
-            <div>{{ number }}</div>
-          </div>
-        </div>
-      </main>
-    </div>
-  </div>
-</template>
-```
-
-:::
