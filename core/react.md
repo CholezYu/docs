@@ -823,10 +823,6 @@ const dispatch = useAppDispatch()
 
 ### 异步操作
 
-::: tabs#async
-
-@tab <Ts /> slice/user.ts
-
 ```tsx
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit"
 import type { LoginParams } from "@/api/user"
@@ -888,8 +884,6 @@ const userSlice = createSlice({
 
 export default userSlice.reducer
 ```
-
-:::
 
 ## Zustand
 
