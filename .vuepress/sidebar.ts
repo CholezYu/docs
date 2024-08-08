@@ -265,11 +265,11 @@ export default sidebar({
       link: "解决问题"
     },
     
-    // {
-    //   text: "项目难点",
-    //   icon: "markdown",
-    //   link: "项目难点"
-    // },
+    {
+      text: "项目难点",
+      icon: "markdown",
+      link: "项目难点"
+    },
     
     {
       text: "代码规范",

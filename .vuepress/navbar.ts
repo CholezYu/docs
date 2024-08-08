@@ -65,18 +65,18 @@ export default navbar([
             link: "mini-app"
           }
         ]
-      }
+      },
       
-      // {
-      //   text: "动态",
-      //   children: [
-      //     {
-      //       text: "Cholez",
-      //       icon: "/icon/cholez.svg",
-      //       link: "http://cholez.cn"
-      //     }
-      //   ]
-      // }
+      {
+        text: "动态",
+        children: [
+          {
+            text: "Cholez",
+            icon: "cholez",
+            link: "http://cholez.cn"
+          }
+        ]
+      }
     ]
   },
   
@@ -97,11 +97,11 @@ export default navbar([
         link: "解决问题"
       },
       
-      // {
-      //   text: "项目难点",
-      //   icon: "markdown",
-      //   link: "项目难点"
-      // },
+      {
+        text: "项目难点",
+        icon: "markdown",
+        link: "项目难点"
+      },
       
       {
         text: "代码规范",
