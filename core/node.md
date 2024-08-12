@@ -10,11 +10,17 @@ description: Node
 ### npm
 
 - 安装包：`npm i [package]`
+
 - 安装开发环境的包：`npm i [package] -D`
+
 - 安装全局环境的包：`npm i [package] -g`
+
 - 删除包：`npm un [package]`
+
 - 发布包：`npm publish`
+
 - 取消发布：`npm unpublish --force`
+
 - 添加用户名和密码：`npm adduser`
 
 
