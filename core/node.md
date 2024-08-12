@@ -1,8 +1,8 @@
 ---
-title: Node.js
+title: Node
 icon: nodeJS
 date: 2024-05-04
-description: Node.js
+description: Node
 ---
 
 ## 包管理

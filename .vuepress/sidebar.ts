@@ -85,9 +85,9 @@ export default sidebar({
           link: "ajax"
         },
         {
-          text: "Node.js",
+          text: "Node",
           icon: "nodeJS",
-          link: "nodejs"
+          link: "node"
         },
         {
           text: "Webpack",
