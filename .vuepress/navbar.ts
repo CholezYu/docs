@@ -65,17 +65,6 @@ export default navbar([
             link: "mini-app"
           }
         ]
-      },
-      
-      {
-        text: "动态",
-        children: [
-          {
-            text: "Cholez",
-            icon: "cholez",
-            link: "http://cholez.cn"
-          }
-        ]
       }
     ]
   },
@@ -109,5 +98,11 @@ export default navbar([
         link: "代码规范"
       }
     ]
+  },
+  
+  {
+    text: "主页",
+    icon: "cholez",
+    link: "http://cholez.cn"
   }
 ])
