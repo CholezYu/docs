@@ -100,9 +100,9 @@ export default navbar([
     ]
   },
   
-  {
-    text: "主页",
-    icon: "cholez",
-    link: "http://cholez.cn"
-  }
+  // {
+  //   text: "主页",
+  //   icon: "cholez",
+  //   link: "http://cholez.cn"
+  // }
 ])
