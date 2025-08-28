@@ -57,7 +57,7 @@ for (int i = 0; i < arr.length; i++) {
   }
 }
 
-System.out.println(Arrays.deepToString(arr));
+Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9, 0]]
 ```
 
 for each 循环
@@ -73,7 +73,7 @@ for (int[] ints : arr) {
   }
 }
 
-System.out.println(Arrays.deepToString(arr));
+Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9, 0]]
 ```
 
 ### 查找元素
@@ -159,6 +159,42 @@ for (int i = 0; i < arr.length - 1; i++) {
 }
 ```
 
+### Arraays 工具类
+
+`Arrays.equals` 比较数组元素是否相同。
+
+```java
+int[] arr1 = { 1, 2, 3, 4, 5 };
+int[] arr2 = { 1, 2, 3, 4, 5 };
+
+arr1 == arr2; // false 比较的是两个数组的地址值，所以不相等
+Arrays.equals(arr1, arr2); // true 依次比较两个数组的元素
+```
+
+`Arrays.fill` 数组填充。
+
+```java
+int[] arr = { 1, 2, 3, 4, 5 };
+Arrays.fill(arr, 3);
+arr; // [3, 3, 3, 3, 3]
+```
+
+`Arrays.sort` 快速排序。
+
+```java
+int[] arr = { 34, 53, 3, 2, 65, 7, 34, 5, 76, 34, 67 };
+Arrays.sort(arr);
+arr; // [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
+```
+
+`Arrays.binarySearch` 二分查找。
+
+```java
+int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
+Arrays.binarySearch(arr, 32); // 3
+Arrays.binarySearch(arr, 10); // -2 not found
+```
+
 ## 面向对象
 
 ### 封装性
@@ -190,3 +226,5 @@ public class Person {
 ```
 
 ### 继承性
+
+子类可以继承父类的属性和方法。
