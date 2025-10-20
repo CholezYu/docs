@@ -273,21 +273,40 @@ public class Person {
 
 ```java
 class Animal {
-  void speak() {/* */}
+  void speak() { System.out.println("动物在叫"); }
 }
 
 class Dog extends Animal {
   @Override
-  void speak() {/* */}
+  void speak() { System.out.println("狗在汪汪叫"); }
+  
+  void watch() { System.out.println("狗在看家"); }
 }
 
 class Cat extends Animal {
   @Override
-  void speak() {/* */}
+  void speak() { System.out.println("猫在喵喵叫"); }
+  
+  void sleep() { System.out.println("猫在睡觉"); }
 }
 
-Animal a1 = new Dog();
-Animal a2 = new Cat();
-a1.speak();
-a2.speak();
+class AnimalTest {
+  void adopt(Animal animal) {
+    animal.speak();
+    
+    if (animal instanceof Dog) {
+      Dog dog = (Dog)animal;
+      dog.watch();
+    }
+    if (animal instanceof Cat cat /* 模式变量 */) {
+      cat.sleep();
+    }
+  }
+  
+  public static void main(String[] args) {
+    AnimalTest animalTest = new AnimalTest();
+    animalTest.adopt(new Dog());
+    animalTest.adopt(new Cat());
+  }
+}
 ```
