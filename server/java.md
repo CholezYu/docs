@@ -198,6 +198,43 @@ Arrays.binarySearch(arr, 10); // -2 not found
 
 ## 面向对象
 
+### 重载和重写
+
+重载。在同一个类中，方法名一样，但参数（类型/个数/顺序）不同。
+
+```java
+class MathUtil {
+  int add(int a, int b) { return a + b; }
+  double add(double a, double b) { return a + b; }
+  int add(int a, int b, int c) { return a + b + c; }
+}
+
+MathUtil m = new MathUtil();
+m.add(3, 5);       // 调用第一个
+m.add(1.2, 3.4);   // 调用第二个
+m.add(1, 2, 3);    // 调用第三个
+```
+
+重写。子类修改父类的方法实现，保持父类方法名与参数列表不变。
+
+```java
+class Animal {
+  void speak() {
+    System.out.println("动物在叫");
+  }
+}
+
+class Dog extends Animal {
+  @Override
+  void speak() {
+    System.out.println("狗在汪汪叫");
+  }
+}
+
+Animal a = new Dog();
+a.speak();  // 狗在汪汪叫
+```
+
 ### 封装性
 
 使用权限修饰符来修饰类及类的内部成员。
@@ -232,9 +269,7 @@ public class Person {
 
 ### 多态性
 
-同一个**方法**，通过不同的对象表现出不同的行为。
-
-多态必须满足：继承和重写。
+同一个**方法**，通过不同的对象表现出不同的行为。多态必须满足**继承**和**重写**。
 
 ```java
 class Animal {
@@ -251,13 +286,8 @@ class Cat extends Animal {
   void speak() {/* */}
 }
 
-public class Main {
-  public static void main(String[] args) {
-    Animal a1 = new Dog();
-    Animal a2 = new Cat();
-    
-    a1.speak();
-    a2.speak();
-  }
-}
+Animal a1 = new Dog();
+Animal a2 = new Cat();
+a1.speak();
+a2.speak();
 ```
