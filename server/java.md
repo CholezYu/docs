@@ -160,7 +160,7 @@ for (int i = 0; i < arr.length - 1; i++) {
 }
 ```
 
-### Arraays 工具类
+### Arrays类
 
 `Arrays.equals` 比较数组元素是否相同。
 
