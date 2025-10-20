@@ -1,6 +1,7 @@
 ---
 title: Java
 icon: java
+date: 2025-10-20
 description: Java
 ---
 
@@ -228,3 +229,35 @@ public class Person {
 ### 继承性
 
 子类可以继承父类的属性和方法。
+
+### 多态性
+
+同一个**方法**，通过不同的对象表现出不同的行为。
+
+多态必须满足：继承和重写。
+
+```java
+class Animal {
+  void speak() {/* */}
+}
+
+class Dog extends Animal {
+  @Override
+  void speak() {/* */}
+}
+
+class Cat extends Animal {
+  @Override
+  void speak() {/* */}
+}
+
+public class Main {
+  public static void main(String[] args) {
+    Animal a1 = new Dog();
+    Animal a2 = new Cat();
+    
+    a1.speak();
+    a2.speak();
+  }
+}
+```
