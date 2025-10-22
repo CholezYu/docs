@@ -182,43 +182,68 @@ export default sidebar({
           link: "java"
         },
         {
-          text: "Python",
-          icon: "python",
-          link: "python"
-        },
-        {
           text: "MySQL",
           icon: "mysql",
           link: "mysql"
         },
         {
+          text: "Maven",
+          icon: "maven",
+          link: "maven"
+        },
+        {
+          text: "Spring",
+          icon: "spring",
+          link: "spring"
+        },
+        {
+          text: "SpringMVC",
+          icon: "spring",
+          link: "springmvc"
+        },
+        {
+          text: "SpringBoot",
+          icon: "spring",
+          link: "springboot"
+        },
+        {
+          text: "MyBatis",
+          icon: "mybatis",
+          link: "mybatis"
+        },
+        {
+          text: "Redis",
+          icon: "redis",
+          link: "redis"
+        },
+        {
           text: "Nginx",
-          icon: "nginx",
+          icon: "Nginx",
           link: "nginx"
+        },
+        {
+          text: "Docker",
+          icon: "docker",
+          link: "docker"
+        },
+        {
+          text: "Linux",
+          icon: "linux",
+          link: "linux"
         }
       ]
     },
     
     {
-      text: "高级",
-      icon: "launch",
-      prefix: "high-end/",
+      text: "人工智能",
+      icon: "ai",
+      prefix: "ai/",
       collapsible: true,
       children: [
         {
-          text: "WebGL",
-          icon: "webgl",
-          link: "webgl"
-        },
-        {
-          text: "Threejs",
-          icon: "threejs",
-          link: "threejs"
-        },
-        {
-          text: "MicroFrontend",
-          icon: "microfrontend",
-          link: "microfrontend"
+          text: "Python",
+          icon: "python",
+          link: "python"
         }
       ]
     }
