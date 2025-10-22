@@ -2,7 +2,7 @@ import { defineClientConfig } from "@vuepress/client"
 import Vue from "./components/Icons/Vue.vue"
 import Ts from "./components/Icons/Ts.vue"
 import Tsx from "./components/Icons/Tsx.vue"
-import Js from "./components/Icons/JS.vue"
+import Js from "./components/Icons/Js.vue"
 import Json from "./components/Icons/Json.vue"
 import Wechat from "./components/Icons/Wechat.vue"
 
