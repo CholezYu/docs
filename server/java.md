@@ -12,20 +12,16 @@ description: Java
 容量小的类型与容量大的类型运算时，会提升为容量大的类型。
 
 ```java
-public class Main {
-  public static void main(String[] args) {
-    byte b = 2;
-    int i = 12;
-    
-    byte s = b + i; // 编译失败
-    
-    int s = b + i; // 14
-    float s = b + i; // 14.0
-    
-    char c = 'a';
-    int s = i + c; // 109
-  }
-}
+byte b = 2;
+int i = 12;
+
+byte s = b + i; // 编译失败
+
+int s = b + i; // 14
+float s = b + i; // 14.0
+
+char c = 'a';
+int s = i + c; // 109
 ```
 
 ### 强制类型转换
@@ -33,12 +29,10 @@ public class Main {
 如果需要将容量大的类型转换为容量小的类型，需要使用强制类型转换。
 
 ```java
-public static void main(String[] args) {
-  double d = 12;
-  
-  int i = d; // 编译失败
-  int i = (int) d; // 将 double 类型强制转为 int 类型
-}
+double d = 12;
+
+int i = d; // 编译失败
+int i = (int) d; // 将 double 类型强制转为 int 类型
 ```
 
 ## 数组
@@ -302,13 +296,11 @@ class AnimalTest {
       cat.sleep();
     }
   }
-  
-  public static void main(String[] args) {
-    AnimalTest animalTest = new AnimalTest();
-    animalTest.adopt(new Dog());
-    animalTest.adopt(new Cat());
-  }
 }
+
+AnimalTest animalTest = new AnimalTest();
+animalTest.adopt(new Dog());
+animalTest.adopt(new Cat());
 ```
 
 ### final 关键字
