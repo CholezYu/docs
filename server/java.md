@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-23
+date: 2025-10-24
 description: Java
 ---
 
@@ -361,3 +361,27 @@ class Dog extends Animal {} // ❌ 报错：final 类不能被继承
 ```java
 public static final double PI = 3.14159;
 ```
+
+### 抽象类
+
+抽象类（abstract class）是一种不能被直接实例化的类，它可以被其他类继承，通常用于定义通用规范或模板。
+
+> [!important]
+>
+> 抽象方法只有声明，没有实现。子类必须实现所有抽象方法，除非子类也是抽象类。
+
+```java
+abstract class Animal {
+  // 抽象方法（没有方法体）
+  public abstract void makeSound();
+}
+
+class Dog extends Animal {
+  // 实现抽象方法
+  @Override
+  public void makeSound() {
+    System.out.println(name + " says: Woof!");
+  }
+}
+```
+
