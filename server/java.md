@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-20
+date: 2025-10-23
 description: Java
 ---
 
@@ -160,7 +160,7 @@ for (int i = 0; i < arr.length - 1; i++) {
 }
 ```
 
-### Arrays类
+### Arrays 类
 
 `Arrays.equals` 比较数组元素是否相同。
 
@@ -309,4 +309,63 @@ class AnimalTest {
     animalTest.adopt(new Cat());
   }
 }
+```
+
+### final 关键字
+
+修饰变量。
+
+> [!warning]
+>
+> 修饰基本类型变量：**在初始化之后**，值不能被修改；
+>
+> 修饰引用类型变量：不能指向另一个对象，但是内部结构可以改变。
+
+```java
+final int n;
+n = 10; // 10
+n = 20; // ❌ 报错：不能修改 final 变量的值
+
+final Person person = new Person();
+person.age = 18; // ✅ 可以修改对象内容
+person = new Person(); // ❌ 报错：不能指向新的对象
+```
+
+修饰方法。
+
+> [!warning]
+>
+> 方法不能被重写。
+
+```java
+class Person {
+  public final void show() {} 
+}
+
+class Woman extends Parent {
+  @Override
+  public void show() {} // ❌ 报错：不能重写 final 方法
+}
+```
+
+修饰类。
+
+> [!warning]
+>
+> 类不能被继承。
+
+```java
+final class Animal {}
+
+class Dog extends Animal {} // ❌ 报错：final 类不能被继承
+```
+
+定义常量。
+
+> [!tip]
+>
+> 常用 `final` + `static` 定义常量。
+
+```java
+public static final double PI = 3.14159;
 ```
