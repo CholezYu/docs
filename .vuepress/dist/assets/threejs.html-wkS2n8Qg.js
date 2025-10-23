@@ -1,1 +1,0 @@
-import{_ as t,o as r,c as s,d as e}from"./app-SY5i2kxs.js";const a={},c=e("h2",{id:"",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#","aria-hidden":"true"},"#")],-1),o=[c];function n(_,d){return r(),s("div",null,o)}const i=t(a,[["render",n],["__file","threejs.html.vue"]]);export{i as default};
