@@ -9,30 +9,41 @@ description: Java
 
 ### 自动类型提升
 
-容量小的类型与容量大的类型运算时，会提升为容量大的类型。
+在表达式计算或者赋值过程中，较低精度的基本数据类型会自动转换为较高精度的数据类型。
+
+提升顺序如下：
+
+```
+byte → short → int → long → float → double
+```
+
+> [!important]
+>
+> byte、short、char 运算时自动提升为 int。
 
 ```java
-byte b = 2;
-int i = 12;
+byte a = 10;
+byte b = 10;
 
-byte s = b + i; // 编译失败
+byte c = a + b; // ❌ 编译失败：需要强制类型转换
+byte c = (byte) (a + b); // ✅ 正确
 
-int s = b + i; // 14
-float s = b + i; // 14.0
+int c = a + b; // 20
+float c = a + b; // 20.0
 
 char c = 'a';
-int s = i + c; // 109
+int d = a + b + c; // 117
 ```
 
 ### 强制类型转换
 
-如果需要将容量大的类型转换为容量小的类型，需要使用强制类型转换。
+把一个高精度类型的值赋给低精度类型变量时，必须使用强制类型转换。
 
 ```java
 double d = 12;
 
-int i = d; // 编译失败
-int i = (int) d; // 将 double 类型强制转为 int 类型
+int i = d; // ❌ 编译失败
+int i = (int) d; // ✅ 将 double 类型强制转为 int 类型
 ```
 
 ## 数组
