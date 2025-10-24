@@ -50,11 +50,28 @@ int i = (int) d; // ✅ 将 double 类型强制转为 int 类型
 
 ### 遍历数组
 
-for 循环
+```java
+int[] arr = { 1, 2, 3, 4, 5 };
+
+// for 循环
+for (int i = 0; i < arr.length; i++) {
+  System.out.println(arr[i]);
+}
+
+// for-each 循环
+for (int item : arr) {
+  System.out.println(item);
+}
+
+Arrays.toString(arr); // [1, 2, 3, 4, 5]
+```
+
+二维数组。
 
 ```java
-int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9, 0 } };
+int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9 } };
 
+// for 循环
 for (int i = 0; i < arr.length; i++) {
   System.out.println(Arrays.toString(arr[i]));
   
@@ -63,28 +80,33 @@ for (int i = 0; i < arr.length; i++) {
   }
 }
 
-Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9, 0]]
-```
-
-for each 循环
-
-```java
-int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9, 0 } };
-
-for (int[] ints : arr) {
-  System.out.println(Arrays.toString(ints));
+// for-each 循环
+for (int[] row : arr) {
+  System.out.println(Arrays.toString(row));
   
-  for (int anInt : ints) {
-    System.out.println(anInt);
+  for (int item : row) {
+    System.out.println(item);
   }
 }
 
-Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9, 0]]
+Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
 ```
 
-### 查找元素
+使用 Stream <Badge text="Java 8+" type="tip" /> 遍历二维数组。
 
-线性查找（遍历），时间复杂度为 $O(n)$。
+```java
+Arrays.stream(arr).forEach(row -> {
+  System.out.println(Arrays.toString(row));
+  
+  for (int item : row) {
+    System.out.println(item);
+  }
+});
+```
+
+### 数组查找
+
+#### 线性查找
 
 ```java
 int[] arr = { 14, 32, 73, 45, 54, 26, 79 };
@@ -106,7 +128,15 @@ if (!flag) {
 }
 ```
 
-二分查找（必须是有序数组），时间复杂度为 $O(log_2n)$。
+#### 二分查找
+
+> [!important]
+>
+> 必须是有序数组。
+
+> [!tip]
+>
+> Java 提供了 `Arrays.binarySearch(array, index)` 方法进行二分查找。
 
 ```java
 int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
@@ -139,9 +169,9 @@ if (!flag) {
 }
 ```
 
-> Java 提供了 `Arrays.binarySearch(array, index)` 方法进行二分查找。
+### 数组排序
 
-### 冒泡排序
+#### 冒泡排序
 
 ```java
 int[] arr = { 34, 54, 3, 2, 84, 65, 7, 19, 5, 76, 67 };
@@ -165,19 +195,23 @@ for (int i = 0; i < arr.length - 1; i++) {
 }
 ```
 
-### Arrays 类
+## Arrays
 
-`Arrays.equals` 比较数组元素是否相同。
+### .equals
+
+数组元素比较。
 
 ```java
 int[] arr1 = { 1, 2, 3, 4, 5 };
 int[] arr2 = { 1, 2, 3, 4, 5 };
 
-arr1 == arr2; // false 比较的是两个数组的地址值，所以不相等
-Arrays.equals(arr1, arr2); // true 依次比较两个数组的元素
+arr1 == arr2; // false, 比较的是两个数组的地址值，所以不相等
+Arrays.equals(arr1, arr2); // true, 依次比较两个数组的元素
 ```
 
-`Arrays.fill` 数组填充。
+### .fill
+
+数组填充。
 
 ```java
 int[] arr = { 1, 2, 3, 4, 5 };
@@ -185,7 +219,9 @@ Arrays.fill(arr, 3);
 arr; // [3, 3, 3, 3, 3]
 ```
 
-`Arrays.sort` 快速排序。
+### .sort
+
+快速排序。
 
 ```java
 int[] arr = { 34, 53, 3, 2, 65, 7, 34, 5, 76, 34, 67 };
@@ -193,7 +229,9 @@ Arrays.sort(arr);
 arr; // [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
 ```
 
-`Arrays.binarySearch` 二分查找。
+### .binarySearch
+
+二分查找。
 
 ```java
 int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
