@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-24
+date: 2025-10-25
 description: Java
 ---
 
@@ -418,6 +418,8 @@ class Dog extends Animal {
 
 ### 接口
 
+接口（Interface）是一种比抽象类更加抽象的类型，它用来定义一组规范（方法），实现这些接口的类必须按照接口的要求进行实现。
+
 #### 常量
 
 默认使用 `public static final` 修饰。
@@ -505,4 +507,3 @@ interface USB {
   private void checkConnection() { System.out.println("Checking USB connection..."); }
 }
 ```
-
