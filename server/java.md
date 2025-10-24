@@ -385,3 +385,107 @@ class Dog extends Animal {
 }
 ```
 
+### 接口
+
+#### 常量
+
+默认使用 `public static final` 修饰。
+
+```java
+interface USB {
+  String VERSION = "2.0";
+}
+```
+
+#### 抽象方法
+
+默认使用 `abstract` 修饰。
+
+```java
+interface USB {
+  void connect();
+  
+  void disconnect();
+}
+
+// implements 关键字实现接口
+class Printer implements USB {
+  @Override
+  public void connect() {
+    System.out.println("打印机连接成功...");
+  }
+  
+  @Override
+  public void disconnect() {
+    System.out.println("打印机断开连接...");
+  }
+}
+computer.run(new Printer());
+
+// 匿名实现类实现接口
+computer.run(new USB() {
+  @Override
+  public void connect() {
+    System.out.println("打印机连接成功...");
+  }
+  
+  @Override
+  public void disconnect() {
+    System.out.println("打印机断开连接...");
+  }
+});
+```
+
+#### 静态方法 <Badge text="Java 8+" type="tip" />
+
+使用 `static` 修饰。
+
+> [!warning]
+>
+> 只能通过接口调用，不能通过实现类或对象调用。
+
+```java
+interface USB {
+  static void showVersion() {
+    System.out.println("USB Interface Version " + VERSION);
+  }
+}
+
+class Printer implements USB {}
+
+USB.staticMethod(); // ✅ 可以修改对象内容
+Printer.staticMethod(); // ❌ static 方法只能在其包含接口上调用
+```
+
+#### 默认方法 <Badge text="Java 8+" type="tip" />
+
+使用 `default` 修饰。
+
+> [!tip]
+>
+> 实现类可以直接调用，也可以进行重写。
+
+```java
+interface USB {
+  default void startTransfer() {
+    System.out.println("Starting data transfer...");
+  }
+}
+```
+
+#### 私有方法 <Badge text="Java 9+" type="tip" />
+
+使用 `private` 修饰。
+
+> [!warning]
+>
+> 只能在接口内部使用，不能被实现类调用或重写。
+
+```java
+interface USB {
+  private void checkConnection() {
+    System.out.println("Checking USB connection...");
+  }
+}
+```
+
