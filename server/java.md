@@ -420,9 +420,7 @@ class Dog extends Animal {
 
 接口（Interface）是一种比抽象类更加抽象的类型，它用来定义一组规范（方法），实现这些接口的类必须按照接口的要求进行实现。
 
-#### 常量
-
-默认使用 `public static final` 修饰。
+常量，默认使用 `public static final` 修饰。
 
 ```java
 interface USB {
@@ -430,9 +428,7 @@ interface USB {
 }
 ```
 
-#### 抽象方法
-
-默认使用 `abstract` 修饰。
+抽象方法，默认使用 `abstract` 修饰。
 
 ```java
 interface USB {
@@ -461,9 +457,7 @@ computer.run(new USB() {
 });
 ```
 
-#### 静态方法 <Badge text="Java 8+" type="tip" />
-
-使用 `static` 修饰。
+静态方法 <Badge text="Java 8+" type="tip" /> ，使用 `static` 修饰。
 
 > [!warning]
 >
@@ -480,9 +474,7 @@ USB.staticMethod(); // ✅ 可以修改对象内容
 Printer.staticMethod(); // ❌ static 方法只能在其包含接口上调用
 ```
 
-#### 默认方法 <Badge text="Java 8+" type="tip" />
-
-使用 `default` 修饰。
+默认方法 <Badge text="Java 8+" type="tip" /> ，使用 `default` 修饰。
 
 > [!tip]
 >
@@ -494,9 +486,7 @@ interface USB {
 }
 ```
 
-#### 私有方法 <Badge text="Java 9+" type="tip" />
-
-使用 `private` 修饰。
+私有方法 <Badge text="Java 9+" type="tip" /> ，使用 `private` 修饰。
 
 > [!warning]
 >
