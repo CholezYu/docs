@@ -262,20 +262,16 @@ m.add(1, 2, 3);    // 调用第三个
 
 ```java
 class Animal {
-  void speak() {
-    System.out.println("动物在叫");
-  }
+  void speak() { System.out.println("动物在叫"); }
 }
 
 class Dog extends Animal {
   @Override
-  void speak() {
-    System.out.println("狗在汪汪叫");
-  }
+  void speak() { System.out.println("狗在汪汪叫"); }
 }
 
 Animal a = new Dog();
-a.speak();  // 狗在汪汪叫
+a.speak(); // 狗在汪汪叫
 ```
 
 ### 封装性
@@ -290,29 +286,17 @@ a.speak();  // 狗在汪汪叫
 
 - public：公开
 
-将内部成员设为私有，对外暴露 getter 和 setter 方法。这样，在其他类中只能通过这些方法来操作成员。
-
-```java
-public class Person {
-  private String name;
-  
-  public String getName() {
-    return name;
-  }
-  
-  public void setName(String name) {
-    this.name = name;
-  }
-}
-```
-
 ### 继承性
 
 子类可以继承父类的属性和方法。
 
 ### 多态性
 
-同一个**方法**，通过不同的对象表现出不同的行为。多态必须满足**继承**和**重写**。
+同一个方法，通过不同的对象表现出不同的行为。
+
+> [!important]
+>
+> 多态必须满足继承和重写。
 
 ```java
 class Animal {
@@ -428,9 +412,7 @@ abstract class Animal {
 class Dog extends Animal {
   // 实现抽象方法
   @Override
-  public void makeSound() {
-    System.out.println(name + " says: Woof!");
-  }
+  public void makeSound() { System.out.println(name + " says: Woof!"); }
 }
 ```
 
@@ -460,28 +442,20 @@ interface USB {
 // implements 关键字实现接口
 class Printer implements USB {
   @Override
-  public void connect() {
-    System.out.println("打印机连接成功...");
-  }
+  public void connect() { System.out.println("打印机连接成功..."); }
   
   @Override
-  public void disconnect() {
-    System.out.println("打印机断开连接...");
-  }
+  public void disconnect() { System.out.println("打印机断开连接..."); }
 }
 computer.run(new Printer());
 
 // 匿名实现类实现接口
 computer.run(new USB() {
   @Override
-  public void connect() {
-    System.out.println("打印机连接成功...");
-  }
+  public void connect() { System.out.println("打印机连接成功..."); }
   
   @Override
-  public void disconnect() {
-    System.out.println("打印机断开连接...");
-  }
+  public void disconnect() { System.out.println("打印机断开连接..."); }
 });
 ```
 
@@ -495,9 +469,7 @@ computer.run(new USB() {
 
 ```java
 interface USB {
-  static void showVersion() {
-    System.out.println("USB Interface Version " + VERSION);
-  }
+  static void showVersion() { System.out.println("USB Interface Version " + VERSION); }
 }
 
 class Printer implements USB {}
@@ -516,9 +488,7 @@ Printer.staticMethod(); // ❌ static 方法只能在其包含接口上调用
 
 ```java
 interface USB {
-  default void startTransfer() {
-    System.out.println("Starting data transfer...");
-  }
+  default void startTransfer() { System.out.println("Starting data transfer..."); }
 }
 ```
 
@@ -532,9 +502,7 @@ interface USB {
 
 ```java
 interface USB {
-  private void checkConnection() {
-    System.out.println("Checking USB connection...");
-  }
+  private void checkConnection() { System.out.println("Checking USB connection..."); }
 }
 ```
 
