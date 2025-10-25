@@ -65,6 +65,18 @@ export default navbar([
             link: "mini-app"
           }
         ]
+      },
+      
+      {
+        text: "服务端",
+        prefix: "server/",
+        children: [
+          {
+            text: "Java",
+            icon: "java",
+            link: "java"
+          }
+        ]
       }
     ]
   },
@@ -98,7 +110,7 @@ export default navbar([
         link: "代码规范"
       }
     ]
-  },
+  }
   
   // {
   //   text: "主页",
