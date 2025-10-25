@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-25
+date: 2025-10-26
 description: Java
 ---
 
@@ -497,3 +497,65 @@ interface USB {
   private void checkConnection() { System.out.println("Checking USB connection..."); }
 }
 ```
+
+### 内部类 <Badge text="不常用" type="note" />
+
+内部类（Inner Class）是定义在另一个类内部的类。
+
+成员内部类。可以访问外部类的成员。
+
+```java
+class Outer {
+  String name = "Outer";
+  
+  class Inner {
+    void show() { System.out.println("outer name: " + name); }
+  }
+}
+
+Outer outer = new Outer();
+Outer.Inner inner = outer.new Inner();
+```
+
+静态内部类，相当外部类的静态成员。只能访问外部类的静态成员。
+
+```java
+class Outer {
+  static String name = "Outer";
+  
+  static class Inner {
+    void show() { System.out.println("outer static name: " + name); }
+  }
+}
+
+Outer.Inner inner = new Outer.Inner();
+```
+
+局部内部类，定义在方法、代码块中。作用范围仅限方法内部，不能使用权限修饰符。
+
+```java
+class Outer {
+  Comparable getInstance() {
+    class Inner implements Comparator {
+      @Override
+      public int compareTo(Object o) { return 0; }
+    }
+    
+    return new Inner();
+  }
+}
+```
+
+匿名内部类。常用于回调、事件监听、线程创建等场景。
+
+```java
+class Outer {
+  Comparable getInstance() {
+    return new Comparable() {
+      @Override
+      public int compareTo(Object o) { return 0; }
+    };
+  }
+}
+```
+
