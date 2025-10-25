@@ -1,1 +1,0 @@
-import{_ as t,o,c as r,d as e}from"./app-XPirRn4N.js";const s={},a=e("h2",{id:"",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#","aria-hidden":"true"},"#")],-1),c=[a];function n(_,d){return o(),r("div",null,c)}const h=t(s,[["render",n],["__file","springboot.html.vue"]]);export{h as default};
