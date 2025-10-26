@@ -423,3 +423,63 @@ class Outer {
   }
 }
 ```
+
+### 枚举
+
+枚举（Enum） 是一种特殊的类，用来定义常量。每个枚举值都是此类的唯一实例对象。
+
+```java
+enum Season {
+  SPRING("spring"),
+  SUMMER("summer"),
+  AUTUMN("autumn"),
+  WINTER("winter");
+  
+  private final String name;
+  
+  Season(String name) {
+    this.name = name;
+  }
+  
+  public String getName() { return name; }
+}
+
+Arrays.toString(Season.values()); // [SPRING, SUMMER, AUTUMN, WINTER]
+
+Season.SPRING; // SPRING
+Season.SPRING.toString(); // SPRING
+Season.SPRING.name(); // SPRING
+Season.SPRING.getName(); // spring
+
+Season.valueOf("SUMMER"); // SUMMER
+
+Season.WINTER.ordinal(); // 3
+```
+
+枚举实现接口（支持多态）。
+
+```java
+interface Show {
+  void show();
+}
+
+enum Season implements Show {
+  SPRING {
+    @Override
+    public void show() { System.out.println("spring coming"); }
+  },
+  SUMMER {
+    @Override
+    public void show() { System.out.println("summer coming"); }
+  },
+  AUTUMN {
+    @Override
+    public void show() { System.out.println("autumn coming"); }
+  },
+  WINTER {
+    @Override
+    public void show() { System.out.println("winter coming"); }
+  }
+}
+```
+
