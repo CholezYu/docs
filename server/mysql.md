@@ -1,7 +1,7 @@
 ---
 title: MySQL
-icon: mysql
+icon: MySQL
 description: MySQL
 ---
 
-## 
+##  

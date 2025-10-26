@@ -183,7 +183,7 @@ export default sidebar({
         },
         {
           text: "MySQL",
-          icon: "mysql",
+          icon: "MySQL",
           link: "mysql"
         },
         {
