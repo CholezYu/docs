@@ -483,3 +483,26 @@ enum Season implements Show {
 }
 ```
 
+### 注解
+
+注解（Annotation）是一种用于为代码添加说明、元数据的机制，它不会直接影响程序逻辑，但可以被编译器、运行时程序读取并执行特定操作。
+
+常见的内置注解：
+
+- `@Override`：检查方法是否正确重写父类方法。
+
+- `@Deprecated`：标记方法或类为“过时”，不建议使用。
+
+- `@SuppressWarnings`：忽略编译器警告。
+
+- `@FunctionalInterface`：限定接口必须只有一个抽象方法。
+
+元注解（为注解提供说明）：
+
+- `@Retention`：注解的保留时间（SOURCE、CLASS、RUNTIME）。
+
+- `@Target`：可以作用的位置（类、方法、字段等）。
+
+- `@Documented`：是否写入 JavaDoc。
+
+- `@Inherited`：子类是否继承父类注解。
