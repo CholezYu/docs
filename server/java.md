@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-26
+date: 2025-10-31
 description: Java
 ---
 
@@ -28,11 +28,11 @@ byte b = 10;
 byte c = a + b; // ❌ 编译失败：需要强制类型转换
 byte c = (byte) (a + b); // ✅ 正确
 
-int c = a + b; // 20
-float c = a + b; // 20.0
+int c = a + b; // => 20
+float c = a + b; // => 20.0
 
 char c = 'a';
-int d = a + b + c; // 117
+int d = a + b + c; // => 117
 ```
 
 ### 强制类型转换
@@ -65,7 +65,7 @@ for (int item : arr) {
   System.out.println(item);
 }
 
-Arrays.toString(arr); // [1, 2, 3, 4, 5]
+Arrays.toString(arr); // => [1, 2, 3, 4, 5]
 ```
 
 二维数组。
@@ -91,7 +91,7 @@ for (int[] row : arr) {
   }
 }
 
-Arrays.deepToString(arr); // [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
+Arrays.deepToString(arr); // => [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
 ```
 
 使用 Stream <Badge text="Java 8+" type="tip" /> 遍历二维数组。
@@ -126,7 +126,7 @@ Arrays.equals(arr1, arr2); // true, 依次比较两个数组的元素
 
 ```java
 int[] arr = { 1, 2, 3, 4, 5 };
-Arrays.fill(arr, 3); // [3, 3, 3, 3, 3]
+Arrays.fill(arr, 3); // => [3, 3, 3, 3, 3]
 ```
 
 #### .sort
@@ -135,7 +135,7 @@ Arrays.fill(arr, 3); // [3, 3, 3, 3, 3]
 
 ```java
 int[] arr = { 34, 53, 3, 2, 65, 7, 34, 5, 76, 34, 67 };
-Arrays.sort(arr); // [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
+Arrays.sort(arr); // => [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
 ```
 
 #### .binarySearch
@@ -144,8 +144,8 @@ Arrays.sort(arr); // [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
 
 ```java
 int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
-Arrays.binarySearch(arr, 32); // 3
-Arrays.binarySearch(arr, 10); // -2 not found
+Arrays.binarySearch(arr, 32); // => 3
+Arrays.binarySearch(arr, 10); // => -2 (not found)
 ```
 
 ## 面向对象
@@ -233,7 +233,7 @@ void adopt(Animal animal) {
 
 ```java
 final int n;
-n = 10; // 10
+n = 10; // => 10
 n = 20; // ❌ 报错：不能修改 final 变量的值
 ```
 
@@ -444,16 +444,16 @@ enum Season {
   public String getName() { return name; }
 }
 
-Arrays.toString(Season.values()); // [SPRING, SUMMER, AUTUMN, WINTER]
+Arrays.toString(Season.values()); // => [SPRING, SUMMER, AUTUMN, WINTER]
 
-Season.SPRING; // SPRING
-Season.SPRING.toString(); // SPRING
-Season.SPRING.name(); // SPRING
-Season.SPRING.getName(); // spring
+Season.SPRING;             // => SPRING
+Season.SPRING.toString();  // => SPRING
+Season.SPRING.name();      // => SPRING
+Season.SPRING.getName();   // => spring
 
-Season.valueOf("SUMMER"); // SUMMER
+Season.valueOf("SUMMER");  // => SUMMER
 
-Season.WINTER.ordinal(); // 3
+Season.WINTER.ordinal(); // => 3
 ```
 
 枚举实现接口（支持多态）。
