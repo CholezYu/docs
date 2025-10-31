@@ -10,9 +10,9 @@ export default sidebar({
     },
     
     {
-      text: "基础",
-      icon: "module",
-      prefix: "base/",
+      text: "客户端",
+      icon: "chrome",
+      prefix: "client/",
       collapsible: true,
       children: [
         {
@@ -31,24 +31,15 @@ export default sidebar({
           link: "less"
         },
         {
-          text: "Sass",
-          icon: "sass",
-          link: "sass"
-        },
-        {
           text: "JavaScript",
           icon: "javascript",
           link: "javascript"
-        }
-      ]
-    },
-    
-    {
-      text: "核心",
-      icon: "chrome",
-      prefix: "core/",
-      collapsible: true,
-      children: [
+        },
+        {
+          text: "React",
+          icon: "react",
+          link: "react"
+        },
         {
           text: "Vue 3",
           icon: "vue",
@@ -58,11 +49,6 @@ export default sidebar({
           text: "Vue 2",
           icon: "vue",
           link: "vue-history"
-        },
-        {
-          text: "React 18",
-          icon: "react",
-          link: "react"
         },
         {
           text: "Nuxt",
@@ -132,40 +118,6 @@ export default sidebar({
           text: "微信小程序",
           icon: "mini-app",
           link: "mini-app"
-        }
-      ]
-    },
-    
-    {
-      text: "工具库",
-      icon: "plugin",
-      prefix: "tools/",
-      collapsible: true,
-      children: [
-        {
-          text: "VueUse",
-          icon: "vueuse",
-          link: "vueuse"
-        },
-        {
-          text: "ECharts",
-          icon: "echarts",
-          link: "echarts"
-        },
-        {
-          text: "Lodash",
-          icon: "lodash",
-          link: "lodash"
-        },
-        {
-          text: "Dayjs",
-          icon: "dayjs",
-          link: "dayjs"
-        },
-        {
-          text: "Exceljs",
-          icon: "exceljs",
-          link: "exceljs"
         }
       ]
     },

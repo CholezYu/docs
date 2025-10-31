@@ -2,7 +2,7 @@
   "name": "docs",
   "author": "Cholez.Yu",
   "version": "25.10.26",
-  "description": "Cholez Web Docs",
+  "description": "Cholez Docs",
   "license": "MIT",
   "type": "module",
   "packageManager": "yarn@4.3.1",

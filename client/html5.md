@@ -51,13 +51,13 @@ ctx.fillRect(10, 10, 100, 100)
 
 操作 HTML 文档的结构、样式和内容。
 
-[DOM API | JavaScript](/base/javascript.md#dom)
+[DOM API | JavaScript](/client/javascript.md#dom)
 
 ### Fetch
 
 现代网络请求方式。
 
-[Fetch API | Ajax](/core/ajax.md#fetch)
+[Fetch API | Ajax](/client/ajax.md#fetch)
 
 ### History
 

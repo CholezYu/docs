@@ -12,40 +12,23 @@ export default navbar([
     icon: "context",
     children: [
       {
-        text: "基础",
-        prefix: "base/",
+        text: "客户端",
+        prefix: "client/",
         children: [
-          {
-            text: "HTML5",
-            icon: "html",
-            link: "html5"
-          },
-          {
-            text: "CSS",
-            icon: "css",
-            link: "css"
-          },
           {
             text: "JavaScript",
             icon: "javascript",
             link: "javascript"
-          }
-        ]
-      },
-      
-      {
-        text: "核心",
-        prefix: "core/",
-        children: [
+          },
+          {
+            text: "React",
+            icon: "react",
+            link: "react"
+          },
           {
             text: "Vue 3",
             icon: "vue",
             link: "vue"
-          },
-          {
-            text: "React 18",
-            icon: "react",
-            link: "react"
           }
         ]
       },
@@ -58,11 +41,6 @@ export default navbar([
             text: "React Native",
             icon: "react",
             link: "react-native"
-          },
-          {
-            text: "微信小程序",
-            icon: "mini-app",
-            link: "mini-app"
           }
         ]
       },

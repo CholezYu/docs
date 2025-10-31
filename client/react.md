@@ -1,5 +1,5 @@
 ---
-title: React 18
+title: React
 icon: react
 date: 2024-07-16
 description: React

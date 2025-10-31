@@ -266,13 +266,3 @@ uniqWith([...target1, ...target2], isEqual) /* => [
   { id: 2, props }
 ] */
 ```
-
-## 对象方法
-
-
-
-## 字符串方法
-
-
-
-## 函数方法
