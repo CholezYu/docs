@@ -263,11 +263,11 @@ for key, value in enumerate(ls,1):
 def Person(name,country='China'):
   print('name:%s,country:%s'%(name,country))
   Person('Shadow')
-  Person('Minji','Korea')
+  Person('Gareth','China')
   
 """
   输出结果: name: Shadow, country: China
-  输出结果: name: Minji, country: Korea
+  输出结果: name: Gareth, country: China
 """
 ```
 
@@ -276,7 +276,7 @@ def Person(name,country='China'):
 形式为 "形参=实参"
 
 ```python
-Person(name='Minji',country='Korea')
+Person(name='Gareth',country='China')
 ```
 
 位置参数和关键字参数可以混合使用,但位置参数必须在关键字参数之前
