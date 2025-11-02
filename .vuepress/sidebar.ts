@@ -124,7 +124,7 @@ export default sidebar({
     
     {
       text: "服务端",
-      icon: "back-stage",
+      icon: "shell",
       prefix: "server/",
       collapsible: true,
       children: [
