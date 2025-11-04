@@ -525,9 +525,7 @@ thread.start();
 
 #### 实现 Runnable 接口 <Badge text="推荐" type="tip" />
 
-> [!tip]
->
-> 优点：避免单继承限制；可以共享同一个任务对象。
+避免单继承限制，并且可以共享同一个任务对象。
 
 ```java
 class PrintTask implements Runnable {
@@ -542,9 +540,7 @@ thread.start();
 
 #### 实现 Callable 接口 <Badge text="Java 5+" type="tip" />
 
-> [!tip]
->
-> 优点：有返回值；可以抛出异常。适合需要处理结果的任务。
+可以返回结果和抛出异常。适合需要处理结果的任务。
 
 ```java
 class PrintCallable implements Callable<Integer> {
@@ -570,9 +566,7 @@ try {
 
 #### 线程池 <Badge text="推荐" type="tip" />
 
-> [!tip]
->
-> 优点：能够自动管理线程的创建和回收，提高资源利用率；可以控制最大并发数。适合处理大量短任务。
+线程池能够自动管理线程的创建和回收，提高资源利用率。适合处理大量短任务。
 
 ```java
 // 创建一个固定大小的线程池
