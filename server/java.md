@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-10-31
+date: 2025-11-04
 description: Java
 ---
 
@@ -506,3 +506,207 @@ enum Season implements Show {
 - `@Documented`：是否写入 JavaDoc。
 
 - `@Inherited`：子类是否继承父类注解。
+
+## 多线程
+
+### 创建线程
+
+#### 继承 Thread 类
+
+```java
+class PrintThread extends Thread {
+  @Override
+  public void run() {/* 执行线程代码 */}
+}
+
+PrintThread thread = new PrintThread();
+thread.start();
+```
+
+#### 实现 Runnable 接口 <Badge text="推荐" type="tip" />
+
+> [!tip]
+>
+> 优点：避免单继承限制；可以共享同一个任务对象。
+
+```java
+class PrintTask implements Runnable {
+  @Override
+  public void run() {/* 执行线程代码 */}
+}
+
+PrintTask task = new PrintTask();
+Thread thread = new Thread(task);
+thread.start();
+```
+
+#### 实现 Callable 接口 <Badge text="Java 5+" type="tip" />
+
+> [!tip]
+>
+> 优点：有返回值；可以抛出异常。适合需要处理结果的任务。
+
+```java
+class PrintCallable implements Callable<Integer> {
+  @Override
+  public Integer call() throws Exception {
+    int sum = 0;
+    for (int i = 0; i < 10; i++) sum += i;
+    return sum;
+  }
+}
+
+PrintCallable callable = new PrintCallable();
+FutureTask<Integer> futureTask = new FutureTask<>(callable);
+Thread thread = new Thread(futureTask);
+thread.start();
+
+try {
+  futureTask.get(); // 阻塞等待线程执行结果
+} catch (Exception e) {
+  e.printStackTrace();
+}
+```
+
+#### 线程池 <Badge text="推荐" type="tip" />
+
+> [!tip]
+>
+> 优点：能够自动管理线程的创建和回收，提高资源利用率；可以控制最大并发数。适合处理大量短任务。
+
+```java
+// 创建一个固定大小的线程池
+ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+// 设置线程池中线程数的上限
+((ThreadPoolExecutor) executorService).setMaximumPoolSize(50);
+
+executorService.submit(new Runnable() {
+  @Override
+  public void run() {
+    // 线程1执行代码
+  }
+});
+
+executorService.submit(new Runnable() {
+  @Override
+  public void run() {
+    // 线程2执行代码
+  }
+});
+
+// 关闭线程池
+executorService.shutdown();
+```
+
+### 生命周期
+
+- NEW（新建状态），线程对象已创建但 **还未调用** `start()`。
+
+- RUNNABLE（可运行状态），调用 `start()` 后，进入可运行状态，实际上可能 **正在运行** 或 **等待 CPU 调度**。
+
+- BLOCKED（阻塞状态），当线程尝试获取某个 **同步锁** 时，如果锁被别的线程占用，就进入 BLOCKED 状态。
+
+- WAITING（等待状态），无限制等待被其他线程唤醒，比如：
+
+  - `Object.wait()`
+
+  - `Thread.join()`（等待目标线程执行完）
+
+  - `LockSupport.park()`
+
+- TIMED_WAITING（超时等待），与 WAITING 类似，但会在超时后自动唤醒，常见方法：
+
+  - `Thread.sleep(ms)`
+
+  - `Object.wait(ms)`
+
+  - `Thread.join(ms)`
+
+  - `LockSupport.parkNanos()`
+
+  - `LockSupport.parkUntil()`
+
+- TERMINATED（终止状态），当线程的 `run()` 方法执行结束或抛出异常时进入终止状态。
+
+### 线程同步
+
+多个线程同时访问共享数据时，可能会导致 **线程安全问题**（数据不一致）。
+
+使用线程同步，可以解决线程安全问题，避免资源抢占。
+
+#### synchronized 关键字
+
+> [!tip]
+>
+> `synchronized` 本质上是基于 **对象锁**。每个对象都有一把隐式锁。当线程进入 `synchronized` 块时**获得锁**；退出时**释放锁**。其他线程必须等待锁释放才能进入。
+
+同步方法：
+
+- 修饰实例方法（锁住当前对象），同步监视器默认是 `this`。
+
+- 修饰静态方法（锁住类对象），同步监视器默认是 `[ClassName].class`。
+
+```java
+class Counter {
+  private /* static */ int count = 0;
+  
+  public /* static */ synchronized void increment() {
+    count++;
+  }
+}
+```
+
+同步代码块：
+
+- 实现 `Runnable` 接口创建线程，可以直接指定 `this` 作为同步监视器。
+
+- 继承 `Thread` 类创建线程，`this` 可能不是唯一的，需要指定 `[ClassName].class` 作为同步监视器。
+
+```java
+class Counter {
+  private int count = 0;
+  
+  public void increment() {
+    synchronized (this /* Counter.class */) {
+      count++;
+    }
+  }
+}
+```
+
+#### Lock 锁 <Badge text="Java 5+" type="tip" />
+
+Java 5 之后，可以使用显示锁机制。
+
+```java
+class Counter {
+  private int count = 0;
+  
+  private static final ReentrantLock lock = new ReentrantLock();
+  
+  public void increment() {
+    lock.lock(); // 获得锁
+    try {
+      count++;
+    } finally {
+      lock.unlock(); // 一定要释放锁！
+    }
+  }
+}
+```
+
+### 线程通信
+
+Java 提供了多种线程通信机制，其中基本通信机制方法有：
+
+- `wait()` 让当前线程进入等待状态并释放锁。
+
+- `notify()` 唤醒一个等待中的线程（随机）。
+
+- `notifyAll()` 唤醒所有等待中的线程。
+
+> [!important]
+>
+> 必须在 **同步方法或同步代码块** 内调用。
+
