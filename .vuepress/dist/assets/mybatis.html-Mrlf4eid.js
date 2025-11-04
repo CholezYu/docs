@@ -1,1 +1,0 @@
-import{_ as t,o as a,c as s,d as e}from"./app-lSCqWAGx.js";const c={},o=e("h2",{id:"",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#","aria-hidden":"true"},"#")],-1),r=[o];function n(_,d){return a(),s("div",null,r)}const h=t(c,[["render",n],["__file","mybatis.html.vue"]]);export{h as default};
