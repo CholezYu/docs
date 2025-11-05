@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2025-11-04
+date: 2025-11-06
 description: Java
 ---
 
@@ -44,108 +44,6 @@ double d = 12;
 
 int i = d; // ❌ 编译失败
 int i = (int) d; // ✅ 将 double 类型强制转为 int 类型
-```
-
-## 数组
-
-### 遍历数组
-
-一维数组。
-
-```java
-int[] arr = { 1, 2, 3, 4, 5 };
-
-// for 循环
-for (int i = 0; i < arr.length; i++) {
-  System.out.println(arr[i]);
-}
-
-// for-each 循环
-for (int item : arr) {
-  System.out.println(item);
-}
-
-Arrays.toString(arr); // => [1, 2, 3, 4, 5]
-```
-
-二维数组。
-
-```java
-int[][] arr = { { 1, 2, 3 }, { 4, 5 }, { 6, 7, 8, 9 } };
-
-// for 循环
-for (int i = 0; i < arr.length; i++) {
-  System.out.println(Arrays.toString(arr[i]));
-  
-  for (int j = 0; j < arr[i].length; j++) {
-    System.out.println(arr[i][j]);
-  }
-}
-
-// for-each 循环
-for (int[] row : arr) {
-  System.out.println(Arrays.toString(row));
-  
-  for (int item : row) {
-    System.out.println(item);
-  }
-}
-
-Arrays.deepToString(arr); // => [[1, 2, 3], [4, 5], [6, 7, 8, 9]]
-```
-
-使用 Stream <Badge text="Java 8+" type="tip" /> 遍历二维数组。
-
-```java
-Arrays.stream(arr).forEach(row -> {
-  System.out.println(Arrays.toString(row));
-  
-  for (int item : row) {
-    System.out.println(item);
-  }
-});
-```
-
-### Arrays 类
-
-#### .equals
-
-数组元素比较。
-
-```java
-int[] arr1 = { 1, 2, 3, 4, 5 };
-int[] arr2 = { 1, 2, 3, 4, 5 };
-
-arr1 == arr2; // false, 比较的是两个数组的地址值，所以不相等
-Arrays.equals(arr1, arr2); // true, 依次比较两个数组的元素
-```
-
-#### .fill
-
-数组填充。
-
-```java
-int[] arr = { 1, 2, 3, 4, 5 };
-Arrays.fill(arr, 3); // => [3, 3, 3, 3, 3]
-```
-
-#### .sort
-
-快速排序。
-
-```java
-int[] arr = { 34, 53, 3, 2, 65, 7, 34, 5, 76, 34, 67 };
-Arrays.sort(arr); // => [2, 3, 5, 7, 34, 34, 34, 53, 65, 67, 76]
-```
-
-#### .binarySearch
-
-二分查找。
-
-```java
-int[] arr = { 2, 14, 26, 32, 41, 45, 54, 66, 73, 79, 83, 96 };
-Arrays.binarySearch(arr, 32); // => 3
-Arrays.binarySearch(arr, 10); // => -2 (not found)
 ```
 
 ## 面向对象
