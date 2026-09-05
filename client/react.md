@@ -1,7 +1,7 @@
 ---
 title: React
 icon: react
-date: 2024-07-16
+date: 2026-09-05
 description: React
 ---
 
@@ -225,6 +225,28 @@ const delayConsole = () => {
 }
 ```
 
+### useMemo
+
+`useMemo` 类似于 `Vue Computed`，用于缓存一个计算结果，只有当依赖项发生改变时，才会重新计算。
+
+```tsx
+const [count, setCount] = useState(1)
+
+const double = useMemo(() => count * 2, [count]) // 只有当 count 改变时，才会重新计算
+```
+
+### useCallback
+
+`useCallback` 与 `useMemo` 用法相似，用于缓存一个函数。
+
+```tsx
+const [count, setCount] = useState(1)
+
+const showCount = () => console.log(count)
+
+const cachedShowCount = useCallback(showCount, [count]) // 只有当 count 改变时，才会重新创建函数
+```
+
 ### useContext
 
 `useContext` 接受一个 context 对象作为参数，该对象由 `createContext` 创建。并返回一个对象，它包含了 `<Context.Provider>` 组件提供的数据。
@@ -314,28 +336,6 @@ function useReducer<T = any>(
   
   return [state, dispatch]
 }
-```
-
-### useMemo
-
-`useMemo` 类似于 `Vue Computed`，用于缓存一个计算结果，只有当依赖项发生改变时，才会重新计算。
-
-```tsx
-const [count, setCount] = useState(1)
-
-const double = useMemo(() => count * 2, [count]) // 只有当 count 改变时，才会重新计算
-```
-
-### useCallback
-
-`useCallback` 与 `useMemo` 用法相似，用于缓存一个函数。
-
-```tsx
-const [count, setCount] = useState(1)
-
-const showCount = () => console.log(count)
-
-const cachedShowCount = useCallback(showCount, [count]) // 只有当 count 改变时，才会重新创建函数
 ```
 
 ## HOC
