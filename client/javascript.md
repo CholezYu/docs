@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2024-05-11
+date: 2026-09-06
 description: JavaScript
 ---
 
@@ -577,7 +577,7 @@ obj.__proto__ = undefined // 这里注意！不是 null
 
 ### Object.keys
 
-遍历对象，返回对象属性名组成的数组。
+返回对象“键”名组成的数组。
 
 ```js
 Object.keys({ name: "Gareth", age: 20 }) // => ['name', 'age']
@@ -585,7 +585,7 @@ Object.keys({ name: "Gareth", age: 20 }) // => ['name', 'age']
 
 ### Object.values
 
-遍历对象，返回对象属性值组成的数组。
+返回对象“键”值组成的数组。
 
 ```js
 Object.values({ name: "Gareth", age: 20 }) // => ['Gareth', 20]
@@ -593,10 +593,18 @@ Object.values({ name: "Gareth", age: 20 }) // => ['Gareth', 20]
 
 ### Object.entries
 
-遍历对象，返回对象属性名与属性值组成的二维数组。
+返回对象键值对组成的二维数组。
 
 ```js
 Object.entries({ name: "Gareth", age: 20 }) // => [['name', 'Gareth'], ['age', 20]]
+```
+
+### Object.fromEntries
+
+将键值对二维数组转为对象，可以理解为 `Object.entries` 的反向操作。
+
+```js
+Object.fromEntries([['name', 'Gareth'], ['age', 20]]) // =>  { name: "Gareth", age: 20 }
 ```
 
 ### Object.assign
@@ -917,16 +925,6 @@ arr.fill("*")
 arr // => ["*", "*", "*"]
 ```
 
-### .flat
-
-数组扁平化。
-
-```js
-const arr = [1, 2, 3, [4, 5, [6]]]
-
-arr.flat(2) // => [1, 2, 3, 4, 5, 6]
-```
-
 ### .find
 
 遍历数组，返回符合条件的第一个元素。
@@ -945,6 +943,43 @@ arr.find(item => item > 3) // => 5
 const arr = [1, 3, 5, 7, 9]
 
 arr.findIndex(item => item > 3) // => 2
+```
+
+### .flat
+
+数组扁平化。
+
+```js
+const arr = [1, 2, 3, [4, 5, [6]]]
+
+arr.flat(2) // => [1, 2, 3, 4, 5, 6]
+```
+
+### .flatMap
+
+遍历数组并扁平化。相当于调用 `map` 后再调用深度为 1 的 `flat`。
+
+```js
+const arr = [
+  {
+    name: "Alice",
+    age: 42,
+    children: [
+      { name: "Charlie", age: 16 },
+      { name: "Dave", age: 13 }
+    ]
+  },
+  {
+    name: "Bob",
+    age: 36,
+    children: [
+      { name: "Eve", age: 10 }
+    ]
+  }
+]
+
+const children = arr.flatMap(({ children }) => children)
+children // => [{ name: "Charlie", age: 16 }, { name: "Dave", age: 13 }, { name: "Eve", age: 10 }]
 ```
 
 ## 字符串
