@@ -1191,7 +1191,7 @@ let str = "abc"
 str.padEnd(10, "*") // => 'abc*******'
 ```
 
-## 正则
+## 正则表达式
 
 ### 匹配规则
 
@@ -1224,15 +1224,11 @@ str.padEnd(10, "*") // => 'abc*******'
 const reg = /^\S+@[^\s.]+(\.[a-z]+){1,2}$/
 ```
 
-## 正则（ES6+）
-
-
-
-## Set & Map
+## 集合 & 字典
 
 ### Set
 
-set 常用于数组去重。
+Set 常用于数组去重。
 
 ```js
 const arr = [1, 2, 3, 4, 5, 5, 5, 5]
@@ -1241,7 +1237,7 @@ const arr = [1, 2, 3, 4, 5, 5, 5, 5]
 Array.from(new Set(arr)) // => [1, 2, 3, 4, 5]
 ```
 
-向 set 中添加一个元素。
+向 Set 中添加一个元素。
 
 ```js
 const set = new Set()
@@ -1249,7 +1245,7 @@ const set = new Set()
 set.add(1).add(2).add(2) // => Set(2) {1, 2}
 ```
 
-删除 set 中的某个元素。
+删除 Set 中的元素。
 
 ```js
 const set = new Set([1, 2])
@@ -1258,7 +1254,7 @@ set.delete(1) // => true, 表示删除成功
 set // => Set(1) {2}
 ```
 
-判断 set 中是否存在某个元素。
+判断 Set 中是否存在某个元素。
 
 ```js
 const set = new Set([1, 2])
@@ -1270,9 +1266,9 @@ set.has(3) // => false
 
 ### Map
 
-map 与对象的区别就是，map 的 key 可以是任意类型（含引用类型）。
+Map 与对象的区别就是，Map 的 key 可以是任意类型（含引用类型）。
 
-向 map 中添加一个元素。
+向 Map 中添加元素。
 
 ```js
 const map = new Map()
@@ -1280,7 +1276,7 @@ const map = new Map()
 map.set([1, 2 ,3 ], "abc")
 ```
 
-获取 map 中的元素。
+获取 Map 中的元素。
 
 ```js
 const map = new Map()
@@ -1291,7 +1287,7 @@ map.set(fnKey, 1)
 map.get(fnKey) // => 1
 ```
 
-删除 map 中的某个元素。
+删除 Map 中的元素。
 
 ```js
 const map = new Map()
@@ -1307,7 +1303,7 @@ map.delete(arrKey) // => true, 表示删除成功
 map // => Map(1) { { a: 1 } => "f" }
 ```
 
-判断 map 中是否存在某个元素。
+判断 Map 中是否存在某个元素。
 
 ```js
 const map = new Map()
