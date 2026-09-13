@@ -660,6 +660,64 @@ Object.hasOwn(person, "foo") // => false
 
 ## 数组
 
+### .slice
+
+截取数组，返回被截取的部分。
+
+```js
+const arr = [2, 3, 4, 5, 6]
+
+arr.slice(1, 3) // => [3, 4]
+arr.slice(0, arr.length) // => [2, 3, 4, 5, 6]
+arr.slice() // => [2, 3, 4, 5, 6]
+```
+
+### .concat
+
+合并数组，并返回。
+
+```js
+const arr = [2, 3, 4]
+
+arr.concat([5, 6]) // => [2, 3, 4, 5, 6]
+```
+
+### .join
+
+拆分数组，将被拆分的部分组成字符串，并返回。
+
+```js
+const arr = ["h", "e", "l", "l", "o"]
+
+arr.join("") // => "hello"
+arr.join(" ") // => "h e l l o"
+arr.join("") === "" // => false, 判断 arr 是否为空数组
+```
+
+### .indexOf
+
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```js
+const arr = ['a', 'b', 'c', 'd', 'b']
+
+arr.indexOf('b') // => 1
+arr.indexOf('b', 2) // => 4
+arr.indexOf('g') // => -1
+```
+
+### .lastIndexOf
+
+反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```js
+const arr = ['a', 'b', 'c', 'd', 'b']
+
+arr.lastIndexOf('b') // => 4
+arr.lastIndexOf('b', -2) // => 1
+arr.lastIndexOf('g') // => -1
+```
+
 ### .push
 
 向数组尾部添加元素，返回新数组的长度。
@@ -742,6 +800,18 @@ arr.splice(1, 3, 7, 8, 9) // => [3, 4, 5]
 arr // => [2, 7, 8, 9, 6]
 ```
 
+### .reverse
+
+反转数组中的元素。
+
+```js
+const arr = [1, 2, 3, 4, 5]
+
+arr.reverse()
+
+arr // => [5, 4, 3, 2, 1]
+```
+
 ### .sort
 
 将元素按 UTF-16 升序排列。可以传入比较函数进行排序。
@@ -756,76 +826,6 @@ const arr = [
 arr.sort((a, b) => a.age - b.age)
 
 arr // => [{ name: "Alice", age: 16 }, { name: "Bob", age: 18 }, { name: "Charlie", age: 25 }]
-```
-
-### .reverse
-
-反转数组中的元素。
-
-```js
-const arr = [1, 2, 3, 4, 5]
-
-arr.reverse()
-
-arr // => [5, 4, 3, 2, 1]
-```
-
-### .slice
-
-截取数组，返回被截取的部分。
-
-```js
-const arr = [2, 3, 4, 5, 6]
-
-arr.slice(1, 3) // => [3, 4]
-arr.slice(0, arr.length) // => [2, 3, 4, 5, 6]
-arr.slice() // => [2, 3, 4, 5, 6]
-```
-
-### .concat
-
-合并数组，并返回。
-
-```js
-const arr = [2, 3, 4]
-
-arr.concat([5, 6]) // => [2, 3, 4, 5, 6]
-```
-
-### .join
-
-拆分数组，将被拆分的部分组成字符串，并返回。
-
-```js
-const arr = ["h", "e", "l", "l", "o"]
-
-arr.join("") // => "hello"
-arr.join(" ") // => "h e l l o"
-arr.join("") === "" // => false, 判断 arr 是否为空数组
-```
-
-### .indexOf
-
-查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-const arr = ['a', 'b', 'c', 'd', 'b']
-
-arr.indexOf('b') // => 1
-arr.indexOf('b', 2) // => 4
-arr.indexOf('g') // => -1
-```
-
-### .lastIndexOf
-
-反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-const arr = ['a', 'b', 'c', 'd', 'b']
-
-arr.lastIndexOf('b') // => 4
-arr.lastIndexOf('b', -2) // => 1
-arr.lastIndexOf('g') // => -1
 ```
 
 ### .forEach
@@ -984,30 +984,6 @@ children // => [{ name: "Charlie", age: 16 }, { name: "Dave", age: 13 }, { name:
 
 ## 字符串
 
-### .indexOf
-
-查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-let str = "hello world hello world"
-
-str.indexOf("world") // => 6
-str.indexOf("world", 10) // => 18
-str.indexOf("woood") // => -1
-```
-
-### .lastIndexOf
-
-反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-let str = "hello world hello world"
-
-str.lastIndexOf("world") // => 18
-str.lastIndexOf("world", 10) // => 6
-str.indexOf("woood") // => -1
-```
-
 ### .slice
 
 截取字符串，返回被截取的部分。
@@ -1048,26 +1024,6 @@ str.substr(6, 3) // => 'wor'
 str.substr(3) // => 'lo world'
 ```
 
-### .toUpperCase
-
-将字符串转为大写，并返回。
-
-```js
-let str = "I love JavaScript"
-
-str.toUpperCase() // => 'I LOVE JAVASCRIPT'
-```
-
-### .toLowerCase
-
-将字符串转为小写，并返回。
-
-```js
-let str = "I love JavaScript"
-
-str.toLowerCase() // => 'i love javascript'
-```
-
 ### .split
 
 拆分字符串，将被拆分的部分组成数组，并返回。
@@ -1084,6 +1040,30 @@ str.split(" ") // => ['hello', 'world']
 let str = "fdaf123fdsa12321fdas123fda"
 
 str.split(/\d+/) // => ['fdaf', 'fdsa', 'fdas', 'fda']
+```
+
+### .indexOf
+
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```js
+let str = "hello world hello world"
+
+str.indexOf("world") // => 6
+str.indexOf("world", 10) // => 18
+str.indexOf("woood") // => -1
+```
+
+### .lastIndexOf
+
+反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```js
+let str = "hello world hello world"
+
+str.lastIndexOf("world") // => 18
+str.lastIndexOf("world", 10) // => 6
+str.lastIndexOf("woood") // => -1
 ```
 
 ### .search
@@ -1123,6 +1103,26 @@ str.replace(/-/g, ":") // => '18:31:56'
 let str = "html and css"
 
 str.replace(/html|css/g, value => value.toUpperCase()) // => 'HTML and CSS'
+```
+
+### .toUpperCase
+
+将字符串转为大写，并返回。
+
+```js
+let str = "I love JavaScript"
+
+str.toUpperCase() // => 'I LOVE JAVASCRIPT'
+```
+
+### .toLowerCase
+
+将字符串转为小写，并返回。
+
+```js
+let str = "I love JavaScript"
+
+str.toLowerCase() // => 'i love javascript'
 ```
 
 ## 字符串（ES6+）
