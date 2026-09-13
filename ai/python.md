@@ -143,7 +143,6 @@ print(g(20))  # 即print(outer(50)(20))
 ls = [2, 3, 4]
 
 ls.push(5)
-
 ls  # => [2, 3, 4, 5]
 ```
 
@@ -155,7 +154,6 @@ ls  # => [2, 3, 4, 5]
 ls = [2, 3, 4]
 
 ls.extend([5, 6])
-
 ls  # => [2, 3, 4, 5, 6]
 ```
 
@@ -167,7 +165,6 @@ ls  # => [2, 3, 4, 5, 6]
 ls = [2, 3, 4]
 
 ls.insert(1, 5)
-
 ls  # => [2, 5, 3, 4]
 ```
 
@@ -179,7 +176,6 @@ ls  # => [2, 5, 3, 4]
 ls = [2, 3, 4]
 
 ls.pop(1)
-
 ls  # => [2, 4]
 ```
 
@@ -191,7 +187,6 @@ ls  # => [2, 4]
 ls = [2, 3, 4]
 
 ls.remove(2)
-
 ls  # => [3, 4]
 ```
 
@@ -203,7 +198,6 @@ ls  # => [3, 4]
 ls = [2, 3, 4]
 
 ls.clear()
-
 ls  # => []
 ```
 
@@ -215,7 +209,6 @@ ls  # => []
 ls = [2, 3, 4]
 
 ls.reverse()
-
 ls  # => [4, 3, 2]
 ```
 
@@ -235,7 +228,6 @@ ls = [
 ]
 
 ls.sort(key=cmp_to_key(compare))
-
 ls  #  => [{'name': 'Alice', 'age': 18}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 16}]
 ```
 
@@ -255,7 +247,6 @@ t[2] = 6  # TypeError: 'tuple' object does not support item assignment
 t = ([1, 2, 3], [3, 2, 1])
 
 t[1].sort()
-
 t  # => ([1, 2, 3], [1, 2, 3])
 ```
 
