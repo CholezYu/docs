@@ -694,30 +694,6 @@ arr.join(" ") // => "h e l l o"
 arr.join("") === "" // => false, 判断 arr 是否为空数组
 ```
 
-### .indexOf
-
-查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-const arr = ['a', 'b', 'c', 'd', 'b']
-
-arr.indexOf('b') // => 1
-arr.indexOf('b', 2) // => 4
-arr.indexOf('g') // => -1
-```
-
-### .lastIndexOf
-
-反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```js
-const arr = ['a', 'b', 'c', 'd', 'b']
-
-arr.lastIndexOf('b') // => 4
-arr.lastIndexOf('b', -2) // => 1
-arr.lastIndexOf('g') // => -1
-```
-
 ### .push
 
 向数组尾部添加元素，返回新数组的长度。
@@ -1088,7 +1064,7 @@ str.match(/[0-9]+/g) // => [1, 2, 666]
 
 ### .replace
 
-替换（首次）匹配的元素。
+替换（首次）匹配的元素，并返回。
 
 ```js
 let str = "18-31-56"
@@ -1150,7 +1126,7 @@ str.repeat(3) // => 'abcabcabc'
 
 ### .replaceAll
 
-替换所有匹配的元素。
+替换所有匹配的元素，并返回。
 
 ```js
 let str = "18-31-56"
