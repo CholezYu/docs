@@ -207,6 +207,18 @@ ls.clear()
 ls  # => []
 ```
 
+### .reverse
+
+反转列表中的元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.reverse()
+
+ls  # => [4, 3, 2]
+```
+
 ### .sort
 
 将元素按 Unicode 升序排列，可以指定比较函数进行排序。
@@ -225,18 +237,6 @@ ls = [
 ls.sort(key=cmp_to_key(compare))
 
 ls  #  => [{'name': 'Alice', 'age': 18}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 16}]
-```
-
-### .reverse
-
-反转列表中的元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.reverse()
-
-ls  # => [4, 3, 2]
 ```
 
 ## 元组
@@ -403,6 +403,140 @@ d=dict({'one':1, 'two':2, 'three':3})
 　　　　　　　　print(key,value)
 　　　　　　输出结果:sno 181
 　　　　　　　　　　 name lxm
+```
+
+## 字符串
+
+### .split
+
+拆分字符串，将被拆分的部分组成列表，并返回。
+
+```python
+s = "hello world"
+
+s.split()  # => ['hello', 'world']
+s.split("")  # ValueError: empty separator
+s.split(" ")  # => ['hello', 'world']
+```
+
+### .join
+
+> [!tip]
+>
+> 与 JS 用法相反，`["a", "b", "c"].join(", ")`。
+
+```python
+s = ", "
+
+s.join(["hello", "world"])  # => 'hello, world'
+```
+
+### .find
+
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```python
+s = "hello world hello world"
+
+s.find("world")  # => 6
+s.find("world", 10)  # => 18
+s.find("woood")  # => -1
+```
+
+### .rfind
+
+反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```python
+s = "hello world hello world"
+
+s.rfind("world")  # => 18
+s.rfind("world", 2, 12)  # => 6
+s.rfind("woood")  # => -1
+```
+
+### .replace
+
+替换匹配的元素，并返回。
+
+```python
+s = "18-31-56"
+ 
+# 默认替换所有匹配项
+s.replace("-", ":")  # => '18:31：56'
+
+# 指定替换的次数
+s.replace("-", ":", 1)  # => '18:31-56'
+```
+
+### .strip
+
+移除字符串两边的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.strip("-")  # => 'hello world'
+```
+
+### .lstrip
+
+移除字符串首部的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.lstrip("-")  # => 'hello world---'
+```
+
+### .rstrip
+
+移除字符串尾部的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.rstrip("-")  # => '---hello world'
+```
+
+### .upper
+
+将字符串转为大写，并返回。
+
+```python
+s = "I love Python"
+
+s.upper()  # => 'I LOVE PYTHON'
+```
+
+### .lower
+
+将字符串转为小写，并返回。
+
+```python
+s = "I love Python"
+
+s.lower()  # => 'i love python'
+```
+
+### .swapcase
+
+将字符串大写转为小写，小写转为大写，并返回。
+
+```python
+s = "I love Python"
+
+s.swapcase()  # => 'i LOVE pYTHON'
+```
+
+### .capitalize
+
+将字符串首字符转为大写，其他字符转为小写，并返回。
+
+```python
+s = "I love Python"
+
+s.capitalize()  # => 'I love python'
 ```
 
 ## 模块
@@ -746,126 +880,6 @@ Sum=NewSum # 将NewSum赋给Sum,再调用Sum函数则执行NewSum函数
 　　　　　　　　　　 第3个元素:6
 　　　　　　　　　　 第4个元素:24
 　　　　　　　　　　 第5个元素:120
-```
-
-## 字符串的常用方法
-
-```
- 字符串创建
-　　　　单引号和双引号的字符串中,\表示续行,\n表示换行
-
- 字符串比较
-　　　　通过ASCⅡ码值比较
-　　　　若字符相同,则较长字符串更大
-　　　　若完全一样,则两字符串相等
-　　　　使用< > ==比较,返回布尔值
-
- 字符串切割
-　　　　字符串名.split(sep=None,maxsplit=-1)
-　　　　　　sep是指定的分隔符,默认值为None(空格、换行、制表符)
-　　　　　　maxsplit为最大切割次数,默认值为-1(不限)
-　　　　　　　　s1='It is a book'
-　　　　　　　　ls1=s1.split()  # 输出:['It','is','a','book']
-　　　　　　　　s2='Python##Java##PHP'
-　　　　　　　　ls2=s2.split('##')  # 输出:['Python','Java','PHP']
-　　　　　　　　ls3=s2.split('##',1)  # 输出:['Python','Java##PHP']
-　　　　字符串名.splitlines([keepends])  # 固定以'\r' '\n' '\r\n'作为分隔符切割
-　　　　　　keepends表示是否保留行结束符(默认值为False,不保留)
-　　　　　　　　s='hello\nwelcome\r\ngood luck\r'
-　　　　　　　　ls1=s.splitlines()  # 输出:['hello','welcome','good luck']
-　　　　　　　　ls2=s.splitlines(True)  # 输出:['hello\n','welcome\r\n','good luck\r']
-　　　　不会修改原字符串
-
- 字符串检索
-　　　　字符串名.find(sub,start,end)  # 返回sub第一次出现的位置,检索不到返回-1
-　　　　字符串名.rfind(sub,start,end)  # 返回sub最后一次出现的位置,检索不到返回-1
-　　　　字符串名.index(sub,start,end)  # 与find作用相同,检索不到引发ValueError异常
-　　　　字符串名.rindex(sub,start,end)  # 与rfind作用相同,检索不到引发ValueError异常
-
- 字符串替换
-　　　　字符串名.replace(old,new,max)  # old替换为new,max表示替换次数上限,不指定则无上限
-　　　　不会修改原字符串
-
- 字符串空格的去除
-　　　　字符串名.strip()  # 去除字符串头部和尾部的空格
-　　　　字符串名.lstrip()  # 去除字符串头部的空格
-　　　　字符串名.rstrip()  # 去除字符串尾部的空格
-　　　　若要去除字符串中其他位置空格,则用字符串替换的方法  # 字符串名.replace(' ','')
-　　　　不会修改原字符串
-
- 字符串大小写转换
-　　　　字符串名.capitalize()  # 首字母大写,其他字母小写
-　　　　字符串名.lower()  # 所有字母小写
-　　　　字符串名.upper()  # 所有字母大写
-　　　　字符串名.swapcase()  # 大写字母变小写,小写字母变大写
-　　　　不会修改原字符串
-
- 字符串复制
-　　　　直接用赋值运算符=复制
-　　　　　　s1='a'
-　　　　　　s2='b'
-　　　　　　print(s1,s2)  # 输出:a b
-　　　　　　s1='c'
-　　　　　　print(s1,s2)  # 输出:c b
-
- 字符串连接
-　　　　通过拼接运算+连接
-　　　　str.join(seq)  # str为字符串元素,作为连接符  seq为序列对象,序列中为字符串元素
-　　　　　　s1=' '  # 空格字符串
-　　　　　　s2=','  # 逗号字符串
-　　　　　　s3=''  # 空字符串
-　　　　　　ls=['I','like','Python']
-　　　　　　print(s1.join(ls))  # 输出:I like Python
-　　　　　　print(s2.join(ls))  # 输出:I,like,Python
-　　　　　　print(s3.join(ls))  # 输出:IlikePython
-
- 获取字符串长度
-　　　　len(字符串名)  # 获取字符串中包含的元素数量
-
- 测试字符串的组成部分
-　　　　用in运算符判断A是否为B的子串
-　　　　　　s='cat dog cat'
-　　　　　　print('cat' in s)  # 输出:True
-　　　　　　print('mouse' in s)  # 输出:False
-```
-
-## 占位符和format方法
-
-```
- 占位符
-　　　　%d或%i  # 有符号整型十进制数
-　　　　%o  # 有符号八进制数
-　　　　%x  # 有符号十六进制数(字母小写)
-　　　　%X  # 有符号十六进制数(字母大写)
-　　　　%e  # 指数格式浮点数(字母小写)
-　　　　%E  # 指数格式浮点数(字母大写)
-　　　　%f或%F  # 有符号浮点型十进制数
-　　　　%g  # 浮点数(根据数值大小采用%e或%f)
-　　　　%G  # 浮点数(根据数值大小采用%E或%f)
-　　　　%c  # 单个字符(整型或单个字符的字符串)
-　　　　%r  # 字符串(使用repr函数进行对象转换)
-　　　　%s  # 字符串(使用str函数进行对象转换)
-　　　　%a  # 字符串(使用ascii函数进行对象转换)
-　　　　%%  # 表示一个百分号
-
- format方法
-　　　　字符串名.format(*args,**kwargs)
-　　　　　　s1='{0}的计算机成绩是{1},{0}的数学成绩是{2}'  # {}中为索引值
-　　　　　　s2='{name}的计算机成绩是{a},{name}的数学成绩是{b}'  # {}中为自定义名
-　　　　　　print(s1.format('李晓明',90,85))
-　　　　　　　　# 输出:李晓明的计算机成绩是90,李晓明的数学成绩是85
-　　　　　　print(s2.format(a=90,b=85,name='李晓明'))
-　　　　　　　　# 输出:李晓明的计算机成绩是90,李晓明的数学成绩是85
-　　　　字符串替换字段中可以包含对实参属性的访问
-　　　　　　class Student:
-　　　　　　　　def __init__(self,name,cs):
-　　　　　　　　　　self.name=name
-　　　　　　　　　　self.cs=cs
-　　　　　　s=Student('李晓明',90)
-　　　　　　s1='{0.name}的计算机成绩是{0.cs}'
-　　　　　　s2='{stu.name}的计算机成绩是{stu.cs}'
-　　　　　　print(s1.format(s))  # 李晓明的计算机成绩是90
-　　　　　　print(s2.format(stu=s))  # 李晓明的计算机成绩是90
 ```
 
 ## turtle
