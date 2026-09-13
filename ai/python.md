@@ -235,15 +235,16 @@ ls  # => []
 def compare(a, b):
     return a["age"] - b["age"]
 
+
 ls = [
-    { "name": "张三", "age": 18 },
-    { "name": "李四", "age": 25 },
-    { "name": "王五", "age": 16 }
+    { "name": "Alice", "age": 18 },
+    { "name": "Bob", "age": 25 },
+    { "name": "Charlie", "age": 16 }
 ]
 
 ls.sort(key=cmp_to_key(compare))
 
-ls  #  => [{ "name": "王五", "age": 16 }, { "name": "张三", "age": 18 }, { "name": "李四", "age": 25 }]
+ls  #  => [{'name': 'Alice', 'age': 18}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 16}]
 ```
 
 ### .reverse
