@@ -748,14 +748,14 @@ arr // => [2, 7, 8, 9, 6]
 
 ```js
 const arr = [
-  { name: "张三", age: 18 },
-  { name: "李四", age: 25 },
-  { name: "王五", age: 16 }
+  { name: "Alice", age: 18 },
+  { name: "Bob", age: 25 },
+  { name: "Charlie", age: 16 }
 ]
 
 arr.sort((a, b) => a.age - b.age)
 
-arr // => [{ name: "王五", age: 16 }, { name: "张三", age: 18 }, { name: "李四", age: 25 }]
+arr // => [{ name: "Alice", age: 16 }, { name: "Bob", age: 18 }, { name: "Charlie", age: 25 }]
 ```
 
 ### .reverse
