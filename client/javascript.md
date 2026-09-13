@@ -702,7 +702,6 @@ arr.join("") === "" // => false, 判断 arr 是否为空数组
 const arr = [2, 3, 4]
 
 arr.push(5, 6)
-
 arr // => [2, 3, 4, 5, 6]
 ```
 
@@ -714,7 +713,6 @@ arr // => [2, 3, 4, 5, 6]
 const arr = [1, 2, 3, 4, 5]
 
 arr.pop()
-
 arr // => [1, 2, 3, 4]
 ```
 
@@ -726,7 +724,6 @@ arr // => [1, 2, 3, 4]
 const arr = [2, 3, 4]
 
 arr.unshift(1)
-
 arr // => [1, 2, 3, 4]
 ```
 
@@ -738,7 +735,6 @@ arr // => [1, 2, 3, 4]
 const arr = [1, 2, 3, 4, 5]
 
 arr.shift()
-
 arr // => [2, 3, 4, 5]
 ```
 
@@ -752,7 +748,6 @@ arr // => [2, 3, 4, 5]
 const arr = [2, 3, 4, 5, 6]
 
 arr.splice(1, 0, 7, 8, 9) // => []
-
 arr // => [2, 7, 8, 9, 3, 4, 5, 6]
 ```
 
@@ -762,7 +757,6 @@ arr // => [2, 7, 8, 9, 3, 4, 5, 6]
 const arr = [2, 3, 4, 5, 6]
 
 arr.splice(1, 2) // [3, 4]
-
 arr // => [2, 5, 6]
 ```
 
@@ -772,7 +766,6 @@ arr // => [2, 5, 6]
 const arr = [2, 3, 4, 5, 6]
 
 arr.splice(1, 3, 7, 8, 9) // => [3, 4, 5]
-
 arr // => [2, 7, 8, 9, 6]
 ```
 
@@ -784,7 +777,6 @@ arr // => [2, 7, 8, 9, 6]
 const arr = [1, 2, 3, 4, 5]
 
 arr.reverse()
-
 arr // => [5, 4, 3, 2, 1]
 ```
 
@@ -800,7 +792,6 @@ const arr = [
 ]
 
 arr.sort((a, b) => a.age - b.age)
-
 arr // => [{ name: "Alice", age: 16 }, { name: "Bob", age: 18 }, { name: "Charlie", age: 25 }]
 ```
 
@@ -821,9 +812,7 @@ arr.forEach(item => item) // => 4 9 16 25
 ```js
 const arr = [4, 9, 16, 25]
 
-const newArr = arr.filter(item => item > 12)
-
-newArr // => [16, 25]
+arr.filter(item => item > 12) // => [16, 25]
 ```
 
 ### .map
@@ -833,9 +822,7 @@ newArr // => [16, 25]
 ```js
 const arr = [4, 9, 16, 25]
 
-const newArr = arr.map(item => Math.sqrt(item))
-
-newArr // => [2, 3, 4, 5]
+arr.map(item => Math.sqrt(item)) // => [2, 3, 4, 5]
 ```
 
 ### .reduce
@@ -845,9 +832,7 @@ newArr // => [2, 3, 4, 5]
 ```js
 const arr = [4, 9, 16, 25]
 
-const total = arr.reduce((prev, item) => prev + item, 1)
-
-total // => 55 (1 + 4 + 9 + 16 + 25)
+arr.reduce((prev, item) => prev + item, 1) // => 55 (1 + 4 + 9 + 16 + 25)
 ```
 
 ## 数组（ES6+）
@@ -897,7 +882,6 @@ arr.includes(9) // => false
 const arr = [1, 2, 3]
 
 arr.fill("*")
-
 arr // => ["*", "*", "*"]
 ```
 
