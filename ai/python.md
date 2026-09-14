@@ -1,7 +1,7 @@
 ---
 title: Python
 icon: python
-date: 2026-09-13
+date: 2026-09-15
 description: Python
 ---
 
@@ -252,148 +252,231 @@ t  # => ([1, 2, 3], [1, 2, 3])
 
 ## 集合
 
-集合中可以包含多个元素，且元素类型可以不同
+### .add
 
-集合中各元素无序，不允许有相同元素
+向集合中添加一个元素。
 
-集合中的元素必须是不可变类型
+```python
+s = { "2", "3", "4" }
 
-集合主要用于做并、交、差等集合运算，以及基于集合进行元素的快速检索
-
-`set()` 创建集合
-
-不能使用 `[]` 访问
-
-> 创建空集合只能使用 `set()`，使用 `{}` 创建的是空字典
-
+s.add("5")
+s  # => {'2', '4', '5', '3'}
 ```
- 集合的创建
-　　　　使用{}创建集合(空集合不能用{}创建)
-　　　　使用内置方法set()创建集合  # 只能为一个参数,且参数可迭代
-　　　　集合无序,且不能包含相同的元素
 
- 插入集合元素
-　　　　集合名.add(x)  # 把x作为一个新的元素插入到集合中(x必须是可哈希对象)
-　　　　集合名.update(x)  # 把x拆分成多个元素后插入到集合中(x必须是可迭代对象)
+### .update
 
- 集合的运算
-　　　　交集
-　　　　s1.intersection(s2)  # 计算s1和s2的交集并返回,不会修改s1和s2本身的值
+将一个可迭代对象中的元素添加到集合中。
 
-　　　　并集
-　　　　s1.union(s2)  # 计算s1和s2的并集并返回,不会修改s1和s2本身的值
+```python
+s = { "2", "3", "4" }
 
-　　　　差集
-　　　　s1.difference(s2)  # 计算s1和s2的差集并返回,不会修改s1和s2本身的值
+s.update(["5", "6"])
+s  # => {'3', '2', '6', '5', '4'}
+```
 
-　　　　对称差集
-　　　　s1.symmetric_difference(s2)  # 计算s1和s2的对称差集并返回,不会修改s1和s2本身的值
+### .remove
 
-　　　　子集
-　　　　s1.issubset(s2)  # 判断s1是否为s2的子集
+移除集合中的指定元素，不存在则报错。
 
-　　　　父集
-　　　　s1.issuperset(s2)  # 判断s1是否为s2的父集
+```python
+s = { "2", "3", "4" }
+
+s.remove("5")  # KeyError: 5
+
+s.remove("3")
+s  # => {'2', '4'}
+```
+
+### .discard
+
+移除集合中的指定元素，不存在不会报错。
+
+```python
+s = { "2", "3", "4" }
+
+s.discard("5")  # 不会报错
+s  # => {'3', '4', '2'}
+
+s.discard("3")
+s  # => {'2', '4'}
+```
+
+### .pop
+
+随机删除集合中的一个元素，返回被删除的元素。
+
+```python
+s = { "2", "3", "4" }
+
+r = s.pop()
+r  # => '4'
+s  # => {'2', '3'}
+```
+
+### .clear
+
+清空集合。
+
+```python
+s = { "2", "3", "4" }
+
+s.clear()
+s  # => set()
+```
+
+### .intersection
+
+计算两个集合的交集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.intersection(s2)  # => {3, 4}
+s1 & s1  # => {3, 4}
+```
+
+### .union
+
+计算两个集合的并集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.union(s2)  # => {1, 2, 3, 4, 5, 6}
+s1 | s2  # => {1, 2, 3, 4, 5, 6}
+```
+
+### .difference
+
+计算两个集合的差集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.difference(s2)  # => {1, 2}
+s1 - s2  # => {1, 2}
+
+s2.difference(s1)  # => {5, 6}
+s2 - s1  # => {5, 6}
+```
+
+### .symmetric_difference
+
+计算两个集合的对称差集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.symmetric_difference(s2)  # => {1, 2, 5, 6}
+s1 ^ s2  # => {1, 2, 5, 6}
+```
+
+### .issubset
+
+判断集合是否为另一个集合的子集。
+
+```python
+s1 = { 1, 2, 3 }
+s2 = { 1, 2, 3, 4, 5 }
+
+s1.issubset(s2)  # => True
+s1 <= s2  # => True
+```
+
+### .issuperset
+
+判断集合是否为另一个集合的超集（父集）。
+
+```python
+s1 = { 1, 2, 3, 4, 5 }
+s2 = { 1, 2, 3 }
+
+s1.issuperset(s2)  # => True
+s1 >= s2  # => True
+```
+
+### .isdisjoint
+
+判断两个集合是否**无**交集。
+
+```python
+s1 = { 1, 2, 3 }
+s2 = { 4, 5, 6 }
+
+s1.isdisjoint(s2)  # => True
 ```
 
 ## 字典
 
-无序，每个元素是一个键值对
+### .get
 
-不同元素的键不能相同
-
-键必须是不可变类型，值可以是任意类型
-
-`dict()` 创建字典
+访问字典中的元素。
 
 ```python
-# 赋值表达式
-a=dict(one=1, two=2, three=3)
+person = { "name": "Alice", "age": 25 }
 
-# zip函数(参数是多个可迭代对象)
-b=dict(zip(['one', 'two', 'three'], [1,2,3]))
-
-# 元组类型元素的列表,每个元组包含两个元素
-c=dict([('one',1), ('two',2), ('three',3)])
-
-# 已有的字典
-d=dict({'one':1, 'two':2, 'three':3})
+person.get("age")  # => 25
+person.get("email")  # => None
+person.get("email", "N/A")  # => 'N/A'，设置默认值
 ```
 
-不能使用下标 `[]` 访问
+也可以通过“键”访问。
 
-`dict[key])` 访问字典
+```python
+person = { "name": "Alice", "age": 25 }
 
-> 数字、字符串、元组为不可变类型(可哈希)
->
-> 列表、集合、字典为可变类型(不可哈希)
-
+person["name"]  # => 'Alice'
+person["email"]  # KeyError: 'email'
 ```
- 字典的创建
-　　　　使用{}创建字典
-　　　　使用内置方法dict()创建字典
-　　　　字典无序,且不能包含键相同的元素
 
- 初始化字典元素
-　　　　字典名.fromkeys(一个包含字典键名的序列,一个指定各元素初始值的参数(默认值为None))
-　　　　　　若字典对象已有其他元素,则调用fromkeys方法后原有元素都会被清除
-　　　　　　　　d1=dict(age=18)
-　　　　　　　　d2=d1.fromkeys(['sno','name'],'Unknown')
-　　　　　　　　print(d1)  # 输出:{'age':18}
-　　　　　　　　print(d2)  # 输出:{'sno':'Unknown','name':'Unknown'}
+### .update
 
- 字典元素的修改和插入
-　　　　修改键对应的元素值时,若键在字典中不存在,则会插入一个新元素
-　　　　字典名.['键名']='修改后对应的值'
-　　　　　　stu['sno']='181'  # 将键为'sno'的元素的值修改为'181'
-　　　　字典1.update(字典2)  # 用字典2的元素修改或插入字典1的元素
-　　　　字典名.update(键1=值1,键2=值2...)
+修改字典中元素的值，如果不存在则添加元素。
 
- 字典元素的删除
-　　　　del 字典名['age']  # 删除字典中键为'age'的元素
-　　　　字典名.pop('key','default')  # 删除字典中键为key的元素并返回该元素的值
-　　　　　　若字典中不存在key元素,则返回default参数的值
+```python
+person = { "name": "Alice", "age": 25 }
 
- 字典的浅拷贝
-　　　　字典名.copy()  # 对字典进行浅拷贝得到一个新字典并返回
-　　　　　　若字典中包含可变类型的元素,则修改该元素时,新字典中可变类型的元素也会发生改变
+person.update({ "city": "California" })
+person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
 
- 字典的深拷贝
-　　　　copy.deepcopy(字典名)  # 对字典进行深拷贝得到一个新字典并返回
-　　　　　　深拷贝使原有字典与新字典对象完全独立
+person.update(age=27)
+person  # => {'name': 'Alice', 'age': 27, 'city': 'California'}
+```
 
- 判断字典中是否存在键
-　　　　字典名.get('key','default'(默认值为None))
-　　　　　　从字典中获取键为key的元素值并返回,若不存在key元素,则返回default参数的值
-　　　　关键字in
+也可以通过“键”访问后直接修改或添加元素。
 
- 字典的拼接
-　　　　dMerge=dict(d1,**d2)
-　　　　dMerge=d1.copy()　　dMerge.update(d2)
-　　　　　　dMerge为保存数据的对象
+```python
+person = { "name": "Alice", "age": 25 }
 
- 获取字典中元素个数
-　　　　len(字典名)  # 获取字典中包含的元素数量
+person["city"] = "California"
+person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
+```
 
- 清除字典中所有元素
-　　　　字典名.clear()
+### .pop
 
- 获取字典中键集合
-　　　　字典名.keys()  # 返回一个包含字典中所有键的对象
-　　　　　　d=dict(sno='181',name='lxm')
-　　　　　　print(d.keys())  # 输出:dict_keys(['sno','name'])
+删除字典中的元素，返回被删除的元素。
 
- 获取字典中值集合
-　　　　字典名.values()  # 返回一个包含字典中所有值的对象
-　　　　　　与获取字典中键集合示例类似
+```python
+person = { "name": "Alice", "age": 25, "city": "California" }
 
- 获取字典中元素组
-　　　　字典名.items()  # 返回一个可按(键,值)方式遍历的对象
-　　　　　　d=dict(sno='181',name='lxm')
-　　　　　　for key,value in d.items():
-　　　　　　　　print(key,value)
-　　　　　　输出结果:sno 181
-　　　　　　　　　　 name lxm
+age = person.pop("age")
+age  # => 25
+person  # => {'name': 'Alice', 'city': 'California'}
+```
+
+### .clear
+
+清空字典。
+
+```python
+person = { "name": "Alice", "age": 25, "city": "California" }
+
+person.clear()
+person  # => None
 ```
 
 ## 字符串
