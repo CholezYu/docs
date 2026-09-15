@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2026-09-13
+date: 2026-09-16
 description: JavaScript
 ---
 
@@ -13,7 +13,7 @@ description: JavaScript
 
 - 判定为 true：其余数据。
 
-## 强制转换原理
+## 类型转换
 
 ### Number()
 
