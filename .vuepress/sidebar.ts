@@ -187,7 +187,7 @@ export default sidebar({
     },
     
     {
-      text: "人工智能",
+      text: "大模型",
       icon: "ai",
       prefix: "ai/",
       collapsible: true,
