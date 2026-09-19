@@ -374,12 +374,12 @@ function Person(name, age) {
   this.age = age
 }
 
-const person = new Person("Gareth", 20)
+const person = new Person("Alice", 20)
 
 // 等同于
 const person = {}
 person.__proto__ = Person.prototype
-Person.call(person, "Gareth", 20)
+Person.call(person, "Alice", 20)
 ```
 
 ### instanceof 关键字
@@ -443,11 +443,11 @@ Object.getPrototypeOf(obj) // => null
 
 ```js
 const person = Object.create(null, {
-	name: { value: "Gareth", enumerable: true },
-	sex: { value: "male" }
+	name: { value: "Alice", enumerable: true },
+	sex: { value: "female" }
 })
 
-person // => { name: "Gareth", sex: "male" }
+person // => { name: "Alice", sex: "female" }
 ```
 
 ### Object.defineProperty
@@ -455,14 +455,14 @@ person // => { name: "Gareth", sex: "male" }
 使用属性描述符为对象定义或修改一个属性。
 
 ```js
-const person = { name: "Gareth" }
+const person = { name: "Alice" }
 
 Object.defineProperty(person, "age", {
   value: 20,
   enumerable: true
 })
 
-person // => { name: "Gareth", age: 20 }
+person // => { name: "Alice", age: 20 }
 ```
 
 ### Object.defineProperties
@@ -470,14 +470,14 @@ person // => { name: "Gareth", age: 20 }
 使用属性描述符为对象定义或修改多个属性。
 
 ```js
-const person = { name: "Gareth" }
+const person = { name: "Alice" }
 
 Object.defineProperties(person, {
   age: { value: 20, enumerable: true },
-  sex: { value: "male", enumerable: true }
+  sex: { value: "female", enumerable: true }
 })
 
-person // => { name: "Gareth", age: 20, sex: "male" }
+person // => { name: "Alice", age: 20, sex: "female" }
 ```
 
 ### 继承
@@ -580,7 +580,7 @@ obj.__proto__ = undefined // 这里注意！不是 null
 返回对象“键”名组成的数组。
 
 ```js
-Object.keys({ name: "Gareth", age: 20 }) // => ['name', 'age']
+Object.keys({ name: "Alice", age: 20 }) // => ['name', 'age']
 ```
 
 ### Object.values
@@ -588,7 +588,7 @@ Object.keys({ name: "Gareth", age: 20 }) // => ['name', 'age']
 返回对象“键”值组成的数组。
 
 ```js
-Object.values({ name: "Gareth", age: 20 }) // => ['Gareth', 20]
+Object.values({ name: "Alice", age: 20 }) // => ['Alice', 20]
 ```
 
 ### Object.entries
@@ -596,7 +596,7 @@ Object.values({ name: "Gareth", age: 20 }) // => ['Gareth', 20]
 返回对象键值对组成的二维数组。
 
 ```js
-Object.entries({ name: "Gareth", age: 20 }) // => [['name', 'Gareth'], ['age', 20]]
+Object.entries({ name: "Alice", age: 20 }) // => [['name', 'Alice'], ['age', 20]]
 ```
 
 ### Object.fromEntries
@@ -604,7 +604,7 @@ Object.entries({ name: "Gareth", age: 20 }) // => [['name', 'Gareth'], ['age', 2
 将键值对二维数组转为对象，可以理解为 `Object.entries` 的反向操作。
 
 ```js
-Object.fromEntries([['name', 'Gareth'], ['age', 20]]) // =>  { name: "Gareth", age: 20 }
+Object.fromEntries([['name', 'Alice'], ['age', 20]]) // =>  { name: "Alice", age: 20 }
 ```
 
 ### Object.assign
@@ -625,12 +625,12 @@ Object.assign({}, obj)
 冻结对象属性。如果属性是对象或数组，可以改变其内部结构，必要时需要深冻结。
 
 ```js
-const person = { name: "Gareth", age: 20 }
+const person = { name: "Alice", age: 20 }
 
 Object.freeze(person)
 
 person.age = 30
-person // => { name: 'Gareth', age: 20 }
+person // => { name: 'Alice', age: 20 }
 ```
 
 ### Object.is
@@ -650,7 +650,7 @@ Object.is(NaN, NaN) // => true
 判断一个属性是否是对象**自身**的属性，与 `.hasOwnProperty()` 相同。
 
 ```js
-const person = { name: "Gareth", age: 20 }
+const person = { name: "Alice", age: 20 }
 
 person.__proto__.foo = "bar"
 

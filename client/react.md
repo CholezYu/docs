@@ -632,13 +632,13 @@ import { useNavigate } from "react-router-dom"
 const navigate = useNavigate()
 
 // 传递 search 参数
-navigate({ pathname: "/user", search: "?id=1&name=Gareth" })
+navigate({ pathname: "/user", search: "?id=1&name=Alice" })
 
 // 传递 params 参数，需要设置动态路径
-navigate("/user/1/Gareth") // <Route path="user/:id/:name" />
+navigate("/user/1/Alice") // <Route path="user/:id/:name" />
 
 // 传递 state 参数
-navigate("/user", { state: { id: 1, name: "Gareth" } })
+navigate("/user", { state: { id: 1, name: "Alice" } })
 ```
 
 ### search
@@ -651,8 +651,8 @@ import qs from "query-string"
 
 const location = useLocation()
 
-location.search // ?id=1&name=Gareth
-qs.parse(location.search) // { id: '1', name: 'Gareth' }
+location.search // ?id=1&name=Alice
+qs.parse(location.search) // { id: '1', name: 'Alice' }
 ```
 
 使用 `useSearchParams` 获取 search 参数。
@@ -663,7 +663,7 @@ import { useSearchParams } from "react-router-dom"
 const [searchParams, setSearchParams] = useSearchParams()
 
 searchParams.get("id") // 1
-searchParams.get("name") // Gareth
+searchParams.get("name") // Alice
 ```
 
 ### params
@@ -673,7 +673,7 @@ searchParams.get("name") // Gareth
 ```tsx
 import { useParams } from "react-router-dom"
 
-const params = useParams() // { id: '1', name: 'Gareth' }
+const params = useParams() // { id: '1', name: 'Alice' }
 ```
 
 ### state
@@ -685,7 +685,7 @@ import { useLocation } from "react-router-dom"
 
 const location = useLocation()
 
-location.state // { id: '1', name: 'Gareth' }
+location.state // { id: '1', name: 'Alice' }
 ```
 
 ### 路由懒加载
@@ -857,7 +857,7 @@ export const fetchLogin = createAsyncThunk("fetchLogin", async (data: LoginParam
 
 export const fetchUserInfo = createAsyncThunk("fetchUserInfo", async () => {
   const response = await (await fetch("/api/user")).json()
-  return { userInfo: response.data } // response.data => { "id": 1, "name": "Gareth" }
+  return { userInfo: response.data } // response.data => { "id": 1, "name": "Alice" }
 })
 
 const userSlice = createSlice({

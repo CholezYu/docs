@@ -22,9 +22,9 @@ interface Student extends Person {
 }
 
 const student: Student = {
-  name: "Gareth",
+  name: "Alice",
   age: 18,
-  sex: "male"
+  sex: "female"
 }
 ```
 
@@ -40,9 +40,9 @@ interface Response {
 }
 
 const response: Response = {
-  name: "Gareth",
+  name: "Alice",
   age: 18,
-  sex: "male",
+  sex: "female",
   subject: "TypeScript"
 }
 ```
@@ -159,7 +159,7 @@ interface Params {
 }
 
 request<Params>("127.0.0.1:8000", {
-  name: "Gareth",
+  name: "Alice",
   age: 18
 })
 ```
@@ -184,7 +184,7 @@ const response: Response<User> = {
   code: 200,
   data: {
     id: 10000,
-    nickname: "Gareth"
+    nickname: "Alice"
   },
   message: "success"
 }
