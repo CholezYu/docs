@@ -55,6 +55,18 @@ export default navbar([
             link: "java"
           }
         ]
+      },
+      
+      {
+        text: "大模型",
+        prefix: "ai/",
+        children: [
+          {
+            text: "Python",
+            icon: "python",
+            link: "python"
+          }
+        ]
       }
     ]
   },
