@@ -1,9 +1,143 @@
 ---
 title: Python
 icon: python
-date: 2026-09-19
+date: 2026-09-20
 description: Python
 ---
+
+## 字符串
+
+### .split
+
+拆分字符串，将被拆分的部分组成列表，并返回。
+
+```python
+s = "hello world"
+
+s.split()  # => ['hello', 'world']
+s.split("")  # ValueError: empty separator
+s.split(" ")  # => ['hello', 'world']
+```
+
+### .join
+
+> [!tip]
+>
+> 与 JS 用法相反，`["a", "b", "c"].join(", ")`。
+
+```python
+s = ", "
+
+s.join(["hello", "world"])  # => 'hello, world'
+```
+
+### .find
+
+查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```python
+s = "hello world hello world"
+
+s.find("world")  # => 6
+s.find("world", 10)  # => 18
+s.find("woood")  # => -1
+```
+
+### .rfind
+
+反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
+
+```python
+s = "hello world hello world"
+
+s.rfind("world")  # => 18
+s.rfind("world", 2, 12)  # => 6
+s.rfind("woood")  # => -1
+```
+
+### .replace
+
+替换匹配的元素，并返回。
+
+```python
+s = "18-31-56"
+ 
+# 默认替换所有匹配项
+s.replace("-", ":")  # => '18:31:56'
+
+# 指定替换的次数
+s.replace("-", ":", 1)  # => '18:31-56'
+```
+
+### .strip
+
+移除字符串两边的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.strip("-")  # => 'hello world'
+```
+
+### .lstrip
+
+移除字符串首部的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.lstrip("-")  # => 'hello world---'
+```
+
+### .rstrip
+
+移除字符串尾部的指定字符，并返回。
+
+```python
+s = "---hello world---"
+
+s.rstrip("-")  # => '---hello world'
+```
+
+### .upper
+
+将字符串转为大写，并返回。
+
+```python
+s = "I love Python"
+
+s.upper()  # => 'I LOVE PYTHON'
+```
+
+### .lower
+
+将字符串转为小写，并返回。
+
+```python
+s = "I love Python"
+
+s.lower()  # => 'i love python'
+```
+
+### .swapcase
+
+将字符串大写转为小写，小写转为大写，并返回。
+
+```python
+s = "I love Python"
+
+s.swapcase()  # => 'i LOVE pYTHON'
+```
+
+### .capitalize
+
+将字符串首字符转为大写，其他字符转为小写，并返回。
+
+```python
+s = "I love Python"
+
+s.capitalize()  # => 'I love python'
+```
 
 ## 列表
 
@@ -349,140 +483,6 @@ person = { "name": "Alice", "age": 25, "city": "California" }
 
 person.clear()
 person  # => None
-```
-
-## 字符串
-
-### .split
-
-拆分字符串，将被拆分的部分组成列表，并返回。
-
-```python
-s = "hello world"
-
-s.split()  # => ['hello', 'world']
-s.split("")  # ValueError: empty separator
-s.split(" ")  # => ['hello', 'world']
-```
-
-### .join
-
-> [!tip]
->
-> 与 JS 用法相反，`["a", "b", "c"].join(", ")`。
-
-```python
-s = ", "
-
-s.join(["hello", "world"])  # => 'hello, world'
-```
-
-### .find
-
-查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```python
-s = "hello world hello world"
-
-s.find("world")  # => 6
-s.find("world", 10)  # => 18
-s.find("woood")  # => -1
-```
-
-### .rfind
-
-反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
-
-```python
-s = "hello world hello world"
-
-s.rfind("world")  # => 18
-s.rfind("world", 2, 12)  # => 6
-s.rfind("woood")  # => -1
-```
-
-### .replace
-
-替换匹配的元素，并返回。
-
-```python
-s = "18-31-56"
- 
-# 默认替换所有匹配项
-s.replace("-", ":")  # => '18:31：56'
-
-# 指定替换的次数
-s.replace("-", ":", 1)  # => '18:31-56'
-```
-
-### .strip
-
-移除字符串两边的指定字符，并返回。
-
-```python
-s = "---hello world---"
-
-s.strip("-")  # => 'hello world'
-```
-
-### .lstrip
-
-移除字符串首部的指定字符，并返回。
-
-```python
-s = "---hello world---"
-
-s.lstrip("-")  # => 'hello world---'
-```
-
-### .rstrip
-
-移除字符串尾部的指定字符，并返回。
-
-```python
-s = "---hello world---"
-
-s.rstrip("-")  # => '---hello world'
-```
-
-### .upper
-
-将字符串转为大写，并返回。
-
-```python
-s = "I love Python"
-
-s.upper()  # => 'I LOVE PYTHON'
-```
-
-### .lower
-
-将字符串转为小写，并返回。
-
-```python
-s = "I love Python"
-
-s.lower()  # => 'i love python'
-```
-
-### .swapcase
-
-将字符串大写转为小写，小写转为大写，并返回。
-
-```python
-s = "I love Python"
-
-s.swapcase()  # => 'i LOVE pYTHON'
-```
-
-### .capitalize
-
-将字符串首字符转为大写，其他字符转为小写，并返回。
-
-```python
-s = "I love Python"
-
-s.capitalize()  # => 'I love python'
 ```
 
 ## 函数
