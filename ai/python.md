@@ -487,7 +487,7 @@ person  # => None
 
 ## 函数
 
-### 可变参数
+### 函数的参数
 
 ```python
 def func(a: int, b: int, *args: int, **kwargs: str | int):
