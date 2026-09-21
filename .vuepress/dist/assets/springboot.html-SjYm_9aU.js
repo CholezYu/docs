@@ -1,0 +1,1 @@
+import{_ as t,o,c as a,a as e}from"./app-q-mu0ztf.js";const r={},s=e("h2",{id:"",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#","aria-hidden":"true"},"#")],-1),c=[s];function n(_,i){return o(),a("div",null,c)}const h=t(r,[["render",n],["__file","springboot.html.vue"]]);export{h as default};
