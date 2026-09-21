@@ -1,9 +1,121 @@
 ---
 title: Python
 icon: python
-date: 2026-09-20
+date: 2026-09-21
 description: Python
 ---
+
+## 列表
+
+### .append
+
+向列表尾部添加元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.append(5)
+ls  # => [2, 3, 4, 5]
+```
+
+### .extend
+
+扩展列表，将一个可迭代对象中的元素添加到列表中。
+
+```python
+ls = [2, 3, 4]
+
+ls.extend([5, 6])
+ls  # => [2, 3, 4, 5, 6]
+```
+
+### .insert
+
+在列表指定位置插入元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.insert(1, 5)
+ls  # => [2, 5, 3, 4]
+```
+
+### .pop
+
+删除列表指定位置的元素，默认删除最后一个元素，返回被删除的元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.pop(1)
+ls  # => [2, 4]
+```
+
+### .remove
+
+移除列表中首次匹配的元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.remove(2)
+ls  # => [3, 4]
+```
+
+### .clear
+
+清空列表。
+
+```python
+ls = [2, 3, 4]
+
+ls.clear()
+ls  # => []
+```
+
+### .reverse
+
+反转列表中的元素。
+
+```python
+ls = [2, 3, 4]
+
+ls.reverse()
+ls  # => [4, 3, 2]
+```
+
+### .sort
+
+将元素按 Unicode 升序排列，可以指定键函数（或比较函数）进行排序。
+
+```python
+ls = [{ "name": "Alice", "age": 18 }, { "name": "Bob", "age": 25 }, { "name": "Charlie", "age": 16 }]
+
+ls.sort(key=lambda item: item["age"])
+ls  # => [{'name': 'Charlie', 'age': 16}, {'name': 'Alice', 'age': 18}, {'name': 'Bob', 'age': 25}]
+
+ls.sort(key=lambda item: item["age"], reverse=True)
+ls  # => [{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 18}, {'name': 'Charlie', 'age': 16}]
+```
+
+## 元组
+
+元组是不可变类型，只能访问元素，不能进行修改。
+
+```python
+t = (1, 2, 3, 4, 5)
+
+t[2] = 6  # TypeError: 'tuple' object does not support item assignment
+```
+
+如果元组中的元素是可变类型，那么可以对其进行修改。
+
+```python
+t = ([1, 2, 3], [3, 2, 1])
+
+t[1].sort()
+t  # => ([1, 2, 3], [1, 2, 3])
+```
 
 ## 字符串
 
@@ -21,9 +133,7 @@ s.split(" ")  # => ['hello', 'world']
 
 ### .join
 
-> [!tip]
->
-> 与 JS 用法相反，`["a", "b", "c"].join(", ")`。
+拆分列表，将被拆分的部分组成字符串，并返回。
 
 ```python
 s = ", "
@@ -137,123 +247,6 @@ s.swapcase()  # => 'i LOVE pYTHON'
 s = "I love Python"
 
 s.capitalize()  # => 'I love python'
-```
-
-## 列表
-
-### .append
-
-向列表尾部添加元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.push(5)
-ls  # => [2, 3, 4, 5]
-```
-
-### .extend
-
-扩展列表，将一个可迭代对象中的元素添加到列表中。
-
-```python
-ls = [2, 3, 4]
-
-ls.extend([5, 6])
-ls  # => [2, 3, 4, 5, 6]
-```
-
-### .insert
-
-在列表指定位置插入元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.insert(1, 5)
-ls  # => [2, 5, 3, 4]
-```
-
-### .pop
-
-删除列表指定位置的元素，默认删除最后一个元素，返回被删除的元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.pop(1)
-ls  # => [2, 4]
-```
-
-### .remove
-
-移除列表中首次匹配的元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.remove(2)
-ls  # => [3, 4]
-```
-
-### .clear
-
-清空列表。
-
-```python
-ls = [2, 3, 4]
-
-ls.clear()
-ls  # => []
-```
-
-### .reverse
-
-反转列表中的元素。
-
-```python
-ls = [2, 3, 4]
-
-ls.reverse()
-ls  # => [4, 3, 2]
-```
-
-### .sort
-
-将元素按 Unicode 升序排列，可以指定比较函数进行排序。
-
-```python
-def compare(a, b):
-    return a["age"] - b["age"]
-
-
-ls = [
-    { "name": "Alice", "age": 18 },
-    { "name": "Bob", "age": 25 },
-    { "name": "Charlie", "age": 16 }
-]
-
-ls.sort(key=cmp_to_key(compare))
-ls  #  => [{'name': 'Alice', 'age': 18}, {'name': 'Bob', 'age': 25}, {'name': 'Charlie', 'age': 16}]
-```
-
-## 元组
-
-元组是不可变类型，只能访问元素，不能进行修改。
-
-```python
-t = (1, 2, 3, 4, 5)
-
-t[2] = 6  # TypeError: 'tuple' object does not support item assignment
-```
-
-如果元组中的元素是可变类型，那么可以对其进行修改。
-
-```python
-t = ([1, 2, 3], [3, 2, 1])
-
-t[1].sort()
-t  # => ([1, 2, 3], [1, 2, 3])
 ```
 
 ## 集合
