@@ -588,6 +588,10 @@ def func(a: int, b: int, *args: int, **kwargs: str | int):
 func(1, 2, 3, 4, 5, name="Alice", age=22)
 ```
 
+### 闭包
+
+[闭包 | JavaScript](/client/javascript.md#闭包)
+
 ## 面向对象
 
 ### 构造方法
