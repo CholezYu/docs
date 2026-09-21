@@ -1,7 +1,7 @@
 ---
 title: Python
 icon: python
-date: 2026-09-21
+date: 2026-09-22
 description: Python
 ---
 
@@ -296,6 +296,46 @@ ls  # => [1, 6, 7, 4, 5]
 # 清空切片
 ls[:] = []
 ls  # => []
+```
+
+### 列表推导式
+
+列表推导式以更简洁的方式生成列表。
+
+```python
+# 传统 for 循环
+squares = []
+for x in range(5):
+    squares.append(x**2)
+
+# map
+squares = list(map(lambda x: x**2, range(5)))
+
+# 列表推导式
+squares = [x**2 for x in range(5)]
+
+squares  # => [0, 1, 4, 9, 16]
+```
+
+下面是带条件的列表推导式。
+
+```python
+# 传统 for 循环
+squares = []
+for x in range(5):
+    if x % 2 == 0:
+        squares.append(x**2)
+
+# filter & map
+squares = list(filter(lambda x: x % 2 == 0, map(lambda x: x**2, range(5))))
+
+# reduce
+squares = reduce(lambda prev, x: [*prev, x**2] if x**2 % 2 == 0 else prev, range(5), [])
+
+# 列表推导式
+squares = [x**2 for x in range(5) if x % 2 == 0]
+
+squares  # => [0, 4, 16]
 ```
 
 ## 集合
