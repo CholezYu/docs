@@ -594,6 +594,60 @@ func(1, 2, 3, name="Alice", age=22, sex="female")
 
 [闭包 | JavaScript](/client/javascript.md#闭包)
 
+### 装饰器
+
+装饰器是一个返回值为函数的高阶函数，可以增强被修饰函数的功能。
+
+```python
+# 装饰器
+def decorator(func):
+    def wrapper(*args, **kwargs):
+        func(*args, **kwargs.items())
+    return wrapper
+
+
+# 作为普通函数使用
+def func(*args):
+    print(args)
+
+decorator(func)(name="Alice", age=22)  # (('name', 'Alice'), ('age', 22))
+
+
+# 作为装饰器使用
+@decorator
+def func(*args):
+    print(args)
+
+func(name="Alice", age=22)  # (('name', 'Alice'), ('age', 22))
+```
+
+下面是带参数的装饰器。
+
+```python
+# 带参数的装饰器
+def executor(n):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            func(*args * n, *kwargs.items())
+        return wrapper
+    return decorator
+
+
+# 作为普通函数使用
+def func(*args):
+    print(args)
+
+executor(2)(func)("hello", name="Alice")  # => ('hello', 'hello', ('name', 'Alice'))
+
+
+# 作为装饰器使用
+@executor(2)
+def func(*args):
+    print(args)
+
+func("hello", name="Alice")  # => ('hello', 'hello', ('name', 'Alice'))
+```
+
 ## 面向对象
 
 ### 构造方法
