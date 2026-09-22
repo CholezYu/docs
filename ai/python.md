@@ -303,7 +303,7 @@ ls  # => []
 列表推导式以更简洁的方式生成列表。
 
 ```python
-# 传统 for 循环
+# for...in
 squares = []
 for x in range(5):
     squares.append(x**2)
@@ -320,7 +320,7 @@ squares  # => [0, 1, 4, 9, 16]
 下面是带条件的列表推导式。
 
 ```python
-# 传统 for 循环
+# for...in
 squares = []
 for x in range(5):
     if x % 2 == 0:
@@ -572,20 +572,22 @@ person  # => None
 ### 函数的参数
 
 ```python
-def func(a: int, b: int, *args: int, **kwargs: str | int):
+def func(a: int, *args: int, name: str, **kwargs: str | int):
     """ 参数说明
     Args:
         a (int): 位置参数
-        b (int): 位置参数
         args (int): 可变位置参数
+        name (str): 关键字参数
         kwargs (str | int): 可变关键字参数
     """
 
-    args  # (3, 4, 5)
-    kwargs  # {'name': 'Alice', 'age': 22}
+    a  # => 1
+    args  # => (2, 3)
+    name  # => 'Alice'
+    kwargs  # {'age': 22, 'sex': 'female'}
 
 
-func(1, 2, 3, 4, 5, name="Alice", age=22)
+func(1, 2, 3, name="Alice", age=22, sex="female")
 ```
 
 ### 闭包
