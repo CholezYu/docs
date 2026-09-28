@@ -1,7 +1,7 @@
 ---
 title: Python
 icon: python
-date: 2026-09-22
+date: 2026-09-29
 description: Python
 ---
 
@@ -584,7 +584,7 @@ def func(a: int, *args: int, name: str, **kwargs: str | int):
     a  # => 1
     args  # => (2, 3)
     name  # => 'Alice'
-    kwargs  # {'age': 22, 'sex': 'female'}
+    kwargs  # => {'age': 22, 'sex': 'female'}
 
 
 func(1, 2, 3, name="Alice", age=22, sex="female")
@@ -890,3 +890,103 @@ cat = Cat()
 dog.speak()  # Woof!
 cat.speak()  # Meow!
 ```
+
+## 多进程
+
+### 创建进程
+
+#### 使用 Process 类
+
+```python
+def worker(process_name):
+    print(f"Process: {process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
+    time.sleep(1)
+    print(f"Process: {process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
+
+
+if __name__ == '__main__':
+    p = Process(target=worker, args=("print_task",))
+    p.start()
+    p.join()  # 阻塞主进程，等待子进程执行完成再执行主进程
+```
+
+#### 继承 Process 类
+
+```python
+class PrintProcess(Process):
+    def __init__(self, process_name):
+        super().__init__()
+        self.process_name = process_name
+
+    def run(self):
+        print(f"Process: {self.process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
+        time.sleep(1)
+        print(f"Process: {self.process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
+
+
+if __name__ == "__main__":
+    p = PrintProcess("print_task")
+    p.start()
+    p.join()
+```
+
+### 进程同步
+
+#### Lock 互斥锁
+
+Lock 不可重入，适用于简单互斥场景。
+
+```python
+def worker(process_name, lock):
+    with lock:
+        print(f"Process {process_name} acquire lock")  # 获取锁
+        time.sleep(1)
+        print(f"Process {process_name} release lock")  # 释放锁
+
+
+if __name__ == "__main__":
+    lock = Lock()
+
+    p = Process(target=worker, args=("print_task", lock))
+    p.start()
+    p.join()
+```
+
+#### RLock 可重入锁 <Badge text="推荐" type="tip" />
+
+RLock 可重入，适用于嵌套锁场景。
+
+```python
+def worker(process_name, rlock):
+    with rlock:
+        print(f"Process {process_name} acquire lock")  # 获取锁
+        with rlock:
+            print(f"Process {process_name} reacquire lock")  # 重新获取锁
+
+
+if __name__ == "__main__":
+    rlock = RLock()
+
+    p = Process(target=worker, args=("print_task", rlock))
+    p.start()
+    p.join()
+```
+
+### 守护进程
+
+主进程执行完成时，守护进程会随之结束。常用于后台监控。
+
+```python
+def monitor():
+    # 监控主进程任务，主进程任务执行完成后结束
+    # ...
+    pass
+
+
+if __name__ == '__main__':
+    p = Process(target=monitor, daemon=True)  # daemon=True 设置为守护进程
+    p.start()
+    # 主进程执行任务
+    # ...
+```
+
