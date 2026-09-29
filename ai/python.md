@@ -1,7 +1,7 @@
 ---
 title: Python
 icon: python
-date: 2026-09-29
+date: 2026-09-30
 description: Python
 ---
 
@@ -893,7 +893,7 @@ def worker(process_name):
 
 
 if __name__ == "__main__'":
-    p = Process(target=worker, args=("print_task",))
+    p = Process(target=worker, args=("print_work",))
     p.start()
     p.join()  # 阻塞主进程，等待子进程执行完成再执行主进程
 ```
@@ -931,7 +931,7 @@ class PrintProcess(Process):
 
 
 if __name__ == "__main__":
-    p = PrintProcess("print_task")
+    p = PrintProcess("print_work")
     p.start()
     p.join()
 ```
@@ -998,7 +998,7 @@ def worker(process_name, lock):
 if __name__ == "__main__":
     lock = Lock()
 
-    p = Process(target=worker, args=("print_task", lock))
+    p = Process(target=worker, args=("print_work", lock))
     p.start()
     p.join()
 ```
@@ -1016,7 +1016,7 @@ def worker(process_name, rlock):
 if __name__ == "__main__":
     rlock = RLock()
 
-    p = Process(target=worker, args=("print_task", rlock))
+    p = Process(target=worker, args=("print_work", rlock))
     p.start()
     p.join()
 ```
@@ -1063,7 +1063,7 @@ def setter(event):
 if __name__ == "__main__":
     event = Event()
 
-    waiter_process = Process(target=waiter, args=("waiter_task", event))
+    waiter_process = Process(target=waiter, args=("waiter_work", event))
     setter_process = Process(target=setter, args=(event,))
 
     waiter_process.start()
@@ -1180,3 +1180,4 @@ if __name__ == "__main__":
 
         shared_list  # => [1, 2, 3]
         shared_dict  # => {'data': [1, 2, 3], 'status': 'Success'}
+```
