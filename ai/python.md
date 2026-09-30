@@ -1,7 +1,7 @@
 ---
 title: Python
 icon: python
-date: 2026-09-30
+date: 2026-10-01
 description: Python
 ---
 
@@ -883,17 +883,17 @@ cat.speak()  # Meow!
 
 #### 使用 Process 类
 
-适用于简单的单发任务。
+适用于简单的任务。
 
 ```python
-def worker(process_name):
-    print(f"Process: {process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
+def worker(name):
+    print(f"Process: {name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
     time.sleep(1)
-    print(f"Process: {process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
+    print(f"Process: {name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
 
 
-if __name__ == "__main__'":
-    p = Process(target=worker, args=("print_work",))
+if __name__ == "__main__":
+    p = Process(target=worker, args=("print_worker",))
     p.start()
     p.join()  # 阻塞主进程，等待子进程执行完成再执行主进程
 ```
@@ -916,22 +916,22 @@ if __name__ == "__main__":
 
 #### 继承 Process 类
 
-适用于子进程需要维护复杂状态、内部变量或封装特定逻辑的场景。
+适用于维护复杂状态，或处理复杂逻辑的场景。
 
 ```python
 class PrintProcess(Process):
-    def __init__(self, process_name):
+    def __init__(self, name):
         super().__init__()
-        self.process_name = process_name
+        self.name = name
 
     def run(self):
-        print(f"Process: {self.process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
+        print(f"Process: {self.name} (PID: {os.getpid()}, PPID: {os.getppid()}) start")
         time.sleep(1)
-        print(f"Process: {self.process_name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
+        print(f"Process: {self.name} (PID: {os.getpid()}, PPID: {os.getppid()}) end")
 
 
 if __name__ == "__main__":
-    p = PrintProcess("print_work")
+    p = PrintProcess("print_worker")
     p.start()
     p.join()
 ```
@@ -948,19 +948,20 @@ def square(n):
 if __name__ == "__main__":
     # max_workers 通常为 CPU 核心数
     with ProcessPoolExecutor(max_workers=4) as executor:
-        # 提交单个任务
+        # 提交任务（不阻塞）
         future = executor.submit(square, 10)
-        # 阻塞获取结果
+        # 获取结果（阻塞）
         future.result()  # => 100
 
-        # 批量提交任务
-        results = list(executor.map(square, [1, 2, 3, 4, 5]))
-        results  # => [1, 4, 9, 16, 25]
+        # 批量提交任务，并获取结果（不阻塞）
+        results = executor.map(square, [1, 2, 3, 4, 5])
+        # 执行生成器（阻塞）
+        [*results]  # => [1, 4, 9, 16, 25]
 ```
 
 #### 传统进程池 Pool
 
-这是老版本 Python 常用的进程池，虽然限制更推荐 ProcessPoolExecutor，但在老项目中很常见。
+传统进程池在老项目中很常见，现在更推荐 `ProcessPoolExecutor`。
 
 ```python
 def square(n):
@@ -968,9 +969,8 @@ def square(n):
 
 
 if __name__ == "__main__":
-    # max_workers 通常为 CPU 核心数
     with Pool(processes=4) as pool:
-        # 异步非阻塞提交
+        # 异步提交（不阻塞）
         result = pool.apply_async(square, args=(10,))
         result.get()  # => 100
 
@@ -988,17 +988,17 @@ if __name__ == "__main__":
 Lock 不可重入，适用于简单互斥场景。
 
 ```python
-def worker(process_name, lock):
+def worker(name, lock):
     with lock:
-        print(f"Process {process_name} acquire lock")  # 获取锁
+        print(f"Process {name} acquire lock")  # 获取锁
         time.sleep(1)
-        print(f"Process {process_name} release lock")  # 释放锁
+        print(f"Process {name} release lock")  # 释放锁
 
 
 if __name__ == "__main__":
     lock = Lock()
 
-    p = Process(target=worker, args=("print_work", lock))
+    p = Process(target=worker, args=("print_worker", lock))
     p.start()
     p.join()
 ```
@@ -1006,17 +1006,17 @@ if __name__ == "__main__":
 RLock 可重入，适用于嵌套锁场景。
 
 ```python
-def worker(process_name, rlock):
+def worker(name, rlock):
     with rlock:
-        print(f"Process {process_name} acquire lock")  # 获取锁
+        print(f"Process {name} acquire lock")  # 获取锁
         with rlock:
-            print(f"Process {process_name} reacquire lock")  # 重新获取锁
+            print(f"Process {name} reacquire lock")  # 重新获取锁
 
 
 if __name__ == "__main__":
     rlock = RLock()
 
-    p = Process(target=worker, args=("print_work", rlock))
+    p = Process(target=worker, args=("print_worker", rlock))
     p.start()
     p.join()
 ```
@@ -1026,9 +1026,9 @@ if __name__ == "__main__":
 允许指定数量的进程同时访问。
 
 ```python
-def access_resource(process_name, sem):
+def worker(name, sem):
     with sem:
-        print(f"Process {process_name} access resources")
+        print(f"Process {name} access resource")
         time.sleep(1)
 
 
@@ -1037,7 +1037,7 @@ if __name__ == "__main__":
 
     processes = []
     for i in range(5):
-        p = Process(target=access_resource, args=(i, sem))
+        p = Process(target=worker, args=(i, sem))
         processes.append(p)
         p.start()
 
@@ -1048,36 +1048,36 @@ if __name__ == "__main__":
 #### 事件 Event
 
 ```python
-def waiter(process_name, event):
-    print(f"Process {process_name} is waiting")
+def waiter(event, name):
+    print(f"Process {name} is waiting...")
     event.wait()
-    print(f"Process {process_name} is done")
+    print(f"Process {name} is done")
 
 
-def setter(event):
+def setter(event, name):
     time.sleep(2)
-    print("event is set")
+    print(f"Process {name} set event")
     event.set()
 
 
 if __name__ == "__main__":
     event = Event()
 
-    waiter_process = Process(target=waiter, args=("waiter_work", event))
-    setter_process = Process(target=setter, args=(event,))
+    wait_process = Process(target=waiter, args=(event, "wait_worker"))
+    set_process = Process(target=setter, args=(event, "set_worker"))
 
-    waiter_process.start()
-    setter_process.start()
+    wait_process.start()
+    set_process.start()
 
-    waiter_process.join()
-    setter_process.join()
+    wait_process.join()
+    set_process.join()
 ```
 
 ### 进程通信
 
 #### 队列 Queue <Badge text="常用" type="tip" />
 
-Queue 支持多写多读，内部自带锁，是进程安全的。
+支持多写多读，内部自带锁，是进程安全的。
 
 ```python
 def producer(q):
@@ -1097,19 +1097,19 @@ def consumer(q):
 if __name__ == "__main__":
     q = Queue()
 
-    producer_process = Process(target=producer, args=(q,))
-    consumer_process = Process(target=consumer, args=(q,))
+    produce_process = Process(target=producer, args=(q,))
+    consume_process = Process(target=consumer, args=(q,))
 
-    producer_process.start()
-    consumer_process.start()
+    produce_process.start()
+    consume_process.start()
 
-    producer_process.join()
-    consumer_process.join()
+    produce_process.join()
+    consume_process.join()
 ```
 
 #### 管道 Pipe <Badge text="效率高" type="tip" />
 
-Pipe 只用于两个进程之间的双向或单向通信。由于没有队列那么多的逻辑管理，它的速度比 Queue 快。
+只用于**两个进程**之间的双向（默认）或单向通信。
 
 ```python
 def sender(connection):
@@ -1124,21 +1124,21 @@ def receiver(connection):
 
 
 if __name__ == "__main__":
-    parent_conn, child_conn = Pipe()
+    send_connection, recv_connection = Pipe(duplex=False)  # 设置为单向通信，默认为 True
 
-    sender_process = Process(target=sender, args=(child_conn,))
-    receiver_process = Process(target=receiver, args=(parent_conn,))
+    send_process = Process(target=sender, args=(send_connection,))
+    recv_process = Process(target=receiver, args=(recv_connection,))
 
-    sender_process.start()
-    receiver_process.start()
+    send_process.start()
+    recv_process.start()
 
-    sender_process.join()
-    receiver_process.join()
+    send_process.join()
+    recv_process.join()
 ```
 
 #### 共享简单数据 Value & Array
 
-适用于不需要复杂的队列，只是让两个进程共同读写一个数字或数组。它避开了序列化的开销，因此效率最高。
+共享数字或数组。
 
 ```python
 def worker(num, arr):
@@ -1160,7 +1160,7 @@ if __name__ == "__main__":
 
 #### 共享复杂数据 Manager
 
-Manager 可以跨进程共享复杂的数据结构（列表、字典）。它会启动一个控制服务器进程来统一管理。
+共享列表、字典等复杂数据。
 
 ```python
 def worker(shared_list, shared_dict):
