@@ -1176,6 +1176,41 @@ if __name__ == "__main__":
 
   - 队列 Queue
 
+### 协程
+
+协程可以理解为“微线程”，它会将包含 I/O 等待的代码块包装成一个任务（Task）提交给事件循环。当任务遇到 I/O 阻塞时会主动挂起并释放 CPU，由事件循环在后台监听并调度，从而实现高效的并发。
+
+```python
+async def download_image(name):
+    print(f"start download {name}...")
+    await asyncio.sleep(2)  # 模拟网络 IO 等待
+    print(f"{name} download completed！")
+
+
+async def main():
+    # 同步执行单个任务
+    await download_image("image")
+
+    # 异步执行多个任务（事件循环机制）
+    task1 = asyncio.create_task(download_image("image_1"))
+    task2 = asyncio.create_task(download_image("image_2"))
+    task3 = asyncio.create_task(download_image("image_3"))
+    await task1
+    await task2
+    await task3
+
+    # 等同于
+    # 并发（异步）执行多个任务，类似 `Promise.all()`
+    await asyncio.gather(
+        download_image("image_1"),
+        download_image("image_2"),
+        download_image("image_3")
+    )
+
+
+asyncio.run(main())
+```
+
 ### 全局解释器锁 GIL <Badge text="3.14+ 可禁用" type="warning" />
 
 GIL（全局解释器锁）是 CPython 解释器中的一个互斥锁，目的是保证线程安全，确保在同一时间只有一个线程执行 Python 字节码。因此 Python 的多线程是并发（交替执行）而不是并行（同时执行）。
