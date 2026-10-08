@@ -1182,6 +1182,28 @@ if __name__ == "__main__":
         shared_dict  # => {'data': [1, 2, 3], 'status': 'Success'}
 ```
 
+### 多线程
+
+线程的 API 与进程相似：
+
+- 创建线程：
+
+  - 使用 Thread 类
+
+  - 继承 Thread 类
+
+  - 线程池 ThreadPoolExecutor
+
+- 线程同步：
+
+  - 锁 Lock & RLock
+
+  - 信号量 Semaphore
+
+- 线程通信：
+
+  - 队列 Queue
+
 ### 全局解释器锁 GIL <Badge text="3.14+ 可禁用" type="warning" />
 
 GIL（全局解释器锁）是 CPython 解释器中的一个互斥锁，目的是保证线程安全，确保在同一时间只有一个线程执行 Python 字节码。因此 Python 的多线程是并发（交替执行）而不是并行（同时执行）。
