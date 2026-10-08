@@ -1045,34 +1045,6 @@ if __name__ == "__main__":
         p.join()
 ```
 
-#### 事件 Event
-
-```python
-def waiter(event, name):
-    print(f"Process {name} is waiting...")
-    event.wait()
-    print(f"Process {name} is done")
-
-
-def setter(event, name):
-    time.sleep(2)
-    print(f"Process {name} set event")
-    event.set()
-
-
-if __name__ == "__main__":
-    event = Event()
-
-    wait_process = Process(target=waiter, args=(event, "wait_worker"))
-    set_process = Process(target=setter, args=(event, "set_worker"))
-
-    wait_process.start()
-    set_process.start()
-
-    wait_process.join()
-    set_process.join()
-```
-
 ### 进程通信
 
 #### 队列 Queue <Badge text="常用" type="tip" />
