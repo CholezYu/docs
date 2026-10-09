@@ -1,13 +1,15 @@
 ---
 title: Python
 icon: python
-date: 2026-10-08
+date: 2026-10-09
 description: Python
 ---
 
-## 列表
+## 数据类型
 
-### .append
+### 列表
+
+#### .append
 
 向列表尾部添加元素。
 
@@ -18,7 +20,7 @@ ls.append(5)
 ls  # => [2, 3, 4, 5]
 ```
 
-### .extend
+#### .extend
 
 扩展列表，将一个可迭代对象中的元素添加到列表中。
 
@@ -29,7 +31,7 @@ ls.extend([5, 6])
 ls  # => [2, 3, 4, 5, 6]
 ```
 
-### .insert
+#### .insert
 
 在列表指定位置插入元素。
 
@@ -40,7 +42,7 @@ ls.insert(1, 5)
 ls  # => [2, 5, 3, 4]
 ```
 
-### .pop
+#### .pop
 
 删除列表指定位置的元素，默认删除最后一个元素，返回被删除的元素。
 
@@ -51,7 +53,7 @@ ls.pop(1)
 ls  # => [2, 4]
 ```
 
-### .remove
+#### .remove
 
 移除列表中首次匹配的元素。
 
@@ -62,7 +64,7 @@ ls.remove(2)
 ls  # => [3, 4]
 ```
 
-### .clear
+#### .clear
 
 清空列表。
 
@@ -73,7 +75,7 @@ ls.clear()
 ls  # => []
 ```
 
-### .reverse
+#### .reverse
 
 反转列表中的元素。
 
@@ -84,7 +86,7 @@ ls.reverse()
 ls  # => [4, 3, 2]
 ```
 
-### .sort
+#### .sort
 
 将元素按 Unicode 升序排列，可以指定键函数（或比较函数）进行排序。
 
@@ -98,7 +100,7 @@ ls.sort(key=lambda item: item["age"], reverse=True)
 ls  # => [{'name': 'Bob', 'age': 25}, {'name': 'Alice', 'age': 18}, {'name': 'Charlie', 'age': 16}]
 ```
 
-## 元组
+### 元组
 
 元组是不可变类型，只能访问元素，不能进行修改。
 
@@ -117,9 +119,9 @@ t[1].sort()
 t  # => ([1, 2, 3], [1, 2, 3])
 ```
 
-## 字符串
+### 字符串
 
-### .split
+#### .split
 
 拆分字符串，将被拆分的部分组成列表，并返回。
 
@@ -131,7 +133,7 @@ s.split("")  # ValueError: empty separator
 s.split(" ")  # => ['hello', 'world']
 ```
 
-### .join
+#### .join
 
 拆分列表，将被拆分的部分组成字符串，并返回。
 
@@ -141,7 +143,7 @@ s = ", "
 s.join(["hello", "world"])  # => 'hello, world'
 ```
 
-### .find
+#### .find
 
 查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -153,7 +155,7 @@ s.find("world", 10)  # => 18
 s.find("woood")  # => -1
 ```
 
-### .rfind
+#### .rfind
 
 反向查找元素，返回元素首次出现的索引。若不存在，则返回 -1。
 
@@ -165,7 +167,7 @@ s.rfind("world", 2, 12)  # => 6
 s.rfind("woood")  # => -1
 ```
 
-### .replace
+#### .replace
 
 替换匹配的元素，并返回。
 
@@ -179,7 +181,7 @@ s.replace("-", ":")  # => '18:31:56'
 s.replace("-", ":", 1)  # => '18:31-56'
 ```
 
-### .strip
+#### .strip
 
 移除字符串两边的指定字符，并返回。
 
@@ -189,7 +191,7 @@ s = "---hello world---"
 s.strip("-")  # => 'hello world'
 ```
 
-### .lstrip
+#### .lstrip
 
 移除字符串首部的指定字符，并返回。
 
@@ -199,7 +201,7 @@ s = "---hello world---"
 s.lstrip("-")  # => 'hello world---'
 ```
 
-### .rstrip
+#### .rstrip
 
 移除字符串尾部的指定字符，并返回。
 
@@ -209,7 +211,7 @@ s = "---hello world---"
 s.rstrip("-")  # => '---hello world'
 ```
 
-### .upper
+#### .upper
 
 将字符串转为大写，并返回。
 
@@ -219,7 +221,7 @@ s = "I love Python"
 s.upper()  # => 'I LOVE PYTHON'
 ```
 
-### .lower
+#### .lower
 
 将字符串转为小写，并返回。
 
@@ -229,7 +231,7 @@ s = "I love Python"
 s.lower()  # => 'i love python'
 ```
 
-### .swapcase
+#### .swapcase
 
 将字符串大写转为小写，小写转为大写，并返回。
 
@@ -239,7 +241,7 @@ s = "I love Python"
 s.swapcase()  # => 'i LOVE pYTHON'
 ```
 
-### .capitalize
+#### .capitalize
 
 将字符串首字符转为大写，其他字符转为小写，并返回。
 
@@ -249,7 +251,236 @@ s = "I love Python"
 s.capitalize()  # => 'I love python'
 ```
 
-## 序列
+### 集合
+
+#### .add
+
+向集合中添加一个元素。
+
+```python
+s = { "2", "3", "4" }
+
+s.add("5")
+s  # => {'2', '4', '5', '3'}
+```
+
+#### .update
+
+将一个可迭代对象中的元素添加到集合中。
+
+```python
+s = { "2", "3", "4" }
+
+s.update(["5", "6"])
+s  # => {'3', '2', '6', '5', '4'}
+```
+
+#### .remove
+
+移除集合中的指定元素，不存在则报错。
+
+```python
+s = { "2", "3", "4" }
+
+s.remove("5")  # KeyError: 5
+
+s.remove("3")
+s  # => {'2', '4'}
+```
+
+#### .discard
+
+移除集合中的指定元素，不存在不会报错。
+
+```python
+s = { "2", "3", "4" }
+
+s.discard("5")  # 不会报错
+s  # => {'3', '4', '2'}
+
+s.discard("3")
+s  # => {'2', '4'}
+```
+
+#### .pop
+
+随机删除集合中的一个元素，返回被删除的元素。
+
+```python
+s = { "2", "3", "4" }
+
+r = s.pop()
+r  # => '4'
+s  # => {'2', '3'}
+```
+
+#### .clear
+
+清空集合。
+
+```python
+s = { "2", "3", "4" }
+
+s.clear()
+s  # => set()
+```
+
+#### .intersection
+
+计算两个集合的交集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.intersection(s2)  # => {3, 4}
+s1 & s1  # => {3, 4}
+```
+
+#### .union
+
+计算两个集合的并集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.union(s2)  # => {1, 2, 3, 4, 5, 6}
+s1 | s2  # => {1, 2, 3, 4, 5, 6}
+```
+
+#### .difference
+
+计算两个集合的差集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.difference(s2)  # => {1, 2}
+s1 - s2  # => {1, 2}
+
+s2.difference(s1)  # => {5, 6}
+s2 - s1  # => {5, 6}
+```
+
+#### .symmetric_difference
+
+计算两个集合的对称差集，并返回。
+
+```python
+s1 = { 1, 2, 3, 4 }
+s2 = { 3, 4, 5, 6 }
+
+s1.symmetric_difference(s2)  # => {1, 2, 5, 6}
+s1 ^ s2  # => {1, 2, 5, 6}
+```
+
+#### .issubset
+
+判断集合是否为另一个集合的子集。
+
+```python
+s1 = { 1, 2, 3 }
+s2 = { 1, 2, 3, 4, 5 }
+
+s1.issubset(s2)  # => True
+s1 <= s2  # => True
+```
+
+#### .issuperset
+
+判断集合是否为另一个集合的超集（父集）。
+
+```python
+s1 = { 1, 2, 3, 4, 5 }
+s2 = { 1, 2, 3 }
+
+s1.issuperset(s2)  # => True
+s1 >= s2  # => True
+```
+
+#### .isdisjoint
+
+判断两个集合是否**无**交集。
+
+```python
+s1 = { 1, 2, 3 }
+s2 = { 4, 5, 6 }
+
+s1.isdisjoint(s2)  # => True
+```
+
+### 字典
+
+#### .get
+
+访问字典中的元素。
+
+```python
+person = { "name": "Alice", "age": 25 }
+
+person.get("age")  # => 25
+person.get("email")  # => None
+person.get("email", "N/A")  # => 'N/A'，设置默认值
+```
+
+也可以通过“键”访问。
+
+```python
+person = { "name": "Alice", "age": 25 }
+
+person["name"]  # => 'Alice'
+person["email"]  # KeyError: 'email'
+```
+
+#### .update
+
+修改字典中元素的值，如果不存在则添加元素。
+
+```python
+person = { "name": "Alice", "age": 25 }
+
+person.update({ "city": "California" })
+person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
+
+person.update(age=27)
+person  # => {'name': 'Alice', 'age': 27, 'city': 'California'}
+```
+
+也可以通过“键”访问后直接修改或添加元素。
+
+```python
+person = { "name": "Alice", "age": 25 }
+
+person["city"] = "California"
+person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
+```
+
+#### .pop
+
+删除字典中的元素，返回被删除的元素。
+
+```python
+person = { "name": "Alice", "age": 25, "city": "California" }
+
+age = person.pop("age")
+age  # => 25
+person  # => {'name': 'Alice', 'city': 'California'}
+```
+
+#### .clear
+
+清空字典。
+
+```python
+person = { "name": "Alice", "age": 25, "city": "California" }
+
+person.clear()
+person  # => None
+```
+
+## 高级特性
 
 ### 切片
 
@@ -342,235 +573,6 @@ squares = [x**2 for x in range(5) if x % 2 == 0]
 squares  # => [0, 4, 16]
 ```
 
-## 集合
-
-### .add
-
-向集合中添加一个元素。
-
-```python
-s = { "2", "3", "4" }
-
-s.add("5")
-s  # => {'2', '4', '5', '3'}
-```
-
-### .update
-
-将一个可迭代对象中的元素添加到集合中。
-
-```python
-s = { "2", "3", "4" }
-
-s.update(["5", "6"])
-s  # => {'3', '2', '6', '5', '4'}
-```
-
-### .remove
-
-移除集合中的指定元素，不存在则报错。
-
-```python
-s = { "2", "3", "4" }
-
-s.remove("5")  # KeyError: 5
-
-s.remove("3")
-s  # => {'2', '4'}
-```
-
-### .discard
-
-移除集合中的指定元素，不存在不会报错。
-
-```python
-s = { "2", "3", "4" }
-
-s.discard("5")  # 不会报错
-s  # => {'3', '4', '2'}
-
-s.discard("3")
-s  # => {'2', '4'}
-```
-
-### .pop
-
-随机删除集合中的一个元素，返回被删除的元素。
-
-```python
-s = { "2", "3", "4" }
-
-r = s.pop()
-r  # => '4'
-s  # => {'2', '3'}
-```
-
-### .clear
-
-清空集合。
-
-```python
-s = { "2", "3", "4" }
-
-s.clear()
-s  # => set()
-```
-
-### .intersection
-
-计算两个集合的交集，并返回。
-
-```python
-s1 = { 1, 2, 3, 4 }
-s2 = { 3, 4, 5, 6 }
-
-s1.intersection(s2)  # => {3, 4}
-s1 & s1  # => {3, 4}
-```
-
-### .union
-
-计算两个集合的并集，并返回。
-
-```python
-s1 = { 1, 2, 3, 4 }
-s2 = { 3, 4, 5, 6 }
-
-s1.union(s2)  # => {1, 2, 3, 4, 5, 6}
-s1 | s2  # => {1, 2, 3, 4, 5, 6}
-```
-
-### .difference
-
-计算两个集合的差集，并返回。
-
-```python
-s1 = { 1, 2, 3, 4 }
-s2 = { 3, 4, 5, 6 }
-
-s1.difference(s2)  # => {1, 2}
-s1 - s2  # => {1, 2}
-
-s2.difference(s1)  # => {5, 6}
-s2 - s1  # => {5, 6}
-```
-
-### .symmetric_difference
-
-计算两个集合的对称差集，并返回。
-
-```python
-s1 = { 1, 2, 3, 4 }
-s2 = { 3, 4, 5, 6 }
-
-s1.symmetric_difference(s2)  # => {1, 2, 5, 6}
-s1 ^ s2  # => {1, 2, 5, 6}
-```
-
-### .issubset
-
-判断集合是否为另一个集合的子集。
-
-```python
-s1 = { 1, 2, 3 }
-s2 = { 1, 2, 3, 4, 5 }
-
-s1.issubset(s2)  # => True
-s1 <= s2  # => True
-```
-
-### .issuperset
-
-判断集合是否为另一个集合的超集（父集）。
-
-```python
-s1 = { 1, 2, 3, 4, 5 }
-s2 = { 1, 2, 3 }
-
-s1.issuperset(s2)  # => True
-s1 >= s2  # => True
-```
-
-### .isdisjoint
-
-判断两个集合是否**无**交集。
-
-```python
-s1 = { 1, 2, 3 }
-s2 = { 4, 5, 6 }
-
-s1.isdisjoint(s2)  # => True
-```
-
-## 字典
-
-### .get
-
-访问字典中的元素。
-
-```python
-person = { "name": "Alice", "age": 25 }
-
-person.get("age")  # => 25
-person.get("email")  # => None
-person.get("email", "N/A")  # => 'N/A'，设置默认值
-```
-
-也可以通过“键”访问。
-
-```python
-person = { "name": "Alice", "age": 25 }
-
-person["name"]  # => 'Alice'
-person["email"]  # KeyError: 'email'
-```
-
-### .update
-
-修改字典中元素的值，如果不存在则添加元素。
-
-```python
-person = { "name": "Alice", "age": 25 }
-
-person.update({ "city": "California" })
-person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
-
-person.update(age=27)
-person  # => {'name': 'Alice', 'age': 27, 'city': 'California'}
-```
-
-也可以通过“键”访问后直接修改或添加元素。
-
-```python
-person = { "name": "Alice", "age": 25 }
-
-person["city"] = "California"
-person  # => {'name': 'Alice', 'age': 25, 'city': 'California'}
-```
-
-### .pop
-
-删除字典中的元素，返回被删除的元素。
-
-```python
-person = { "name": "Alice", "age": 25, "city": "California" }
-
-age = person.pop("age")
-age  # => 25
-person  # => {'name': 'Alice', 'city': 'California'}
-```
-
-### .clear
-
-清空字典。
-
-```python
-person = { "name": "Alice", "age": 25, "city": "California" }
-
-person.clear()
-person  # => None
-```
-
 ## 函数
 
 ### 函数的参数
@@ -636,20 +638,9 @@ func("hello", name="Alice")  # => ('hello', 'hello', ('name', 'Alice'))
 
 ## 面向对象
 
-### 构造方法
+### 类和实例
 
-创建实例时，会自动执行构造方法。
-
-```python
-class Person:
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
-```
-
-### 实例属性
-
-通过构造方法初始化的属性是实例属性。实例属性对于每个实例都是独立的。
+通过构造方法初始化的属性是**实例属性**。实例属性对于每个实例都是独立的。
 
 ```python
 class Person:
@@ -658,15 +649,13 @@ class Person:
 
 
 p1 = Person("Alice")
-p2 = Person("bob")
+p2 = Person("Bob")
 
 p1.name  # => 'Alice'
 p2.name  # => 'Bob'
 ```
 
-### 类属性
-
-定义在类的内部，并且没有在构造法中初始化的属性是类属性。类属性是所有实例共享的。
+定义在类的内部，并且没有在构造法中初始化的属性是**类属性**。类属性是所有实例共享的。
 
 ```python
 class Person:
@@ -686,7 +675,7 @@ p2.school  # => 'MIT'
 Person.school  # => 'MIT'
 ```
 
-### 实例方法
+未使用任何装饰器修饰的非构造方法是**实例方法**，通常用于访问或修改实例属性。
 
 ```python
 class Person:
@@ -707,11 +696,7 @@ p.set_name("Bob")
 p.get_name()  # => 'Bob'
 ```
 
-### 类方法
-
-使用 `@classmethod` 装饰器定义的方法是类方法。
-
-类方法通常用于访问或修改类属性。
+使用 `@classmethod` 装饰器修饰的方法是**类方法**，通常用于访问或修改类属性。
 
 ```python
 class Person:
@@ -731,11 +716,7 @@ p2 = Person()
 Person.get_count()  # => 2
 ```
 
-### 静态方法
-
-使用 `@staticmethod` 装饰器定义的方法是静态方法。
-
-静态方法不需要实例化可以直接调用，通常用于开发工具集。
+使用 `@staticmethod` 装饰器修饰的方法是**静态方法**，不需要实例化可以直接调用，通常用于开发工具集。
 
 ```python
 class MathUtils:
@@ -752,41 +733,9 @@ MathUtils.add(3, 5)  # => 8
 MathUtils.multiply(4, 6)  # => 24
 ```
 
-### 属性方法
-
-```python
-class Person:
-    def __init__(self, name):
-        self._name = name
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
-    @name.deleter
-    def name(self):
-        del self._name
-
-
-p = Person("Alice")
-p.name  # => 'Alice'
-
-p.name = "Bob"
-p.name  # => 'Bob'
-
-del p.name
-p.name  # AttributeError: 'Person' object has no attribute '_name'
-```
-
 ### 继承
 
-子类可以继承父类的属性和方法 。
-
-在子类中使用 `super()` 调用父类的方法。
+子类可以继承父类的属性和方法 。在子类中使用 `super()` 调用父类的方法。
 
 ```python
 class Person:
@@ -1223,7 +1172,7 @@ GIL（全局解释器锁）是 CPython 解释器中的一个互斥锁，目的�
 
   - 最佳方案：**多进程**。
 
-- I/O 密集型任务（网络请求、文件读写）：
+- I/O 密集型任务（如网络请求、文件读写）：
 
   - 线程在等待 I/O 阻塞时会自动释放 GIL，其他线程可以获取 GIL 并继续执行。
 
