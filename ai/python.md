@@ -743,7 +743,7 @@ class Person:
         self.name = name
         self.age = age
 
-    def info(self):
+    def get_info(self):
         return { "name": self.name, "age": self.age }
 
 
@@ -752,13 +752,13 @@ class Student(Person):
         super().__init__(name, age)
         self.sex = sex
 
-    def info(self):
-        name, age = super().info().values()
+    def get_info(self):
+        name, age = super().get_info().values()
         return { "name": name, "age": age, "sex": self.sex }
 
 
 student = Student("Alice", 22, "female")
-student.info()  # => {'name': 'Alice', 'age': 22, 'sex': 'female'}
+student.get_info()  # => {'name': 'Alice', 'age': 22, 'sex': 'female'}
 ```
 
 ### 多态
