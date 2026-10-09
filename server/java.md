@@ -1,93 +1,86 @@
 ---
 title: Java
 icon: java
-date: 2025-11-06
+date: 2026-10-09
 description: Java
 ---
 
-## 类型转换
-
-### 自动类型提升
-
-在表达式计算或者赋值过程中，较低精度的基本数据类型会自动转换为较高精度的数据类型。
-
-提升顺序如下：
-
-```arduino
-byte → short → int → long → float → double
-```
-
-> [!important]
->
-> byte、short、char 运算时自动提升为 int。
-
-```java
-byte a = 10;
-byte b = 10;
-
-byte c = a + b; // ❌ 编译失败：需要强制类型转换
-byte c = (byte) (a + b); // ✅ 正确
-
-int c = a + b; // => 20
-float c = a + b; // => 20.0
-
-char c = 'a';
-int d = a + b + c; // => 117
-```
-
-### 强制类型转换
-
-把一个高精度类型的值赋给低精度类型变量时，必须使用强制类型转换。
-
-```java
-double d = 12;
-
-int i = d; // ❌ 编译失败
-int i = (int) d; // ✅ 将 double 类型强制转为 int 类型
-```
-
 ## 面向对象
 
-### 重载和重写
+### 封装
 
-重载。在同一个类中，方法名一样，但参数（类型/个数/顺序）不同。
+#### 访问修饰符
 
-```java
-class MathUtil {
-  int add(int a, int b) { return a + b; }
-  double add(double a, double b) { return a + b; }
-  int add(int a, int b, int c) { return a + b + c; }
+- private：只能在同一个类中访问。
+
+- default（默认）：可以在同一个包中访问。
+
+- protected：可以在同一个包或不同包的子类中访问，即不能再不同包的非子类中访问。
+
+- public：可以在任何地方访问。
+
+#### Getter & Setter
+
+为了不让外部直接访问或修改类的属性，通常将其设置为私有属性，然后提供 Getter 和 Setter 方法用来访问或修改。
+
+```python
+class Person {
+  private String name;
+  private int age;
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public void setAge(int age) {
+    if (age >= 0) this.age = age;
+  }
 }
 ```
 
-重写。子类修改父类的方法实现，保持父类方法名与参数列表不变。
+### 继承
+
+子类可以继承父类的属性和方法。在子类中使用 `super` 调用父类的方法。
 
 ```java
-class Animal {
-  void speak() { System.out.println("animal speaking"); }
+class Person {
+  String name;
+  int age;
+
+  public Person(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  String getInfo() {
+    return "name: " + name + ", " + "age: " + age;
+  }
 }
 
-class Dog extends Animal {
-  @Override
-  void speak() { System.out.println("dog speaking"); }
+class Student extends Person {
+  String sex;
+
+  public Student(String name, int age, String sex) {
+    super(name, age);
+    this.sex = sex;
+  }
+
+  String getInfo() {
+    return super.getInfo() + ", " + "sex: " + sex;
+  }
 }
+
+Student student = new Student("Alice", 20, "male");
+student.getInfo() // => 'name: Alice, age: 20, sex: male'
 ```
-
-### 封装性
-
-使用权限修饰符来修饰类及类的内部成员。
-
-- private：私有
-
-- default：缺省
-
-- protected：受保护
-
-- public：公开
-
-### 继承性
-
-子类可以继承父类的属性和方法。
 
 ### 多态性
 
