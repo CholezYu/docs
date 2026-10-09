@@ -196,6 +196,11 @@ export default sidebar({
           text: "Python",
           icon: "python",
           link: "python"
+        },
+        {
+          text: "LangChain",
+          icon: "langchain",
+          link: "langchain"
         }
       ]
     }
