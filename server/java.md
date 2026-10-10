@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-09
+date: 2026-10-10
 description: Java
 ---
 
@@ -15,7 +15,7 @@ description: Java
 
 - default（默认）：可以在同一个包中访问。
 
-- protected：可以在同一个包或不同包的子类中访问，即不能再不同包的非子类中访问。
+- protected：可以在同一个包或不同包的子类中访问，即不能在不同包的非子类中访问。
 
 - public：可以在任何地方访问。
 
@@ -79,48 +79,53 @@ class Student extends Person {
 }
 
 Student student = new Student("Alice", 20, "male");
-student.getInfo() // => 'name: Alice, age: 20, sex: male'
+student.getInfo(); // => name: Alice, age: 20, sex: male
 ```
 
-### 多态性
+### 多态
 
-同一个方法，通过不同的对象表现出不同的行为。
+同一个方法，通过不同的对象会表现出不同的行为。
 
 ```java
-class Animal {
-  void speak() { System.out.println("animal speaking"); }
+abstract class Animal {
+  abstract void speak();
 }
 
 class Dog extends Animal {
   @Override
-  void speak() { System.out.println("dog speaking"); }
-  
-  void watch() { System.out.println("dog watching"); }
+  void speak() {
+    System.out.println("Woof!");
+  }
 }
 
 class Cat extends Animal {
   @Override
-  void speak() { System.out.println("cat speaking"); }
-  
-  void sleep() { System.out.println("cat sleeping"); }
+  void speak() {
+    System.out.println("Meow!");
+  }
 }
 
-void adopt(Animal animal) {
+static void animalSpeak(Animal animal) {
   animal.speak();
-  
+
   if (animal instanceof Dog) {
-    Dog dog = (Dog)animal;
-    dog.watch();
+    Dog dog = (Dog) animal;
+    // ...
   }
   if (animal instanceof Cat cat /* 模式变量 */) {
-    cat.sleep();
+    // ...
   }
 }
+
+Dog dog = new Dog();
+Cat cat = new Cat();
+animalSpeak(dog); // Woof!
+animalSpeak(cat); // Meow!
 ```
 
 ### final 关键字
 
-修饰基本类型变量，**在初始化之后**，值不能被修改。
+修饰基本类型变量：**在初始化之后**，值不能被修改。
 
 ```java
 final int n;
@@ -128,7 +133,7 @@ n = 10; // => 10
 n = 20; // ❌ 报错：不能修改 final 变量的值
 ```
 
-修饰引用类型变量，不能指向另一个对象，但是内部结构可以改变。
+修饰引用类型变量：不能指向另一个对象，但是内部结构可以改变。
 
 ```java
 final Person person = new Person();
@@ -136,20 +141,20 @@ person.age = 18; // ✅ 可以修改对象内容
 person = new Person(); // ❌ 报错：不能指向新的对象
 ```
 
-修饰方法，不能被重写。
+修饰方法：不能被重写。
 
 ```java
 class Person {
-  public final void show() {} 
+  public final void getInfo() {} 
 }
 
 class Woman extends Person {
   @Override
-  public void show() {} // ❌ 报错：不能重写 final 方法
+  public void getInfo() {} // ❌ 报错：不能重写 final 方法
 }
 ```
 
-修饰类，不能被继承。
+修饰类：不能被继承。
 
 ```java
 final class Animal {}
@@ -180,7 +185,9 @@ abstract class Animal {
 class Dog extends Animal {
   // 实现抽象方法
   @Override
-  public void speak() { System.out.println(name + " says: Woof!"); }
+  public void speak() {
+    System.out.println("Woof!");
+  }
 }
 ```
 
@@ -188,7 +195,7 @@ class Dog extends Animal {
 
 接口（Interface）是一种比抽象类更加抽象的类型，它用来定义规范，实现类必须按照接口的要求进行实现。
 
-常量，默认使用 `public static final` 修饰。
+**常量** 默认使用 `public static final` 修饰。
 
 ```java
 interface USB {
@@ -196,61 +203,75 @@ interface USB {
 }
 ```
 
-抽象方法，默认使用 `abstract` 修饰。
+**抽象方法** 默认使用 `abstract` 修饰。
 
 ```java
 interface USB {
   void connect();
-  
+
   void disconnect();
 }
 
-// implements 关键字实现接口
+// 使用 implements 关键字
 class Printer implements USB {
   @Override
-  public void connect() { System.out.println("printer connected..."); }
+  public void connect() {
+    System.out.println("printer connected...");
+  }
   
   @Override
-  public void disconnect() { System.out.println("printer disconnected..."); }
+  public void disconnect() {
+    System.out.println("printer disconnected...");
+  }
 }
 computer.run(new Printer());
 
-// 匿名实现类实现接口
+// 匿名实现类
 computer.run(new USB() {
   @Override
-  public void connect() { System.out.println("printer connected..."); }
+  public void connect() {
+    System.out.println("printer connected...");
+  }
   
   @Override
-  public void disconnect() { System.out.println("printer disconnected..."); }
+  public void disconnect() {
+    System.out.println("printer disconnected...");
+  }
 });
 ```
 
-静态方法 <Badge text="Java 8+" type="tip" /> ，使用 `static` 修饰。只能通过接口调用，不能通过实现类或对象调用。
+**静态方法** <Badge text="Java 8+" type="tip" /> 使用 `static` 修饰。只能通过接口调用，不能通过实现类或对象调用。
 
 ```java
 interface USB {
-  static void showVersion() { System.out.println("USB interface version: " + VERSION); }
+  static void showVersion() {
+    System.out.println("USB interface version: " + VERSION);
+  }
 }
 
 class Printer implements USB {}
 
-USB.staticMethod(); // ✅ 可以修改对象内容
-Printer.staticMethod(); // ❌ static 方法只能在其包含接口上调用
+USB.showVersion(); // ✅ 可以通过接口调用
+Printer.showVersion(); // ❌ 不能通过实现类调用
 ```
 
-默认方法 <Badge text="Java 8+" type="tip" /> ，使用 `default` 修饰。实现类可以直接调用，也可以进行重写。
+**默认方法** <Badge text="Java 8+" type="tip" /> 使用 `default` 修饰。实现类可以直接调用，也可以进行重写。
 
 ```java
 interface USB {
-  default void startTransfer() { System.out.println("starting data transfer..."); }
+  default void startTransfer() {
+    System.out.println("starting data transfer...");
+  }
 }
 ```
 
-私有方法 <Badge text="Java 9+" type="tip" /> ，使用 `private` 修饰。只能在接口内部使用，不能被实现类调用或重写。
+**私有方法** <Badge text="Java 9+" type="tip" /> 使用 `private` 修饰。只能在接口内部使用，不能被实现类调用或重写。
 
 ```java
 interface USB {
-  private void checkConnection() { System.out.println("checking USB connection..."); }
+  private void checkConnection() {
+    System.out.println("checking USB connection...");
+  }
 }
 ```
 
@@ -258,61 +279,85 @@ interface USB {
 
 内部类（Inner Class）是定义在另一个类内部的类。
 
-成员内部类。可以访问外部类的成员。
+**成员内部类** 可以访问外部类的成员。
 
 ```java
 class Outer {
-  String name = "Outer";
-  
+  String name = "outer name";
+
   class Inner {
-    void show() { System.out.println("outer name: " + name); }
+    void display() {
+      System.out.println(name);
+    }
   }
 }
 
 Outer outer = new Outer();
 Outer.Inner inner = outer.new Inner();
+inner.display(); // outer name
 ```
 
-静态内部类，相当外部类的静态成员。只能访问外部类的静态成员。
+**静态内部类** 相当于外部类的静态成员。只能访问外部类的静态成员。
 
 ```java
 class Outer {
-  static String name = "Outer";
-  
+  static String name = "outer name";
+
   static class Inner {
-    void show() { System.out.println("outer static name: " + name); }
+    void display() {
+      System.out.println(name);
+    }
   }
 }
 
 Outer.Inner inner = new Outer.Inner();
+inner.display(); // outer name
 ```
 
-局部内部类，定义在方法、代码块中。作用范围仅限方法内部，不能使用权限修饰符。
+**局部内部类** 定义在方法、代码块中。作用范围仅限方法内部，不能使用访问修饰符。
 
 ```java
 class Outer {
-  Comparable getInstance() {
-    class Inner implements Comparator {
-      @Override
-      public int compareTo(Object o) { return 0; }
+  String name = "outer name";
+
+  void print() {
+    class Inner {
+      public void display() {
+        System.out.println(name);
+      }
     }
-    
-    return new Inner();
+    Inner inner = new Inner();
+    inner.display();
   }
 }
+
+Outer outer = new Outer();
+outer.print();
 ```
 
-匿名内部类。常用于回调、事件监听、线程创建等场景。
+**匿名内部类** 常用于回调、事件监听、线程创建等场景。
 
 ```java
+interface Inner {
+  void display();
+}
+
 class Outer {
-  Comparable getInstance() {
-    return new Comparable() {
+  String name = "outer name";
+
+  void print() {
+    Inner inner = new Inner() {
       @Override
-      public int compareTo(Object o) { return 0; }
+      public void display() {
+        System.out.println(name);
+      }
     };
+    inner.display();
   }
 }
+
+Outer outer = new Outer();
+outer.print();
 ```
 
 ### 枚举
@@ -325,14 +370,16 @@ enum Season {
   SUMMER("summer"),
   AUTUMN("autumn"),
   WINTER("winter");
-  
+
   private final String name;
-  
+
   Season(String name) {
     this.name = name;
   }
-  
-  public String getName() { return name; }
+
+  public String getName() {
+    return name;
+  }
 }
 
 Arrays.toString(Season.values()); // => [SPRING, SUMMER, AUTUMN, WINTER]
@@ -357,19 +404,27 @@ interface Show {
 enum Season implements Show {
   SPRING {
     @Override
-    public void show() { System.out.println("spring coming"); }
+    public void show() {
+      System.out.println("spring coming");
+    }
   },
   SUMMER {
     @Override
-    public void show() { System.out.println("summer coming"); }
+    public void show() {
+      System.out.println("summer coming");
+    }
   },
   AUTUMN {
     @Override
-    public void show() { System.out.println("autumn coming"); }
+    public void show() {
+      System.out.println("autumn coming");
+    }
   },
   WINTER {
     @Override
-    public void show() { System.out.println("winter coming"); }
+    public void show() {
+      System.out.println("winter coming");
+    }
   }
 }
 ```
