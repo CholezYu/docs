@@ -1,7 +1,7 @@
 ---
 title: Nginx
 icon: Nginx
-date: 2024-05-09
+date: 2026-10-11
 description: Nginx
 ---
 
@@ -67,7 +67,7 @@ git clone url
 server {
   listen       5000;
   server_name  localhost;
-  
+
   location / {
     root   /www/project/build;
     index  index.html index.htm;
