@@ -1,7 +1,7 @@
 ---
 title: HTML5
 icon: html
-date: 2024-07-11
+date: 2026-10-11
 description: HTML5
 ---
 
@@ -57,7 +57,7 @@ ctx.fillRect(10, 10, 100, 100)
 
 现代网络请求方式。
 
-[Fetch API | Ajax](/client/ajax.md#fetch)
+[Fetch API | JavaScript](/client/javascript.md#fetch)
 
 ### History
 
