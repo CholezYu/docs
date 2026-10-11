@@ -1,6 +1,7 @@
 ---
 title: ECharts
 icon: echarts
+date: 2026-10-11
 description: ECharts
 ---
 
@@ -91,7 +92,7 @@ export default charts
   import { ref, watch, onMounted } from "vue"
   import charts, { type ECOption } from "@/utils/charts"
   import { merge, cloneDeep } from "lodash"
-  
+
   const props = withDefaults(defineProps<{
     option: ECOption
     width?: string
@@ -100,7 +101,7 @@ export default charts
     width: "100%",
     height: "100%"
   })
-  
+
   const initOption: ECOption = {
     title: {},
     xAxis: {},
@@ -120,23 +121,23 @@ export default charts
       containLabel: true // 是否包含标签
     }
   }
-  
+
   const chartRef = ref<HTMLDivElement>()
-  
+
   const chart = ref<charts.ECharts>()
-  
+
   onMounted(() => {
     // 初始化 charts 实例
     chart.value = charts.init(chartRef.value)
   })
-  
+
   watch(() => props.option, (option: ECOption) => {
     // 渲染图表
     chart.value?.setOption(merge(cloneDeep(initOption), option))
   }, {
     deep: true
   })
-  
+
   defineExpose({
     name: "Chart",
     chart
@@ -236,9 +237,9 @@ export default charts
   import Chart from "@/components/Chart/index.vue"
   import charts, { type ECOption } from "@/utils/charts.ts"
   import china from "@/china.json" // https://github.com/yezongyang/china-geojson
-  
+
   charts.registerMap("china", china as any)
-  
+
   const option: ECOption = {
     title: {
       show: false
