@@ -1,7 +1,7 @@
 ---
 title: CSS
 icon: css
-date: 2024-07-13
+date: 2026-10-11
 description: CSS
 ---
 
@@ -31,7 +31,6 @@ link > visited > hover > active
 /* 获取焦点的表单元素 */
 :focus
 
-
 /* 未被禁用的表单元素 */
 :enabled
 
@@ -54,7 +53,6 @@ ul li:last-child
 /* <ul> 中的 <li>，且该元素是第 n 个子元素 */
 ul li:nth-child(n)
 
-
 /* <ul> 中的第一个 <li> */
 ul li:first-of-type
 
@@ -63,7 +61,6 @@ ul li:last-of-type
 
 /* <ul> 中的第 n 个 <li> */
 ul li:nth-of-type(n)
-
 
 /* <ul> 中的唯一一个 <li> */
 ul li:only-child
@@ -100,13 +97,11 @@ ul li:only-child
 /* 在元素内部的最后面插入内容（必须设置 content 属性） */
 ::after
 
-
 /* 元素的首字母 */
 ::first-letter
 
 /* 元素的首行 */
 ::first-line
-
 
 /* 元素中被选中的部分 */
 ::selection
@@ -129,10 +124,8 @@ text-decoration-line: overline;
 /* 删除线 */
 text-decoration-line: line-through;
 
-
 /* 装饰线颜色 */
 text-decoration-color: black;
-
 
 /* 实线 */
 text-decoration-style: solid;
@@ -148,7 +141,6 @@ text-decoration-style: dotted;
 
 /* 波浪线 */
 text-decoration-style: wavy;
-
 
 /* 复合属性 */
 text-decoration: underline red solid;
@@ -623,7 +615,7 @@ flex-basis: 0;
   .box {
     height: 200px;
   }
-  
+
   .box span {
     line-height: 200px;
   }
@@ -686,18 +678,6 @@ margin: 0 auto;
 
 .inner {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-}
-.outer {
-  position: relative;
-}
-
-.inner {
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -734,19 +714,19 @@ text-overflow: ellipsis;
 ```css
 /* 隐藏溢出部分 */
 overflow: hidden;
-  
+
 /* 用省略号代替溢出文本 */
 text-overflow: ellipsis;
-  
+
 /* 非汉字强制换行 */
 word-break: break-all;
-  
+
 /* 设置为弹性容器 */
 display: -webkit-box;
-  
+
 /* 弹性容器的排列方式: 垂直排列 */
 -webkit-box-orient: vertical;
-  
+
 /* 控制多行文本的显示行数 */
 -webkit-line-clamp: 2;
 ```
