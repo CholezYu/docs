@@ -8,7 +8,7 @@ export default sidebar({
       link: "overview/",
       collapsible: true
     },
-    
+
     {
       text: "客户端",
       icon: "chrome",
@@ -36,6 +36,11 @@ export default sidebar({
           link: "javascript"
         },
         {
+          text: "TypeScript",
+          icon: "typescript",
+          link: "typescript"
+        },
+        {
           text: "React",
           icon: "react",
           link: "react"
@@ -61,16 +66,6 @@ export default sidebar({
           link: "next"
         },
         {
-          text: "TypeScript",
-          icon: "typescript",
-          link: "typescript"
-        },
-        {
-          text: "Ajax",
-          icon: "ajax",
-          link: "ajax"
-        },
-        {
           text: "Node",
           icon: "nodeJS",
           link: "node"
@@ -79,15 +74,10 @@ export default sidebar({
           text: "Webpack",
           icon: "webpack",
           link: "webpack"
-        },
-        {
-          text: "Git",
-          icon: "git",
-          link: "git"
         }
       ]
     },
-    
+
     {
       text: "移动端",
       icon: "phone",
@@ -121,7 +111,7 @@ export default sidebar({
         }
       ]
     },
-    
+
     {
       text: "服务端",
       icon: "shell",
@@ -185,7 +175,7 @@ export default sidebar({
         }
       ]
     },
-    
+
     {
       text: "大模型",
       icon: "ai",
@@ -205,64 +195,64 @@ export default sidebar({
       ]
     }
   ],
-  
+
   "/algorithm": [
     {
       text: "介绍",
       icon: "hot",
       link: "/algorithm/"
     },
-    
+
     {
       text: "栈与队列",
       icon: "stack",
       link: "stack_queue"
     },
-    
+
     {
       text: "数组与链表",
       icon: "extend",
       link: "array_linked"
     },
-    
+
     {
       text: "哈希表",
       icon: "map",
       link: "hashmap"
     },
-    
+
     {
       text: "树",
       icon: "tree",
       link: "tree"
     },
-    
+
     {
       text: "查找算法",
       icon: "search",
       link: "search"
     },
-    
+
     {
       text: "排序算法",
       icon: "sort",
       link: "sort"
     }
   ],
-  
+
   "/notes": [
     {
       text: "解决问题",
       icon: "markdown",
       link: "解决问题"
     },
-    
+
     {
       text: "项目难点",
       icon: "markdown",
       link: "项目难点"
     },
-    
+
     {
       text: "代码规范",
       icon: "markdown",
