@@ -249,9 +249,9 @@ const scrollToTop = () => {
   const easeInOutCubic = (value: number) => value < 0.5
     ? cubic(value * 2) / 2
     : 1 - cubic((1 - value) * 2) / 2
-  
+
   const el = document.documentElement
-  
+
   const beginTime = Date.now()
   const beginValue = el.scrollTop
   const animate = () => {
@@ -653,7 +653,7 @@ const call = async () => {
   // 建立两个对等连接
   pc1 = new RTCPeerConnection(configuration)
   pc2 = new RTCPeerConnection(configuration)
-  
+
   // 交换 ICE 候选者
   pc1.onicecandidate = async event => {
     await pc2.addIceCandidate(event.candidate)
@@ -661,23 +661,23 @@ const call = async () => {
   pc2.onicecandidate = async event => {
     await pc1.addIceCandidate(event.candidate)
   }
-  
+
   // 处理接收到的远程流
   pc2.addEventListener("track", event => {
     // 将远程视频流显示在页面上
     document.getElementById("remoteVideo").srcObject = event.streams[0]
   })
-  
+
   // 将本地视频流添加到 pc1 中
   localStream.getTracks().forEach(track => pc1.addTrack(track, localStream))
-  
+
   // 创建一个 offer
   const offer = await pc1.createOffer()
   // 将 pc1 设置为本地描述
   await pc1.setLocalDescription(offer)
   // 将 pc1 设置为 pc2 的远程描述
   await pc2.setRemoteDescription(offer)
-  
+
   // 创建一个 answer
   const answer = await pc2.createAnswer()
   // 将 pc2 设置为本地描述
@@ -753,7 +753,7 @@ speechSynthesis.addEventListener("voiceschanged", () => {
 const speak = () => {
   const text = document.getElementById("text").value
   if (text.trim() === "") return
-  
+
   // 创建语音合成实例
   const utterance = new SpeechSynthesisUtterance(text)
   const selectedVoiceName = voiceSelect.value
@@ -761,13 +761,13 @@ const speak = () => {
   const voices = speechSynthesis.getVoices()
   const selectedVoice = voices.find(voice => voice.name === selectedVoiceName)
   utterance.voice = selectedVoice
-  
+
   // 设置属性（可选）
   utterance.lang = selectedVoice.lang // 设置语言
   utterance.pitch = 1  // 设置语调
   utterance.rate = 1   // 设置语速
   utterance.volume = 1 // 设置音量
-  
+
   // 开始朗读
   speechSynthesis.speak(utterance)
 }
@@ -828,12 +828,12 @@ await paymentResponse.complete("success")
 if (window.AmbientLightSensor) {
   // 创建环境光传感器实例
   const sensor = new AmbientLightSensor()
-  
+
   // 监听传感器数据
   sensor.addEventListener("reading", () => {
     const lightLevel = sensor.illuminance
     document.getElementById('light-level').textContent = `Current Light Level: ${lightLevel} lux`
-    
+
     // 根据光照强度调整网页样式
     if (lightLevel < 50) {
       document.body.style.backgroundColor = "black"
@@ -844,7 +844,7 @@ if (window.AmbientLightSensor) {
       document.body.style.color = "black"
     }
   })
-  
+
   // 开始传感器
   sensor.start()
 }
