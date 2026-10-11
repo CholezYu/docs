@@ -1,7 +1,7 @@
 ---
 title: Node
 icon: nodeJS
-date: 2024-05-04
+date: 2026-10-11
 description: Node
 ---
 
@@ -1448,7 +1448,7 @@ const decoded = jwt.verify(token, "secret")
 app.post("/login", (req, res) => {
   if (true /* 用户名密码正确 */) {
     const token = jwt.sign(data, "secret", { expiresIn: "7 days" })
-    
+
     res.send({ status: 200, data: { token } })
   }
 })
@@ -1472,11 +1472,11 @@ fetch("http://127.0.0.1:3000/user", {
 ```ts
 app.get("/user", (req, res) => {
   const token = req.get("Authorization").split(" ")[1]
-  
+
   try {
     const decoded = jwt.verify(token, "secret")
   }
-  
+
   catch {
     // token 失效
   }
