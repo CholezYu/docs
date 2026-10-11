@@ -1,7 +1,7 @@
 ---
 title: Exceljs
 icon: exceljs
-date: 2024-07-16
+date: 2026-10-11
 description: Exceljs
 ---
 
@@ -14,19 +14,19 @@ description: Exceljs
 interface Style {
   // 字体
 	font: Partial<Font>
-  	
+
   // 对齐
   alignment: Partial<Alignment>
-  
+
   // 边框
   border: Partial<Borders>
-  
+
   // 填充模式
 	fill: Fill
-  
+
   // 数字格式
 	numFmt: string
-	
+
   // 单元格保护
 	protection: Partial<Protection>
 }
@@ -44,31 +44,31 @@ interface Font {
   
   // 字体大小
 	size: number
-  
+
   // 字体颜色
 	color: { argb: string; theme: number }
-  
+
   // 字体加粗
 	bold: boolean
-  
+
   // 字体倾斜
 	italic: boolean
-  
+
   // 下划线
 	underline: boolean | 'none' | 'single' | 'double' | 'singleAccounting' | 'doubleAccounting'
-  
+
   // 删除线
 	strike: boolean
-  
+
   // 字体轮廓
 	outline: boolean
-  
+
   // 垂直对齐
 	vertAlign: 'superscript' | 'subscript'
-  
+
   // 字体方案
 	scheme: 'minor' | 'major' | 'none'
-  
+
   // 字符集
 	charset: number
 }
@@ -80,22 +80,22 @@ interface Font {
 interface Alignment {
   // 水平对齐
 	horizontal: 'left' | 'center' | 'right' | 'fill' | 'justify' | 'centerContinuous' | 'distributed'
-  
+
   // 垂直对齐
 	vertical: 'top' | 'middle' | 'bottom' | 'distributed' | 'justify'
-  
+
   // 文本换行
 	wrapText: boolean
-  
+
   // 自适应
 	shrinkToFit: boolean
-  
+
   // 缩进
 	indent: number
-  
+
   // 阅读顺序
 	readingOrder: 'rtl' | 'ltr'
-  
+
   // 文本旋转
 	textRotation: number | 'vertical'
 }
@@ -107,7 +107,7 @@ interface Alignment {
 interface Borders {
   // 对角线
 	diagonal: Partial<BorderDiagonal>
-  
+
 	top: Partial<Border>
 	left: Partial<Border>
 	bottom: Partial<Border>
@@ -138,7 +138,7 @@ type Fill = FillPattern | FillGradientAngle | FillGradientPath
 interface FillPattern {
   // 普通模式
 	type: 'pattern'
-  
+
   // 模式类型
 	pattern: 
     | 'none' | 'solid'
@@ -146,10 +146,10 @@ interface FillPattern {
 	  | 'lightVertical' | 'lightHorizontal' | 'lightGrid' | 'lightTrellis' | 'lightDown'
     | 'lightUp'
 	  | 'darkGray' | 'mediumGray' | 'lightGray' | 'gray125' | 'gray0625'
-  
+
   // 图案前景色
 	fgColor?: { argb: string; theme: number }
-  
+
   // 图案背景色
 	bgColor?: { argb: string; theme: number }
 }
@@ -157,13 +157,13 @@ interface FillPattern {
 interface FillGradientAngle {
   // 渐变模式
 	type: 'gradient'
-  
+
   // 线性渐变
 	gradient: 'angle'
-  
+
   // 旋转角度
 	degree: number
-  
+
   // 渐变颜色序列
 	stops: { position: number; color: { argb: string; theme: number } }[]
 }
@@ -171,13 +171,13 @@ interface FillGradientAngle {
 interface FillGradientPath {
   // 渐变模式
 	type: 'gradient'
-  
+
   // 径向渐变
 	gradient: 'path'
-  
+
   // 中心点
 	center: { left: number; top: number }
-  
+
   // 渐变颜色序列
 	stops: { position: number; color: { argb: string; theme: number } }[]
 }
@@ -209,7 +209,7 @@ export default function useExport<T, K>() {
     headers: K
   }) => {
     progress.value = data.length
-    
+
     const workbook = new Exceljs.Workbook()
     const sheet = workbook.addWorksheet("sheet")
     sheet.columns = headers
@@ -222,14 +222,14 @@ export default function useExport<T, K>() {
     }
     // [empty, "图片", url, url, url ...]
     const urls = sheet.getColumn(2).values.slice(2)
-    
+
     worker.postMessage({ workbook, sheet, urls })
-    
+
     listener.value = async (event: MessageEvent) => {
       const { row, base64 } = event.data
-      
+
       progress.value--
-      
+
       const imageId = workbook.addImage({
         base64: base64.toString(),
         extension: "jpeg"
@@ -245,14 +245,14 @@ export default function useExport<T, K>() {
           const _file = new Blob([buffer], { type: "application/octet-stream" })
           FileSaver.saveAs(_file, "Excel.xlsx")
         })
-        
+
         worker.removeEventListener("message", listener.value!)
       }
     }
-    
+
     worker.addEventListener("message", listener.value)
   }
-  
+
   return { progress, toExcel }
 }
 ```
