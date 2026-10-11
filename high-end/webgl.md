@@ -1,6 +1,7 @@
 ---
 title: WebGL
 icon: webgl
+date: 2026-10-11
 description: WebGL
 ---
 
@@ -62,31 +63,31 @@ const FRAGMENT_SHADER_SOURCE = `
 function useShader(gl, VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE) {
   // 创建顶点着色器
   const vertexShader = gl.createShader(gl.VERTEX_SHADER)
-  
+
   // 创建片元着色器
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
-  
+
   // 指定着色器的源程序
   gl.shaderSource(vertexShader, VERTEX_SHADER_SOURCE)
   gl.shaderSource(fragmentShader, FRAGMENT_SHADER_SOURCE)
-  
+
   // 编译着色器
   gl.compileShader(vertexShader)
   gl.compileShader(fragmentShader)
-  
+
   // 创建一个程序对象
   const program = gl.createProgram()
-  
+
   // 关联着色器
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
-  
+
   // 关联程序对象
   gl.linkProgram(program)
-  
+
   // 使用程序对象
   gl.useProgram(program)
-  
+
   return program
 }
 ```
