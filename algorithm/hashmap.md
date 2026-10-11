@@ -1,7 +1,7 @@
 ---
 title: 哈希表
 icon: map
-date: 2024-05-24
+date: 2026-10-11
 description: 哈希表
 ---
 
@@ -89,12 +89,12 @@ index = hash(key) % capacity
 ```ts
 const hash = (key: string, capacity: number) => {
   let hashCode = 0
-  
+
   // 霍纳算法
   for (let i = 0; i < key.length; i++) {
     hashCode = 37 * hashCode + key.charCodeAt(i)
   }
-  
+
   // 输出空间 [0, capacity)
   return hashCode % capacity
 }
@@ -116,7 +116,7 @@ const hash = (key: string, capacity: number) => {
 class Pair<T> {
   key: string
   val: T
-  
+
   constructor(key: string, val: T) {
     this.key = key
     this.val = val
@@ -128,24 +128,24 @@ class HashMap<T> {
    * 哈希表容量
    */
   private capacity = 7
-  
+
   /**
    * 所有的桶
    */
   private buckets: (Pair<T>[] | null)[]
-  
+
   /**
    * 元素数量
    */
   private length = 0
-  
+
   constructor(pair?: Pair<T>) {
     this.buckets = new Array(this.capacity).fill(null)
     if (pair && pair.key && pair.val) {
       this.set(pair.key, pair.val)
     }
   }
-  
+
   /**
    * 哈希函数
    * @param key - 键
@@ -157,28 +157,28 @@ class HashMap<T> {
     }
     return hashCode % this.capacity
   }
-  
+
   /**
    * 哈希表的值
    */
   get val() {
     return this.buckets
   }
-  
+
   /**
    * 哈希表的元素数量
    */
   get size() {
     return this.length
   }
-  
+
   /**
    * 负载因子
    */
   private get loadFactor() {
     return this.length / this.capacity
   }
-  
+
   /**
    * 查找元素
    * @param key - 键
@@ -195,7 +195,7 @@ class HashMap<T> {
     // 目标元素不存在
     return null
   }
-  
+
   /**
    * 插入或修改元素
    * @param key - 键
@@ -221,7 +221,7 @@ class HashMap<T> {
       this.resize(this.capacity * 2)
     }
   }
-  
+
   /**
    * 删除元素
    * @param key - 键
@@ -247,7 +247,7 @@ class HashMap<T> {
     // 目标元素不存在
     return null
   }
-  
+
   /**
    * 重新计算哈希表容量（扩容/缩容）
    */
@@ -264,7 +264,7 @@ class HashMap<T> {
       }
     }
   }
-  
+
   /**
    * 判断是否为质数
    * @param n - 任意数字
@@ -276,7 +276,7 @@ class HashMap<T> {
     }
     return true
   }
-  
+
   /**
    * 获取 >= n 的下一个质数
    * @param n - 任意数字

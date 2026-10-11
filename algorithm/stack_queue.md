@@ -1,7 +1,7 @@
 ---
 title: 栈与队列
 icon: stack
-date: 2024-05-24
+date: 2026-10-11
 description: 栈与队列
 ---
 
@@ -20,25 +20,25 @@ description: 栈与队列
 ```ts
 class Stack<T> {
   private readonly stack: T[]
-  
+
   constructor(stack: T[] = []) {
     this.stack = stack
   }
-  
+
   /**
    * 获取栈的值
    */
   get val() {
     return this.stack
   }
-  
+
   /**
    * 获取栈的长度
    */
   get size() {
     return this.stack.length
   }
-  
+
   /**
    * 入栈（向栈顶添加元素）
    * @param val - 入栈的元素
@@ -46,21 +46,21 @@ class Stack<T> {
   push(val: T) {
     this.stack.push(val)
   }
-  
+
   /**
    * 出栈（移除栈顶元素）
    */
   pop() {
     return this.stack.pop()
   }
-  
+
   /**
    * 访问栈顶元素
    */
   peek() {
     return this.stack[this.stack.length - 1]
   }
-  
+
   /**
    * 遍历栈
    */
@@ -89,25 +89,25 @@ class Stack<T> {
 ```ts
 class Queue<T> {
   private readonly queue: T[]
-  
+
   constructor(queue: T[] = []) {
     this.queue = queue
   }
-  
+
   /**
    * 获取队列的值
    */
   get val() {
     return this.queue
   }
-  
+
   /**
    * 获取队列的长度
    */
   get size() {
     return this.queue.length
   }
-  
+
   /**
    * 入队（向队尾添加元素）
    * @param val - 入队的元素
@@ -115,21 +115,21 @@ class Queue<T> {
   enqueue(val: T) {
     this.queue.push(val)
   }
-  
+
   /**
    * 出队（移除队首元素）
    */
   dequeue() {
     return this.queue.shift()
   }
-  
+
   /**
    * 访问队首元素
    */
   front() {
     return this.queue[0]
   }
-  
+
   /**
    * 遍历队列
    */
@@ -155,7 +155,7 @@ class Queue<T> {
 class QueueNode<T> {
   val: T
   priority: number
-  
+
   constructor(val: T, priority: number) {
     this.val = val
     this.priority = priority
@@ -169,7 +169,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
       this.insert(node.val, node.priority)
     }
   }
-  
+
   /**
    * 插入元素
    * @param val - 元素值
@@ -177,7 +177,7 @@ class PriorityQueue<T> extends Queue<QueueNode<T>> {
    */
   insert(val: T, priority: number) {
     const node = new QueueNode(val, priority)
-    
+
     if (this.val.length === 0) {
       this.val.push(node)
     }

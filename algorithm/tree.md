@@ -1,7 +1,7 @@
 ---
 title: 树
 icon: tree
-date: 2024-06-05
+date: 2026-10-11
 description: 树
 ---
 
@@ -57,7 +57,7 @@ description: 树
 class Pair<T> {
   key: number
   val: T
-  
+
   constructor(key: number, val: T) {
     this.key = key
     this.val = val
@@ -68,7 +68,7 @@ class TreeNode<T> {
   pair: Pair<T>
   left: TreeNode<T> | null
   right: TreeNode<T> | null
-  
+
   constructor(pair: Pair<T>) {
     this.pair = pair
     this.left = null
@@ -80,7 +80,7 @@ type NodeType = "root" | "left" | "right"
 
 class BinaryTree<T> {
   root: TreeNode<T> | null
-  
+
   constructor(root?: Pair<T>) {
     this.root = root ? new TreeNode(root) : null
   }
@@ -90,7 +90,7 @@ class BinaryTree<T> {
    */
   preTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
     recursion(this.root, "root")
-    
+
     /**
      * 递归遍历节点
      * @param target - 目标节点
@@ -106,13 +106,13 @@ class BinaryTree<T> {
       recursion(target.right, "right")
     }
   }
-  
+
   /**
    * 中序遍历
    */
   syncTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
     recursion(this.root, "root")
-    
+
     /**
      * 递归遍历节点
      * @param target - 目标节点
@@ -128,13 +128,13 @@ class BinaryTree<T> {
       recursion(target.right, "right")
     }
   }
-  
+
   /**
    * 后序遍历
    */
   postTraverse(callback: (node: TreeNode<T>, type: NodeType) => void) {
     recursion(this.root, "root")
-    
+
     /**
      * 递归遍历节点
      * @param target - 目标节点
@@ -176,7 +176,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
   constructor(root?: Pair<T>) {
     super(root)
   }
-  
+
   /**
    * 插入节点
    * @param pair - 节点的值（键值对）
@@ -189,7 +189,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       return
     }
     recursion(node, this.root)
-    
+
     /**
      * 递归比较节点
      * @param current - 当前节点
@@ -210,14 +210,14 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       }
     }
   }
-  
+
   /**
    * 查找节点
    * @param target - 目标节点的 key
    */
   search(target: number) {
     return recursion(this.root, target)
-    
+
     /**
      * 递归查找节点
      * @param current - 当前节点
@@ -229,7 +229,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       if (current.pair.key < target) return recursion(current.right, target)
       if (current.pair.key === target) return current
     }
-    
+
     /* 循环实现 */
     // let current = this.root
     // while (current) {
@@ -245,7 +245,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
     // }
     // return null
   }
-  
+
   /**
    * 移除节点
    * @param target - 目标节点的 key
@@ -254,7 +254,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
     let type: "left" | "right" = "left"
     let parent: TreeNode<T> | null = null
     let current = this.root
-    
+
     while (current && target !== current.pair.key) {
       type = target < current.pair.key ? "left" : "right"
       parent = current
@@ -262,7 +262,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
     }
     if (!current) return console.warn(`target: ${ target } is not found`)
     /* 找到目标节点 */
-    
+
     // current => both (left & right)
     if (current.left && current.right) {
       // 查找后继节点，并用后继节点替换目标节点的位置
@@ -275,7 +275,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       }
       return
     }
-    
+
     // current => only left | only right | none
     if (!parent) { // 根节点（没有父节点）
       this.root = current.left || current.right
@@ -283,7 +283,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
     else { // 非根节点
       parent[type] = current.left || current.right
     }
-    
+
     /**
      * 查找后继节点
      * @description 也就是找 > 目标节点的下一个节点（右节点的最后一个左子节点）
@@ -294,7 +294,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       let successorParent = parent
       let successor = target
       let current = target.right
-      
+
       while (current) {
         successorParent = successor
         successor = current
@@ -315,7 +315,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
       return successor
     }
   }
-  
+
   /**
    * 最大值
    * @description 一直向右查找子节点
@@ -328,7 +328,7 @@ class BinarySearchTree<T> extends BinaryTree<T> {
     }
     return node.pair
   }
-  
+
   /**
    * 最小值
    * @description 一直向左查找子节点

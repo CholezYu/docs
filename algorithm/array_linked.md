@@ -1,7 +1,7 @@
 ---
 title: 数组与链表
 icon: extend
-date: 2024-05-24
+date: 2026-10-11
 description: 数组与链表
 ---
 
@@ -28,35 +28,35 @@ description: 数组与链表
 ```ts
 class ArrayList extends Array {
   array: number[]
-  
+
   constructor(array: number[]) {
     super()
     this.array = array
   }
-  
+
   // 冒泡排序
   bubbleSort() {
     // ...
   }
-  
+
   // 选择排序
   selectionSort() {
     // ...
   }
-  
+
   // 插入排序
   insertionSort() {
     // ...
   }
-  
+
   // 快速排序
   quickSort() {
     // ...
   }
-  
+
   // 希尔排序
   shellSort() {
-    
+    // ...
   }
 }
 ```
@@ -83,7 +83,7 @@ class ArrayList extends Array {
 class LinkedNode<T> {
   val: T
   next: LinkedNode<T> | null
-  
+
   constructor(val: T) {
     this.val = val
     this.next = null
@@ -93,7 +93,7 @@ class LinkedNode<T> {
 class LinkedList<T> {
   head: LinkedNode<T> | null
   size: number
-  
+
   constructor(val?: T) {
     this.head = null
     this.size = 0
@@ -101,7 +101,7 @@ class LinkedList<T> {
       this.append(val)
     }
   }
-  
+
   /**
    * 向链表尾部添加节点
    * @param val - 节点值
@@ -120,7 +120,7 @@ class LinkedList<T> {
     }
     this.size++
   }
-  
+
   /**
    * 插入节点
    * @param index - 索引值
@@ -128,7 +128,7 @@ class LinkedList<T> {
    */
   insert(index: number, val: T) {
     if (index < 0 || index > this.size) throw new Error("out of range")
-    
+
     const node = new LinkedNode(val)
     if (index === 0) {
       node.next = this.head
@@ -146,21 +146,21 @@ class LinkedList<T> {
     }
     this.size++
   }
-  
+
   /**
    * 查找对应索引的节点
    * @param index - 索引值
    */
   find(index: number) {
     if (index < 0 || index > this.size) throw new Error("out of range")
-    
+
     let current = this.head
     for (let i = 0; i < index; i++) {
       current = current!.next
     }
     return current
   }
-  
+
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
@@ -170,14 +170,14 @@ class LinkedList<T> {
     const node = this.find(index)
     node!.val = val
   }
-  
+
   /**
    * 移除对应索引的节点
    * @param index - 索引值
    */
   remove(index: number) {
     if (index < 0 || index >= this.size) throw new Error("out of range")
-    
+
     let current = this.head
     let prev: LinkedNode<T> | null = null
     if (index === 0) {
@@ -194,7 +194,7 @@ class LinkedList<T> {
     }
     this.size--
   }
-  
+
   /**
    * 遍历链表
    */
@@ -225,7 +225,7 @@ class LinkedNode<T> {
   val: T
   prev: LinkedNode<T> | null
   next: LinkedNode<T> | null
-  
+
   constructor(val: T) {
     this.val = val
     this.prev = null
@@ -237,7 +237,7 @@ class DoubleLinkedList<T> {
   head: LinkedNode<T> | null
   tail: LinkedNode<T> | null
   size: number
-  
+
   constructor(val?: T) {
     this.head = null
     this.tail = null
@@ -246,7 +246,7 @@ class DoubleLinkedList<T> {
       this.append(val)
     }
   }
-  
+
   /**
    * 向链表尾部添加节点
    * @param val - 节点值
@@ -264,7 +264,7 @@ class DoubleLinkedList<T> {
     }
     this.size++
   }
-  
+
   /**
    * 插入节点
    * @param index - 索引值
@@ -272,7 +272,7 @@ class DoubleLinkedList<T> {
    */
   insert(index: number, val: T) {
     if (index < 0 || index > this.size) throw new Error("out of range")
-    
+
     const node = new LinkedNode(val)
     if (this.size === 0) {
       this.head = node
@@ -302,14 +302,14 @@ class DoubleLinkedList<T> {
     }
     this.size++
   }
-  
+
   /**
    * 查找对应索引的节点
    * @param index - 索引值
    */
   find(index: number) {
     if (index < 0 || index > this.size) throw new Error("out of range")
-    
+
     // 从前往后
     if (this.size / 2 > index) {
       let current = this.head
@@ -327,7 +327,7 @@ class DoubleLinkedList<T> {
       return current
     }
   }
-  
+
   /**
    * 修改对应索引的节点值
    * @param index - 索引值
@@ -337,14 +337,14 @@ class DoubleLinkedList<T> {
     const node = this.find(index)
     node!.val = val
   }
-  
+
   /**
    * 移除对应索引的节点
    * @param index - 索引值
    */
   remove(index: number) {
     if (index < 0 || index >= this.size) throw new Error("out of range")
-    
+
     let current = this.head
     if (this.size === 1) {
       this.head = null
@@ -371,7 +371,7 @@ class DoubleLinkedList<T> {
     this.size--
     return current!.val
   }
-  
+
   /**
    * 遍历链表
    */
