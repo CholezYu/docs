@@ -1,7 +1,7 @@
 ---
 title: Webpack
 icon: webpack
-date: 2024-04-23
+date: 2026-10-11
 description: Webpack
 ---
 
@@ -15,25 +15,25 @@ const path = require("node:path")
 module.exports = {
   // 模式
   mode: "development", // or "production"
-  
+
   // 入口
   entry: "./src/main.js",
-  
+
   // 出口
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js", // 如果配置了代码分包, 需要改成 "[chunkhash].js", 避免冲突
     clean: true // 自动清空上次打包资源
   },
-  
+
   // 预处理器
   module: {
     rules: []
   },
-  
+
   // 插件
   plugins: [],
-  
+
   // 其他配置
   stats: "errors-only" // 终端控制台只输出 error 信息
 }
