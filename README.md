@@ -9,7 +9,7 @@ bgImageDark: https://theme-hope-assets.vuejs.press/bg/9-dark.svg
 bgImageStyle:
   background-attachment: fixed
 heroText: Cholez Docs
-# tagline: 练习前端三年半。
+tagline: 记录 2021 年以来的学习过程。
 actions:
   - text: GitHub
     icon: github
