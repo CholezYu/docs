@@ -1,7 +1,7 @@
 ---
 title: Nuxt
 icon: nuxt
-date: 2024-07-14
+date: 2026-10-11
 description: Nuxt
 ---
 
@@ -116,9 +116,9 @@ export default async function request<T>(
 ): Promise<T> {
   // 设置请求头
   // options.headers = ...
-  
+
   const { data, pending, error, refresh } = await useFetch(url, options)
-  
+
   return data.value && data.value.code === 200
     ? data.value.data
     : Promise.reject(error.value || data.value!.message)
