@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-10
+date: 2026-10-11
 description: Java
 ---
 
@@ -590,7 +590,7 @@ executorService.shutdown();
 ```java
 class Counter {
   private /* static */ int count = 0;
-  
+
   public /* static */ synchronized void increment() {
     count++;
   }
@@ -606,7 +606,7 @@ class Counter {
 ```java
 class Counter {
   private int count = 0;
-  
+
   public void increment() {
     synchronized (this /* Counter.class */) {
       count++;
@@ -622,9 +622,9 @@ Java 5 之后，可以使用显示锁机制。
 ```java
 class Counter {
   private int count = 0;
-  
+
   private static final ReentrantLock lock = new ReentrantLock();
-  
+
   public void increment() {
     lock.lock(); // 获得锁
     try {
