@@ -1,7 +1,7 @@
 ---
 title: 微信小程序
 icon: mini-app
-date: 2024-07-26
+date: 2026-10-11
 description: 微信小程序
 ---
 
@@ -224,28 +224,28 @@ App({
    * 小程序初始化完成时触发（冷启动）
    */
   onLaunch() {
-  
+
   },
-  
+
   /**
    * 小程序启动、或切入前台时触发
    */
   onShow(options) {
-  
+
   },
-  
+
   /**
    * 小程序切入后台时触发
    */
   onHide() {
-  
+
   },
-  
+
   /**
    * 小程序发生脚本错误、或 api 调用失败时触发
    */
   onError(msg) {
-  
+
   }
 })
 ```
@@ -258,35 +258,35 @@ Page({
    * 页面加载完成时触发（冷启动）
    */
   onLoad(options) {
-  
+
   },
-  
+
   /**
    * 页面初次渲染完成时触发
    */
   onReady() {
-  
+
   },
-  
+
   /**
    * 页面显示、或切入前台时触发
    */
   onShow() {
-  
+
   },
-  
+
   /**
    * 页面隐藏、或切入后台时触发
    */
   onHide() {
-  
+
   },
-  
+
   /**
    * 页面卸载时触发（重定向跳转）
    */
   onUnload() {
-  
+
   }
 })
 ```
@@ -299,35 +299,35 @@ Page({
    * 页面滚动时触发
    */
   onPageScroll() {
-  
+
   },
-  
+
   /**
    * 页面尺寸变化时触发
    */
   onResize() {
-  
+
   },
-  
+
   /**
    * 用于触发下拉刷新
    */
   onPullDownRefresh() {
-  
+
   },
-  
+
   /**
    * 用于触发上拉加载
    */
   onReachBottom() {
-  
+
   },
-  
+
   /**
    * 用户分享时触发
    */
   onShareAppMessage() {
-  
+
   }
 })
 ```
@@ -340,22 +340,22 @@ Page({
 Component({
   // 配置项
   options: {
-  
+
   },
-  
+
   // 属性
   properties: {
-  
+
   },
-  
+
   // 组件的数据
   data: {
-  
+
   },
-  
+
   // 组件的方法
   methods: {
-  
+
   }
 })
 ```
@@ -449,25 +449,25 @@ Component({
      * 组件实例挂载到页面时触发
      */
     attached() {
-    
+
     },
     /**
      * 组件实例卸载时触发
      */
     detached() {
-    
+
     },
     /**
      * 组件在视图层布局完成后触发
      */
     ready() {
-    
+
     },
     /**
      * 组件被移动时触发
      */
     moved() {
-    
+
     }
   }
 })
@@ -482,19 +482,19 @@ Component({
      * 组件所在页面显示、或切入前台时触发
      */
     show() {
-    
+
     },
     /**
      * 组件所在页面隐藏、或切入后台时触发
      */
     hide() {
-    
+
     },
     /**
      * 组件所在页面尺寸变化时触发
      */
     resize() {
-    
+
     }
   }
 })
@@ -592,13 +592,13 @@ Page({
     avatar: "/static/default-avatar.jpg",
     username: ""
   },
-  
+
   chooseAvatar(event) {
     this.setData({
       avatar: event.detail.avatarUrl
     })
   },
-  
+
   onSubmit(event) {
     this.setData({
       username: event.detail.value.nickname
@@ -626,7 +626,7 @@ Page({
       通过右上角三点转发 {form: "menu", target: undefined}
       通过自定义按钮转发 {form: "button", target: {...}}
     */
-    
+
     // 自定义分享封面
     return {
       title: "Share the shop!",    // 封面标题
@@ -646,7 +646,7 @@ Page({
   onShareAppMessage(event) {
     // ...
   },
-  
+
   onShareTimeline(event) {
     event // {from: "menu", target: undefined}
   }
@@ -676,7 +676,7 @@ Page({
       success: async ({ code }) => {
         const token = await apiLogin(code)
         wx.setStorageSync("TOKEN", token)
-        
+
         const userInfo = await apiGetUserInfo()
         wx.setStorageSync("USER_INFO", userInfo)
       }
@@ -718,7 +718,7 @@ App({
   onLaunch() {
     // 创建 updateManager 实例，用于管理更新
     const updateManager = wx.getUpdateManager()
-    
+
     // 监听是否有新版本，如果有的话会主动触发下载
     updateManager.onUpdateReady(() => {
       wx.showModal({
