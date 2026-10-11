@@ -230,11 +230,11 @@ rest 参数匹配的变量是一个数组，该变量将剩余的参数放入这
 ```js
 function add(...values) {
   let sum = 0
-  
+
   values.forEach(value => {
     sum += value
   })
-  
+
   return sum
 }
 
@@ -1356,37 +1356,37 @@ const obj = { a: 1, b: 2 }
 const objProxy = new Proxy(obj, {
   // 拦截取值操作
   get(target, p, receiver) {
-  
+
   },
-  
+
   // 拦截赋值操作
   set(target, p, value, receiver) {
-  
+
   },
-  
+
   // 拦截函数的调用
   apply(target, thisArg, argArray) {
-  
+
   },
-  
+
   // 拦截 in 操作符
   has(target, p) {
-  
+
   },
-  
+
   // 拦截 for...in
   ownKeys(target) {
-  
+
   },
-  
+
   // 拦截 new 操作符
   construct(target, argArray, newTarget) {
-  
+
   },
-  
+
   // 拦截 delete 操作符
   deleteProperty(target, p) {
-  
+
   }
 })
 ```
@@ -1631,10 +1631,10 @@ iterator.next() // => { value: undefined, done: true }
 function iterate(iterable: any, callback: (current: any) => void) {
   const iterator = iterable[Symbol.iterator]()
   let current = { done: false }
-  
+
   while (!current.done) {
     current = iterator.next()
-    
+
     if (!current.done) {
       callback(current)
     }
@@ -2060,21 +2060,21 @@ const request = (url: string) => {
   
   // Post 请求需要设置该请求头，通过 JSON 传递数据
   xhr.setRequestHeader("Content-Type", "application/json")
-  
+
   // Get 请求的请求体为空
   xhr.send()
   // Post 请求可以添加请求体
   xhr.send(JSON.stringify({
     // json data
   }))
-  
+
   // 监听请求状态码
   xhr.addEventListener("readystatechange", () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       xhr.responseText // JSON
     }
   }) 
-  
+
   // or
   xhr.addEventListener("load", () => {
     if (xhr.status === 200) {
@@ -2132,17 +2132,17 @@ xhr.addEventListener("error", () => {
 const request = (url: string) => {
   // 获取文件对象 `<input type="file" />`
   const file = document.getElementById("file")
-  
+
   file.addEventListener("change", () => {
     const formData = new FormData()
     formData.append("file", file.files[0])
-    
+
     const xhr = new XMLHttpRequest()
     xhr.open("post", url)
     // 浏览器会自动设置 form-data 请求头
     // xhr.setRequestHeader("Content-Type", "multipart/form-data")
     xhr.send(formData)
-    
+
     xhr.addEventListener("load", () => {
       if (xhr.status === 200) {
         xhr.responseText
@@ -2166,7 +2166,7 @@ const request = (url: string) => {
     .then(response => {
       response.data
     })
-  
+
   // Post 请求
   fetch(url, {
     method: "post",
@@ -2197,7 +2197,7 @@ const request = (url: string) => {
     .then(async response => {
       // 拷贝一份，用于计算上传进度
       const _response = response.clone()
-      
+
       // 流
       const reader = _response.body.getReader()
       // 总字节
@@ -2209,7 +2209,7 @@ const request = (url: string) => {
         if (done) break
         loaded += value.length
       }
-      
+
       return response.json()
     })
     .then(response => {
@@ -2223,14 +2223,14 @@ const request = (url: string) => {
 ```ts
 const request = (url: string) => {
   const controller = new AbortController()
-  
+
   fetch(url, { signal: controller.signal })
-  
+
   // 超过 3 秒, 取消请求
   setTimeout(() => {
     controller.abort()
   }, 3000)
-  
+
   // 点击取消请求
   const stop = () => {
     controller && controller.abort()
@@ -2248,7 +2248,7 @@ import axios from "axios"
 const request = (url: string) => {
   // Get 请求
   axios.get(url)
-  
+
   // Post 请求
   axios.post(url, {
     // json data
@@ -2314,7 +2314,7 @@ import axios, { type AxiosProgressEvent } from "axios"
 const request = (url: string, data: any) => {
   const formData = new FormData()
   formData.append("file", data.file)
-  
+
   return axios.post(url, formData, {
     headers: { "Content-Type": "multipart/form-data" },
     onUploadProgress: (event: AxiosProgressEvent) => {
@@ -2429,7 +2429,7 @@ export default defineConfig({
 server {
   listen       5000;
   server_name  localhost;
-  
+
   location /api {
     root   /app/src/dist;
     index  index.html index.htm;
@@ -2479,7 +2479,7 @@ app.get("/api", (req, res) => {
     "Content-Type": "text/event-stream", // ！设置对应的请求头
     "Connection": "close"
   })
-  
+
   const data = fs.readFileSync("./index.txt", "utf-8")
   const total = data.length
   let current = 0
