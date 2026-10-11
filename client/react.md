@@ -1,7 +1,7 @@
 ---
 title: React
 icon: react
-date: 2026-09-05
+date: 2026-10-11
 description: React
 ---
 
@@ -69,7 +69,7 @@ useEffect(() => /* setup */ {
   let timer = setTimeout(() => {
     // do something...
   }, 1000)
-  
+
   return () => /* cleanup */ {
     clearTimeout(timer)
     timer = null
@@ -333,7 +333,7 @@ function useReducer<T = any>(
 ] {
   const [state, setState] = useState(initialState)
   const dispatch = (action: Action<T>) => setState(reducer(state, action))
-  
+
   return [state, dispatch]
 }
 ```
@@ -355,12 +355,12 @@ const withLog = (Component: FC<any>) => {
   return (props: any) => {
     useEffect(() => {
       console.log(`${Component.name} 组件已挂载 ${now()}`)
-      
+
       return () => {
         console.log(`${Component.name} 组件已卸载 ${now()}`)
       }
     }, [])
-    
+
     return <Component {...props} />
   }
 }
@@ -602,12 +602,12 @@ interface Path {
    * A URL pathname, beginning with a /.
    */
   pathname: string
-  
+
   /**
    * A URL search string, beginning with a ?.
    */
   search: string
-  
+
   /**
    * A URL fragment identifier, beginning with a #.
    */
@@ -872,7 +872,7 @@ const userSlice = createSlice({
       .addCase(fetchLogin.rejected, () => {
         console.log("login rejected")
       })
-      
+
       .addCase(fetchUserInfo.fulfilled, (state, { payload }: UserInfoAction) => {
         state.userInfo = payload.userInfo
       })
@@ -1057,7 +1057,7 @@ const useStore = create<CounterSlice & UserSlice>((...args) => ({
   width: 240px;
   height: 100%;
   background: #344156;
-  
+
   .menu-item {
     width: 100%;
     height: 80px;
@@ -1066,12 +1066,12 @@ const useStore = create<CounterSlice & UserSlice>((...args) => ({
     color: #c1cbd9;
     text-align: center;
     cursor: pointer;
-    
+
     &:hover {
       background: #051528;
     }
   }
-  
+
   .active {
     .menu-item {
       background-color: #051528;
@@ -1136,7 +1136,7 @@ const Button = styled.button<ButtonProps>`
   border-radius: 3px;
   border: 2px solid #bf4f74;
   cursor: pointer;
-  
+
   ${props => props.$primary && css`
     background: #bf4f74;
     color: white;
