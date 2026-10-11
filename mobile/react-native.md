@@ -1,7 +1,7 @@
 ---
 title: React Native
 icon: react
-date: 2024-07-19
+date: 2026-10-11
 description: React Native
 ---
 
@@ -307,7 +307,7 @@ useEffect(() => {
   const keyboardHideListener = Keyboard.addListener("keyboardDidHide", () => {
     console.log("Keyboard Hide")
   })
-  
+
   return () => {
     keyboardShowListener.remove()
     keyboardHideListener.remove()
@@ -331,7 +331,7 @@ useEffect(() => {
     AppState.currentState // => 'active' or 'background'
     AppState.currentState === state // => true
   })
-  
+
   return listener.remove
 }, [])
 ```
@@ -473,7 +473,7 @@ const pickImage = async () => {
   // 询问用户权限
   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync()
   if (!permission.granted) return alert("拒绝访问！")
-  
+
   // 从相册获取图片
   const picker = await ImagePicker.launchImageLibraryAsync()
   if (picker.canceled) return alert("取消选择图片")
