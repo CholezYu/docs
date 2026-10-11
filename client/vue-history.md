@@ -1,7 +1,7 @@
 ---
 title: Vue 2
 icon: vue
-date: 2024-07-16
+date: 2026-10-11
 description: Vue 2
 ---
 
@@ -523,7 +523,7 @@ export default {
     increment() {
       // 以载荷形式提交
       this.$store.commit("increment", { n: 2 })
-      
+
       // 以对象形式提交
       this.$store.commit({ type: "increment", n: 2 })
     }
