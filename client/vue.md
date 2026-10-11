@@ -1,7 +1,7 @@
 ---
 title: Vue 3
 icon: vue
-date: 2024-07-16
+date: 2026-10-11
 description: Vue 3
 ---
 
@@ -50,7 +50,7 @@ class RefImpl<T> {
   
   public dep?: Dep = undefined
   public readonly __v_isRef = true
-  
+
   constructor(value: T, public readonly __v_isShallow: boolean) {
     this._rawValue = __v_isShallow ? value : toRaw(value)
     // 如果是 shallowRef，直接返回 .value 的值，如果 value 是引用类型，不会做深度响应式
@@ -59,12 +59,12 @@ class RefImpl<T> {
     // toReactive：如果 value 是引用类型，就会调用 reactive(value)，否则直接返回 value
     this._value = __v_isShallow ? value : toReactive(value)
   }
-  
+
   get value() {
     trackRefValue(this) // 进行依赖的收集
     return this._value
   }
-  
+
   set value(newVal) {
     newVal = this.__v_isShallow ? newVal : toRaw(newVal)
     if (hasChanged(newVal, this._rawValue)) {
@@ -199,9 +199,9 @@ function computed<T>(
 ) {
   let getter: ComputedGetter<T>
   let setter: ComputedSetter<T>
-  
+
   const onlyGetter = isFunction(getterOrOptions)
-  
+
   // 如果传入一个函数，为函数式用法
   if (onlyGetter) {
     // 将传入的函数赋值给 getter
@@ -220,29 +220,29 @@ function computed<T>(
     // 将 set 选项赋值给 setter
     setter = getterOrOptions.set
   }
-  
+
   const cRef = new ComputedRefImpl(getter, setter, onlyGetter || !setter, isSSR)
-  
+
   if (__DEV__ && debugOptions && !isSSR) {
     cRef.effect.onTrack = debugOptions.onTrack
     cRef.effect.onTrigger = debugOptions.onTrigger
   }
-  
+
   return cRef as any
 }
 
 class ComputedRefImpl<T> {
   public dep?: Dep = undefined
-  
+
   private _value!: T // 真正读取的值
   public readonly effect: ReactiveEffect<T>
-  
+
   public readonly __v_isRef = true
   public readonly [ReactiveFlags.IS_READONLY]: boolean = false
-  
+
   public _dirty = true // 脏值，是否需要重新计算
   public _cacheable: boolean
-  
+
   constructor(
     getter: ComputedGetter<T>,
     private readonly _setter: ComputedSetter<T>,
@@ -260,7 +260,7 @@ class ComputedRefImpl<T> {
     this.effect.active = this._cacheable = !isSSR
     this[ReactiveFlags.IS_READONLY] = isReadonly
   }
-  
+
   get value() {
     const self = toRaw(this)
     trackRefValue(self)
@@ -271,7 +271,7 @@ class ComputedRefImpl<T> {
     }
     return self._value
   }
-  
+
   set value(newValue: T) {
     this._setter(newValue)
   }
@@ -374,14 +374,14 @@ function doWatch(
   { immediate, deep, flush, onTrack, onTrigger }: WatchOptions = EMPTY_OBJ
 ): WatchStopHandle {
   // ...
-  
+
   const instance = currentInstance
-  
+
   // 初始化 getter
   let getter: () => any
   let forceTrigger = false
   let isMultiSource = false
-  
+
   // 如果 source 是 ref，将 `() => ref.value` 赋值给 getter
   if (isRef(source)) {
     getter = () => source.value
@@ -440,22 +440,22 @@ function doWatch(
       }
     }
   }
-  
+
   // 如果 deep 选项为 true，调用 `traverse()` 进行深度监听
   if (cb && deep) {
     const baseGetter = getter
     getter = () => traverse(baseGetter())
   }
-  
+
   let cleanup: () => void
   let onCleanup: OnCleanup = (fn: () => void) => {
     cleanup = effect.onStop = () => {
       callWithErrorHandling(fn, instance, ErrorCodes.WATCH_CLEANUP)
     }
   }
-  
+
   // ...
-  
+
   // 初始化旧值
   let oldValue = isMultiSource ? [] : INITIAL_WATCHER_VALUE
   // 调度任务
@@ -485,9 +485,9 @@ function doWatch(
       effect.run()
     }
   }
-  
+
   job.allowRecurse = !!cb
-  
+
   // 初始化调度器
   let scheduler: EffectScheduler
   if (flush === 'sync') {
@@ -507,10 +507,10 @@ function doWatch(
       }
     }
   }
-  
+
   // 收集依赖
   const effect = new ReactiveEffect(getter, scheduler)
-  
+
   if (cb) {
     // 立即执行
     if (immediate) {
@@ -528,7 +528,7 @@ function doWatch(
   } else {
     effect.run()
   }
-  
+
   return () => {
     effect.stop()
     if (instance && instance.scope) {
@@ -626,7 +626,7 @@ const effect = (fn: Function) => {
     activeEffect = _effect
     fn()
   }
-  
+
   _effect()
 }
 
@@ -649,13 +649,13 @@ const track = (target: object, key: unknown) => {
     depsMap = new Map()
     targetMap.set(target, depsMap)
   }
-  
+
   let deps = depsMap.get(key)
   if (!deps) {
     deps = new Set()
     depsMap.set(key, deps)
   }
-  
+
   deps.add(activeEffect)
 }
 ```
@@ -670,10 +670,10 @@ const track = (target: object, key: unknown) => {
 const trigger = (target: object, key: unknown) => {
   const depsMap = targetMap.get(target)
   if (!depsMap) return
-  
+
   const deps = depsMap.get(key)
   if (!deps) return
-  
+
   deps.forEach(effect => effect())
 }
 ```
@@ -697,7 +697,7 @@ const reactive = <T extends object>(target: T): T => {
       }
       return result
     },
-    
+
     set(target: T, key: string | symbol, value: any, receiver: any) {
       const result = Reflect.set(target, key, value, receiver)
       trigger(target, key)
@@ -840,7 +840,7 @@ const patchKeyedChildren = (
   const l2 = c2.length
   let e1 = c1.length - 1 // prev ending index
   let e2 = l2 - 1 // next ending index
-  
+
   // 1. 前序对比算法
   // (a b) c
   // (a b) d e
@@ -866,7 +866,7 @@ const patchKeyedChildren = (
     }
     i++
   }
-  
+
   // 2. 尾序对比算法
   // a (b c)
   // d e (b c)
@@ -893,7 +893,7 @@ const patchKeyedChildren = (
     e1--
     e2--
   }
-  
+
   // 3. 如果新节点有剩余，就需要挂载新节点
   // (a b)
   // (a b) c
@@ -923,7 +923,7 @@ const patchKeyedChildren = (
       }
     }
   }
-  
+
   // 4. 如果旧节点有剩余，就需要卸载旧节点
   // (a b) c
   // (a b)
@@ -937,7 +937,7 @@ const patchKeyedChildren = (
       i++
     }
   }
-  
+
   // 5. 乱序/无序
   // [i ... e1 + 1]: a b [c d e] f g
   // [i ... e2 + 1]: a b [e d c h] f g
@@ -945,7 +945,7 @@ const patchKeyedChildren = (
   else {
     const s1 = i // prev starting index
     const s2 = i // next starting index
-    
+
     // 5.1 构建新节点的映射关系
     // key: [1, 2, 3, 4, 5]
     // index: [0, 1, 2, 3, 4]
@@ -968,7 +968,7 @@ const patchKeyedChildren = (
         keyToNewIndexMap.set(nextChild.key, i)
       }
     }
-    
+
     // 5.2 遍历旧节点，并对其进行 patch 比较
     // 匹配节点并删除不存在的节点
     let j
@@ -984,7 +984,7 @@ const patchKeyedChildren = (
     // used for determining longest stable subsequence
     const newIndexToOldIndexMap = new Array(toBePatched)
     for (i = 0; i < toBePatched; i++) newIndexToOldIndexMap[i] = 0
-    
+
     for (i = s1; i <= e1; i++) {
       const prevChild = c1[i]
       // 如果有多余的旧节点，就将其删除
@@ -1033,7 +1033,7 @@ const patchKeyedChildren = (
         patched++
       }
     }
-    
+
     // 5.3 move and mount
     // generate longest stable subsequence only when nodes have moved
     const increasingNewIndexSequence = moved
@@ -1307,7 +1307,7 @@ defineExpose({
 ```vue
 <script setup lang="ts">
   const formRef = ref<InstanceType<typeof ElForm>>()
-  
+
   const validate = () => formRef.value?.validate() // 触发表单校验
   const reset = () => formRef.value?.resetFields() // 重置表单项
 </script>
@@ -1348,7 +1348,7 @@ defineExpose({
 <script setup lang=ts>
   const modelValue = defineModel({ default: 0 }) // 默认为 modelValue
   const modelCount = defineModel("count", { default: 1 })
-  
+
   const updateValue = () => modelValue.value++ // 触发 "update:modelValue" 事件
   const updateCount = () => modelCount.value++ // 触发 "update:count" 事件
 </script>
@@ -1429,12 +1429,12 @@ inject("count", ref(1))
     <!-- 作用域插槽 -->
     <slot name="header" :navigations />
   </header>
-  
+
   <main>
     <!-- 默认插槽 -->
     <slot />
   </main>
-  
+
   <footer>
     <!-- 具名插槽 -->
     <slot name="footer" />
@@ -1465,12 +1465,12 @@ inject("count", ref(1))
       </el-submenu>
     </el-menu>
   </template>
-  
+
   <!-- 默认插槽 -->
   <template #default>
     main
   </template>
-  
+
   <!-- 具名插槽 -->
   <template #footer>
     footer
@@ -1495,7 +1495,7 @@ inject("count", ref(1))
 ```vue
 <script setup lang="ts">
   import { defineAsyncComponent } from "vue"
-  
+
   const SyncComponent = defineAsyncComponent(() => import("@/components/sync.vue"))
 </script>
 
@@ -1505,7 +1505,7 @@ inject("count", ref(1))
     <template #default>
       <SyncComponent />
     </template>
-    
+
     <!-- 在等待异步组件加载时，渲染一个加载状态 -->
     <template #fallback>
       <!-- 骨架屏 -->
@@ -1549,24 +1549,24 @@ inject("count", ref(1))
 
 const KeepAliveImpl: ComponentOptions = {
   name: `KeepAlive`,
-  
+
   __isKeepAlive: true,
-  
+
   props: {
     include: [String, RegExp, Array],
     exclude: [String, RegExp, Array],
     max: [String, Number]
   },
-  
+
   // 初始化函数
   setup(props: KeepAliveProps, { slots }: SetupContext) {
     const instance = getCurrentInstance()!
     const sharedContext = instance.ctx as KeepAliveContext
-    
+
     if (!sharedContext.renderer) {
       return slots.default
     }
-    
+
     // 缓存容器
     const cache: Cache = new Map()
     // 缓存 key 队列
@@ -1576,9 +1576,9 @@ const KeepAliveImpl: ComponentOptions = {
     if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
       ;(instance as any).__v_cache = cache
     }
-    
+
     const parentSuspense = instance.suspense
-    
+
     const {
       renderer: {
         p: patch,
@@ -1589,7 +1589,7 @@ const KeepAliveImpl: ComponentOptions = {
     } = sharedContext
     // 临时的隐藏容器
     const storageContainer = createElement('div')
-    
+
     // 注册 activate hook
     sharedContext.activate = (vnode, container, anchor, isSVG, optimized) => {
       const instance = vnode.component!
@@ -1617,12 +1617,12 @@ const KeepAliveImpl: ComponentOptions = {
           invokeVNodeHook(vnodeHook, instance.parent, vnode)
         }
       }, parentSuspense)
-      
+
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
         devtoolsComponentAdded(instance)
       }
     }
-    
+
     // 注册 deactivate hook
     sharedContext.deactivate = (vnode: VNode) => {
       const instance = vnode.component!
@@ -1644,12 +1644,12 @@ const KeepAliveImpl: ComponentOptions = {
         devtoolsComponentAdded(instance)
       }
     }
-    
+
     function unmount(vnode: VNode) {
       resetShapeFlag(vnode)
       _unmount(vnode, instance, parentSuspense, true)
     }
-    
+
     function pruneCache(filter?: (name: string) => boolean) {
       cache.forEach((vnode, key) => {
         const name = getComponentName(vnode.type as ConcreteComponent)
@@ -1658,7 +1658,7 @@ const KeepAliveImpl: ComponentOptions = {
         }
       })
     }
-    
+
     function pruneCacheEntry(key: CacheKey) {
       const cached = cache.get(key) as VNode
       if (!current || cached.type !== current.type) {
@@ -1669,7 +1669,7 @@ const KeepAliveImpl: ComponentOptions = {
       cache.delete(key)
       keys.delete(key)
     }
-    
+
     watch(
       () => [props.include, props.exclude],
       ([include, exclude]) => {
@@ -1678,7 +1678,7 @@ const KeepAliveImpl: ComponentOptions = {
       },
       { flush: 'post', deep: true }
     )
-    
+
     // 缓存标记
     let pendingCacheKey: CacheKey | null = null
     // 缓存函数
@@ -1692,7 +1692,7 @@ const KeepAliveImpl: ComponentOptions = {
     // 因为缓存标记是在 render 函数中进行赋值，所以缓存函数首次执行是不缓存的
     onMounted(cacheSubtree)
     onUpdated(cacheSubtree)
-    
+
     onBeforeUnmount(() => {
       cache.forEach(cached => {
         const { subTree, suspense } = instance
@@ -1706,15 +1706,15 @@ const KeepAliveImpl: ComponentOptions = {
         unmount(cached)
       })
     })
-    
+
     // 返回一个 render 函数
     return () => {
       pendingCacheKey = null
-      
+
       if (!slots.default) {
         return null
       }
-      
+
       // 读取插槽的默认值（默认插槽）
       const children = slots.default()
       const rawVNode = children[0]
@@ -1736,18 +1736,18 @@ const KeepAliveImpl: ComponentOptions = {
         // KeepAlive 是一个抽象组件，它本身并不会被渲染
         return rawVNode
       }
-      
+
       let vnode = getInnerChild(rawVNode)
       const comp = vnode.type as ConcreteComponent
-      
+
       const name = getComponentName(
         isAsyncWrapper(vnode)
           ? (vnode.type as ComponentOptions).__asyncResolved || {}
           : comp
       )
-      
+
       const { include, exclude, max } = props
-      
+
       // 如果与 include 和 exclude 的规则不匹配，则不进行缓存
       if (
         (include && (!name || !matches(include, name))) ||
@@ -1756,21 +1756,21 @@ const KeepAliveImpl: ComponentOptions = {
         current = vnode
         return rawVNode
       }
-      
+
       const key = vnode.key == null ? comp : vnode.key
       // 根据 `vnode.key` 去缓存容器中查找缓存组件
       const cachedVNode = cache.get(key)
-      
+    
       if (vnode.el) {
         vnode = cloneVNode(vnode)
         if (rawVNode.shapeFlag & ShapeFlags.SUSPENSE) {
           rawVNode.ssContent = vnode
         }
       }
-      
+
       // 将 `vnode.key` 赋值给缓存标记
       pendingCacheKey = key
-      
+
       // 如果缓存组件存在，则继承组件实例，并将 vnode 标记为 ShapeFlags512 静态标记
       // 这样渲染器就不会重新创建新的组件实例
       if (cachedVNode) {
@@ -1927,7 +1927,7 @@ const routes = [
 ```ts
 router.beforeEach(async (to, _from, next) => {
   NProgress.start()
-  
+
   // 有 Token
   if (userToken) {
     if (whiteRoutes.includes(to.name)) {
@@ -2055,13 +2055,13 @@ import { defineStore } from "pinia"
 
 const useCounterStore = defineStore("counter", () => {
   const count = ref(0)
-  
+
   const doubleCount = computed(() => count.value * 2)
-  
+
   const increment = () => {
     count.value++
   }
-  
+
   return { count, doubleCount, increment }
 })
 ```
