@@ -1,7 +1,7 @@
 ---
 title: TypeScript
 icon: typescript
-date: 2024-04-13
+date: 2026-10-11
 description: TypeScript
 ---
 
@@ -397,18 +397,18 @@ type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer 
 {
   "compilerOptions": {
     /* https://aka.ms/tsconfig */
-    
+
     /* Projects */
     "incremental": true,                  /* TS 在初次编译时会创建缓存文件, 再次编译会读取这个缓存文件 */
     "tsBuildInfoFile": "./.tsbuildinfo",  /* 缓存文件的存储位置 */
     "diagnostics": true,                  /* 打印诊断信息 */
-    
+
     /* Language and Environment */
     "target": "es2016",                   /* 目标语言的版本 */
     "lib": [],                            /* TS 需要引用的声明文件, ES5 默认引用 DOM、ES5、ScriptHost */
     "jsx": "preserve",                    /* JSX 解析器 */
     "jsxFactory": "",                     /* JSX 语法的解析器 'React.createElement' or 'h' */
-    
+
     /* Modules */
     "module": "commonjs",                 /* 生成代码的模板标准 */
     "rootDir": "./",                      /* 根目录 */
@@ -419,11 +419,11 @@ type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer 
     "paths": {                            /* 路径映射 */
       "@/*": ["./src/*"]
     },
-    
+
     /* JavaScript Support */
     "allowJs": false,                     /* 允许编译 JS, JSX 文件 */
     "checkJs": false,                     /* 允许在 JS 文件中报错, 通常与 allowJs 一起使用 */
-    
+
     /* Emit */
     "declaration": false,                 /* 自动生成声明文件 */
     "declarationDir": "./types",          /* 声明文件存放目录 */
@@ -436,7 +436,7 @@ type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer 
     "noEmit": false,                      /* 编译后不生成任何 JS 文件 */
     "noEmitOnError": true,                /* 发生错误时不输出任何文件 */
     "downlevelIteration": true,           /* 如果目标源是 ES3/ES5, 那么遍历器会有降级的实现 */
-    
+
     /* Type Checking */
     "strict": true,                       /* 开启所有严格的类型检查 */
     "alwaysStrict": true,                 /* 在代码中注入 'use strict' */
@@ -450,7 +450,7 @@ type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer 
     "noUnusedParameters": true,           /* 检查未使用的函数参数（只提示不报错） */
     "noFallthroughCasesInSwitch": true,   /* 防止 switch 语句贯穿（如果没有 break 语句后面不会执行） */
   },
-  
+
   "include": [],                          /* 指定包含的编译列表 */
   "exclude": [],                          /* 指定排除的编译列表 */
   "files": [],                            /* 指定使用该配置的文件 */
@@ -467,16 +467,16 @@ type CustomReturnType<F extends Function> = F extends (...args: any[]) => infer 
 declare module "express" {
   interface App {
     get(path: string, callback: (req: any, res: any) => void): void
-    
+
     listen(port: number, callback?: () => void)
   }
-  
+
   interface Express {
     (): App
   }
-  
+
   const express: Express
-  
+
   export default express
 }
 ```
