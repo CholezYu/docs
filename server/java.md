@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-12
+date: 2026-10-13
 description: Java
 ---
 
@@ -490,7 +490,7 @@ enum Season implements Printer {
 
   - `@Inherited`：子类是否继承父类注解。
 
-## 异常处理
+## 异常
 
 ### 异常分类
 
@@ -515,6 +515,28 @@ enum Season implements Printer {
   - `NumberFormatException`：数字格式异常
 
   - `ArithmeticException`：算术异常
+
+> [!tip]
+>
+> 编译时异常是由**外部不确定因素**导致的，编译器强制要求处理；
+>
+> 运行时异常通常为**代码逻辑问题**导致的，一般不处理。
+
+### 异常处理
+
+捕获异常。
+
+- `try`：可能发生异常的代码块。
+
+- `catch`：匹配对应的异常类型并进行处理。
+
+- `finally`：无论是否发生异常，代码都会执行。
+
+抛出异常。
+
+- `throw`：在方法体内部显式地抛出一个具体的异常对象。
+
+- `throws`：在方法签名上声明该方法可能抛出的异常类型，通知调用者必须处理这些异常。
 
 ## 多线程
 
