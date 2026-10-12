@@ -402,33 +402,32 @@ outer.executeInner(); // outer name
 枚举（Enum） 是一种特殊的类，用来定义常量。每个枚举值都是类的唯一实例对象。
 
 ```java
-enum Season {
-  SPRING("spring"),
-  SUMMER("summer"),
-  AUTUMN("autumn"),
-  WINTER("winter");
+enum Status {
+  SUCCESS("success"),
+  WARNING("warning"),
+  Error("error");
 
-  private final String name;
+  private final String value;
 
-  Season(String name) {
-    this.name = name;
+  Status(String value) {
+    this.value = value;
   }
 
-  public String getName() {
-    return name;
+  public String getValue() {
+    return value;
   }
 }
 
-Arrays.toString(Season.values()); // => [SPRING, SUMMER, AUTUMN, WINTER]
+Arrays.toString(Status.values()); // => [SUCCESS, WARNING, Error]
 
-Season.SPRING;             // => SPRING
-Season.SPRING.toString();  // => SPRING
-Season.SPRING.name();      // => SPRING
-Season.SPRING.getName();   // => spring
+Status.SUCCESS;             // => SUCCESS
+Status.SUCCESS.toString();  // => SUCCESS
+Status.SUCCESS.name();      // => SUCCESS
+Status.SUCCESS.getValue();  // => success
 
-Season.valueOf("SUMMER");  // => SUMMER
+Status.valueOf("WARNING");  // => WARNING
 
-Season.WINTER.ordinal(); // => 3
+Status.Error.ordinal(); // => 2
 ```
 
 枚举实现接口（支持多态）。
@@ -439,28 +438,22 @@ interface Printer {
 }
 
 enum Season implements Printer {
-  SPRING {
+  SUCCESS {
     @Override
     public void print() {
-      System.out.println("spring");
+      System.out.println("success");
     }
   },
-  SUMMER {
+  WARNING {
     @Override
     public void print() {
-      System.out.println("summer");
+      System.out.println("warning");
     }
   },
-  AUTUMN {
+  Error {
     @Override
     public void print() {
-      System.out.println("autumn");
-    }
-  },
-  WINTER {
-    @Override
-    public void print() {
-      System.out.println("winter");
+      System.out.println("error");
     }
   }
 }
