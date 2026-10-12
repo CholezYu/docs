@@ -490,6 +490,32 @@ enum Season implements Printer {
 
   - `@Inherited`：子类是否继承父类注解。
 
+## 异常处理
+
+### 异常分类
+
+- 编译时异常（受检异常）：
+
+  - `FileNotFoundException`：文件未找到
+
+  - `ClassNotFoundException`：类未找到
+
+  - `IOException`：I/O 操作异常
+
+  - `SQLException`：数据库操作异常
+
+- 运行时异常（非受检异常）：
+
+  - `NullPointerException`：空指针异常
+
+  - `ArrayIndexOutOfBoundsException`：数组下标越界
+
+  - `ClassCastException`：类型转换异常
+
+  - `NumberFormatException`：数字格式异常
+
+  - `ArithmeticException`：算术异常
+
 ## 多线程
 
 ### 创建线程
