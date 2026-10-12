@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-11
+date: 2026-10-12
 description: Java
 ---
 
@@ -212,18 +212,26 @@ interface USB {
   void disconnect();
 }
 
+class Computer {
+  void run(USB usb) {
+    usb.connect();
+    usb.disconnect();
+  }
+}
+
 // 使用 implements 关键字
 class Printer implements USB {
   @Override
   public void connect() {
     System.out.println("printer connected...");
   }
-  
+
   @Override
   public void disconnect() {
     System.out.println("printer disconnected...");
   }
 }
+Computer computer = new Computer();
 computer.run(new Printer());
 
 // 匿名实现类
@@ -232,7 +240,7 @@ computer.run(new USB() {
   public void connect() {
     System.out.println("printer connected...");
   }
-  
+
   @Override
   public void disconnect() {
     System.out.println("printer disconnected...");
@@ -240,10 +248,12 @@ computer.run(new USB() {
 });
 ```
 
-**静态方法** <Badge text="Java 8+" type="tip" /> 使用 `static` 修饰。只能通过接口调用，不能通过实现类或对象调用。
+**静态方法** <Badge text="Java 8+" type="tip" /> 使用 `static` 修饰。只能通过接口调用，不能通过实现类或实例调用。
 
 ```java
 interface USB {
+  String VERSION = "2.0";
+
   static void showVersion() {
     System.out.println("USB interface version: " + VERSION);
   }
@@ -253,26 +263,53 @@ class Printer implements USB {}
 
 USB.showVersion(); // ✅ 可以通过接口调用
 Printer.showVersion(); // ❌ 不能通过实现类调用
+new Printer().showVersion(); // ❌ 不能通过实现类的实例调用
 ```
 
-**默认方法** <Badge text="Java 8+" type="tip" /> 使用 `default` 修饰。实现类可以直接调用，也可以进行重写。
+**默认方法** <Badge text="Java 8+" type="tip" /> 使用 `default` 修饰。可以被实现类重写，也可以通过实现类的实例调用。
 
 ```java
 interface USB {
   default void startTransfer() {
-    System.out.println("starting data transfer...");
+    System.out.println("starting USB transfer...");
   }
 }
+
+class Printer implements USB {
+  @Override
+  public void startTransfer() { // ✅ 可以进行重写
+    System.out.println("starting Printer transfer...");
+  }
+}
+
+Printer printer = new Printer();
+printer.startTransfer(); // ✅ 可以通过实现类的实例调用
 ```
 
-**私有方法** <Badge text="Java 9+" type="tip" /> 使用 `private` 修饰。只能在接口内部使用，不能被实现类调用或重写。
+**私有方法** <Badge text="Java 9+" type="tip" /> 使用 `private` 修饰。只能在接口内部使用，不能被实现类重写或调用。
 
 ```java
 interface USB {
   private void checkConnection() {
     System.out.println("checking USB connection...");
   }
+
+  default void startTransfer() {
+    checkConnection(); // ✅ 可以在接口内部调用
+    System.out.println("starting USB transfer...");
+  }
 }
+
+class Printer implements USB {
+  @Override
+  public void checkConnection() { // ❌ 不能进行重写
+    System.out.println("checking Printer connection...");
+  }
+}
+
+USB.checkConnection(); // ❌ 不能通过接口调用
+Printer.checkConnection(); // ❌ 不能通过实现类调用
+new Printer().checkConnection(); // ❌ 不能通过实现类的实例调用
 ```
 
 ### 内部类 <Badge text="不常用" type="note" />
@@ -286,7 +323,7 @@ class Outer {
   String name = "outer name";
 
   class Inner {
-    void display() {
+    void print() {
       System.out.println(name);
     }
   }
@@ -294,7 +331,7 @@ class Outer {
 
 Outer outer = new Outer();
 Outer.Inner inner = outer.new Inner();
-inner.display(); // outer name
+inner.print(); // outer name
 ```
 
 **静态内部类** 相当于外部类的静态成员。只能访问外部类的静态成员。
@@ -304,14 +341,14 @@ class Outer {
   static String name = "outer name";
 
   static class Inner {
-    void display() {
+    void print() {
       System.out.println(name);
     }
   }
 }
 
 Outer.Inner inner = new Outer.Inner();
-inner.display(); // outer name
+inner.print(); // outer name
 ```
 
 **局部内部类** 定义在方法、代码块中。作用范围仅限方法内部，不能使用访问修饰符。
@@ -320,49 +357,49 @@ inner.display(); // outer name
 class Outer {
   String name = "outer name";
 
-  void print() {
+  void executeInner() {
     class Inner {
-      public void display() {
+      public void print() {
         System.out.println(name);
       }
     }
     Inner inner = new Inner();
-    inner.display();
+    inner.print();
   }
 }
 
 Outer outer = new Outer();
-outer.print();
+outer.executeInner(); // outer name
 ```
 
 **匿名内部类** 常用于回调、事件监听、线程创建等场景。
 
 ```java
 interface Inner {
-  void display();
+  void print();
 }
 
 class Outer {
   String name = "outer name";
 
-  void print() {
+  void executeInner() {
     Inner inner = new Inner() {
       @Override
-      public void display() {
+      public void print() {
         System.out.println(name);
       }
     };
-    inner.display();
+    inner.print();
   }
 }
 
 Outer outer = new Outer();
-outer.print();
+outer.executeInner(); // outer name
 ```
 
 ### 枚举
 
-枚举（Enum） 是一种特殊的类，用来定义常量。每个枚举值都是此类的唯一实例对象。
+枚举（Enum） 是一种特殊的类，用来定义常量。每个枚举值都是类的唯一实例对象。
 
 ```java
 enum Season {
@@ -397,33 +434,33 @@ Season.WINTER.ordinal(); // => 3
 枚举实现接口（支持多态）。
 
 ```java
-interface Show {
-  void show();
+interface Printer {
+  void print();
 }
 
-enum Season implements Show {
+enum Season implements Printer {
   SPRING {
     @Override
-    public void show() {
-      System.out.println("spring coming");
+    public void print() {
+      System.out.println("spring");
     }
   },
   SUMMER {
     @Override
-    public void show() {
-      System.out.println("summer coming");
+    public void print() {
+      System.out.println("summer");
     }
   },
   AUTUMN {
     @Override
-    public void show() {
-      System.out.println("autumn coming");
+    public void print() {
+      System.out.println("autumn");
     }
   },
   WINTER {
     @Override
-    public void show() {
-      System.out.println("winter coming");
+    public void print() {
+      System.out.println("winter");
     }
   }
 }
@@ -433,25 +470,25 @@ enum Season implements Show {
 
 注解（Annotation）是一种用于为代码添加说明、元数据的机制，它不会直接影响程序逻辑，但可以被编译器、运行时程序读取并执行特定操作。
 
-常见的内置注解：
+- 常见的内置注解：
 
-- `@Override`：检查方法是否正确重写父类方法。
+  - `@Override`：检查方法是否正确重写父类方法。
 
-- `@Deprecated`：标记方法或类为“过时”，不建议使用。
+  - `@Deprecated`：标记方法或类为“过时”，不建议使用。
 
-- `@SuppressWarnings`：忽略编译器警告。
+  - `@SuppressWarnings`：忽略编译器警告。
 
-- `@FunctionalInterface`：限定接口必须只有一个抽象方法。
+  - `@FunctionalInterface`：限定接口必须只有一个抽象方法。
 
-元注解（为注解提供说明）：
+- 元注解（为注解提供说明）：
 
-- `@Retention`：注解的保留时间（SOURCE、CLASS、RUNTIME）。
+  - `@Retention`：注解的保留时间（SOURCE、CLASS、RUNTIME）。
 
-- `@Target`：可以作用的位置（类、方法、字段等）。
+  - `@Target`：可以作用的位置（类、方法、字段等）。
 
-- `@Documented`：是否写入 JavaDoc。
+  - `@Documented`：是否写入 JavaDoc。
 
-- `@Inherited`：子类是否继承父类注解。
+  - `@Inherited`：子类是否继承父类注解。
 
 ## 多线程
 
@@ -504,7 +541,7 @@ Thread thread = new Thread(futureTask);
 thread.start();
 
 try {
-  futureTask.get(); // 阻塞等待线程执行结果
+  futureTask.get(); // 阻塞等待线程执行结果 => 10
 } catch (Exception e) {
   e.printStackTrace();
 }
@@ -512,7 +549,7 @@ try {
 
 #### 线程池 <Badge text="推荐" type="tip" />
 
-线程池能够自动管理线程的创建和回收，提高资源利用率。适合处理大量短任务。
+进程池能自动管理进程的创建与释放，提高资源利用率。适合处理大量短任务。
 
 ```java
 // 创建一个固定大小的线程池
@@ -523,17 +560,11 @@ ExecutorService executorService = Executors.newFixedThreadPool(10);
 
 executorService.submit(new Runnable() {
   @Override
-  public void run() {
-    // 线程1执行代码
-  }
+  public void run() {/* 执行线程1代码 */}
 });
 
-executorService.submit(new Runnable() {
-  @Override
-  public void run() {
-    // 线程2执行代码
-  }
-});
+/* lambda 表达式 */
+executorService.submit(() -> {/* 执行线程2代码 */});
 
 // 关闭线程池
 executorService.shutdown();
@@ -551,7 +582,7 @@ executorService.shutdown();
 
   - `Object.wait()`
 
-  - `Thread.join()`（等待目标线程执行完）
+  - `Thread.join()` 等待目标线程执行完
 
   - `LockSupport.park()`
 
@@ -642,7 +673,7 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 
 - `wait()` 让当前线程进入等待状态并释放锁。
 
-- `notify()` 唤醒一个等待中的线程（随机）。
+- `notify()` 随机唤醒一个等待中的线程。
 
 - `notifyAll()` 唤醒所有等待中的线程。
 
