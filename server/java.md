@@ -625,11 +625,11 @@ executorService.shutdown();
 
 ### 生命周期
 
-- NEW（新建状态），线程对象已创建但 **还未调用** `start()`。
+- NEW（新建状态），线程对象已创建但**还未调用** `start()`。
 
 - RUNNABLE（可运行状态），调用 `start()` 后，进入可运行状态，实际上可能 **正在运行** 或 **等待 CPU 调度**。
 
-- BLOCKED（阻塞状态），当线程尝试获取某个 **同步锁** 时，如果锁被别的线程占用，就进入 BLOCKED 状态。
+- BLOCKED（阻塞状态），当线程尝试获取某个**同步锁**时，如果锁被别的线程占用，就进入 BLOCKED 状态。
 
 - WAITING（等待状态），无限制等待被其他线程唤醒，比如：
 
@@ -655,7 +655,7 @@ executorService.shutdown();
 
 ### 线程同步
 
-多个线程同时访问共享数据时，可能会导致 **线程安全问题**（数据不一致）。
+多个线程同时访问共享数据时，可能会导致**线程安全问题**（数据不一致）。
 
 使用线程同步，可以解决线程安全问题，避免资源抢占。
 
@@ -663,23 +663,7 @@ executorService.shutdown();
 
 > [!tip]
 >
-> `synchronized` 本质上是基于 **对象锁**。每个对象都有一把隐式锁。当线程进入 `synchronized` 块时**获得锁**；退出时**释放锁**。其他线程必须等待锁释放才能进入。
-
-同步方法：
-
-- 修饰实例方法（锁住当前对象），同步监视器默认是 `this`。
-
-- 修饰静态方法（锁住类对象），同步监视器默认是 `[ClassName].class`。
-
-```java
-class Counter {
-  private /* static */ int count = 0;
-
-  public /* static */ synchronized void increment() {
-    count++;
-  }
-}
-```
+> `synchronized` 本质上是基于**对象锁**，每个对象都有一把隐式锁。当线程进入 `synchronized` 块时**获得锁**，退出时**释放锁**。其他线程必须等待锁释放才能进入。
 
 同步代码块：
 
@@ -687,17 +671,129 @@ class Counter {
 
 - 继承 `Thread` 类创建线程，`this` 可能不是唯一的，需要指定 `[ClassName].class` 作为同步监视器。
 
+:::tabs#synchronizedBlock
+
+@tab Runnable
+
 ```java
-class Counter {
+class CountTask implements Runnable {
   private int count = 0;
 
-  public void increment() {
-    synchronized (this /* Counter.class */) {
-      count++;
+  @Override
+  public void run() {
+    for (int i = 0; i < 100; i++) {
+      synchronized (this /* CountTask task */) {
+        count++;
+        System.out.println(Thread.currentThread().getName() + ": " + count);
+      }
     }
   }
 }
+
+CountTask task = new CountTask();
+
+// 开启 3 个线程
+for (int i = 0; i < 3; i++) {
+  Thread thread = new Thread(task);
+  thread.start();
+}
 ```
+
+@tab Thread
+
+```java
+class CountThread extends Thread {
+  private static int count = 0;
+
+  @Override
+  public void run() {
+    for (int i = 0; i < 100; i++) {
+      synchronized (CountThread.class) {
+        count++;
+        System.out.println(Thread.currentThread().getName() + ": " + count);
+      }
+    }
+  }
+}
+
+// 开启 3 个线程
+for (int i = 0; i < 3; i++) {
+  CountThread thread = new CountThread();
+  thread.start();
+}
+```
+
+:::
+
+同步方法：
+
+- 修饰**非静态方法**，同步监视器默认是 `this`。
+
+- 修饰**静态方法**，同步监视器默认是 `[ClassName].class`。
+
+> [!warning]
+>
+> 继承 `Thread` 类创建线程，`this` 不是唯一的，所以只能修饰静态方法，或使用同步代码块。
+
+:::tabs#synchronizedMethod
+
+@tab Runnable
+
+```java
+class CountTask implements Runnable {
+  private int count = 0;
+
+  // 非静态方法
+  private synchronized void increment() {
+    count++;
+    System.out.println(Thread.currentThread().getName() + ": " + count);
+  }
+
+  @Override
+  public void run() {
+    for (int i = 0; i < 100; i++) {
+      increment();
+    }
+  }
+}
+
+CountTask task = new CountTask();
+
+// 开启 3 个线程
+for (int i = 0; i < 3; i++) {
+  Thread thread = new Thread(task);
+  thread.start();
+}
+```
+
+@tab Thread
+
+```java
+class CountThread extends Thread {
+  private static int count = 0;
+
+  // 静态方法
+  private static synchronized void increment() {
+    count++;
+    System.out.println(Thread.currentThread().getName() + ": " + count);
+  }
+
+  @Override
+  public void run() {
+    for (int i = 0; i < 100; i++) {
+      increment();
+    }
+  }
+}
+
+// 开启 3 个线程
+for (int i = 0; i < 3; i++) {
+  CountThread thread = new CountThread();
+  thread.start();
+}
+```
+
+:::
 
 #### Lock 锁 <Badge text="Java 5+" type="tip" />
 
@@ -732,5 +828,5 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 
 > [!important]
 >
-> 必须在 **同步方法或同步代码块** 内调用。
+> 必须在 **同步方法** 或 **同步代码块** 内调用。
 
