@@ -437,7 +437,7 @@ interface Printer {
   void print();
 }
 
-enum Season implements Printer {
+enum Status implements Printer {
   SUCCESS {
     @Override
     public void print() {
@@ -517,19 +517,19 @@ enum Season implements Printer {
 
 ### 异常处理
 
-捕获异常。
+- 捕获异常:
 
-- `try`：可能发生异常的代码块。
+  - `try`：可能发生异常的代码块。
 
-- `catch`：匹配对应的异常类型并进行处理。
+  - `catch`：匹配对应的异常类型并进行处理。
 
-- `finally`：无论是否发生异常，代码都会执行。
+  - `finally`：无论是否发生异常，代码都会执行。
 
-抛出异常。
+- 抛出异常:
 
-- `throw`：在方法体内部显式地抛出一个具体的异常对象。
+  - `throw`：在方法体内部显式地抛出一个具体的异常对象。
 
-- `throws`：在方法签名上声明该方法可能抛出的异常类型，通知调用者必须处理这些异常。
+  - `throws`：在方法签名上声明该方法可能抛出的异常类型，通知调用者必须处理这些异常。
 
 ## 多线程
 
@@ -559,6 +559,10 @@ class PrintTask implements Runnable {
 
 PrintTask task = new PrintTask();
 Thread thread = new Thread(task);
+
+// 匿名实现类 + lambda 表达式
+Thread thread = new Thread(() -> {/* 执行线程代码 */});
+
 thread.start();
 ```
 
@@ -578,11 +582,19 @@ class PrintCallable implements Callable<Integer> {
 
 PrintCallable callable = new PrintCallable();
 FutureTask<Integer> futureTask = new FutureTask<>(callable);
+
+// 匿名实现类 + lambda 表达式
+FutureTask<Integer> futureTask = new FutureTask<>(() -> {
+  int sum = 0;
+  for (int i = 0; i < 10; i++) sum += i;
+  return sum;
+});
+
 Thread thread = new Thread(futureTask);
 thread.start();
 
 try {
-  futureTask.get(); // 阻塞等待线程执行结果 => 10
+  futureTask.get(); // 阻塞等待线程执行结果 => 45
 } catch (Exception e) {
   e.printStackTrace();
 }
@@ -604,7 +616,7 @@ executorService.submit(new Runnable() {
   public void run() {/* 执行线程1代码 */}
 });
 
-/* lambda 表达式 */
+// 匿名实现类 + lambda 表达式
 executorService.submit(() -> {/* 执行线程2代码 */});
 
 // 关闭线程池
