@@ -1,13 +1,15 @@
 ---
 title: LangChain
 icon: langchain
-date: 2026-10-11
+date: 2026-10-13
 description: LangChain
 ---
 
 ## 模型初始化
 
-`init_chat_model` 是对 ChatOpenAI、ChatDeepSeek 等厂商的驱动类进行统一封装的 API。
+> [!tip]
+>
+> `init_chat_model` 是对 ChatOpenAI、ChatDeepSeek 等厂商的驱动类进行统一封装的 API。
 
 ::: tabs#DeepSeek
 
