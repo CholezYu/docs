@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-14
+date: 2026-10-15
 description: Java
 ---
 
@@ -665,17 +665,15 @@ class CountTask implements Runnable {
   private int count = 0;
 
   public synchronized void increment() {
-    count++;
-    System.out.println(Thread.currentThread().getName() + ": " + count);
+    System.out.println(Thread.currentThread().getName() + ": " + count++);
   }
 
   @Override
   public void run() {
-    for (int i = 0; i < 100; i++) {
+    while (count < 100) {
       // 同步代码块
       synchronized (this /* CountTask task */) {
-        count++;
-        System.out.println(Thread.currentThread().getName() + ": " + count);
+        System.out.println(Thread.currentThread().getName() + ": " + count++);
       }
 
       // 同步方法
@@ -692,17 +690,15 @@ class CountThread extends Thread {
   private static int count = 0;
 
   public static synchronized void increment() {
-    count++;
-    System.out.println(Thread.currentThread().getName() + ": " + count);
+    System.out.println(Thread.currentThread().getName() + ": " + count++);
   }
 
   @Override
   public void run() {
-    for (int i = 0; i < 100; i++) {
+    while (count < 100) {
       // 同步代码块
       synchronized (CountThread.class) {
-        count++;
-        System.out.println(Thread.currentThread().getName() + ": " + count);
+        System.out.println(Thread.currentThread().getName() + ": " + count++);
       }
 
       // 同步方法
@@ -749,5 +745,5 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 
 > [!important]
 >
-> 以上方法只能在 **同步方法** 或 **同步代码块** 内调用。
+> 以上方法只能在 **同步方法** 或 **同步代码块** 内调用，并且必须由同步监视器调用。
 
