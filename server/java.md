@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-13
+date: 2026-10-14
 description: Java
 ---
 
@@ -611,6 +611,7 @@ ExecutorService executorService = Executors.newFixedThreadPool(10);
 // 设置线程池中线程数的上限
 ((ThreadPoolExecutor) executorService).setMaximumPoolSize(50);
 
+// 匿名实现类
 executorService.submit(new Runnable() {
   @Override
   public void run() {/* 执行线程1代码 */}
@@ -625,192 +626,112 @@ executorService.shutdown();
 
 ### 生命周期
 
-- NEW（新建状态），线程对象已创建但**还未调用** `start()`。
+- NEW（新建状态）：线程对象已创建，但**还未调用** `start()`。
 
-- RUNNABLE（可运行状态），调用 `start()` 后，进入可运行状态，实际上可能 **正在运行** 或 **等待 CPU 调度**。
+- RUNNABLE（可运行状态，**正在运行** 或 **等待运行**），调用 `start()` 后，进入可运行状态。
 
-- BLOCKED（阻塞状态），当线程尝试获取某个**同步锁**时，如果锁被别的线程占用，就进入 BLOCKED 状态。
+- BLOCKED（阻塞状态）：当线程尝试获取某个锁时，若该锁被其他线程占用，进入阻塞状态。
 
-- WAITING（等待状态），无限制等待被其他线程唤醒，比如：
+- WAITING（等待状态）：阻塞当前线程，无限期等待被其他线程唤醒。
 
-  - `Object.wait()`
+- TIMED_WAITING（超时等待），超时后自动唤醒，或被其他线程提前唤醒。
 
-  - `Thread.join()` 等待目标线程执行完
-
-  - `LockSupport.park()`
-
-- TIMED_WAITING（超时等待），与 WAITING 类似，但会在超时后自动唤醒，常见方法：
-
-  - `Thread.sleep(ms)`
-
-  - `Object.wait(ms)`
-
-  - `Thread.join(ms)`
-
-  - `LockSupport.parkNanos()`
-
-  - `LockSupport.parkUntil()`
-
-- TERMINATED（终止状态），当线程的 `run()` 方法执行结束或抛出异常时进入终止状态。
+- TERMINATED（终止状态），当线程的 `run()` 方法执行结束，或抛出异常时进入终止状态。
 
 ### 线程同步
 
 多个线程同时访问共享数据时，可能会导致**线程安全问题**（数据不一致）。
 
-使用线程同步，可以解决线程安全问题，避免资源抢占。
+线程同步可以解决线程安全问题，避免资源抢占。
 
 #### synchronized 关键字
 
-> [!tip]
->
-> `synchronized` 本质上是基于**对象锁**，每个对象都有一把隐式锁。当线程进入 `synchronized` 块时**获得锁**，退出时**释放锁**。其他线程必须等待锁释放才能进入。
+线程进入 `synchronized` 块时，它会“监视”这个对象。如果对象未被锁定，线程获得监视器控制权并执行代码，执行结束后释放监视器；如果对象已经被其他线程锁定，当前线程会被阻塞，直到监视器被释放。
 
-同步代码块：
+`synchronized` 可以修饰同步代码块和同步方法：
 
-- 实现 `Runnable` 接口创建线程，可以直接指定 `this` 作为同步监视器。
+- 修饰同步代码块：需要指定唯一对象作为同步监视器。
 
-- 继承 `Thread` 类创建线程，`this` 可能不是唯一的，需要指定 `[ClassName].class` 作为同步监视器。
+- 修饰同步方法：
 
-:::tabs#synchronizedBlock
+  - 修饰**实例方法**，同步监视器默认为 `this`（当前对象实例）；
 
-@tab Runnable
+  - 修饰**静态方法**，同步监视器默认为 `[ClassName].class`（当前类的 Class 对象）。
+
+实现 Runnable 接口创建线程，修饰同步代码块通常指定 `this` 作为同步监视器。
 
 ```java
 class CountTask implements Runnable {
   private int count = 0;
 
+  public synchronized void increment() {
+    count++;
+    System.out.println(Thread.currentThread().getName() + ": " + count);
+  }
+
   @Override
   public void run() {
     for (int i = 0; i < 100; i++) {
+      // 同步代码块
       synchronized (this /* CountTask task */) {
         count++;
         System.out.println(Thread.currentThread().getName() + ": " + count);
       }
+
+      // 同步方法
+      increment();
     }
   }
 }
-
-CountTask task = new CountTask();
-
-// 开启 3 个线程
-for (int i = 0; i < 3; i++) {
-  Thread thread = new Thread(task);
-  thread.start();
-}
 ```
 
-@tab Thread
+继承 `Thread` 类创建线程，因为每个线程都是独立的实例，`this` 不是唯一的，若要实现多线程同步，需要修饰**静态方法**；修饰同步代码块需要指定 `[ClassName].class` 作为同步监视器。
 
 ```java
 class CountThread extends Thread {
   private static int count = 0;
 
+  public static synchronized void increment() {
+    count++;
+    System.out.println(Thread.currentThread().getName() + ": " + count);
+  }
+
   @Override
   public void run() {
     for (int i = 0; i < 100; i++) {
+      // 同步代码块
       synchronized (CountThread.class) {
         count++;
         System.out.println(Thread.currentThread().getName() + ": " + count);
       }
-    }
-  }
-}
 
-// 开启 3 个线程
-for (int i = 0; i < 3; i++) {
-  CountThread thread = new CountThread();
-  thread.start();
-}
-```
-
-:::
-
-同步方法：
-
-- 修饰**非静态方法**，同步监视器默认是 `this`。
-
-- 修饰**静态方法**，同步监视器默认是 `[ClassName].class`。
-
-> [!warning]
->
-> 继承 `Thread` 类创建线程，`this` 不是唯一的，所以只能修饰静态方法，或使用同步代码块。
-
-:::tabs#synchronizedMethod
-
-@tab Runnable
-
-```java
-class CountTask implements Runnable {
-  private int count = 0;
-
-  // 非静态方法
-  private synchronized void increment() {
-    count++;
-    System.out.println(Thread.currentThread().getName() + ": " + count);
-  }
-
-  @Override
-  public void run() {
-    for (int i = 0; i < 100; i++) {
+      // 同步方法
       increment();
     }
   }
 }
-
-CountTask task = new CountTask();
-
-// 开启 3 个线程
-for (int i = 0; i < 3; i++) {
-  Thread thread = new Thread(task);
-  thread.start();
-}
 ```
-
-@tab Thread
-
-```java
-class CountThread extends Thread {
-  private static int count = 0;
-
-  // 静态方法
-  private static synchronized void increment() {
-    count++;
-    System.out.println(Thread.currentThread().getName() + ": " + count);
-  }
-
-  @Override
-  public void run() {
-    for (int i = 0; i < 100; i++) {
-      increment();
-    }
-  }
-}
-
-// 开启 3 个线程
-for (int i = 0; i < 3; i++) {
-  CountThread thread = new CountThread();
-  thread.start();
-}
-```
-
-:::
 
 #### Lock 锁 <Badge text="Java 5+" type="tip" />
 
 Java 5 之后，可以使用显示锁机制。
 
 ```java
-class Counter {
-  private int count = 0;
+class CountThread extends Thread {
+  private static int count = 0;
 
   private static final ReentrantLock lock = new ReentrantLock();
 
-  public void increment() {
-    lock.lock(); // 获得锁
-    try {
-      count++;
-    } finally {
-      lock.unlock(); // 一定要释放锁！
+  @Override
+  public void run() {
+    for (int i = 0; i < 100; i++) {
+      lock.lock(); // 获得锁
+      try {
+        count++;
+        System.out.println(Thread.currentThread().getName() + ": " + count);
+      } finally {
+        lock.unlock(); // 一定要释放锁！
+      }
     }
   }
 }
@@ -828,5 +749,5 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 
 > [!important]
 >
-> 必须在 **同步方法** 或 **同步代码块** 内调用。
+> 以上方法只能在 **同步方法** 或 **同步代码块** 内调用。
 
