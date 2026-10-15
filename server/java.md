@@ -720,11 +720,10 @@ class CountThread extends Thread {
 
   @Override
   public void run() {
-    for (int i = 0; i < 100; i++) {
+    while (count < 100) {
       lock.lock(); // 获得锁
       try {
-        count++;
-        System.out.println(Thread.currentThread().getName() + ": " + count);
+        System.out.println(Thread.currentThread().getName() + ": " + count++);
       } finally {
         lock.unlock(); // 一定要释放锁！
       }
