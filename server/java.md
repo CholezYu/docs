@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-15
+date: 2026-10-20
 description: Java
 ---
 
@@ -745,4 +745,445 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 > [!important]
 >
 > 以上方法只能在 **同步方法** 或 **同步代码块** 内调用，并且必须由同步监视器调用。
+
+## 集合框架
+
+### 列表 List
+
+#### ArrayList <Badge text="常用" type="tip" />
+
+适用于读取多、写入少的场景。
+
+- 随机访问快 O(1)。
+
+- 插入、删除慢 O(n)。
+
+- 线程不安全。
+
+> [!tip]
+>
+> `ArrayList` 和 `LinkedList` 的选择：**大部分情况下优先使用 `ArrayList`**，除非有频繁插入、删除需求。
+
+常用方法：
+
+```java
+List<String> list = new ArrayList<>();
+
+// 新增
+list.add("apple");     // => [apple]
+list.add("orange");    // => [apple, orange]
+list.add(1, "banana"); // => [apple, banana, orange]
+
+// 修改
+list.set(2, "lemon");  // => [apple, banana, lemon]
+
+// 查询
+list.get(1);           // => banana
+
+// 删除
+list.remove("lemon");  // => [apple, banana]
+list.remove(0);        // => [banana]
+list.clear();          // => []
+```
+
+遍历方式：
+
+```java
+List<String> list = new ArrayList<>(Arrays.asList("apple", "banana", "orange"));
+
+// 迭代器
+Iterator<String> iterator = list.iterator();
+while (iterator.hasNext()) {
+  String fruit = iterator.next();
+  System.out.println(fruit);
+}
+
+// for...
+for (int i = 0; i < list.size(); i++) {
+  String fruit = list.get(i);
+  System.out.println(fruit);
+}
+
+// 增强 for...
+for (String fruit : list) {
+  System.out.println(fruit);
+}
+
+// forEach (Java 8+)
+list.forEach(fruit -> System.out.println(fruit));
+// forEach + lambda 表达式
+list.forEach(System.out::println);
+
+// stream (Java 8+)
+Stream<String> stream = list.stream();
+stream.forEach(System.out::println);
+```
+
+#### LinkedList
+
+适用于频繁插入、删除场景。
+
+- 随机访问慢 O(n)。
+
+- 插入、删除快 O(1)。
+
+- 内存开销大。
+
+- 可作为列表、栈、队列使用。
+
+作为列表使用与 `ArrayList` 用法相同。
+
+作为栈使用（先进后出）：
+
+```java
+LinkedList<String> stack = new LinkedList<>();
+
+stack.addFirst("a"); // => [a]
+stack.addFirst("b"); // => [b, a]
+stack.removeFirst(); // => [a]
+```
+
+作为队列使用（先进先出）：
+
+```java
+LinkedList<String> queue = new LinkedList<>();
+
+queue.addLast("a");  // => [a]
+queue.addLast("b");  // => [a, b]
+queue.removeFirst(); // => [b]
+```
+
+### 集合 Set <Badge text="常用" type="tip" />
+
+#### HashSet
+
+适用于去重、快速查询场景。
+
+- 查询、插入、删除快 O(1)。
+
+- 无序。
+
+- 需要重写 `hashCode()` 和 `equals()`。
+
+常用方法：
+
+```java
+Set<String> set = new HashSet<>();
+
+// 新增
+set.add("apple");    // => [apple]
+set.add("banana");   // => [banana, apple]
+set.add("apple");    // 重复元素不会添加
+
+// 删除
+set.remove("apple"); // => [banana]
+set.clear();         // => []
+```
+
+遍历方式与 `ArrayList` 相同。
+
+#### LinkedHashSet
+
+适用于需要保持元素插入顺序并去重的场景。
+
+- 查询、插入、删除快 O(1)。
+
+- 保持插入顺序。
+
+- 性能略低于 `HashSet`。
+
+#### TreeSet
+
+适用于需要有序集合的场景。
+
+- 查询、插入、删除慢 O(log n)。
+
+- 有序（自然排序或自定义排序）。
+
+自然排序：
+
+- 元素必须实现 `Comparable` 接口。
+
+- `TreeSet` 调用元素的 `compareTo()` 方法进行比较。
+
+- **注意**：如果 `compareTo()` 返回 0，则 `TreeSet` 认为元素相同，**不会重复添加**。这可能导致数据丢失。
+
+- 适用于元素有明确的自然顺序（如数字、日期）场景。
+
+```java
+class Person implements Comparable<Person> {
+  private String name;
+  private int age;
+
+  public Person(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  @Override
+  public int compareTo(Person other) {
+    return Integer.compare(this.age, other.age);
+  }
+
+  @Override
+  public String toString() {
+    return "{name='" + name + "', age=" + age + "}";
+  }
+}
+
+TreeSet<Person> set = new TreeSet<>();
+
+set.add(new Person("Alice", 20));
+set.add(new Person("Bob", 25));
+set.add(new Person("Charlie", 20)); // 已存在 age 相同的元素，不会重复添加
+
+set; // => [{name='Alice', age=20}, {name='Bob', age=25}]
+```
+
+自定义排序：
+
+- 创建 `TreeSet` 时传入一个 `Comparator` 实现。
+
+- `TreeSet` 调用 `Comparator.compare()` 方法进行比较。
+
+- 同样，如果 `compare()` 返回 0，则 `TreeSet` 认为元素相同，**不会重复添加**。
+
+- 适用于需要多种复杂排序规则的场景。
+
+```java
+class Person {
+  private String name;
+  private int age;
+
+  public Person(String name, int age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  @Override
+  public String toString() {
+    return "{name='" + name + "', age=" + age + "}";
+  }
+}
+
+// 自定义比较器，使用 `Integer.compare`
+Comparator<Person> comparator = (p1, p2) -> Integer.compare(p1.getAge(), p2.getAge());
+
+// 自定义比较器，使用 `Comparator.comparingInt`
+Comparator<Person> comparator = Comparator.comparingInt(Person::getAge);
+
+TreeSet<Person> set = new TreeSet<>(comparator);
+
+set.add(new Person("Alice", 20));
+set.add(new Person("Bob", 25));
+set.add(new Person("Charlie", 20)); // 已存在 age 相同的元素，不会重复添加
+set.add(new Person("Dave", 18));
+
+set; // => [{name='Dave', age=18}, {name='Alice', age=20}, {name='Bob', age=25}]
+```
+
+### 表 Map <Badge text="常用" type="tip" />
+
+#### HashMap
+
+通用键值对存储。
+
+- 查询、插入、删除快 O(1)。
+
+- 无序。
+
+- 允许 null 键和 null 值。
+
+- 线程不安全。
+
+- Java 8+：链表长度 > 8 转红黑树。
+
+HashMap 的工作原理：
+
+1. 存储结构：Java 7 是数组 + 链表；Java 8+ 是数组 + 链表 + 红黑树。
+
+2. 哈希冲突解决：链地址法（拉链法）。
+
+3. 扩容机制：
+
+     - 默认初始容量 16，负载因子 0.75。
+
+     - 当元素个数 > 16 * 0.75 = 12 时，扩容为 32.
+
+     - 扩容时重新计算哈希位置（Java 8+ 优化：只需要判断高位是 0 还是 1，无需重新 hash）。
+
+4. 红黑树转换：
+
+     - 链表长度 > 8 且数组长度 >= 64 时，链表转为红黑树（查询效率从 O(n) 提升到 O(log n)）。
+
+     - 红黑树节点数 < 6 时，退化回链表。
+
+常用方法：
+
+```java
+Map<String, Object> map = new HashMap<>();
+
+// 新增/修改
+map.put("name", "Alice"); // => {name=Alice}
+map.put("age", 20);       // => {name=Alice, age=20}
+map.put("name", "Bob");   // => {name=Bob, age=20}
+
+// 查询
+map.get("name");          // => Bob
+
+// 删除
+map.remove("age");        // => {name=Bob}
+map.clear();              // => {}
+```
+
+遍历方式：
+
+```java
+Map<String, Object> map = new HashMap<>(Map.of(
+  "name", "Alice",
+  "age", 20,
+  "sex", "female"
+));
+
+// 遍历 key
+for (String key : map.keySet()) {
+  Object value = map.get(key);
+  System.out.println(key + ": " + value);
+}
+
+// 遍历 value
+for (Object value : map.values()) {
+  System.out.println(value);
+}
+
+// 遍历 key & value
+for (Map.Entry<String, Object> entry : map.entrySet()) {
+  String key = entry.getKey();
+  Object value = entry.getValue();
+  System.out.println(key + ": " + value);
+}
+```
+
+#### LinkedHashMap
+
+适用于需要记录访问顺序或插入顺序的场景。
+
+- 查询、插入、删除快 O(1)。
+
+- 保持插入顺序或访问顺序。
+
+- 可用于实现 LRU 缓存。
+
+#### TreeMap
+
+适用于需要按键排序或范围查询的场景。
+
+- 查询、插入、删除慢 O(log n)。
+
+- 有序（按键自然排序或自定义排序）。
+
+- 支持范围查询（如 `subMap`）。
+
+### 队列 Queue
+
+#### ArrayDeque
+
+适用于栈、队列操作。
+
+- 双端队列。
+
+- 无容量限制（自动扩容）。
+
+- 性能优于 `LinkedList`。
+
+#### PriorityQueue
+
+适用于优先级调度、Top-K 问题。
+
+- 有序（自然排序或自定义优先级排序）。
+
+- 每次取出最小/最大元素。
+
+### 集合工具类
+
+#### Collections
+
+```java
+// 查询
+Collections.binarySearch(list, "apple");
+
+// 替换
+Collections.replaceAll(list, "apple", "orange");
+
+// 填充
+Collections.fill(list, 0);
+
+// 排序
+Collections.sort(list);
+
+// 反转
+Collections.reverse(list);
+
+// 随机排列
+Collections.shuffle(list);
+
+// 最大值/最小值
+Collections.max(list);
+Collections.min(list);
+
+// 同步包装（线程安全）
+List<String> syncList = Collections.synchronizedList(new ArrayList<>());
+
+// 不可变集合
+List<String> unmodifiable = Collections.unmodifiableList(list);
+```
+
+#### Arrays
+
+```java
+// 转为 List
+List<String> list = Arrays.asList("a", "b", "c");
+
+// 查询
+Arrays.binarySearch(array, "apple");
+
+// 填充
+Arrays.fill(array, "value");
+
+// 排序
+Arrays.sort(array);
+
+// 比较
+Arrays.equals(array1, array2);
+
+// 转为字符串
+Arrays.toString(array);
+```
+
+### 并发集合 <Badge text="Java 5+" type="tip" />
+
+| 集合类                  | 特点               |
+| ----------------------- | ------------------ |
+| `CopyOnWriteArrayList`  | 线程安全、读写分离 |
+| `ConcurrentHasMap`      | 线程安全、高性能   |
+| `ConcurrentLinkedQueue` | 线程安全队列       |
+| `BlockingQueue`         | 阻塞队列           |
+| `ConcurrentSkipListMap` | 线程安全有序 Map   |
+
+### 性能对比
+
+| 集合            | 查询     | 插入     | 删除     | 空间 |
+| :-------------- | :------- | :------- | :------- | :--- |
+| `ArrayList`     | O(1)     | O(n)     | O(n)     | 小   |
+| `LinkedList`    | O(n)     | O(1)     | O(1)     | 大   |
+| `HashSet`       | O(1)     | O(1)     | O(1)     | 中   |
+| `LinkedHashSet` | O(1)     | O(1)     | O(1)     | 中   |
+| `TreeSet`       | O(log n) | O(log n) | O(log n) | 中   |
+| `HashMap`       | O(1)     | O(1)     | O(1)     | 中   |
+| `LinkedHashMap` | O(1)     | O(1)     | O(1)     | 中   |
+| `TreeMap`       | O(log n) | O(log n) | O(log n) | 中   |
 
