@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-20
+date: 2026-10-22
 description: Java
 ---
 
@@ -770,20 +770,20 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 List<String> list = new ArrayList<>();
 
 // 新增
-list.add("apple");     // => [apple]
-list.add("orange");    // => [apple, orange]
-list.add(1, "banana"); // => [apple, banana, orange]
+list.add("apple");     // list => [apple]
+list.add("orange");    // list => [apple, orange]
+list.add(1, "banana"); // list => [apple, banana, orange]
 
 // 修改
-list.set(2, "lemon");  // => [apple, banana, lemon]
+list.set(2, "lemon");  // list => [apple, banana, lemon]
 
 // 查询
 list.get(1);           // => banana
 
 // 删除
-list.remove("lemon");  // => [apple, banana]
-list.remove(0);        // => [banana]
-list.clear();          // => []
+list.remove("lemon");  // list => [apple, banana]
+list.remove(0);        // list => [banana]
+list.clear();          // list => []
 ```
 
 遍历方式：
@@ -809,9 +809,9 @@ for (String fruit : list) {
   System.out.println(fruit);
 }
 
-// forEach (Java 8+)
+// forEach (Java 8+) + lambda 表达式
 list.forEach(fruit -> System.out.println(fruit));
-// forEach + lambda 表达式
+// forEach (Java 8+) + 方法引用
 list.forEach(System.out::println);
 
 // stream (Java 8+)
@@ -838,9 +838,9 @@ stream.forEach(System.out::println);
 ```java
 LinkedList<String> stack = new LinkedList<>();
 
-stack.addFirst("a"); // => [a]
-stack.addFirst("b"); // => [b, a]
-stack.removeFirst(); // => [a]
+stack.addFirst("a"); // stack => [a]
+stack.addFirst("b"); // stack => [b, a]
+stack.removeFirst(); // stack => [a]
 ```
 
 作为队列使用（先进先出）：
@@ -848,9 +848,9 @@ stack.removeFirst(); // => [a]
 ```java
 LinkedList<String> queue = new LinkedList<>();
 
-queue.addLast("a");  // => [a]
-queue.addLast("b");  // => [a, b]
-queue.removeFirst(); // => [b]
+queue.addLast("a");  // queue => [a]
+queue.addLast("b");  // queue => [a, b]
+queue.removeFirst(); // queue => [b]
 ```
 
 ### 集合 Set <Badge text="常用" type="tip" />
@@ -871,13 +871,13 @@ queue.removeFirst(); // => [b]
 Set<String> set = new HashSet<>();
 
 // 新增
-set.add("apple");    // => [apple]
-set.add("banana");   // => [banana, apple]
-set.add("apple");    // 重复元素不会添加
+set.add("apple");    // set => [apple]
+set.add("banana");   // set => [banana, apple]
+set.add("apple");    // 不会添加重复元素
 
 // 删除
-set.remove("apple"); // => [banana]
-set.clear();         // => []
+set.remove("apple"); // set => [banana]
+set.clear();         // set => []
 ```
 
 遍历方式与 `ArrayList` 相同。
@@ -933,11 +933,9 @@ class Person implements Comparable<Person> {
 
 TreeSet<Person> set = new TreeSet<>();
 
-set.add(new Person("Alice", 20));
-set.add(new Person("Bob", 25));
+set.add(new Person("Alice", 20));   // set => [{name='Alice', age=20}]
+set.add(new Person("Bob", 25));     // set => [{name='Alice', age=20}, {name='Bob', age=25}]
 set.add(new Person("Charlie", 20)); // 已存在 age 相同的元素，不会重复添加
-
-set; // => [{name='Alice', age=20}, {name='Bob', age=25}]
 ```
 
 自定义排序：
@@ -978,12 +976,9 @@ Comparator<Person> comparator = Comparator.comparingInt(Person::getAge);
 
 TreeSet<Person> set = new TreeSet<>(comparator);
 
-set.add(new Person("Alice", 20));
-set.add(new Person("Bob", 25));
+set.add(new Person("Alice", 20));   // set => [{name='Alice', age=20}]
+set.add(new Person("Bob", 25));     // set => [{name='Alice', age=20}, {name='Bob', age=25}]
 set.add(new Person("Charlie", 20)); // 已存在 age 相同的元素，不会重复添加
-set.add(new Person("Dave", 18));
-
-set; // => [{name='Dave', age=18}, {name='Alice', age=20}, {name='Bob', age=25}]
 ```
 
 ### 表 Map <Badge text="常用" type="tip" />
@@ -1028,16 +1023,16 @@ HashMap 的工作原理：
 Map<String, Object> map = new HashMap<>();
 
 // 新增/修改
-map.put("name", "Alice"); // => {name=Alice}
-map.put("age", 20);       // => {name=Alice, age=20}
-map.put("name", "Bob");   // => {name=Bob, age=20}
+map.put("name", "Alice"); // map => {name=Alice}
+map.put("age", 20);       // map => {name=Alice, age=20}
+map.put("name", "Bob");   // map => {name=Bob, age=20}
 
 // 查询
 map.get("name");          // => Bob
 
 // 删除
-map.remove("age");        // => {name=Bob}
-map.clear();              // => {}
+map.remove("age");        // map => {name=Bob}
+map.clear();              // map => {}
 ```
 
 遍历方式：
@@ -1114,54 +1109,73 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 
 ```java
 // 查询
-Collections.binarySearch(list, "apple");
+Collections.binarySearch(List<? extends Comparable<? super T>> list, T key);
 
-// 替换
-Collections.replaceAll(list, "apple", "orange");
-
-// 填充
-Collections.fill(list, 0);
-
-// 排序
-Collections.sort(list);
+// 自然排序
+Collections.sort(List<T> list);
+// 自定义排序
+Collections.sort(List<T> list, Comparator<? super T> comp);
 
 // 反转
-Collections.reverse(list);
+Collections.reverse(List<?> list);
 
 // 随机排列
-Collections.shuffle(list);
+Collections.shuffle(List<?> list);
 
-// 最大值/最小值
-Collections.max(list);
-Collections.min(list);
+// 交换位置
+Collections.swap(List<?> list, int i, int j);
+
+// 填充
+Collections.fill(List<? super T> list, T obj);
+
+// 替换
+Collections.replaceAll(List<T> list, T oldVal, T newVal);
+
+// 复制
+Collections.copy(List<? super T> dest, List<? extends T> src);
+
+// 最大值
+Collections.max(Collection<? extends T> coll);
+Collections.max(Collection<? extends T> coll, Comparator<? super T> comp);
+// 最小值
+Collections.min(Collection<? extends T> coll);
+Collections.min(Collection<? extends T> coll, Comparator<? super T> comp);
 
 // 同步包装（线程安全）
-List<String> syncList = Collections.synchronizedList(new ArrayList<>());
+Collections.synchronizedList(List<T> list);
+Collections.synchronizedSet(Set<T> set);
+Collections.synchronizedMap(Map<K, V> map);
+Collections.synchronizedCollection(Collection<T> coll);
 
-// 不可变集合
-List<String> unmodifiable = Collections.unmodifiableList(list);
+// 不可变集合 Java 9+ 推荐 List.of(), Set.of(), Map.of()
+Collections.unmodifiableList(List<? extends T> list);
+Collections.unmodifiableSet(Set<? extends T> set);
+Collections.unmodifiableMap(Map<? extends K, ? extends V> map);
+Collections.unmodifiableCollection(Collection<? extends T> coll);
 ```
 
 #### Arrays
 
 ```java
 // 转为 List
-List<String> list = Arrays.asList("a", "b", "c");
+Arrays.asList(T... array);
 
 // 查询
-Arrays.binarySearch(array, "apple");
+Arrays.binarySearch(Object[] array, Object key);
 
 // 填充
-Arrays.fill(array, "value");
+Arrays.fill(Object[] array, Object value);
 
 // 排序
-Arrays.sort(array);
+Arrays.sort(Object[] array);
+// 自定义排序
+Arrays.sort(T[] array, Comparator<? super T> comp);
 
 // 比较
-Arrays.equals(array1, array2);
+Arrays.equals(Object[] array1, Object[] array2);
 
 // 转为字符串
-Arrays.toString(array);
+Arrays.toString(Object[] array);
 ```
 
 ### 并发集合 <Badge text="Java 5+" type="tip" />
