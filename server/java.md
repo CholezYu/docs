@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-22
+date: 2026-10-23
 description: Java
 ---
 
@@ -1111,9 +1111,8 @@ for (Map.Entry<String, Object> entry : map.entrySet()) {
 // 查询
 Collections.binarySearch(List<? extends Comparable<? super T>> list, T key);
 
-// 自然排序
+// 排序
 Collections.sort(List<T> list);
-// 自定义排序
 Collections.sort(List<T> list, Comparator<? super T> comp);
 
 // 反转
@@ -1134,10 +1133,9 @@ Collections.replaceAll(List<T> list, T oldVal, T newVal);
 // 复制
 Collections.copy(List<? super T> dest, List<? extends T> src);
 
-// 最大值
+// 最大值/最小值
 Collections.max(Collection<? extends T> coll);
 Collections.max(Collection<? extends T> coll, Comparator<? super T> comp);
-// 最小值
 Collections.min(Collection<? extends T> coll);
 Collections.min(Collection<? extends T> coll, Comparator<? super T> comp);
 
@@ -1158,24 +1156,24 @@ Collections.unmodifiableCollection(Collection<? extends T> coll);
 
 ```java
 // 转为 List
-Arrays.asList(T... array);
+Arrays.asList(T... arr);
 
 // 查询
-Arrays.binarySearch(Object[] array, Object key);
+Arrays.binarySearch(T[] arr, T key);
 
 // 填充
-Arrays.fill(Object[] array, Object value);
+Arrays.fill(T[] arr, Object value);
 
 // 排序
-Arrays.sort(Object[] array);
+Arrays.sort(T[] arr);
 // 自定义排序
-Arrays.sort(T[] array, Comparator<? super T> comp);
+Arrays.sort(T[] arr, Comparator<? super T> comp);
 
 // 比较
-Arrays.equals(Object[] array1, Object[] array2);
+Arrays.equals(T[] arr, T[] arr);
 
 // 转为字符串
-Arrays.toString(Object[] array);
+Arrays.toString(T[] arr);
 ```
 
 ### 并发集合 <Badge text="Java 5+" type="tip" />
