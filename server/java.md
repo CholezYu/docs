@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-23
+date: 2026-10-24
 description: Java
 ---
 
@@ -742,7 +742,7 @@ Java 提供了多种线程通信机制，其中基本通信机制方法有：
 
 - `notifyAll()` 唤醒所有等待中的线程。
 
-> [!important]
+> [!caution]
 >
 > 以上方法只能在 **同步方法** 或 **同步代码块** 内调用，并且必须由同步监视器调用。
 
