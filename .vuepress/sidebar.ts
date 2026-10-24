@@ -248,9 +248,9 @@ export default sidebar({
     },
 
     {
-      text: "项目难点",
+      text: "常见需求",
       icon: "markdown",
-      link: "项目难点"
+      link: "常见需求"
     },
 
     {
