@@ -1,7 +1,7 @@
 ---
 title: JavaScript
 icon: javascript
-date: 2026-10-24
+date: 2026-10-25
 description: JavaScript
 ---
 
@@ -1617,8 +1617,6 @@ console.log(4)
 ### 基本使用
 
 迭代器可以遍历可迭代对象。
-
-> 可迭代对象：Array  Set  Map  String  NodeList  arguments
 
 ```ts
 const set = new Set([1, 1, 2, 3])
