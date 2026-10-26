@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-24
+date: 2026-10-26
 description: Java
 ---
 
@@ -1166,7 +1166,6 @@ Arrays.fill(T[] arr, Object value);
 
 // 排序
 Arrays.sort(T[] arr);
-// 自定义排序
 Arrays.sort(T[] arr, Comparator<? super T> comp);
 
 // 比较
@@ -1199,3 +1198,103 @@ Arrays.toString(T[] arr);
 | `LinkedHashMap` | O(1)     | O(1)     | O(1)     | 中   |
 | `TreeMap`       | O(log n) | O(log n) | O(log n) | 中   |
 
+## IO 流
+
+### 文件操作
+
+```java
+File file = new File("file.txt");
+File dir = new File("directory");
+
+// 获取文件的大小（字节）
+file.length();
+
+// 获取文件（或目录）名称
+file.getName();
+
+// 获取文件（或目录）绝对路径
+file.getAbsolutePath();
+
+// 重命名文件
+file.renameTo(new File("abc.txt"));
+
+// 判断文件（或目录）是否存在
+file.exists();
+
+// 判断是否为文件
+file.isFile();
+
+// 判断是否为目录
+dir.isDirectory();
+
+// 创建一个空文件
+file.createNewFile();
+
+// 删除文件（或空目录）
+file.delete();
+
+// 创建目录
+dir.mkdirs();
+
+// 遍历目录内容
+Stream<Path> stream = Files.list(dir.toPath());
+stream.forEach(System.out::println);
+```
+
+### 字符流
+
+```java
+// 写入文件
+FileWriter fw = new FileWriter("file.txt");
+fw.write("hello world");
+fw.close();
+
+// 读取文件
+FileReader fr = new FileReader("file.txt");
+char[] cbuffer = new char[1024]; // 增大缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
+int len;
+while ((len = fr.read(cbuffer)) != -1) {
+  for (int i = 0; i < len; i++) {
+    System.out.print(cbuffer[i]);
+  }
+}
+fr.close();
+
+// 缓存字符流（推荐）
+BufferedWriter bw = new BufferedWriter(new FileWriter("file.txt"));
+BufferedReader br = new BufferedReader(new FileReader("file.txt"));
+```
+
+### 字节流
+
+```java
+// 写入文件
+OutputStream os = new FileOutputStream("file.txt");
+os.write("hello world".getBytes());
+os.close();
+
+// 读取文件
+InputStream is = new FileInputStream("file.txt");
+int byteData;
+while ((byteData = is.read()) != -1) {
+  System.out.print((char) byteData);
+}
+is.close();
+
+// 缓冲字节流（推荐）
+BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("file.txt"));
+BufferInputStream bis = new BufferInputStream(new FileOutputStream("file.txt"));
+```
+
+### 序列化 & 反序列化
+
+```java
+// 序列化
+ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file.xxx"));
+oos.writeObject(new ArrayList<>(Arrays.asList("a", "b", "c")));
+oos.close();
+
+// 反序列化
+ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.xxx"));
+ArrayList list = (ArrayList) ois.readObject();
+ois.close();
