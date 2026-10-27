@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-26
+date: 2026-10-28
 description: Java
 ---
 
@@ -1200,90 +1200,234 @@ Arrays.toString(T[] arr);
 
 ## IO 流
 
-### 文件操作
+### 传统 IO（File 类）
+
+文件操作。
 
 ```java
 File file = new File("file.txt");
-File dir = new File("directory");
 
-// 获取文件的大小（字节）
-file.length();
-
-// 获取文件（或目录）名称
-file.getName();
-
-// 获取文件（或目录）绝对路径
-file.getAbsolutePath();
+// 创建文件
+file.createNewFile();
 
 // 重命名文件
-file.renameTo(new File("abc.txt"));
+file.renameTo(new File("dest.txt"));
 
-// 判断文件（或目录）是否存在
-file.exists();
+// 删除文件
+file.delete();
+```
+
+查看文件信息。
+
+```java
+// 文件名称
+file.getName();
+
+// 文件大小（字节）
+file.length();
+
+// 绝对路径
+file.getAbsolutePath();
+
+// 最后修改时间
+file.lastModified();
 
 // 判断是否为文件
 file.isFile();
 
 // 判断是否为目录
-dir.isDirectory();
+file.isDirectory();
 
-// 创建一个空文件
-file.createNewFile();
+// 判断是否可读
+file.canRead();
 
-// 删除文件（或空目录）
-file.delete();
+// 判断是否可写
+file.canWrite();
 
-// 创建目录
-dir.mkdirs();
+// 判断文件是否存在
+file.exists();
 
-// 遍历目录内容
-Stream<Path> stream = Files.list(dir.toPath());
-stream.forEach(System.out::println);
+// 判断是否隐藏
+file.isHidden();
+```
+
+遍历目录。
+
+```java
+File dir = new File(".");
+
+// 所有文件（含子目录）名称
+String[] files = dir.list();
+for (String fileName : files) {
+  System.out.println(fileName);
+}
+
+// 所有文件（含子目录）的 File 对象
+File[] files = dir.listFiles();
+for (File file : files) {
+  System.out.println(file.getName());
+}
+```
+
+### 现代文件操作（NIO.2） <Badge text="Java 7+" type="tip" /> <Badge text="推荐" type="tip" />
+
+文件操作。
+
+```java
+Path path = Paths.get("file.txt");
+Path dest = Paths.get("dest.txt");
+
+// 创建文件
+Files.createFile(path);
+
+// 复制文件
+Files.copy(path, dest, StandardCopyOption.REPLACE_EXISTING);
+
+// 移动文件
+Files.move(path, dest, StandardCopyOption.REPLACE_EXISTING);
+
+// 删除文件
+Files.deleteIfExists(dest);
+```
+
+读写操作。
+
+```java
+Path path = Paths.get("file.txt");
+
+// 写入内容
+Files.write(path, "hello world".getBytes(StandardCharsets.UTF_8));
+
+// 追加内容
+Files.write(path, "hello java".getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);
+
+// 读取内容
+Files.readAllLines(path, StandardCharsets.UTF_8);
+```
+
+查看文件信息。
+
+```java
+Path path = Paths.get("file.txt");
+BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class);
+
+// 文件大小（字节）
+attrs.size();
+
+// 创建时间
+attrs.creationTime();
+
+// 最后修改时间
+attrs.lastModifiedTime();
+
+// 判断是否为目录
+attrs.isDirectory();
+
+// 判断文件是否存在
+Files.exists(path);
+
+// 判断是否隐藏
+Files.isHidden(path);
+```
+
+遍历目录。
+
+```java
+Path dir = Paths.get(".");
+
+// 遍历当前目录
+Files.list(dir).forEach(System.out::println);
+
+// 递归遍历所有子目录
+Files.walk(dir)
+  .filter(Files::isRegularFile) // 只保留文件
+  .filter(p -> p.toString().endsWith(".java")) // 只保留 .java 文件
+  .forEach(System.out::println);
 ```
 
 ### 字符流
 
+操作文本文件。
+
 ```java
-// 写入文件
-FileWriter fw = new FileWriter("file.txt");
-fw.write("hello world");
-fw.close();
-
 // 读取文件
-FileReader fr = new FileReader("file.txt");
-char[] cbuffer = new char[1024]; // 增大缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
-int len;
-while ((len = fr.read(cbuffer)) != -1) {
-  for (int i = 0; i < len; i++) {
-    System.out.print(cbuffer[i]);
+try (FileReader reader = new FileReader("file.txt")) {
+  char[] buffer = new char[1024]; // 设置缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
+  int len;
+  while ((len = reader.read(buffer)) != -1) {
+    for (int i = 0; i < len; i++) {
+      System.out.print(buffer[i]);
+    }
   }
+} catch (IOException e) {
+  e.printStackTrace();
 }
-fr.close();
 
-// 缓存字符流（推荐）
-BufferedWriter bw = new BufferedWriter(new FileWriter("file.txt"));
-BufferedReader br = new BufferedReader(new FileReader("file.txt"));
+// 写入文件
+try (FileWriter writer = new FileWriter("file.txt")) {
+  writer.write("hello world");
+} catch (IOException e) {
+  e.printStackTrace();
+}
+```
+
+使用缓冲字符流复制文本文件。
+
+```java
+try (
+  BufferedReader reader = new BufferedReader(new FileReader("file.txt"));
+  BufferedWriter writer = new BufferedWriter(new FileWriter("dest.txt"))
+) {
+  String line;
+  while ((line = reader.readLine()) != null) {
+    writer.write(line);
+    writer.newLine();
+  }
+  writer.flush(); // 刷新缓冲区，确保数据写入磁盘
+} catch (IOException e) {
+  e.printStackTrace();
+}
 ```
 
 ### 字节流
 
+操作非文本文件，如图片、PDF 等。
+
 ```java
-// 写入文件
-OutputStream os = new FileOutputStream("file.txt");
-os.write("hello world".getBytes());
-os.close();
-
 // 读取文件
-InputStream is = new FileInputStream("file.txt");
-int byteData;
-while ((byteData = is.read()) != -1) {
-  System.out.print((char) byteData);
+try (InputStream reader = new FileInputStream("img.jpg")) {
+  int byteData;
+  while ((byteData = reader.read()) != -1) {
+    System.out.print((char) byteData);
+  }
+} catch (IOException e) {
+  throw new RuntimeException(e);
 }
-is.close();
 
-// 缓冲字节流（推荐）
-BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("file.txt"));
-BufferInputStream bis = new BufferInputStream(new FileOutputStream("file.txt"));
+// 写入文件
+try (OutputStream writer = new FileOutputStream("img.jpg")) {
+  writer.write("hello world".getBytes());
+} catch (IOException e) {
+  throw new RuntimeException(e);
+}
+```
+
+使用缓冲字符流复制图片。
+
+```java
+try (
+  BufferInputStream reader = new BufferInputStream(new FileInputStream("img.jpg"));
+  BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream("dest.jpg"))
+) {
+  byte[] buffer = new byte[1024]; // 1KB 缓冲
+  int len;
+  while ((len = reader.read(buffer)) != -1) {
+    writer.write(buffer, 0, len);
+  }
+  writer.flush(); // 刷新缓冲区，确保数据写入磁盘
+} catch (IOException e) {
+  e.printStackTrace();
+}
 ```
 
 ### 序列化 & 反序列化
