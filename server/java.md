@@ -1202,7 +1202,7 @@ Arrays.toString(T[] arr);
 
 ### 传统 IO（File 类）
 
-文件操作。
+文件操作：
 
 ```java
 File file = new File("file.txt");
@@ -1217,19 +1217,19 @@ file.renameTo(new File("dest.txt"));
 file.delete();
 ```
 
-查看文件信息。
+查看文件信息：
 
 ```java
-// 文件名称
+// 获取文件名称
 file.getName();
 
-// 文件大小（字节）
+// 获取文件大小（字节）
 file.length();
 
-// 绝对路径
+// 获取绝对路径
 file.getAbsolutePath();
 
-// 最后修改时间
+// 获取最后修改时间
 file.lastModified();
 
 // 判断是否为文件
@@ -1238,31 +1238,22 @@ file.isFile();
 // 判断是否为目录
 file.isDirectory();
 
-// 判断是否可读
-file.canRead();
-
-// 判断是否可写
-file.canWrite();
-
 // 判断文件是否存在
 file.exists();
-
-// 判断是否隐藏
-file.isHidden();
 ```
 
-遍历目录。
+遍历目录：
 
 ```java
 File dir = new File(".");
 
-// 所有文件（含子目录）名称
-String[] files = dir.list();
-for (String fileName : files) {
+// 获取所有文件及子目录的名称
+String[] fileNames = dir.list();
+for (String fileName : fileNames) {
   System.out.println(fileName);
 }
 
-// 所有文件（含子目录）的 File 对象
+// 获取所有文件及子目录的 File 对象
 File[] files = dir.listFiles();
 for (File file : files) {
   System.out.println(file.getName());
@@ -1271,7 +1262,7 @@ for (File file : files) {
 
 ### 现代文件操作（NIO.2） <Badge text="Java 7+" type="tip" /> <Badge text="推荐" type="tip" />
 
-文件操作。
+文件操作：
 
 ```java
 Path path = Paths.get("file.txt");
@@ -1290,7 +1281,7 @@ Files.move(path, dest, StandardCopyOption.REPLACE_EXISTING);
 Files.deleteIfExists(dest);
 ```
 
-读写操作。
+读写操作：
 
 ```java
 Path path = Paths.get("file.txt");
@@ -1305,19 +1296,19 @@ Files.write(path, "hello java".getBytes(StandardCharsets.UTF_8), StandardOpenOpt
 Files.readAllLines(path, StandardCharsets.UTF_8);
 ```
 
-查看文件信息。
+查看文件信息：
 
 ```java
 Path path = Paths.get("file.txt");
 BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class);
 
-// 文件大小（字节）
+// 获取文件大小（字节）
 attrs.size();
 
-// 创建时间
+// 获取创建时间
 attrs.creationTime();
 
-// 最后修改时间
+// 获取最后修改时间
 attrs.lastModifiedTime();
 
 // 判断是否为目录
@@ -1330,7 +1321,7 @@ Files.exists(path);
 Files.isHidden(path);
 ```
 
-遍历目录。
+遍历目录：
 
 ```java
 Path dir = Paths.get(".");
@@ -1352,12 +1343,10 @@ Files.walk(dir)
 ```java
 // 读取文件
 try (FileReader reader = new FileReader("file.txt")) {
-  char[] buffer = new char[1024]; // 设置缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
+  char[] buffer = new char[1024]; // 设置缓冲区（通常用 1024 或 4096 字符），减少磁盘 I/O 次数
   int len;
   while ((len = reader.read(buffer)) != -1) {
-    for (int i = 0; i < len; i++) {
-      System.out.print(buffer[i]);
-    }
+    System.out.print(new String(buffer, 0, len));
   }
 } catch (IOException e) {
   e.printStackTrace();
@@ -1395,36 +1384,64 @@ try (
 
 ```java
 // 读取文件
-try (InputStream reader = new FileInputStream("img.jpg")) {
+try (InputStream stream = new FileInputStream("file.txt")) {
+  byte[] buffer = new byte[1024]; // 设置缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
+  int len;
+  while ((len = stream.read(buffer)) != -1) {
+    System.out.print(new String(buffer, 0, len));
+  }
+} catch (IOException e) {
+  e.printStackTrace();
+}
+
+// 写入文件
+try (OutputStream stream = new FileOutputStream("file.txt")) {
+  stream.write("hello world".getBytes(StandardCharsets.UTF_8));
+} catch (IOException e) {
+  e.printStackTrace();
+}
+```
+
+使用转换流将字节流转换为指定编码的字符流，适合处理带有指定编码的文本文件。
+
+```java
+// 读取文件
+try (
+  InputStream stream = new FileInputStream("file.txt");
+  InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)
+) {
   int byteData;
   while ((byteData = reader.read()) != -1) {
     System.out.print((char) byteData);
   }
 } catch (IOException e) {
-  throw new RuntimeException(e);
+  e.printStackTrace();
 }
 
 // 写入文件
-try (OutputStream writer = new FileOutputStream("img.jpg")) {
-  writer.write("hello world".getBytes());
+try (
+  OutputStream stream = new FileOutputStream("file.txt");
+  OutputStreamWriter writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8)
+) {
+  writer.write("hello world");
 } catch (IOException e) {
-  throw new RuntimeException(e);
+  e.printStackTrace();
 }
 ```
 
-使用缓冲字符流复制图片。
+使用缓冲字节流复制图片。
 
 ```java
 try (
-  BufferInputStream reader = new BufferInputStream(new FileInputStream("img.jpg"));
-  BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream("dest.jpg"))
+  BufferedInputStream bis = new BufferedInputStream(new FileInputStream("img.jpg"));
+  BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("dest.jpg"))
 ) {
   byte[] buffer = new byte[1024]; // 1KB 缓冲
   int len;
-  while ((len = reader.read(buffer)) != -1) {
-    writer.write(buffer, 0, len);
+  while ((len = bis.read(buffer)) != -1) {
+    bos.write(buffer, 0, len);
   }
-  writer.flush(); // 刷新缓冲区，确保数据写入磁盘
+  bos.flush(); // 刷新缓冲区，确保数据写入磁盘
 } catch (IOException e) {
   e.printStackTrace();
 }
@@ -1434,11 +1451,15 @@ try (
 
 ```java
 // 序列化
-ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("file.xxx"));
-oos.writeObject(new ArrayList<>(Arrays.asList("a", "b", "c")));
-oos.close();
+try (ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream("file.xxx"))) {
+  writer.writeObject(new ArrayList<>(Arrays.asList("a", "b", "c")));
+} catch (IOException e) {
+  e.printStackTrace();
+}
 
 // 反序列化
-ObjectInputStream ois = new ObjectInputStream(new FileInputStream("file.xxx"));
-ArrayList list = (ArrayList) ois.readObject();
-ois.close();
+try (ObjectInputStream reader = new ObjectInputStream(new FileInputStream("file.xxx"))) {
+  ArrayList list = (ArrayList) reader.readObject();
+} catch (IOException | ClassNotFoundException e) {
+  e.printStackTrace();
+}
