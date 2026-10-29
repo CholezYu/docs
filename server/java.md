@@ -1,7 +1,7 @@
 ---
 title: Java
 icon: java
-date: 2026-10-28
+date: 2026-10-29
 description: Java
 ---
 
@@ -1316,9 +1316,6 @@ attrs.isDirectory();
 
 // 判断文件是否存在
 Files.exists(path);
-
-// 判断是否隐藏
-Files.isHidden(path);
 ```
 
 遍历目录：
@@ -1360,7 +1357,7 @@ try (FileWriter writer = new FileWriter("file.txt")) {
 }
 ```
 
-使用缓冲字符流复制文本文件。
+使用**缓冲字符流**复制文本文件。
 
 ```java
 try (
@@ -1384,7 +1381,7 @@ try (
 
 ```java
 // 读取文件
-try (InputStream stream = new FileInputStream("file.txt")) {
+try (InputStream stream = new FileInputStream("file.dat")) {
   byte[] buffer = new byte[1024]; // 设置缓冲区（通常用 1024 或 4096 字节），减少磁盘 I/O 次数
   int len;
   while ((len = stream.read(buffer)) != -1) {
@@ -1395,19 +1392,19 @@ try (InputStream stream = new FileInputStream("file.txt")) {
 }
 
 // 写入文件
-try (OutputStream stream = new FileOutputStream("file.txt")) {
+try (OutputStream stream = new FileOutputStream("file.dat")) {
   stream.write("hello world".getBytes(StandardCharsets.UTF_8));
 } catch (IOException e) {
   e.printStackTrace();
 }
 ```
 
-使用转换流将字节流转换为指定编码的字符流，适合处理带有指定编码的文本文件。
+使用**转换流**将字节流转换为指定编码的字符流，适合处理带有指定编码的文本文件。
 
 ```java
-// 读取文件
+// 读取文件，转为字符流
 try (
-  InputStream stream = new FileInputStream("file.txt");
+  InputStream stream = new FileInputStream("file.dat");
   InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8)
 ) {
   int byteData;
@@ -1418,9 +1415,9 @@ try (
   e.printStackTrace();
 }
 
-// 写入文件
+// 写入文件，转为字节流
 try (
-  OutputStream stream = new FileOutputStream("file.txt");
+  OutputStream stream = new FileOutputStream("file.dat");
   OutputStreamWriter writer = new OutputStreamWriter(stream, StandardCharsets.UTF_8)
 ) {
   writer.write("hello world");
@@ -1447,7 +1444,7 @@ try (
 }
 ```
 
-### 序列化 & 反序列化
+### 对象流
 
 ```java
 // 序列化
